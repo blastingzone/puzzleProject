@@ -1,5 +1,6 @@
-// BlackBags.cpp : Defines the entry point for the application.
+﻿// BlackBags.cpp : Defines the entry point for the application.
 // test01
+// wooq test
 //
 
 #include "stdafx.h"
