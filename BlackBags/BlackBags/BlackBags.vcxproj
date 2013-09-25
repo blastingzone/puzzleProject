@@ -91,6 +91,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test01.cpp" />
+    <ClCompile Include="test02.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BlackBags.rc" />
