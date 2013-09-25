@@ -38,6 +38,9 @@
     <ClCompile Include="BlackBags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test01.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BlackBags.rc">
