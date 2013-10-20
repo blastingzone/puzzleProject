@@ -14,6 +14,13 @@ HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
+HRESULT hr;
+ID2D1Factory* pDirect2dFactory;
+ID2D1HwndRenderTarget* pRenderTarget;
+ID2D1SolidColorBrush* pOutlineBrush;
+ID2D1SolidColorBrush* pFilledRectangleBrush;
+ID2D1SolidColorBrush* pGridBrush;
+
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
@@ -132,6 +139,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	HDC hdc;
 
+	RECT rc;
+    GetClientRect(hWnd, &rc);
+
+    D2D1_SIZE_U size = D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top);
+
+	//create factory
+	hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pDirect2dFactory);
+
+	//create render target
+	hr = pDirect2dFactory->CreateHwndRenderTarget(
+            D2D1::RenderTargetProperties(),
+            D2D1::HwndRenderTargetProperties(hWnd, size),
+            &pRenderTarget
+            );
+
+	D2D1_RECT_F rectangle1 = D2D1::RectF(
+		size.width/2 - 50.0f,
+		size.height/2 - 50.0f,
+		size.width/2 + 50.0f,
+		size.height/2 + 50.0f
+		);
+
+	D2D1_RECT_F rectangle2 = D2D1::RectF(
+		size.width/2 - 100.0f,
+		size.height/2 - 100.0f,
+		size.width/2 + 100.0f,
+		size.height/2 + 100.0f
+		);
+
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -151,9 +187,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code here...
-		EndPaint(hWnd, &ps);
+		//create brushes
+		hr = pRenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::LightSlateGray),
+			&pOutlineBrush
+			);
+
+		hr = pRenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::CornflowerBlue),
+			&pFilledRectangleBrush
+			);
+
+		hr = pRenderTarget->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::DarkGray),
+			&pGridBrush
+			);
+
+
+		 //draw grid
+		 for (int x = 0; x < size.width; x += 10)
+        {
+            pRenderTarget->DrawLine(
+                D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
+                D2D1::Point2F(static_cast<FLOAT>(x), size.height),
+                pGridBrush,
+                0.5f
+                );
+        }
+
+        for (int y = 0; y < size.height; y += 10)
+        {
+            pRenderTarget->DrawLine(
+                D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
+                D2D1::Point2F(size.width, static_cast<FLOAT>(y)),
+                pGridBrush,
+                0.5f
+                );
+        }
+
+		//draw rectangles
+        pRenderTarget->FillRectangle(&rectangle1, pFilledRectangleBrush);
+        pRenderTarget->DrawRectangle(&rectangle2, pOutlineBrush);
+
+		//end draw
+        hr = pRenderTarget->EndDraw();
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
