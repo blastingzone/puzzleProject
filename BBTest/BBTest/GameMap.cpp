@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "GameMap.h"
 
+CGameMap* CGameMap::m_pInstance = nullptr;
 
 CGameMap::CGameMap(void)
 {
-	m_pInstance = nullptr;
 	memset(m_Map, 0, sizeof(CMapObj*) * MAX_WIDTH * MAX_HEIGHT);
 }
 
