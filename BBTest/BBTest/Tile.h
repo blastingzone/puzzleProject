@@ -24,9 +24,9 @@ public:
 	~CTile(void);
 
 private:
-	Owner	owner;
-	Item	item;
-	int		score;
+	Owner	m_Owner;
+	Item	m_Item;
+	int		m_Score;
 
 	void	setScore(Item inputItem);
 

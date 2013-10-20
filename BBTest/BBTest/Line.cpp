@@ -4,7 +4,7 @@
 
 CLine::CLine(void)
 {
-	connected = false;
+	m_Connected = false;
 }
 
 
@@ -13,11 +13,11 @@ CLine::~CLine(void)
 }
 
 bool CLine::isConnected(){
-	return connected;
+	return m_Connected;
 }
 
 void CLine::connect(){
-	connected = true;
+	m_Connected = true;
 
 	return;
 }

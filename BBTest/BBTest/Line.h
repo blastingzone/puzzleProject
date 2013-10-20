@@ -8,7 +8,7 @@ public:
 	~CLine(void);
 
 private :
-	bool connected;
+	bool m_Connected;
 
 public :
 	bool isConnected();

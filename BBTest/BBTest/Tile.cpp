@@ -9,27 +9,27 @@ CTile::CTile(void)
 
 CTile::~CTile(void)
 {
-	owner = NOBODY;
-	item = NOTHING;
-	score = 2;
+	m_Owner = NOBODY;
+	m_Item = NOTHING;
+	m_Score = 2;
 }
 
 Owner CTile::getOwner(){
-	return owner;
+	return m_Owner;
 }
 
 void CTile::setOwner(Owner inputOwner){
-	owner = inputOwner;
+	m_Owner = inputOwner;
 
 	return;
 }
 
 Item CTile::getItem(){
-	return item;
+	return m_Item;
 }
 
 void CTile::setItem(Item inputItem){
-	item = inputItem;
+	m_Item = inputItem;
 
 	setScore(inputItem);
 
@@ -45,10 +45,10 @@ void CTile::setScore(Item inputItem){
 	case NOTHING:
 		break;
 	case GOLD:
-		score += 5;
+		m_Score += 5;
 		break;
 	case TRASH:
-		score += -10;;
+		m_Score += -10;;
 		break;
 	default:
 		break;
