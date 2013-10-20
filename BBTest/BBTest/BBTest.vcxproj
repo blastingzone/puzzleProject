@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="BBTest.h" />
     <ClInclude Include="Dot.h" />
+    <ClInclude Include="GameMap.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="MapObj.h" />
     <ClInclude Include="Resource.h" />
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="BBTest.cpp" />
     <ClCompile Include="Dot.cpp" />
+    <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="MapObj.cpp" />
     <ClCompile Include="stdafx.cpp">

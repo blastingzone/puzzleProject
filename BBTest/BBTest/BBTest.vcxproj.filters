@@ -45,6 +45,9 @@
     <ClInclude Include="Tile.h">
       <Filter>Logic Element</Filter>
     </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -63,6 +66,9 @@
       <Filter>Logic Element</Filter>
     </ClCompile>
     <ClCompile Include="Tile.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap.cpp">
       <Filter>Logic Element</Filter>
     </ClCompile>
   </ItemGroup>
