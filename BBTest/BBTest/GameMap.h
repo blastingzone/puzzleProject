@@ -17,7 +17,7 @@ typedef struct Edge{
 	int				row;
 	int				column;
 	LineDirection	direction;
-};
+} Edge;
 
 class CGameMap
 {

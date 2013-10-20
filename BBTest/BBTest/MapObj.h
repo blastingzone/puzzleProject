@@ -23,14 +23,14 @@ public:
 
 public :
 	//line class
-	virtual bool	isConnected() = 0;
-	virtual void	connect() = 0;
+	virtual bool	isConnected();
+	virtual void	connect();
 
 	//tile class
-	virtual Owner	getOwner() = 0;
-	virtual void	setOwner(Owner inputOwner) = 0;
-	virtual Item	getItem() = 0;
-	virtual void	setItem(Item inputItem) = 0;
-	virtual int		getScore() = 0;
+	virtual Owner	getOwner();
+	virtual void	setOwner(Owner inputOwner);
+	virtual Item	getItem();
+	virtual void	setItem(Item inputItem);
+	virtual int		getScore();
 };
 

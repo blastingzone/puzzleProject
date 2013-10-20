@@ -37,6 +37,7 @@ void CTile::setItem(Item inputItem){
 }
 
 int	CTile::getScore(){
+	return m_Score;
 }
 
 void CTile::setScore(Item inputItem){

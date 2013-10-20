@@ -5,6 +5,7 @@
 CGameMap::CGameMap(void)
 {
 	m_pInstance = nullptr;
+	memset(m_Map, 0, sizeof(CMapObj*) * MAX_WIDTH * MAX_HEIGHT);
 }
 
 
@@ -27,6 +28,30 @@ void CGameMap::Release(){
 }
 
 void CGameMap::createMap(){
+	int targetRow, targetColumn;
+
+	for(targetRow = 1; targetRow <= m_Height*2 + 1; ++targetRow){
+		for(targetColumn = 1; targetColumn <= m_Width*2 + 1; ++targetColumn){
+			if(targetRow % 2 == 1){
+				// dot - line - dot - line
+				//m_Map[targetRow][targetColumn] = ((targetColumn % 2 == 1) ? new CDot() : new CLine());
+				if(targetColumn % 2 == 1){
+					m_Map[targetRow][targetColumn] = new CDot();
+				} else {
+					m_Map[targetRow][targetColumn] = new CLine();
+				}
+			} else {
+				// line - tile - line - tile
+				if(targetColumn % 2 == 1){
+					m_Map[targetRow][targetColumn] = new CLine();
+				} else {
+					m_Map[targetRow][targetColumn] = new CTile();
+				}
+			}
+		}
+	}
+
+	return;
 }
 
 void CGameMap::init(){
