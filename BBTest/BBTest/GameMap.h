@@ -1,4 +1,5 @@
 #pragma once
+#include "d2d1.h"
 
 #define MAX_WIDTH	21
 #define MAX_HEIGHT	21
@@ -37,6 +38,7 @@ public:
 	//bool drawLine(Edge tempEdge); //success : return true
 	static CGameMap*	GetInstance();
 	static void			Release();
+	static void			Render(ID2D1HwndRenderTarget* target);
 
 protected:
 	int m_Width;

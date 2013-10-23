@@ -63,6 +63,26 @@ void CGameMap::init(){
 }
 
 bool CGameMap::isPossible(int row, int column){
-	//ÀÏ´Ü ÀÚ¼¼ÇÑ ¼³¸íÀº »ý·«ÇÑ´Ù.
+	//ì¼ë‹¨ ìžì„¸í•œ ì„¤ëª…ì€ ìƒëžµí•œë‹¤.
 	return true;
+}
+
+void CGameMap::Render(ID2D1HwndRenderTarget* target)
+{
+	ID2D1SolidColorBrush* m_pDotBrush;
+	D2D1_ELLIPSE m_DotEllipse;
+
+	D2D1_POINT_2F m_pos;
+
+	target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
+	for(int i = 0; i <= MAX_WIDTH; ++i)
+	{
+		for(int j = 0; j <= MAX_HEIGHT; ++j)
+		{
+			m_pos.y = i * 30;
+			m_pos.x = j * 30;
+			m_DotEllipse = D2D1::Ellipse( m_pos, 5, 5 );
+			target->FillEllipse(&m_DotEllipse, m_pDotBrush);
+		}
+	}
 }

@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "BBTest.h"
 #include "GameMap.h"
+#include "Renderer.h"
 
 #define MAX_LOADSTRING 100
 
@@ -11,6 +12,8 @@
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+CRenderer renderer;								// Renderer ^^
+CGameMap* gameMap;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -29,7 +32,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
  	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
-	CGameMap* gameMap;
 
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -42,7 +44,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	gameMap->GetInstance()->init();
+	gameMap = gameMap->GetInstance();
+	gameMap->init();
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BBTEST));
 
 	// Main message loop:
@@ -112,6 +115,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+   renderer.Init(hWnd);
 
    return TRUE;
 }
@@ -151,9 +155,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_PAINT:
-		hdc = BeginPaint(hWnd, &ps);
-		// TODO: Add any drawing code here...
-		EndPaint(hWnd, &ps);
+		renderer.Begin();
+		gameMap->Render(renderer.GetHwndRenderTarget());
+		renderer.End();
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

@@ -16,6 +16,9 @@
     <Filter Include="Logic Element">
       <UniqueIdentifier>{116ad042-b789-4850-a40f-cc5165d557fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{a8248b6b-c274-40b1-986f-f8fc4a705318}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,6 +39,9 @@
     <ClInclude Include="BBTest.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -46,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="GameMap.cpp">
       <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
