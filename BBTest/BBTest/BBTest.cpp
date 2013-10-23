@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "BBTest.h"
+#include "GameMap.h"
 
 #define MAX_LOADSTRING 100
 
@@ -28,6 +29,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
  	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
+	CGameMap* gameMap;
 
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -40,6 +42,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		return FALSE;
 	}
 
+	gameMap->GetInstance()->init();
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BBTEST));
 
 	// Main message loop:

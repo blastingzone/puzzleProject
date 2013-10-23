@@ -30,23 +30,11 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BBTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MapObj.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
-    <ClInclude Include="Dot.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
-    <ClInclude Include="Line.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
     <ClInclude Include="GameMap.h">
       <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="BBTest.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -55,18 +43,6 @@
     </ClCompile>
     <ClCompile Include="BBTest.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MapObj.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
-    <ClCompile Include="Dot.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
-    <ClCompile Include="Line.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Logic Element</Filter>
     </ClCompile>
     <ClCompile Include="GameMap.cpp">
       <Filter>Logic Element</Filter>
