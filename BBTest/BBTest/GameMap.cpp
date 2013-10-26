@@ -7,6 +7,8 @@ CGameMap* CGameMap::m_pInstance = nullptr;
 CGameMap::CGameMap(void)
 {
 	memset(m_Map, 0, sizeof(MapObject) * MAX_WIDTH * MAX_HEIGHT);
+	m_pRenderTarget = nullptr;
+
  	m_Width = 8;
  	m_Height = 7;
 }
@@ -92,6 +94,12 @@ void CGameMap::Render()
 					m_pos.y = 50 + i * 25;
 					m_pos.x = 50 + j * 25;
 					connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - 2.5, m_pos.x + 2.5, m_pos.y + 2.5);
+					m_pRenderTarget->FillRectangle(connectedLine, m_pUnconnectedLineBrush);
+					break;
+				case MO_LINE_CONNECTED:
+					m_pos.y = 50 + i * 25;
+					m_pos.x = 50 + j * 25;
+					connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - 2.5, m_pos.x + 2.5, m_pos.y + 2.5);
 					m_pRenderTarget->FillRectangle(connectedLine, m_pConnectedLineBrush);
 					break;
 			}
@@ -119,8 +127,13 @@ void CGameMap::createResource(){
 	if(m_pRenderTarget == nullptr){
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
+		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red),&m_pUnconnectedLineBrush);
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pConnectedLineBrush);
 	}
 
 	return;
+}
+
+void CGameMap::drawLine(int i, int j){
+	m_Map[i][j] = MO_LINE_CONNECTED;
 }
