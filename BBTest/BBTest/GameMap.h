@@ -49,8 +49,10 @@ protected:
 	
 	//renderer를 위한 임시 배열입니다. 하하하!
 	MapObject			m_Map[MAX_WIDTH][MAX_HEIGHT];
+	MapObject			getMapType(int i, int j);
 
 	void createMap();
 	bool isPossible(int row, int column);
+
 };
 

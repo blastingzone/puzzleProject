@@ -73,3 +73,9 @@ bool CRenderer::End()
 
 	return true;
 }
+
+bool CRenderer::RenderAll()
+{
+	
+	return true;
+}

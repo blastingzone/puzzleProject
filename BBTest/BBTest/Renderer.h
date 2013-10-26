@@ -12,6 +12,7 @@ public:
 
 	bool Clear();
 	bool Begin();
+	bool RenderAll();
 	bool End();
 
 	ID2D1Factory* GetD2DFactory() const { return m_ipD2DFactory; }
