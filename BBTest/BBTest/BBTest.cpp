@@ -5,6 +5,7 @@
 #include "BBTest.h"
 #include "GameMap.h"
 #include "Renderer.h"
+#include <windowsx.h>
 
 #define MAX_LOADSTRING 100
 
@@ -158,7 +159,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_LBUTTONDOWN:
-		gameMap->drawLine(1, 2);
+		int xPos;
+		int yPos;
+		xPos = GET_X_LPARAM(lParam); 
+		yPos = GET_Y_LPARAM(lParam);
+		//Logic -> update(xPos,yPos);
+		
+		//gameMap->drawLine(1, 2);
 		break;
 	case WM_PAINT:
 		renderer->Begin();
