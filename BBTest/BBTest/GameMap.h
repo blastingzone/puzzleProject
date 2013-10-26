@@ -39,7 +39,9 @@ public:
 	static CGameMap*	GetInstance();
 	static void			Release();
 	void				Render();
+
 	bool setSize(int width, int height);
+	void drawLine(int i, int j);
 
 protected:
 	int m_Width;
@@ -59,6 +61,7 @@ protected:
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
+	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
 	ID2D1SolidColorBrush*	m_pConnectedLineBrush;
 	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
 	ID2D1SolidColorBrush*	m_pTileBrush;
