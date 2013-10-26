@@ -157,6 +157,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
 		break;
+	case WM_LBUTTONDOWN:
+		gameMap->drawLine(1, 2);
+		break;
 	case WM_PAINT:
 		renderer->Begin();
 		renderer->Clear();
