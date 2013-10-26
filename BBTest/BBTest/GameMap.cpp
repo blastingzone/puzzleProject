@@ -124,4 +124,6 @@ void CGameMap::createResource(){
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pConnectedLineBrush);
 	}
+
+	return;
 }

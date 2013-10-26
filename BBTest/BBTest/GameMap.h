@@ -38,7 +38,7 @@ public:
 	//bool drawLine(Edge tempEdge); //success : return true
 	static CGameMap*	GetInstance();
 	static void			Release();
-	void			Render();
+	void				Render();
 	bool setSize(int width, int height);
 
 protected:
@@ -48,8 +48,8 @@ protected:
 	static CGameMap*	m_pInstance; //singleton instance
 	
 	//renderer를 위한 임시 배열입니다. 하하하!
-	static MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
-	MapObject			getMapType(int i, int j);
+	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
+	MapObject	getMapType(int i, int j);
 
 	D2D1_ELLIPSE m_DotEllipse;
 
