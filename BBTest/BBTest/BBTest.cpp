@@ -12,8 +12,8 @@
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer* renderer = CRenderer::GetInstance();							// Renderer ^^
-CGameMap* gameMap;
+CRenderer*	renderer;								// Renderer ^^
+CGameMap*	gameMap;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -46,6 +46,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	gameMap = gameMap->GetInstance();
 	gameMap->init();
+	
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BBTEST));
 
 	// Main message loop:
@@ -115,6 +116,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+   renderer = renderer->GetInstance();
    renderer->Init(hWnd);
 
    return TRUE;
