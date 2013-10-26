@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameMap.h"
+#include "Renderer.h"
 
 CGameMap* CGameMap::m_pInstance = nullptr;
 
@@ -64,22 +65,16 @@ void CGameMap::init(){
 }
 
 bool CGameMap::isPossible(int row, int column){
-	//일단 자세한 설명은 생략한다.
 	return true;
 }
 
-void CGameMap::Render(ID2D1HwndRenderTarget* target)
+void CGameMap::Render()
 {
-	ID2D1SolidColorBrush* m_pDotBrush;
-	ID2D1SolidColorBrush* m_pRectBrush;
-
 	D2D1_ELLIPSE m_DotEllipse;
+	D2D1_RECT_F connectedLine;
 	D2D1_POINT_2F m_pos;
 
-	D2D1_RECT_F tile;
-
-	target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
-	target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pRectBrush);
+	createResource();
 
 	for(int i = 0; i <= MAX_WIDTH; ++i)
 	{
@@ -91,13 +86,13 @@ void CGameMap::Render(ID2D1HwndRenderTarget* target)
 					m_pos.y = 50 + i * 25;
 					m_pos.x = 50 + j * 25;
 					m_DotEllipse = D2D1::Ellipse( m_pos, 5.0, 5.0 );
-					target->FillEllipse(&m_DotEllipse, m_pDotBrush);
+					m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
 					break;
 				case MO_LINE_UNCONNECTED:
 					m_pos.y = 50 + i * 25;
 					m_pos.x = 50 + j * 25;
-					tile = D2D1::Rect( m_pos.x - 2.5, m_pos.y - 2.5, m_pos.x + 2.5, m_pos.y + 2.5);
-					target->FillRectangle(tile, m_pRectBrush);
+					connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - 2.5, m_pos.x + 2.5, m_pos.y + 2.5);
+					m_pRenderTarget->FillRectangle(connectedLine, m_pConnectedLineBrush);
 					break;
 			}
 		}
@@ -118,4 +113,15 @@ MapObject CGameMap::getMapType(int i, int j)
 {
 	if(i <= MAX_HEIGHT && j <= MAX_WIDTH)
 		return m_Map[i][j];
+}
+
+void CGameMap::createResource(){
+	if(m_pRenderTarget == nullptr){
+		CRenderer* renderer;
+		renderer = renderer->GetInstance();
+		m_pRenderTarget = renderer->GetHwndRenderTarget();
+
+		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
+		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pConnectedLineBrush);
+	}
 }

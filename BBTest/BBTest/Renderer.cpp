@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Renderer.h"
 
+CRenderer* CRenderer::m_pInstance = nullptr;
 
 CRenderer::CRenderer(void)
 {
@@ -10,6 +11,13 @@ CRenderer::CRenderer(void)
 CRenderer::~CRenderer(void)
 {
 	Release();
+}
+
+CRenderer* CRenderer::GetInstance(){
+	if(m_pInstance == nullptr)
+		m_pInstance = new CRenderer();
+	
+	return m_pInstance;
 }
 
 bool CRenderer::Init(HWND hwnd)

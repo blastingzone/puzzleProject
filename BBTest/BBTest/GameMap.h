@@ -38,7 +38,7 @@ public:
 	//bool drawLine(Edge tempEdge); //success : return true
 	static CGameMap*	GetInstance();
 	static void			Release();
-	static void			Render(ID2D1HwndRenderTarget* target);
+	void			Render();
 	bool setSize(int width, int height);
 
 protected:
@@ -48,11 +48,21 @@ protected:
 	static CGameMap*	m_pInstance; //singleton instance
 	
 	//renderer를 위한 임시 배열입니다. 하하하!
-	MapObject			m_Map[MAX_WIDTH][MAX_HEIGHT];
+	static MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
 	MapObject			getMapType(int i, int j);
+
+	D2D1_ELLIPSE m_DotEllipse;
 
 	void createMap();
 	bool isPossible(int row, int column);
 
+	ID2D1HwndRenderTarget*	m_pRenderTarget;
+
+	ID2D1SolidColorBrush*	m_pDotBrush;
+	ID2D1SolidColorBrush*	m_pConnectedLineBrush;
+	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
+	ID2D1SolidColorBrush*	m_pTileBrush;
+
+	void createResource();
 };
 

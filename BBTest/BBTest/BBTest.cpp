@@ -43,6 +43,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	{
 		return FALSE;
 	}
+	gameMap->GetInstance()->init();
+	gameMap = gameMap->GetInstance();
 
 	gameMap = gameMap->GetInstance();
 	gameMap->init();
@@ -156,7 +158,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		renderer.Begin();
-		gameMap->Render(renderer.GetHwndRenderTarget());
+		gameMap->Render();
 		renderer.End();
 		break;
 	case WM_DESTROY:
