@@ -12,7 +12,7 @@
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer renderer;								// Renderer ^^
+CRenderer* renderer = CRenderer::GetInstance();							// Renderer ^^
 CGameMap* gameMap;
 
 // Forward declarations of functions included in this code module:
@@ -115,7 +115,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
-   renderer.Init(hWnd);
+   renderer->Init(hWnd);
 
    return TRUE;
 }
@@ -155,10 +155,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_PAINT:
-		renderer.Begin();
-		renderer.Clear();
+		renderer->Begin();
+		renderer->Clear();
 		gameMap->Render();
-		renderer.End();
+		renderer->End();
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

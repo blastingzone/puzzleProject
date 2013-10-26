@@ -117,10 +117,7 @@ MapObject CGameMap::getMapType(int i, int j)
 
 void CGameMap::createResource(){
 	if(m_pRenderTarget == nullptr){
-		CRenderer* renderer;
-		renderer = renderer->GetInstance();
-		m_pRenderTarget = renderer->GetHwndRenderTarget();
-
+		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkKhaki),&m_pDotBrush);
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pConnectedLineBrush);
 	}
