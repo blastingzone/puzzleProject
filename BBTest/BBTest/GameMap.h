@@ -39,6 +39,7 @@ public:
 	static CGameMap*	GetInstance();
 	static void			Release();
 	static void			Render(ID2D1HwndRenderTarget* target);
+	bool setSize(int width, int height);
 
 protected:
 	int m_Width;

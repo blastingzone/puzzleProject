@@ -86,3 +86,13 @@ void CGameMap::Render(ID2D1HwndRenderTarget* target)
 		}
 	}
 }
+
+bool CGameMap::setSize( int width, int height )
+{
+	if(m_Width>MAX_WIDTH/2 || m_Height>MAX_HEIGHT/2){
+		return false;
+	}
+	m_Width = width;
+	m_Height = height;
+	return true;
+}
