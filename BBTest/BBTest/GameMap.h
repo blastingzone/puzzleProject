@@ -88,7 +88,7 @@ protected:
 	ID2D1SolidColorBrush*	m_pConnectedLineBrush;
 	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
 	ID2D1SolidColorBrush*	m_pTileBrush;
-	ID2D1SolidColorBrush* m_pVoidTileBrush;
+	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
 	void createResource();
 };

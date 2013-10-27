@@ -39,7 +39,7 @@ void CLogic::update( Coordinate mouseCoordinate )
 	IndexedPosition indexedPosition;
 	indexedPosition = calcualteIndex(mouseCoordinate);
 
-
+	//isPossible 체크 후에 gameMap 호출해서 반영
 }
 
 //마우스 좌표값을 index로 바꾸는 함수

@@ -43,7 +43,7 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Logic.h">
-      <Filter>Header Files</Filter>
+      <Filter>Logic Element</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +60,7 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Logic.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Logic Element</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

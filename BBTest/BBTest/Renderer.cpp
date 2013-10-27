@@ -63,7 +63,7 @@ bool CRenderer::Release()
 
 bool CRenderer::Clear()
 {
-	m_ipRenderTarget->Clear( D2D1::ColorF( D2D1::ColorF::White));
+	m_ipRenderTarget->Clear( D2D1::ColorF(D2D1::ColorF::MintCream));
 	
 	return true;
 }
