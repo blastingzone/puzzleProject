@@ -5,6 +5,7 @@
 #include "BBTest.h"
 #include "GameMap.h"
 #include "Renderer.h"
+#include "Logic.h"
 #include <windowsx.h>
 
 #define MAX_LOADSTRING 100
@@ -15,6 +16,7 @@ TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 CRenderer*	renderer;								// Renderer ^^
 CGameMap*	gameMap;
+CLogic* logic;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -23,14 +25,14 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPTSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+					   _In_opt_ HINSTANCE hPrevInstance,
+					   _In_ LPTSTR    lpCmdLine,
+					   _In_ int       nCmdShow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
- 	// TODO: Place code here.
+	// TODO: Place code here.
 	MSG msg;
 	HACCEL hAccelTable;
 
@@ -47,7 +49,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	gameMap = gameMap->GetInstance();
 	gameMap->init();
-	
+
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BBTEST));
 
 	// Main message loop:
@@ -103,25 +105,25 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
+	HWND hWnd;
 
-   hInst = hInstance; // Store instance handle in our global variable
+	hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+	hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+	if (!hWnd)
+	{
+		return FALSE;
+	}
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
-   renderer = renderer->GetInstance();
-   renderer->Init(hWnd);
+	renderer = renderer->GetInstance();
+	renderer->Init(hWnd);
 
-   return TRUE;
+	return TRUE;
 }
 
 //
@@ -159,13 +161,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_LBUTTONDOWN:
-		int xPos;
-		int yPos;
-		xPos = GET_X_LPARAM(lParam); 
-		yPos = GET_Y_LPARAM(lParam);
+
+		//xPos = GET_X_LPARAM(lParam); 
+		//yPos = GET_Y_LPARAM(lParam);
+
+		Coordinate mouseCoordinate;
+		mouseCoordinate.xPos = GET_X_LPARAM(lParam);
+		mouseCoordinate.yPos = GET_Y_LPARAM(lParam);
+
+		//logic -> update(mouseCoordinate);
+
 		//Logic -> update(xPos,yPos);
-		
-		//gameMap->drawLine(1, 2);
+		gameMap->drawLine(1, 2);
 		break;
 	case WM_PAINT:
 		renderer->Begin();

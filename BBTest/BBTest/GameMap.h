@@ -4,6 +4,22 @@
 #define MAX_WIDTH	21
 #define MAX_HEIGHT	21
 
+struct IndexedPosition
+{
+	int iPos;
+	int jPos;
+};
+struct Coordinate
+{
+	int xPos;
+	int yPos;
+};
+struct MapSize
+{
+	int width;
+	int height;
+};
+
 enum MapObject
 {
 	MO_SENTINEL,
@@ -40,23 +56,30 @@ public:
 	static void			Release();
 	void				Render();
 
-	bool setSize(int width, int height);
-	void drawLine(int i, int j);
+
+	bool setMapSize(MapSize mapsize);
+	void drawLine(IndexedPosition indexedPosition);
+	void drawLine(int iPos, int jPos);
+
 
 protected:
-	int m_Width;
-	int m_Height;
+	//int m_Width;
+	//int m_Height;
+	MapSize m_MapSize;
+	double m_tileWidth;
+
 
 	static CGameMap*	m_pInstance; //singleton instance
-	
+
 	//renderer를 위한 임시 배열입니다. 하하하!
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
-	MapObject	getMapType(int i, int j);
+	MapObject	getMapType(IndexedPosition indexedPosition);
+	MapObject  getMapType(int xPos, int jPos);
 
 	D2D1_ELLIPSE m_DotEllipse;
 
 	void createMap();
-	bool isPossible(int row, int column);
+	bool isPossible(IndexedPosition indexedPosition);
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
@@ -65,6 +88,7 @@ protected:
 	ID2D1SolidColorBrush*	m_pConnectedLineBrush;
 	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
 	ID2D1SolidColorBrush*	m_pTileBrush;
+	ID2D1SolidColorBrush* m_pVoidTileBrush;
 
 	void createResource();
 };
