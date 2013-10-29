@@ -6,7 +6,7 @@ CGameMap* CGameMap::m_pInstance = nullptr;
 
 CGameMap::CGameMap(void)
 {
-	memset(m_Map, 0, sizeof(MapObject) * MAX_WIDTH * MAX_HEIGHT);
+	memset(m_Map, 0, sizeof(MapObject) * MAX_WIDTH * MAX_HEIGHT); //SM9: 이건 sizeof(m_Map) 해도 된다. 컴파일 타임에 크기를 알 수 있기 때문
 	m_pRenderTarget = nullptr;
 	m_tileWidth = 25;
 
@@ -35,11 +35,13 @@ void CGameMap::Release(){
 void CGameMap::createMap(){
 	int targetRow, targetColumn;
 
-	for(targetRow = 1; targetRow <= m_MapSize.height*2 + 1; ++targetRow){
-		for(targetColumn = 1; targetColumn <= m_MapSize.width*2 + 1; ++targetColumn){
+	for(targetRow = 1; targetRow <= m_MapSize.height*2 + 1; ++targetRow){  //SM9: for와 같은 키워드의 경우 괄호를 for ()처럼 키워드 뒤에 한 칸 띄우고 쓸 것.
+		
+		for(targetColumn = 1; targetColumn <= m_MapSize.width*2 + 1; ++targetColumn) 
+		{ //SM9: 웬만하면 시작{와 닫는 }위치를 맞출 것. (VC++쪽에서는 이게 거의 정석)
 			if(targetRow % 2 == 1){
 				// dot - line - dot - line
-				if(targetColumn % 2 == 1){
+				if (targetColumn % 2 == 1){ //SM9: if도 키워드기 때문에 괄호는 한 칸 띄우고..
 					m_Map[targetRow][targetColumn] = MO_DOT;
 				} else {
 					m_Map[targetRow][targetColumn] = MO_LINE_UNCONNECTED;
@@ -202,7 +204,7 @@ MapObject CGameMap::getMapType(int iPos, int jPos)
 	return getMapType(tempPos);
 }
 
-void CGameMap::createResource(){
+void CGameMap::createResource(){ //SM9: 주기적으로 불리는 Render()안에서 리소스를 생성하는 것은 좋은 방법이 아니다.
 	if(m_pRenderTarget == nullptr){
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkMagenta),&m_pDotBrush);
@@ -211,7 +213,8 @@ void CGameMap::createResource(){
 		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pVoidTileBrush);
 	}
 
-	return;
+
+	return; //SM9: 이놈은 뭐냠? 보통 CreateResource()같은 함수는 실패할 가능성이 있기 때문에 bool로 반환해라.
 }
 
 void CGameMap::drawLine(IndexedPosition indexedPosition){

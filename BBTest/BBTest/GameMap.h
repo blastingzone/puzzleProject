@@ -62,7 +62,8 @@ public:
 	void drawLine(int iPos, int jPos);
 
 
-protected:
+protected: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
+
 	//int m_Width;
 	//int m_Height;
 	MapSize m_MapSize;
