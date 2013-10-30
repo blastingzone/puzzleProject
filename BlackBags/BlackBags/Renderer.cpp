@@ -11,7 +11,8 @@ CRenderer::CRenderer(void)
 
 CRenderer::~CRenderer(void)
 {
-	Release();
+	//ReleaseInstance();
+	//Release();
 }
 
 CRenderer* CRenderer::GetInstance()
@@ -51,15 +52,16 @@ bool CRenderer::Init(HWND hwnd)
 
 bool CRenderer::ReleaseInstance()
 {
-	SafeRelease(m_pInstance);
+	m_pInstance->Release();
+	delete m_pInstance;
 
 	return true;
 }
 
 bool CRenderer::Release()
 {
-	SafeRelease(m_ipD2DFactory);
 	SafeRelease(m_ipRenderTarget);
+	SafeRelease(m_ipD2DFactory);
 
 	return true;
 }

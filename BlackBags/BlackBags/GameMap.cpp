@@ -17,6 +17,7 @@ CGameMap::CGameMap(void)
 
 CGameMap::~CGameMap(void)
 {
+	//SafeArrayDelete(m_Map);
 }
 
 CGameMap* CGameMap::GetInstance()
@@ -31,7 +32,8 @@ CGameMap* CGameMap::GetInstance()
 
 bool CGameMap::ReleaseInstance()
 {
-	SafeRelease(m_pInstance);
+	m_pInstance->Release();
+	delete m_pInstance;
 
 	return true;
 }

@@ -69,7 +69,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
-
+	gameMap->ReleaseInstance();
+	renderer->ReleaseInstance();
 	return (int) msg.wParam;
 }
 
@@ -163,10 +164,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
-			gameMap->Release();
-			gameMap->ReleaseInstance();
-			renderer->Release();
-			renderer->ReleaseInstance();
+			//gameMap->ReleaseInstance();
+			
+
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
