@@ -163,8 +163,8 @@ void CGameMap::Render()
 		{
 			if (m_pInstance->GetMapType(i,j) == MO_TILE_VOID)
 			{
-				m_pos.y = -m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i + 1);
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j + 1);
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1);
+				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1);
 				connectedLine = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
 				m_pRenderTarget->FillRectangle(connectedLine, m_pVoidTileBrush);
 			}
@@ -178,14 +178,14 @@ void CGameMap::Render()
 		{
 			if (i%2==0)
 			{
-				m_pos.y = -m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i + 1);
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * j;
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1);
+				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1);
 				connectedLine = D2D1::Rect( m_pos.x - LINE_WEIGHT / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + LINE_WEIGHT / 2, m_pos.y + TILE_SIZE / 2);
 			}
 			else
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * i;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j + 1);
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1);
+				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1);
 				connectedLine = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
 			}
 			switch (m_pInstance->GetMapType(i,j))
@@ -209,8 +209,8 @@ void CGameMap::Render()
 		{
 			if (m_pInstance->GetMapType(i,j) == MO_DOT)
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * i;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * j;
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1);
+				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1);
 				m_DotEllipse = D2D1::Ellipse( m_pos, DOT_RADIUS, DOT_RADIUS );
 				m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
 			}
@@ -282,6 +282,6 @@ void CGameMap::CalcStartPosition()
 	centerPosition.height /= 2;
 	centerPosition.width /= 2;
 
-	m_StartPosition.height = (m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) - LINE_WEIGHT / 2;
-	m_StartPosition.width = (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) - LINE_WEIGHT / 2;
+	m_StartPosition.height = centerPosition.height - (m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
+	m_StartPosition.width = centerPosition.width - (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
 }

@@ -8,6 +8,8 @@
 #include "Logic.h"
 #include <windowsx.h>
 #include <crtdbg.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MAX_LOADSTRING 100
 
@@ -37,6 +39,11 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
+	// 콘솔창 생성
+	AllocConsole();
+	FILE* pFile;
+	freopen_s(&pFile, "CONOUT$", "wb", stdout);
+
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -60,9 +67,12 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
 
+	int a = 0;
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
+		printf("COUNT : %d\n", a);
+		
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
 			TranslateMessage(&msg);
@@ -72,6 +82,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	gameMap->ReleaseInstance();
 	renderer->ReleaseInstance();
+
+	FreeConsole();
 
 	return (int) msg.wParam;
 }
