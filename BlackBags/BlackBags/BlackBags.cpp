@@ -16,13 +16,13 @@
 #endif
 
 // Global Variables:
-HINSTANCE		hInst;												// current instance
-TCHAR			szTitle[MAX_LOADSTRING];					// The title bar text
+HINSTANCE		hInst;									// current instance
+TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer*		renderer;											// Renderer
-CGameMap*	gameMap;
+CRenderer*		renderer;								// Renderer
+CGameMap*		gameMap;
 CLogic*			logic;
-RECT				clientRect;											//window client size
+RECT			clientRect;								//window client size
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -69,8 +69,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
+
 	gameMap->ReleaseInstance();
 	renderer->ReleaseInstance();
+
 	return (int) msg.wParam;
 }
 
@@ -174,7 +176,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_CREATE:
 		//client 영역 크기 설정
-		SetRect(&clientRect, 0, 0, 429, 429); 
+		SetRect(&clientRect, 0, 0, 799, 599); 
 		
 		//윈도우 크기를 계산
 		AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);

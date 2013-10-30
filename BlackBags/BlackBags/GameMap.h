@@ -44,6 +44,10 @@ enum MapObject
 	MO_TILE_TRASH_P4
 };
 
+const float TILE_SIZE = 50.0f;
+const float LINE_WEIGHT = 10.0f;
+const float DOT_RADIUS = 6.0f;
+
 class CGameMap
 {
 public:
@@ -65,6 +69,9 @@ private: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
 
 	MapSize m_MapSize;
 	float	m_TileWidth;
+
+	D2D1_SIZE_F	m_StartPosition;
+	void CalcStartPosition();
 
 	static CGameMap*	m_pInstance; //singleton instance
 
