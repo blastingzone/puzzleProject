@@ -7,17 +7,18 @@
 #include "Renderer.h"
 #include "Logic.h"
 #include <windowsx.h>
+#include <crtdbg.h>
 
 #define MAX_LOADSTRING 100
 
 // Global Variables:
-HINSTANCE hInst;								// current instance
-TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
-TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer*	renderer;							// Renderer ^^
+HINSTANCE		hInst;												// current instance
+TCHAR			szTitle[MAX_LOADSTRING];					// The title bar text
+TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
+CRenderer*		renderer;											// Renderer
 CGameMap*	gameMap;
-CLogic*		logic;
-RECT		clientRect;							//window client size
+CLogic*			logic;
+RECT				clientRect;											//window client size
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -30,12 +31,17 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 					   _In_ LPTSTR    lpCmdLine,
 					   _In_ int       nCmdShow)
 {
+	#ifdef _DEBUG
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
+		//_CrtSetBreakAlloc( );
+	#endif
+
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	// TODO: Place code here.
-	MSG msg;
-	HACCEL hAccelTable;
+	MSG		msg;
+	HACCEL	hAccelTable;
 
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -49,7 +55,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	gameMap = gameMap->GetInstance();
-	gameMap->init();
+	gameMap->Init();
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
 
@@ -140,8 +146,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
-	PAINTSTRUCT ps;
-	HDC hdc;
+	//PAINTSTRUCT ps;
+	//HDC hdc;
 
 	switch (message)
 	{
@@ -180,13 +186,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		//yPos = GET_Y_LPARAM(lParam);
 
 		Coordinate mouseCoordinate;
-		mouseCoordinate.xPos = GET_X_LPARAM(lParam);
-		mouseCoordinate.yPos = GET_Y_LPARAM(lParam);
+		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
+		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 
-		//logic -> update(mouseCoordinate);
+		logic -> Update(mouseCoordinate);
 
 		//Logic -> update(xPos,yPos);
-		gameMap->drawLine(1, 2);
+		gameMap->DrawLine(1, 2);
 		break;
 	case WM_PAINT:
 		renderer->Begin();

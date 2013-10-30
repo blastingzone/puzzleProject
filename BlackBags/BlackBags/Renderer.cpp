@@ -13,10 +13,13 @@ CRenderer::~CRenderer(void)
 	Release();
 }
 
-CRenderer* CRenderer::GetInstance(){
-	if(m_pInstance == nullptr)
+CRenderer* CRenderer::GetInstance()
+{
+	if (m_pInstance == nullptr)
+	{
 		m_pInstance = new CRenderer();
-	
+	}
+
 	return m_pInstance;
 }
 
@@ -47,12 +50,12 @@ bool CRenderer::Init(HWND hwnd)
 
 bool CRenderer::Release()
 {
-	if(m_ipD2DFactory != nullptr)
+	if (m_ipD2DFactory != nullptr)
 	{
 		m_ipD2DFactory->Release();
 		m_ipD2DFactory = nullptr;
 	}
-	if(m_ipRenderTarget != nullptr)
+	if (m_ipRenderTarget != nullptr)
 	{
 		m_ipRenderTarget->Release();
 		m_ipRenderTarget = nullptr;

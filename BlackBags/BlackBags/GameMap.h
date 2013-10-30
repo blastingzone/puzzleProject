@@ -6,18 +6,18 @@
 
 struct IndexedPosition
 {
-	int iPos;
-	int jPos;
+	int m_PosI;
+	int m_PosJ;
 };
 struct Coordinate
 {
-	int xPos;
-	int yPos;
+	int m_PosX;
+	int m_PosY;
 };
 struct MapSize
 {
-	int width;
-	int height;
+	int m_Width;
+	int m_Height;
 };
 
 enum MapObject
@@ -50,37 +50,32 @@ public:
 	CGameMap(void);
 	~CGameMap(void);
 
-	void init();
-	//bool drawLine(Edge tempEdge); //success : return true
+	void Init();
+	//bool DrawLine(Edge tempEdge); //success : return true
 	static CGameMap*	GetInstance();
-	static void			Release();
-	void				Render();
+	static void				Release();
+	void						Render();
 
+	bool SetMapSize(MapSize mapsize);
+	void DrawLine(IndexedPosition indexedPosition);
+	void DrawLine(int iPos, int jPos);
 
-	bool setMapSize(MapSize mapsize);
-	void drawLine(IndexedPosition indexedPosition);
-	void drawLine(int iPos, int jPos);
+private: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
 
-
-protected: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
-
-	//int m_Width;
-	//int m_Height;
 	MapSize m_MapSize;
-	double m_tileWidth;
-
+	float	m_TileWidth;
 
 	static CGameMap*	m_pInstance; //singleton instance
 
-	//renderer를 위한 임시 배열입니다. 하하하!
+	//renderer를 위한 임시 배열입니다. 
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
-	MapObject	getMapType(IndexedPosition indexedPosition);
-	MapObject  getMapType(int xPos, int jPos);
+	MapObject	GetMapType(IndexedPosition indexedPosition);
+	MapObject  GetMapType(int xPos, int jPos);
 
 	D2D1_ELLIPSE m_DotEllipse;
 
-	void createMap();
-	bool isPossible(IndexedPosition indexedPosition);
+	void CreateMap();
+	bool IsPossible(IndexedPosition indexedPosition);
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
@@ -91,6 +86,6 @@ protected: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
-	void createResource();
+	bool CreateResource();
 };
 

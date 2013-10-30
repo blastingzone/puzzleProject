@@ -15,13 +15,14 @@ public:
 	bool RenderAll();
 	bool End();
 
-	static CRenderer*		CRenderer::GetInstance();
-	ID2D1Factory* GetD2DFactory() const { return m_ipD2DFactory; }
+	static CRenderer*	 CRenderer::GetInstance();
+
+	ID2D1Factory*					GetD2DFactory() const { return m_ipD2DFactory; }
 	ID2D1HwndRenderTarget*	GetHwndRenderTarget() const { return m_ipRenderTarget; }
 
 private:
 	static CRenderer*		m_pInstance; //singleton instance
 
-	ID2D1Factory*			m_ipD2DFactory;
+	ID2D1Factory*					m_ipD2DFactory;
 	ID2D1HwndRenderTarget*	m_ipRenderTarget;
 };
