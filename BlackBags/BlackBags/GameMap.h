@@ -53,7 +53,8 @@ public:
 	void Init();
 	//bool DrawLine(Edge tempEdge); //success : return true
 	static CGameMap*	GetInstance();
-	static void				Release();
+	static bool				ReleaseInstance();
+	bool				Release();
 	void						Render();
 
 	bool SetMapSize(MapSize mapsize);

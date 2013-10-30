@@ -45,6 +45,9 @@
     <ClInclude Include="BlackBags.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MacroSet.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

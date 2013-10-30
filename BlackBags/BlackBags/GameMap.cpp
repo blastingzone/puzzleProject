@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameMap.h"
 #include "Renderer.h"
+#include "MacroSet.h"
 
 CGameMap* CGameMap::m_pInstance = nullptr;
 
@@ -28,13 +29,23 @@ CGameMap* CGameMap::GetInstance()
 	return m_pInstance;
 }
 
-void CGameMap::Release()
+bool CGameMap::ReleaseInstance()
 {
-	if (m_pInstance != nullptr)
-	{
-		delete m_pInstance;
-	}
-	return;
+	SafeRelease(m_pInstance);
+
+	return true;
+}
+
+bool CGameMap::Release()
+{
+	SafeRelease(m_pDotBrush);
+	SafeRelease(m_pUnconnectedLineBrush);
+	SafeRelease(m_pConnectedLineBrush);
+	SafeRelease(m_pPossibleLineBrush);
+	SafeRelease(m_pTileBrush);
+	SafeRelease(m_pVoidTileBrush);
+
+	return true;
 }
 
 void CGameMap::CreateMap()
@@ -85,14 +96,16 @@ void CGameMap::Init()
 
 bool CGameMap::IsPossible(IndexedPosition indexedPosition)
 {
-	return true;
+	if (indexedPosition.m_PosI == 1)
+		return true;
+	return false;
 }
 
 void CGameMap::Render()
 {
 	D2D1_ELLIPSE		m_DotEllipse;
 	D2D1_RECT_F		connectedLine;
-	D2D1_RECT_F		m_TileVoid;
+	//D2D1_RECT_F		m_TileVoid;
 	D2D1_POINT_2F	m_pos;
 
 	CreateResource();
@@ -160,8 +173,8 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_HEIGHT; ++j)
 		{
-			m_pos.y = 50 + i * 25;
-			m_pos.x = 50 + j * 25;
+			m_pos.y = 50.0f + i * 25.0f;
+			m_pos.x = 50.0f + j * 25.0f;
 			if (i%2==0)
 			{
 				connectedLine = D2D1::Rect( m_pos.x - 2.5f, m_pos.y - m_TileWidth, m_pos.x + 2.5f, m_pos.y + m_TileWidth);
@@ -191,8 +204,8 @@ void CGameMap::Render()
 		{
 			if (m_pInstance->GetMapType(i,j) == MO_DOT)
 			{
-				m_pos.y = 50 + i * 25;
-				m_pos.x = 50 + j * 25;
+				m_pos.y = 50.0f + i * 25.0f;
+				m_pos.x = 50.0f + j * 25.0f;
 				m_DotEllipse = D2D1::Ellipse( m_pos, 5.0, 5.0 );
 				m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
 			}
@@ -214,6 +227,9 @@ MapObject CGameMap::GetMapType(IndexedPosition indexedPosition)
 	{
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
 	}
+	//////////////////////////////////////////////////////////////////////////
+	//Á¶½ÉÇØ
+	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
 }
 
 MapObject CGameMap::GetMapType(int iPos, int jPos)
@@ -252,3 +268,5 @@ void CGameMap::DrawLine(int iPos, int jPos)
 
 	DrawLine(indexedPosition);
 }
+
+

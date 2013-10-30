@@ -85,6 +85,7 @@
     <ClInclude Include="BlackBags.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="Logic.h" />
+    <ClInclude Include="MacroSet.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />

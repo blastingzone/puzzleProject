@@ -11,6 +11,10 @@
 
 #define MAX_LOADSTRING 100
 
+#ifdef _DEBUG
+#define new new( _CLIENT_BLOCK, __FILE__, __LINE__ )
+#endif
+
 // Global Variables:
 HINSTANCE		hInst;												// current instance
 TCHAR			szTitle[MAX_LOADSTRING];					// The title bar text
@@ -31,10 +35,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 					   _In_ LPTSTR    lpCmdLine,
 					   _In_ int       nCmdShow)
 {
-	#ifdef _DEBUG
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
-		//_CrtSetBreakAlloc( );
-	#endif
+	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
@@ -124,12 +125,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		return FALSE;
 	}
 
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
-
 	renderer = renderer->GetInstance();
 	renderer->Init(hWnd);
-
+	
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
+	
 	return TRUE;
 }
 
@@ -162,6 +163,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
+			gameMap->Release();
+			gameMap->ReleaseInstance();
+			renderer->Release();
+			renderer->ReleaseInstance();
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
@@ -189,7 +194,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 
-		logic -> Update(mouseCoordinate);
+		//logic -> Update(mouseCoordinate);
 
 		//Logic -> update(xPos,yPos);
 		gameMap->DrawLine(1, 2);

@@ -49,6 +49,9 @@ void CLogic::Update( Coordinate mouseCoordinate )
 IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
+	//¸ô¶ó//////////////////////////
+	mouseCoordinate.m_PosX = 0;
+
 	indexedPosition.m_PosI = 0;
 	indexedPosition.m_PosJ = 0;
 

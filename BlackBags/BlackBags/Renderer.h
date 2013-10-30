@@ -9,6 +9,7 @@ public:
 
 	bool Init(HWND hwnd);
 	bool Release();
+	static bool ReleaseInstance();
 
 	bool Clear();
 	bool Begin();

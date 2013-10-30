@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Renderer.h"
+#include "MacroSet.h"
 
 CRenderer* CRenderer::m_pInstance = nullptr;
 
@@ -48,18 +49,17 @@ bool CRenderer::Init(HWND hwnd)
 	return true;
 }
 
+bool CRenderer::ReleaseInstance()
+{
+	SafeRelease(m_pInstance);
+
+	return true;
+}
+
 bool CRenderer::Release()
 {
-	if (m_ipD2DFactory != nullptr)
-	{
-		m_ipD2DFactory->Release();
-		m_ipD2DFactory = nullptr;
-	}
-	if (m_ipRenderTarget != nullptr)
-	{
-		m_ipRenderTarget->Release();
-		m_ipRenderTarget = nullptr;
-	}
+	SafeRelease(m_ipD2DFactory);
+	SafeRelease(m_ipRenderTarget);
 
 	return true;
 }
