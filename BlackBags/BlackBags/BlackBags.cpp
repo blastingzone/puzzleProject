@@ -65,6 +65,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	gameMap = gameMap->GetInstance();
 	gameMap->Init();
 
+
+	logic = logic->GetInstance();
+	logic->Init();
+
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
 
 	int a = 0;
@@ -82,6 +86,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	gameMap->ReleaseInstance();
 	renderer->ReleaseInstance();
+	logic->ReleaseInstance();
 
 	FreeConsole();
 

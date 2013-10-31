@@ -1,5 +1,6 @@
 #pragma once
 #include "GameMap.h"
+#include "Player.h"
 
 class CLogic
 {
@@ -9,9 +10,14 @@ public:
 
 	void					Init();
 	static CLogic*		GetInstance();
-	static void			Release();
+	static bool			ReleaseInstance();
+	bool Release();
 
 	void StartGame();
+	bool GetPlayerNumber();
+	bool CreatePlayers();
+	bool SetPlayerTurn();
+
 	void ShowResult();
 	void CheckScore();
 
@@ -28,5 +34,8 @@ public:
 private:
 
 	static CLogic*	m_pInstance; //singleton instance
+	int m_PlayerNumber;
+	CPlayer* m_Player[4];
+
 };
 

@@ -44,7 +44,7 @@ enum MapObject
 	MO_TILE_TRASH_P4
 };
 
-const float TILE_SIZE = 50.0f;
+const float TILE_SIZE = 80.0f;
 const float LINE_WEIGHT = 10.0f;
 const float DOT_RADIUS = 6.0f;
 
@@ -65,7 +65,7 @@ public:
 	void DrawLine(IndexedPosition indexedPosition);
 	void DrawLine(int iPos, int jPos);
 
-private: //SM9: 이걸 어디서 상송 받는게 아니라면 private로 해라.
+private: 
 
 	MapSize m_MapSize;
 	float	m_TileWidth;
