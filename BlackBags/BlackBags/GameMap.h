@@ -54,38 +54,34 @@ public:
 	CGameMap(void);
 	~CGameMap(void);
 
-	void Init();
-	//bool DrawLine(Edge tempEdge); //success : return true
+	void				Init();
 	static CGameMap*	GetInstance();
-	static bool				ReleaseInstance();
+	static bool			ReleaseInstance();
 	bool				Release();
-	void						Render();
+
+	void				Render();
 
 	bool SetMapSize(MapSize mapsize);
 	void DrawLine(IndexedPosition indexedPosition);
 	void DrawLine(int iPos, int jPos);
 	
+	bool		IsPossible(IndexedPosition indexedPosition);
 	D2D1_SIZE_F GetStartPosition();
 
 private: 
-
-	MapSize m_MapSize;
-	float	m_TileWidth;
-
-	D2D1_SIZE_F	m_StartPosition;
+	void CreateMap();
+	bool CreateResource();
 	void CalcStartPosition();
+
+	MapSize		m_MapSize;
+	D2D1_SIZE_F	m_StartPosition;
 
 	static CGameMap*	m_pInstance; //singleton instance
 
 	//renderer를 위한 임시 배열입니다. 
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
 	MapObject	GetMapType(IndexedPosition indexedPosition);
-	MapObject  GetMapType(int xPos, int jPos);
-
-	D2D1_ELLIPSE m_DotEllipse;
-
-	void CreateMap();
-	bool IsPossible(IndexedPosition indexedPosition);
+	MapObject	GetMapType(int xPos, int jPos);
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
@@ -96,6 +92,6 @@ private:
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
-	bool CreateResource();
+	D2D1_ELLIPSE			m_DotEllipse;
 };
 

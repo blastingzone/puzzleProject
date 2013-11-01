@@ -9,7 +9,6 @@ CGameMap::CGameMap(void)
 {
 	memset(m_Map, 0, sizeof(m_Map)); 
 	m_pRenderTarget = nullptr;
-	m_TileWidth = 25;
 
 	m_MapSize.m_Width = 5;
 	m_MapSize.m_Height = 5;
@@ -100,8 +99,12 @@ void CGameMap::Init()
 
 bool CGameMap::IsPossible(IndexedPosition indexedPosition)
 {
-	if (indexedPosition.m_PosI == 1)
+	if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
+	{
+		//나중에 양 옆 타일의 소유주가 있는지 확인하는 조건도 추가할 것
 		return true;
+	}
+
 	return false;
 }
 
@@ -260,18 +263,30 @@ D2D1_SIZE_F CGameMap::GetStartPosition(){
 }
 
 bool CGameMap::CreateResource()
-{ //SM9: 주기적으로 불리는 Render()안에서 리소스를 생성하는 것은 좋은 방법이 아니다.
+{
+	HRESULT hr;
+
 	if (m_pRenderTarget == nullptr)
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
-		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkMagenta),&m_pDotBrush);
-		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro),&m_pUnconnectedLineBrush);
-		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Tomato),&m_pConnectedLineBrush);
-		m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pVoidTileBrush);
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkMagenta),&m_pDotBrush);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro),&m_pUnconnectedLineBrush);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Tomato),&m_pConnectedLineBrush);
+		
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pVoidTileBrush);
+
+		if (SUCCEEDED(hr) )
+			return true;
 	}
 
 	//
-	return true; //SM9: 이놈은 뭐냠? 보통 CreateResource()같은 함수는 실패할 가능성이 있기 때문에 bool로 반환해라.
+	return false;
 }
 
 void CGameMap::DrawLine(IndexedPosition indexedPosition)
@@ -295,6 +310,11 @@ void CGameMap::CalcStartPosition()
 	centerPosition.height /= 2;
 	centerPosition.width /= 2;
 
-	m_StartPosition.height = centerPosition.height - (m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
-	m_StartPosition.width = centerPosition.width - (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
+	m_StartPosition.height = 
+		centerPosition.height 
+		- (m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
+
+	m_StartPosition.width = 
+		centerPosition.width 
+		- (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
 }

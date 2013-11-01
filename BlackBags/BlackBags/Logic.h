@@ -8,9 +8,10 @@ public:
 	CLogic(void);
 	~CLogic(void);
 
-	void					Init();
+	void				Init();
 	static CLogic*		GetInstance();
 	static bool			ReleaseInstance();
+	
 	bool Release();
 
 	void StartGame();
@@ -32,10 +33,10 @@ public:
 	void GetMapSize();
 
 private:
-
 	static CLogic*	m_pInstance; //singleton instance
-	int m_PlayerNumber;
-	CPlayer* m_Player[4];
-	CGameMap* m_Map;
+
+	int			m_PlayerNumber;
+	CPlayer*	m_Player[4];
+	CGameMap*	m_Map;
 };
 

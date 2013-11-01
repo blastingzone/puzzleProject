@@ -71,11 +71,17 @@ IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 
-	mouseCoordinate.m_PosX -= (int)(m_Map->GetInstance()->GetStartPosition().width - LINE_WEIGHT / 2);
-	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height - LINE_WEIGHT / 2);
+	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
+	mouseCoordinate.m_PosX -= (int)(m_Map->GetInstance()->GetStartPosition().width);
+	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height);
 
-	indexedPosition.m_PosI = mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) * 2 + ( mouseCoordinate.m_PosY / (int) TILE_SIZE );
-	indexedPosition.m_PosJ = mouseCoordinate.m_PosX / (int) (TILE_SIZE + LINE_WEIGHT) * 2 + ( mouseCoordinate.m_PosX / (int) TILE_SIZE );
+	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
+	indexedPosition.m_PosI = 
+		( mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
+		+ ( ( mouseCoordinate.m_PosY % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
+	indexedPosition.m_PosJ = 
+		( mouseCoordinate.m_PosX / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
+		+ ( ( mouseCoordinate.m_PosX % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
 	
 	return indexedPosition;
 }

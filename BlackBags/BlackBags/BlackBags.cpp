@@ -183,9 +183,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
-			//gameMap->ReleaseInstance();
-			
-
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
@@ -205,15 +202,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			TRUE); 
 		break;
 	case WM_LBUTTONDOWN:
-
-		//xPos = GET_X_LPARAM(lParam); 
-		//yPos = GET_Y_LPARAM(lParam);
-
 		Coordinate mouseCoordinate;
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
+		
+		//여기에서 라인을 그을 수 있는 자리인지 확인해서 가능하다면 타이머 리셋하고 맵 업데이트 할 것
+		if (gameMap->IsPossible(logic->CalcualteIndex(mouseCoordinate) ) )
+		{
+			logic -> Update(mouseCoordinate);
+		}
 
-		logic -> Update(mouseCoordinate);
 		break;
 	case WM_PAINT:
 		renderer->Begin();
