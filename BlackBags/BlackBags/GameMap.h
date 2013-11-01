@@ -64,6 +64,8 @@ public:
 	bool SetMapSize(MapSize mapsize);
 	void DrawLine(IndexedPosition indexedPosition);
 	void DrawLine(int iPos, int jPos);
+	
+	D2D1_SIZE_F GetStartPosition();
 
 private: 
 

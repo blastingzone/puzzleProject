@@ -213,10 +213,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 
-		//logic -> Update(mouseCoordinate);
-
-		//Logic -> update(xPos,yPos);
-		gameMap->DrawLine(1, 2);
+		logic -> Update(mouseCoordinate);
 		break;
 	case WM_PAINT:
 		renderer->Begin();

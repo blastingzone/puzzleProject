@@ -63,18 +63,20 @@ void CLogic::Update( Coordinate mouseCoordinate )
 	indexedPosition = CalcualteIndex(mouseCoordinate);
 
 	//IsPossible 체크 후에 gameMap 호출해서 반영
+	m_Map->GetInstance()->DrawLine(indexedPosition);
 }
 
 //마우스 좌표값을 index로 바꾸는 함수
 IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
-	//몰라//////////////////////////
-	mouseCoordinate.m_PosX = 0;
 
-	indexedPosition.m_PosI = 0;
-	indexedPosition.m_PosJ = 0;
+	mouseCoordinate.m_PosX -= (int)(m_Map->GetInstance()->GetStartPosition().width - LINE_WEIGHT / 2);
+	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height - LINE_WEIGHT / 2);
 
+	indexedPosition.m_PosI = mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) * 2 + ( mouseCoordinate.m_PosY / (int) TILE_SIZE );
+	indexedPosition.m_PosJ = mouseCoordinate.m_PosX / (int) (TILE_SIZE + LINE_WEIGHT) * 2 + ( mouseCoordinate.m_PosX / (int) TILE_SIZE );
+	
 	return indexedPosition;
 }
 
