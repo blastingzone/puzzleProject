@@ -96,6 +96,11 @@ private:
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
+	ID2D1SolidColorBrush*	m_pTileP1;
+	ID2D1SolidColorBrush*	m_pTileP2;
+	ID2D1SolidColorBrush*	m_pTileP3;
+	ID2D1SolidColorBrush*	m_pTileP4;
+
 	D2D1_ELLIPSE			m_DotEllipse;
 };
 

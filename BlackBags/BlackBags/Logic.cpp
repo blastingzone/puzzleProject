@@ -133,6 +133,7 @@ bool CLogic::CreatePlayers()
 	return true;
 }
 
+//
 bool CLogic::SetPlayerTurn()
 {
 	CPlayer * tempPlayer[4];
@@ -168,8 +169,10 @@ bool CLogic::SetPlayerTurn()
 bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTIleList )
 {
 	int i = 0;
+	bool flag = true;
 	std::queue<IndexedPosition> searchTiles;
 	
+	//바로 아래가 타일인 경우. 즉 선이 누워있는 경우.
 	if (m_Map->GetMapType(indexedPosition.m_PosI+1,indexedPosition.m_PosJ) != MO_DOT)
 	{
 		IndexedPosition currentTile;
@@ -187,34 +190,290 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
 				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				flag = false;
 				break;
 			}
 			//////////////////////////////////
 			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
 			{
+
 				nextTile.m_PosI = currentTile.m_PosI;
 				nextTile.m_PosJ = currentTile.m_PosJ-2;
 				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
 				{
 					searchTiles.push(nextTile);
-				}
+					candidateTIleList[i++] = nextTile;
+				}				
 			}
-			/////////////////////////////////절취선
+			if (m_Map->GetMapType(currentTile.m_PosI+1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI+2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ+1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ+2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI-1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI-2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+
 		}
-		
+		if (flag)
+		{
+			return true;
+		}
+		flag = true;
 	}
+
+
+	//위쪽이 타일인 경우, 즉 선이 누워있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI-1,indexedPosition.m_PosJ) != MO_DOT)
 	{
+		IndexedPosition currentTile;
+		IndexedPosition nextTile;
+		// ++ == tile , 큐에 넣는다
+		--indexedPosition.m_PosI;
+		searchTiles.push(indexedPosition);
+		//임시 배열에도 저장한다
+		candidateTIleList[i++] = indexedPosition;
 
+		while (!searchTiles.empty() )
+		{
+			currentTile = searchTiles.front();
+			searchTiles.pop();
+			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
+			{
+				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				flag = false;
+				break;
+			}
+			//////////////////////////////////
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ-2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI+1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI+2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ+1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ+2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI-1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI-2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+
+		}
+		if (flag)
+		{
+			return true;
+		}
+		flag = true;
 	}
+
+	//오른쪽이 타일인 선이 서있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ+1) != MO_DOT)
 	{
+		IndexedPosition currentTile;
+		IndexedPosition nextTile;
+		// ++ == tile , 큐에 넣는다
+		++indexedPosition.m_PosJ;
+		searchTiles.push(indexedPosition);
+		//임시 배열에도 저장한다
+		candidateTIleList[i++] = indexedPosition;
 
+		while (!searchTiles.empty() )
+		{
+			currentTile = searchTiles.front();
+			searchTiles.pop();
+			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
+			{
+				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				flag = false;
+				break;
+			}
+			//////////////////////////////////
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ-2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI+1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI+2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ+1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ+2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI-1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI-2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+
+		}
+		if (flag)
+		{
+			return true;
+		}
+		flag = true;
 	}
+
+	//왼쪽이 타일인, 선이 서있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ-1) != MO_DOT)
 	{
+		IndexedPosition currentTile;
+		IndexedPosition nextTile;
+		// ++ == tile , 큐에 넣는다
+		--indexedPosition.m_PosJ;
+		searchTiles.push(indexedPosition);
+		//임시 배열에도 저장한다
+		candidateTIleList[i++] = indexedPosition;
 
+		while (!searchTiles.empty() )
+		{
+			currentTile = searchTiles.front();
+			searchTiles.pop();
+			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
+			{
+				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				flag = false;
+				break;
+			}
+			//////////////////////////////////
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ-2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI+1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI+2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ+1) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ+2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+			if (m_Map->GetMapType(currentTile.m_PosI-1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+			{
+
+				nextTile.m_PosI = currentTile.m_PosI-2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+					candidateTIleList[i++] = nextTile;
+				}				
+			}
+
+		}
+		if (flag)
+		{
+			return true;
+		}
+		flag = true;
 	}
+
+	return false;
 }
 
 bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
@@ -233,17 +492,3 @@ bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTi
 	return false;
 }
 
-void checkTileDSNB()
-{
-
-	if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
-	{
-		nextTile.m_PosI = currentTile.m_PosI;
-		nextTile.m_PosJ = currentTile.m_PosJ-2;
-		if (!IsAlreadyChecked(candidateTIleList, nextTile) )
-		{
-			searchTiles.push(nextTile);
-		}
-	}
-
-}

@@ -112,50 +112,7 @@ void CGameMap::Render()
 {
 	D2D1_ELLIPSE	m_DotEllipse;
 	D2D1_RECT_F		rectElement;
-	//D2D1_RECT_F		m_TileVoid;
 	D2D1_POINT_2F	m_pos;
-
-	/*
-	for(int i = 0; i <= MAX_WIDTH; ++i)
-	{
-		for(int j = 0; j <= MAX_HEIGHT; ++j)
-		{
-			switch(m_pInstance->GetMapType(i,j))
-			{
-			case MO_DOT:
-				m_pos.y = 50 + i * 25;
-				m_pos.x = 50 + j * 25;
-				m_DotEllipse = D2D1::Ellipse( m_pos, 5.0, 5.0 );
-				m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
-				break;
-			case MO_LINE_UNCONNECTED:
-				m_pos.y = 50 + i * 25;
-				m_pos.x = 50 + j * 25;
-				if (i%2==0)
-				{
-					connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - m_TileWidth, m_pos.x + 2.5, m_pos.y + m_TileWidth);
-				}
-				else
-				{
-					connectedLine = D2D1::Rect( m_pos.x - m_TileWidth, m_pos.y - 2.5, m_pos.x + m_TileWidth, m_pos.y + 2.5);
-				}
-				m_pRenderTarget->FillRectangle(connectedLine, m_pUnconnectedLineBrush);
-				break;
-			case MO_LINE_CONNECTED:
-				m_pos.y = 50 + i * 25;
-				m_pos.x = 50 + j * 25;
-				connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - 2.5, m_pos.x + 2.5, m_pos.y + 2.5);
-				m_pRenderTarget->FillRectangle(connectedLine, m_pConnectedLineBrush);
-				break;
-			case MO_TILE_VOID:
-				m_pos.y = 50 + i * 25;
-				m_pos.x = 50 + j * 25;
-				connectedLine = D2D1::Rect( m_pos.x - m_TileWidth, m_pos.y - m_TileWidth, m_pos.x + m_TileWidth, m_pos.y + m_TileWidth);
-				m_pRenderTarget->FillRectangle(connectedLine, m_pVoidTileBrush);
-				break;
-			}
-		}
-	}*/
 
 	//layer : background - tile - line - dot
 
@@ -164,12 +121,17 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_HEIGHT; ++j)
 		{
+			m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1) + LINE_WEIGHT / 2;
+			m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
+			rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
+			
 			if (m_pInstance->GetMapType(i,j) == MO_TILE_VOID)
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1) + LINE_WEIGHT / 2;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
 				m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+			}
+			if (m_pInstance->GetMapType(i,j) == MO_TILE_VOID_P1)
+			{
+				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
 			}
 		}
 	}
@@ -298,6 +260,14 @@ bool CGameMap::CreateResource()
 		
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue),&m_pVoidTileBrush);
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow),&m_pTileP1);
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Green),&m_pTileP2);
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::CadetBlue),&m_pTileP3);
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink),&m_pTileP4);
 
 		if (SUCCEEDED(hr) )
 			return true;
