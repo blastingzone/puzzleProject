@@ -68,6 +68,9 @@ public:
 	bool		IsPossible(IndexedPosition indexedPosition);
 	D2D1_SIZE_F GetStartPosition();
 
+	MapObject	GetMapType(IndexedPosition indexedPosition);
+	MapObject	GetMapType(int xPos, int jPos);
+
 private: 
 	void CreateMap();
 	bool CreateResource();
@@ -80,8 +83,6 @@ private:
 
 	//renderer를 위한 임시 배열입니다. 
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
-	MapObject	GetMapType(IndexedPosition indexedPosition);
-	MapObject	GetMapType(int xPos, int jPos);
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 

@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Logic.h"
 #include "MacroSet.h"
+#include <queue>
 
 CLogic* CLogic::m_pInstance = nullptr;
 CLogic::CLogic(void)
@@ -64,6 +65,32 @@ void CLogic::Update( Coordinate mouseCoordinate )
 
 	//IsPossible 체크 후에 gameMap 호출해서 반영
 	m_Map->GetInstance()->DrawLine(indexedPosition);
+
+	//IsClosed()
+	IndexedPosition tempArray[100];
+	memset(tempArray,NULL,sizeof(tempArray));
+	
+	if (IsClosed(indexedPosition, tempArray) )
+	{
+		int i = 0;
+
+		while (tempArray[i] != NULL)
+		{
+			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
+			switch(tempArray[i])
+			{
+				case MO_TILE_VOID:
+					tempArray[i] = MO_TILE_VOID_P1;
+					break;
+				case MO_TILE_TRASH:
+					tempArray[i] = MO_TILE_VOID_P1;
+					break;
+				case MO_TILE_GOLD:
+					tempArray[i] = MO_TILE_GOLD_P1;
+					break;
+			}
+		}
+	}
 }
 
 //마우스 좌표값을 index로 바꾸는 함수
@@ -138,3 +165,28 @@ bool CLogic::SetPlayerTurn()
 
 	return true;
 }
+
+bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* tempArray )
+{
+	int i = 0;
+	std::queue<IndexedPosition> searchTiles;
+	
+	if (m_Map->GetMapType(indexedPosition.m_PosI+1,indexedPosition.m_PosJ) != MO_DOT)
+	{
+		++indexedPosition.m_PosI;
+		searchTiles.push(indexedPosition);
+	}
+	if (m_Map->GetMapType(indexedPosition.m_PosI-1,indexedPosition.m_PosJ) != MO_DOT)
+	{
+
+	}
+	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ+1) != MO_DOT)
+	{
+
+	}
+	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ-1) != MO_DOT)
+	{
+
+	}
+}
+

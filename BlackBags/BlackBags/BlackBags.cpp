@@ -1,4 +1,4 @@
-// BlackBags.cpp : Defines the entry point for the application.
+ï»¿// BlackBags.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
@@ -39,7 +39,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
-	// ÄÜ¼ÖÃ¢ »ý¼º
+	// ì½˜ì†”ì°½ ìƒì„±
 	AllocConsole();
 	FILE* pFile;
 	freopen_s(&pFile, "CONOUT$", "wb", stdout);
@@ -189,13 +189,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_CREATE:
-		//client ¿µ¿ª Å©±â ¼³Á¤
+		//client ì˜ì—­ í¬ê¸° ì„¤ì •
 		SetRect(&clientRect, 0, 0, 799, 599); 
 		
-		//À©µµ¿ì Å©±â¸¦ °è»ê
+		//ìœˆë„ìš° í¬ê¸°ë¥¼ ê³„ì‚°
 		AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
 		
-		//À©µµ¿ì Å©±â¸¦ ¹Ù²ãÁÖ°í Å¬¶óÀÌ¾ðÆ® ¿µ¿ªÀ» »õ·Î ±×·ÁÁØ´Ù.
+		//ìœˆë„ìš° í¬ê¸°ë¥¼ ë°”ê¿”ì£¼ê³  í´ë¼ì´ì–¸íŠ¸ ì˜ì—­ì„ ìƒˆë¡œ ê·¸ë ¤ì¤€ë‹¤.
 		MoveWindow(hWnd, 0, 0,
 			clientRect.right - clientRect.left,
 			clientRect.bottom - clientRect.top,
@@ -203,12 +203,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_LBUTTONDOWN:
 
-		// ¸¶¿ì½º ÁÂÇ¥ ¹Þ¾Æ¿À´Â ºÎºÐ
+		// ë§ˆìš°ìŠ¤ ì¢Œí‘œ ë°›ì•„ì˜¤ëŠ” ë¶€ë¶„
 		Coordinate mouseCoordinate;
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
-		//¿©±â¿¡¼­ ¶óÀÎÀ» ±×À» ¼ö ÀÖ´Â ÀÚ¸®ÀÎÁö È®ÀÎÇØ¼­ °¡´ÉÇÏ´Ù¸é Å¸ÀÌ¸Ó ¸®¼ÂÇÏ°í ¸Ê ¾÷µ¥ÀÌÆ® ÇÒ °Í
+		//ì—¬ê¸°ì—ì„œ ë¼ì¸ì„ ê·¸ì„ ìˆ˜ ìžˆëŠ” ìžë¦¬ì¸ì§€ í™•ì¸í•´ì„œ ê°€ëŠ¥í•˜ë‹¤ë©´ íƒ€ì´ë¨¸ ë¦¬ì…‹í•˜ê³  ë§µ ì—…ë°ì´íŠ¸ í•  ê²ƒ
 		if (gameMap->IsPossible(logic->CalcualteIndex(mouseCoordinate) ) )
 		{
 			logic -> Update(mouseCoordinate);
