@@ -89,6 +89,7 @@ void CLogic::Update( Coordinate mouseCoordinate )
 					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
 					break;
 			}
+			i++;
 		}
 	}
 }
