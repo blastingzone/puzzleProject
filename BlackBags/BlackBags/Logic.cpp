@@ -198,7 +198,11 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			searchTiles.pop();
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				memset(candidateTIleList, 0, sizeof(*candidateTIleList) * 100);
+
+				while(!searchTiles.empty())
+					searchTiles.pop();
+
 				flag = false;
 				printf("센티넬을 만났어요\n");
 				break;
@@ -277,7 +281,11 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			searchTiles.pop();
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				memset(candidateTIleList, 0, sizeof(*candidateTIleList) * 100);
+
+				while(!searchTiles.empty())
+					searchTiles.pop();
+
 				flag = false;
 				printf("센티넬을 만났어요\n");
 				break;
@@ -355,7 +363,11 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			searchTiles.pop();
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				memset(candidateTIleList, 0, sizeof(*candidateTIleList) * 100);
+
+				while(!searchTiles.empty())
+					searchTiles.pop();
+
 				flag = false;
 				printf("센티넬을 만났어요\n");
 				break;
@@ -434,7 +446,11 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			searchTiles.pop();
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				memset(candidateTIleList, 0, sizeof(*candidateTIleList) * 100);
+
+				while(!searchTiles.empty())
+					searchTiles.pop();
+
 				flag = false;
 				printf("센티넬을 만났어요\n");
 				break;
@@ -502,11 +518,12 @@ bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPositio
 
 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
 	{
-		i++;
 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
 		{
 			return true;
 		}
+
+		i++;
 	}
 
 	return false;
