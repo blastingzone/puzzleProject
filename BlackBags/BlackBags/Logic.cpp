@@ -73,7 +73,7 @@ void CLogic::Update( Coordinate mouseCoordinate )
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 
 	//IsClosed()
-	IndexedPosition tempArray[100] = {{0}};
+	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE] = {{0}};
 	
 	if (IsClosed(indexedPosition, tempArray) )
 	{
@@ -175,19 +175,40 @@ bool CLogic::SetPlayerTurn()
 
 bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTIleList )
 {
+	//선택된 울타리의 위쪽 확인
+	if(ExploreTile(indexedPosition, candidateTIleList, DI_UP) )
+		return true;
+
+	//선택된 울타리의 오른쪽 확인
+	if(ExploreTile(indexedPosition, candidateTIleList, DI_RIGHT) )
+		return true;
+
+	//선택된 울타리의 아래쪽 확인
+	if(ExploreTile(indexedPosition, candidateTIleList, DI_DOWN) )
+		return true;
+
+	//선택된 울타리의 왼쪽 확인
+	if(ExploreTile(indexedPosition, candidateTIleList, DI_LEFT) )
+		return true;
+
+	return false;
+
+	/*
 	int i = 0;
 	bool flag = true;
 	std::queue<IndexedPosition> searchTiles;
-	
+
 	//바로 아래가 타일인 경우. 즉 선이 누워있는 경우.
 	if (m_Map->GetMapType(indexedPosition.m_PosI+1,indexedPosition.m_PosJ) != MO_DOT)
 	{
 		i  = 0;
 		IndexedPosition currentTile;
 		IndexedPosition nextTile;
+
 		// ++ == tile , 큐에 넣는다
 		currentTile.m_PosI = indexedPosition.m_PosI+1;
 		currentTile.m_PosJ = indexedPosition.m_PosJ;
+
 		searchTiles.push(currentTile);
 		//임시 배열에도 저장한다
 		candidateTIleList[i++] = currentTile;
@@ -510,6 +531,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	}
 
 	return false;
+	*/
 }
 
 bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
@@ -529,3 +551,120 @@ bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPositio
 	return false;
 }
 
+bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction){
+	std::queue<IndexedPosition> searchTiles;
+
+	IndexedPosition currentTile = {0,0};
+	IndexedPosition nextTile;
+
+	//확인 할 방향을 지정
+	switch (direction)
+	{
+	case DI_UP:
+		currentTile.m_PosI = indexedPosition.m_PosI - 1;
+		currentTile.m_PosJ = indexedPosition.m_PosJ;
+		break;
+	case DI_RIGHT:
+		currentTile.m_PosI = indexedPosition.m_PosI;
+		currentTile.m_PosJ = indexedPosition.m_PosJ + 1;
+		break;
+	case DI_DOWN:
+		currentTile.m_PosI = indexedPosition.m_PosI + 1;
+		currentTile.m_PosJ = indexedPosition.m_PosJ;
+		break;
+	case DI_LEFT:
+		currentTile.m_PosI = indexedPosition.m_PosI;
+		currentTile.m_PosJ = indexedPosition.m_PosJ - 1;
+		break;
+	default:
+		break;
+	}
+
+	//확인 할 방향의 출발점이 점이면 확인 안 함
+	if (m_Map->GetMapType(currentTile) == MO_DOT)
+	{
+		return false;
+	}
+
+	//앞에서 갱신한 탐색 출발 지점을 큐와 배열에 넣는다.
+	int i = 0;
+
+	searchTiles.push(currentTile);
+	candidateTIleList[i++] = currentTile;
+		
+	while (!searchTiles.empty() )
+	{
+		currentTile = searchTiles.front();
+		searchTiles.pop();
+
+		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
+		if (CGameMap::GetInstance()->GetMapType(currentTile) == MO_SENTINEL)
+		{
+			memset(candidateTIleList, 0, sizeof(*candidateTIleList) * CHECKED_TILE_ARRAY_SIZE);
+
+			/*
+			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
+			while(!searchTiles.empty())
+				searchTiles.pop();
+			*/
+
+			printf("센티넬을 만났어요\n");
+
+			return false;
+		}
+
+		//현재 타일의 위쪽 확인
+		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+		{
+
+			nextTile.m_PosI = currentTile.m_PosI - 2;
+			nextTile.m_PosJ = currentTile.m_PosJ;
+			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			{
+				searchTiles.push(nextTile);
+				candidateTIleList[i++] = nextTile;
+			}				
+		}
+
+		//현재 타일의 오른쪽 확인
+		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
+		{
+
+			nextTile.m_PosI = currentTile.m_PosI;
+			nextTile.m_PosJ = currentTile.m_PosJ + 2;
+			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			{
+				searchTiles.push(nextTile);
+				candidateTIleList[i++] = nextTile;
+			}				
+		}
+
+		//현재 타일의 아래쪽 확인
+		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+		{
+
+			nextTile.m_PosI = currentTile.m_PosI + 2;
+			nextTile.m_PosJ = currentTile.m_PosJ;
+			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			{
+				searchTiles.push(nextTile);
+				candidateTIleList[i++] = nextTile;
+			}				
+		}
+		
+		//현재 타일의 왼쪽 확인
+		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
+		{
+
+			nextTile.m_PosI = currentTile.m_PosI;
+			nextTile.m_PosJ = currentTile.m_PosJ - 2;
+			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			{
+				searchTiles.push(nextTile);
+				candidateTIleList[i++] = nextTile;
+			}				
+		}
+	}
+
+	return true;
+}

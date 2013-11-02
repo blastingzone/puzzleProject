@@ -2,6 +2,15 @@
 #include "GameMap.h"
 #include "Player.h"
 
+enum Direction{
+	DI_UP,
+	DI_RIGHT,
+	DI_DOWN,
+	DI_LEFT
+};
+
+const int CHECKED_TILE_ARRAY_SIZE = 100;
+
 class CLogic
 {
 public:
@@ -37,6 +46,9 @@ public:
 private:
 	static CLogic*	m_pInstance; //singleton instance
 	
+	//주어진 index의 울타리 주변 타일을 확인 합니다.
+	bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
+
 	// IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다
 	bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile);
 
