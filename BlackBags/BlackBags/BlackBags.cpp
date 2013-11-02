@@ -40,7 +40,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 
 	// 콘솔창 생성
-	AllocConsole();
+	//AllocConsole();
 	FILE* pFile;
 	freopen_s(&pFile, "CONOUT$", "wb", stdout);
 

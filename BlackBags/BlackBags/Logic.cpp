@@ -6,6 +6,9 @@
 CLogic* CLogic::m_pInstance = nullptr;
 CLogic::CLogic(void)
 {
+	AllocConsole();
+	FILE* pFile;
+	freopen_s(&pFile, "CONOUT$", "wb", stdout);
 }
 
 
@@ -64,7 +67,9 @@ void CLogic::Update( Coordinate mouseCoordinate )
 	IndexedPosition indexedPosition;
 	indexedPosition = CalcualteIndex(mouseCoordinate);
 
+	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
 	//IsPossible 체크 후에 gameMap 호출해서 반영
+	
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 
 	//IsClosed()
@@ -177,13 +182,15 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	//바로 아래가 타일인 경우. 즉 선이 누워있는 경우.
 	if (m_Map->GetMapType(indexedPosition.m_PosI+1,indexedPosition.m_PosJ) != MO_DOT)
 	{
+		i  = 0;
 		IndexedPosition currentTile;
 		IndexedPosition nextTile;
 		// ++ == tile , 큐에 넣는다
-		++indexedPosition.m_PosI;
-		searchTiles.push(indexedPosition);
+		currentTile.m_PosI = indexedPosition.m_PosI+1;
+		currentTile.m_PosJ = indexedPosition.m_PosJ;
+		searchTiles.push(currentTile);
 		//임시 배열에도 저장한다
-		candidateTIleList[i++] = indexedPosition;
+		candidateTIleList[i++] = currentTile;
 		
 		while (!searchTiles.empty() )
 		{
@@ -193,6 +200,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			{
 				memset(candidateTIleList, 0, sizeof(candidateTIleList));
 				flag = false;
+				printf("센티넬을 만났어요\n");
 				break;
 			}
 			//////////////////////////////////
@@ -253,13 +261,15 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	//위쪽이 타일인 경우, 즉 선이 누워있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI-1,indexedPosition.m_PosJ) != MO_DOT)
 	{
+		i  = 0;
 		IndexedPosition currentTile;
 		IndexedPosition nextTile;
 		// ++ == tile , 큐에 넣는다
-		--indexedPosition.m_PosI;
-		searchTiles.push(indexedPosition);
+		currentTile.m_PosI = indexedPosition.m_PosI-1;
+		currentTile.m_PosJ = indexedPosition.m_PosJ;
+		searchTiles.push(currentTile);
 		//임시 배열에도 저장한다
-		candidateTIleList[i++] = indexedPosition;
+		candidateTIleList[i++] = currentTile;
 
 		while (!searchTiles.empty() )
 		{
@@ -269,6 +279,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			{
 				memset(candidateTIleList, 0, sizeof(candidateTIleList));
 				flag = false;
+				printf("센티넬을 만났어요\n");
 				break;
 			}
 			//////////////////////////////////
@@ -328,13 +339,15 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	//오른쪽이 타일인 선이 서있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ+1) != MO_DOT)
 	{
+		i  = 0;
 		IndexedPosition currentTile;
 		IndexedPosition nextTile;
 		// ++ == tile , 큐에 넣는다
-		++indexedPosition.m_PosJ;
-		searchTiles.push(indexedPosition);
+		currentTile.m_PosI = indexedPosition.m_PosI;
+		currentTile.m_PosJ = indexedPosition.m_PosJ+1;
+		searchTiles.push(currentTile);
 		//임시 배열에도 저장한다
-		candidateTIleList[i++] = indexedPosition;
+		candidateTIleList[i++] = currentTile;
 
 		while (!searchTiles.empty() )
 		{
@@ -344,6 +357,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			{
 				memset(candidateTIleList, 0, sizeof(candidateTIleList));
 				flag = false;
+				printf("센티넬을 만났어요\n");
 				break;
 			}
 			//////////////////////////////////
@@ -397,19 +411,22 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 		{
 			return true;
 		}
+		
 		flag = true;
 	}
 
 	//왼쪽이 타일인, 선이 서있는 경우
 	if (m_Map->GetMapType(indexedPosition.m_PosI,indexedPosition.m_PosJ-1) != MO_DOT)
 	{
+		i  = 0;
 		IndexedPosition currentTile;
 		IndexedPosition nextTile;
 		// ++ == tile , 큐에 넣는다
-		--indexedPosition.m_PosJ;
-		searchTiles.push(indexedPosition);
+		currentTile.m_PosI = indexedPosition.m_PosI;
+		currentTile.m_PosJ = indexedPosition.m_PosJ-1;
+		searchTiles.push(currentTile);
 		//임시 배열에도 저장한다
-		candidateTIleList[i++] = indexedPosition;
+		candidateTIleList[i++] = currentTile;
 
 		while (!searchTiles.empty() )
 		{
@@ -419,6 +436,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 			{
 				memset(candidateTIleList, 0, sizeof(candidateTIleList));
 				flag = false;
+				printf("센티넬을 만났어요\n");
 				break;
 			}
 			//////////////////////////////////
