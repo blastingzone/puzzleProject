@@ -68,8 +68,8 @@ void CLogic::Update( Coordinate mouseCoordinate )
 	indexedPosition = CalcualteIndex(mouseCoordinate);
 
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
-	//IsPossible 체크 후에 gameMap 호출해서 반영
 	
+	//IsPossible 체크 후에 gameMap 호출해서 반영
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 
 	//IsClosed()

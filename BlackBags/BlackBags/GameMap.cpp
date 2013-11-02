@@ -106,8 +106,26 @@ bool CGameMap::IsPossible(IndexedPosition indexedPosition)
 {
 	if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
 	{
-		//나중에 양 옆 타일의 소유주가 있는지 확인하는 조건도 추가할 것
-		return true;
+		int tileVoidCount = 0;
+
+		//입력된 울타리 주변을 확인해서 소유주가 없는 타일과 센티널의 숫자를 센다
+		if (m_pInstance->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_TILE_VOID ||
+			m_pInstance->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_pInstance->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_TILE_VOID ||
+			m_pInstance->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_TILE_VOID ||
+			m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_TILE_VOID ||
+			m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_SENTINEL) { ++tileVoidCount; }
+		
+		//확인된 타일의 수가 2가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음
+		if (tileVoidCount == 2)
+		{
+			return true;
+		}
 	}
 
 	return false;
