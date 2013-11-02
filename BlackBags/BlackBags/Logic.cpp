@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Logic.h"
 #include "MacroSet.h"
 
@@ -47,7 +47,7 @@ bool CLogic::ReleaseInstance()
 }
 
 
-//Logic°ü·Ã ÃÊ±âÈ­ ÇÔ¼ö
+//Logicê´€ë ¨ ì´ˆê¸°í™” í•¨ìˆ˜
 void CLogic::Init()
 {
 	memset(m_Player,0,sizeof(m_Player));
@@ -56,26 +56,26 @@ void CLogic::Init()
 	SetPlayerTurn();
 }
 
-//Áöµµ °ü·Ã Á¤º¸¸¦ ¾÷µ¥ÀÌÆ® ÇØÁÖ´Â ÇÔ¼ö
+//ì§€ë„ ê´€ë ¨ ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸ í•´ì£¼ëŠ” í•¨ìˆ˜
 void CLogic::Update( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 	indexedPosition = CalcualteIndex(mouseCoordinate);
 
-	//IsPossible Ã¼Å© ÈÄ¿¡ gameMap È£ÃâÇØ¼­ ¹İ¿µ
+	//IsPossible ì²´í¬ í›„ì— gameMap í˜¸ì¶œí•´ì„œ ë°˜ì˜
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 }
 
-//¸¶¿ì½º ÁÂÇ¥°ªÀ» index·Î ¹Ù²Ù´Â ÇÔ¼ö
+//ë§ˆìš°ìŠ¤ ì¢Œí‘œê°’ì„ indexë¡œ ë°”ê¾¸ëŠ” í•¨ìˆ˜
 IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 
-	//¸¶¿ì½ºÀÇ À§Ä¡¸¦ ¸ÊÀÌ ±×·ÁÁö´Â ±âÁØÁ¡ ÁÂÇ¥°è¸¦ ±âÁØÀ¸·Î º¯È¯
+	//ë§ˆìš°ìŠ¤ì˜ ìœ„ì¹˜ë¥¼ ë§µì´ ê·¸ë ¤ì§€ëŠ” ê¸°ì¤€ì  ì¢Œí‘œê³„ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë³€í™˜
 	mouseCoordinate.m_PosX -= (int)(m_Map->GetInstance()->GetStartPosition().width);
 	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height);
 
-	//Å¸ÀÏ ÇÏ³ª¿Í ¶óÀÎ ÇÏ³ª¸¦ ¹­¾î¼­ ¸ğµâ·¯ ¿¬»êÀ¸·Î ÀÎµ¦½º °ª °è»ê
+	//íƒ€ì¼ í•˜ë‚˜ì™€ ë¼ì¸ í•˜ë‚˜ë¥¼ ë¬¶ì–´ì„œ ëª¨ë“ˆëŸ¬ ì—°ì‚°ìœ¼ë¡œ ì¸ë±ìŠ¤ ê°’ ê³„ì‚°
 	indexedPosition.m_PosI = 
 		( mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
 		+ ( ( mouseCoordinate.m_PosY % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
@@ -88,7 +88,7 @@ IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 
 bool CLogic::GetPlayerNumber()
 {
-	//¼±ÅÃÈ­¸é¿¡¼­ ÇÃ·¹ÀÌ¾î ¼ö¸¦ ¼±ÅÃ!
+	//ì„ íƒí™”ë©´ì—ì„œ í”Œë ˆì´ì–´ ìˆ˜ë¥¼ ì„ íƒ!
 	m_PlayerNumber = 3;
 
 	return true;

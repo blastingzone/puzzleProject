@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameMap.h"
 #include "Renderer.h"
 #include "MacroSet.h"
@@ -101,7 +101,7 @@ bool CGameMap::IsPossible(IndexedPosition indexedPosition)
 {
 	if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
 	{
-		//³ªÁß¿¡ ¾ç ¿· Å¸ÀÏÀÇ ¼ÒÀ¯ÁÖ°¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â Á¶°Çµµ Ãß°¡ÇÒ °Í
+		//ë‚˜ì¤‘ì— ì–‘ ì˜† íƒ€ì¼ì˜ ì†Œìœ ì£¼ê°€ ìˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ì¡°ê±´ë„ ì¶”ê°€í•  ê²ƒ
 		return true;
 	}
 
@@ -245,7 +245,7 @@ MapObject CGameMap::GetMapType(IndexedPosition indexedPosition)
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
 	}
 	//////////////////////////////////////////////////////////////////////////
-	//Á¶½ÉÇØ
+	//ì¡°ì‹¬í•´
 	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
 }
 

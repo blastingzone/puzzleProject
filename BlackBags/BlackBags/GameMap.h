@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "d2d1.h"
 
 #define MAX_WIDTH	21
@@ -78,7 +78,7 @@ private:
 
 	static CGameMap*	m_pInstance; //singleton instance
 
-	//renderer¸¦ À§ÇÑ ÀÓ½Ã ¹è¿­ÀÔ´Ï´Ù. 
+	//rendererë¥¼ ìœ„í•œ ìž„ì‹œ ë°°ì—´ìž…ë‹ˆë‹¤. 
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
 	MapObject	GetMapType(IndexedPosition indexedPosition);
 	MapObject	GetMapType(int xPos, int jPos);

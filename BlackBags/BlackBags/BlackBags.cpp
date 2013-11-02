@@ -71,11 +71,11 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
 
-	int a = 0;
+	//int a = 0;
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
-		printf("COUNT : %d\n", a);
+		//printf("COUNT : %d\n", a);
 		
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
@@ -202,6 +202,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			TRUE); 
 		break;
 	case WM_LBUTTONDOWN:
+
+		// 마우스 좌표 받아오는 부분
 		Coordinate mouseCoordinate;
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
