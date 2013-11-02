@@ -131,7 +131,7 @@ void CGameMap::Render()
 			case MO_LINE_UNCONNECTED:
 				m_pos.y = 50 + i * 25;
 				m_pos.x = 50 + j * 25;
-				if(i%2==0)
+				if (i%2==0)
 				{
 					connectedLine = D2D1::Rect( m_pos.x - 2.5, m_pos.y - m_TileWidth, m_pos.x + 2.5, m_pos.y + m_TileWidth);
 				}
@@ -245,8 +245,8 @@ MapObject CGameMap::GetMapType(IndexedPosition indexedPosition)
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
 	}
 	//////////////////////////////////////////////////////////////////////////
-	//조심해
-	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ];
+	//조심해 oo 해결
+	return MO_SENTINEL;
 }
 
 MapObject CGameMap::GetMapType(int iPos, int jPos)
@@ -256,6 +256,24 @@ MapObject CGameMap::GetMapType(int iPos, int jPos)
 	tempPos.m_PosJ = jPos;
 
 	return GetMapType(tempPos);
+}
+
+void CGameMap::SetMapType(IndexedPosition indexedPosition, MapObject newMapObject)
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ] = newMapObject;
+
+	return;
+}
+
+void CGameMap::SetMapType(int iPos, int jPos, MapObject newMapObject)
+{
+	IndexedPosition tempPos;
+	tempPos.m_PosI = iPos;
+	tempPos.m_PosJ = jPos;
+
+	SetMapType(tempPos, newMapObject);
+
+	return;
 }
 
 D2D1_SIZE_F CGameMap::GetStartPosition(){
@@ -318,3 +336,4 @@ void CGameMap::CalcStartPosition()
 		centerPosition.width 
 		- (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
 }
+

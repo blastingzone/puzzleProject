@@ -28,7 +28,7 @@ bool CLogic::Release()
 	for ( int i = 0; i< m_PlayerNumber ; ++i)
 	{
 
-		if(m_Player[i])
+		if (m_Player[i])
 		{
 			delete m_Player[i];
 			m_Player[i] = NULL;
@@ -67,26 +67,25 @@ void CLogic::Update( Coordinate mouseCoordinate )
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 
 	//IsClosed()
-	IndexedPosition tempArray[100];
-	memset(tempArray,NULL,sizeof(tempArray));
+	IndexedPosition tempArray[100] = {{0}};
 	
 	if (IsClosed(indexedPosition, tempArray) )
 	{
 		int i = 0;
 
-		while (tempArray[i] != NULL)
+		while (tempArray[i].m_PosI != 0 && tempArray[i].m_PosJ != 0 )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-			switch(tempArray[i])
+			switch ( m_Map->GetMapType(tempArray[i]) )
 			{
 				case MO_TILE_VOID:
-					tempArray[i] = MO_TILE_VOID_P1;
+					m_Map->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
 					break;
 				case MO_TILE_TRASH:
-					tempArray[i] = MO_TILE_VOID_P1;
+					m_Map->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
 					break;
 				case MO_TILE_GOLD:
-					tempArray[i] = MO_TILE_GOLD_P1;
+					m_Map->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
 					break;
 			}
 		}
@@ -166,15 +165,43 @@ bool CLogic::SetPlayerTurn()
 	return true;
 }
 
-bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* tempArray )
+bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTIleList )
 {
 	int i = 0;
 	std::queue<IndexedPosition> searchTiles;
 	
 	if (m_Map->GetMapType(indexedPosition.m_PosI+1,indexedPosition.m_PosJ) != MO_DOT)
 	{
+		IndexedPosition currentTile;
+		IndexedPosition nextTile;
+		// ++ == tile , 큐에 넣는다
 		++indexedPosition.m_PosI;
 		searchTiles.push(indexedPosition);
+		//임시 배열에도 저장한다
+		candidateTIleList[i++] = indexedPosition;
+		
+		while (!searchTiles.empty() )
+		{
+			currentTile = searchTiles.front();
+			searchTiles.pop();
+			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
+			{
+				memset(candidateTIleList, 0, sizeof(candidateTIleList));
+				break;
+			}
+			//////////////////////////////////
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
+			{
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ-2;
+				if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+				{
+					searchTiles.push(nextTile);
+				}
+			}
+			/////////////////////////////////절취선
+		}
+		
 	}
 	if (m_Map->GetMapType(indexedPosition.m_PosI-1,indexedPosition.m_PosJ) != MO_DOT)
 	{
@@ -190,3 +217,33 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* tempArr
 	}
 }
 
+bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
+{
+	int i = 0;
+
+	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
+	{
+		i++;
+		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void checkTileDSNB()
+{
+
+	if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ-1) == MO_LINE_UNCONNECTED)
+	{
+		nextTile.m_PosI = currentTile.m_PosI;
+		nextTile.m_PosJ = currentTile.m_PosJ-2;
+		if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+		{
+			searchTiles.push(nextTile);
+		}
+	}
+
+}

@@ -69,7 +69,10 @@ public:
 	D2D1_SIZE_F GetStartPosition();
 
 	MapObject	GetMapType(IndexedPosition indexedPosition);
-	MapObject	GetMapType(int xPos, int jPos);
+	MapObject	GetMapType(int iPos, int jPos);
+
+	void SetMapType(IndexedPosition indexedPosition, MapObject newMapObject);
+	void SetMapType(int iPos, int jPos, MapObject newMapObject);
 
 private: 
 	void CreateMap();

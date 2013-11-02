@@ -36,6 +36,9 @@ public:
 
 private:
 	static CLogic*	m_pInstance; //singleton instance
+	
+	// IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다
+	bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile);
 
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[4];
