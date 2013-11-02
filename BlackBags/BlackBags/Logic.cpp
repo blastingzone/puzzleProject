@@ -51,6 +51,7 @@ bool CLogic::ReleaseInstance()
 //Logic관련 초기화 함수
 void CLogic::Init()
 {
+	m_Map = m_Map->GetInstance();
 	memset(m_Player,0,sizeof(m_Player));
 	GetPlayerNumber();
 	CreatePlayers();
@@ -79,13 +80,13 @@ void CLogic::Update( Coordinate mouseCoordinate )
 			switch ( m_Map->GetMapType(tempArray[i]) )
 			{
 				case MO_TILE_VOID:
-					m_Map->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
+					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
 					break;
 				case MO_TILE_TRASH:
-					m_Map->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
+					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
 					break;
 				case MO_TILE_GOLD:
-					m_Map->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
+					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
 					break;
 			}
 		}
@@ -476,7 +477,7 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	return false;
 }
 
-bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
+bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
 {
 	int i = 0;
 
