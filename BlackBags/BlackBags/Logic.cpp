@@ -59,6 +59,7 @@ void CLogic::Init()
 	GetPlayerNumber();
 	CreatePlayers();
 	SetPlayerTurn();
+	InitRandomMap();
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
@@ -327,4 +328,56 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 	}
 
 	return true;
+}
+
+void CLogic::InitRandomMap()
+{
+	int startLineNumber =	m_PlayerNumber * 5;
+//	int startGoldNumber =	m_PlayerNumber * 2;
+//	int startTrashNumber =	m_PlayerNumber * 2;
+	
+	IndexedPosition RandomTargetPosition;
+	IndexedPosition checkList[100] = {{0}};
+
+	srand( (unsigned int)time(NULL) );
+	
+	while (startLineNumber)
+	{
+		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
+		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
+		if(m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED && m_Map->IsPossible(RandomTargetPosition) && !IsClosed(RandomTargetPosition, checkList))
+		{
+			m_Map->SetMapType(RandomTargetPosition, MO_LINE_CONNECTED);
+			startLineNumber--;
+		}
+	}
+
+	// 타일 속성을 얘네들로 바꾸기 전에
+	// 1. 브러쉬를 새로 준비하고
+	// 2. IsClosed() 로직에 얘네들도 반영해야됩니다 ㄷㄷ;
+	// 지금은 그냥 돌려버리면 IsClosed에서 길을 못 찾아감;
+
+	//while (startGoldNumber)
+	//{
+	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
+	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
+	//	if(m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
+	//	{
+	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_GOLD);
+	//		startGoldNumber--;
+	//	}
+	//}
+
+	//while (startTrashNumber)
+	//{
+	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
+	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
+	//	if(m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
+	//	{
+	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_TRASH);
+	//		startTrashNumber--;
+	//	}
+	//}
+
+	return;
 }

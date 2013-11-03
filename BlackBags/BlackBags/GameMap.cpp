@@ -337,4 +337,3 @@ void CGameMap::CalcStartPosition()
 		centerPosition.width 
 		- (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
 }
-

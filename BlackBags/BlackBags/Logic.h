@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameMap.h"
 #include "Player.h"
+#include <time.h>
 
 enum Direction{
 	DI_UP,
@@ -27,6 +28,9 @@ public:
 	bool GetPlayerNumber();
 	bool CreatePlayers();
 	bool SetPlayerTurn();
+
+	//맵 초기화 할 때 유저 수에 맞게 울타리랑 아이템 랜덤 배치하는 메소드
+	void InitRandomMap();
 
 	void ShowResult();
 	void CheckScore();
