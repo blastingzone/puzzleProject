@@ -23,6 +23,7 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
     <Text Include="memo.txt" />
+    <Text Include="updateNote.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

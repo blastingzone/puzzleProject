@@ -62,13 +62,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	gameMap = gameMap->GetInstance();
-	gameMap->Init();
-
-
-	logic = logic->GetInstance();
-	logic->Init();
-
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
 
 	//int a = 0;
@@ -147,7 +140,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 	renderer = renderer->GetInstance();
 	renderer->Init(hWnd);
+
+	gameMap = gameMap->GetInstance();
+	gameMap->Init();
+
+	logic = logic->GetInstance();
+	logic->Init();
 	
+	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 	

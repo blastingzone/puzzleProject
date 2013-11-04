@@ -81,6 +81,7 @@
   <ItemGroup>
     <Text Include="memo.txt" />
     <Text Include="ReadMe.txt" />
+    <Text Include="updateNote.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackBags.h" />
