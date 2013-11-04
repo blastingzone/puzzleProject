@@ -21,7 +21,7 @@ public:
 	void				Init();
 	static CLogic*		GetInstance();
 	static bool			ReleaseInstance();
-	
+
 	bool Release();
 
 	void StartGame();
@@ -49,7 +49,7 @@ public:
 
 private:
 	static CLogic*	m_pInstance; //singleton instance
-	
+
 	//주어진 index의 울타리 주변 타일을 확인 합니다.
 	bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
 
@@ -62,5 +62,6 @@ private:
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[4];
 	CGameMap*	m_Map;
+	int			m_PlayerTurn;
 };
 

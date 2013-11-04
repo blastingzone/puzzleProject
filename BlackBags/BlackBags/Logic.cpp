@@ -9,6 +9,7 @@ CLogic::CLogic(void)
 	AllocConsole();
 	FILE* pFile;
 	freopen_s(&pFile, "CONOUT$", "wb", stdout);
+	m_PlayerTurn = 0;
 }
 
 
@@ -65,6 +66,7 @@ void CLogic::Init()
 //지도 관련 정보를 업데이트 해주는 함수
 void CLogic::Update( Coordinate mouseCoordinate )
 {
+	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 	IndexedPosition indexedPosition;
 	indexedPosition = CalcualteIndex(mouseCoordinate);
 
@@ -97,7 +99,9 @@ void CLogic::Update( Coordinate mouseCoordinate )
 			}
 			i++;
 		}
+		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 	}
+	m_PlayerTurn++;
 }
 
 //마우스 좌표값을 index로 바꾸는 함수
@@ -141,7 +145,6 @@ bool CLogic::CreatePlayers()
 	return true;
 }
 
-//
 bool CLogic::SetPlayerTurn()
 {
 	CPlayer * tempPlayer[4];
@@ -343,10 +346,12 @@ void CLogic::InitRandomMap()
 	
 	while (startLineNumber)
 	{
-		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
+		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
+
 		if(m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED && m_Map->IsPossible(RandomTargetPosition) && !IsClosed(RandomTargetPosition, checkList))
 		{
+			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
 			m_Map->SetMapType(RandomTargetPosition, MO_LINE_CONNECTED);
 			startLineNumber--;
 		}
