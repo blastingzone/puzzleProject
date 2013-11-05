@@ -67,16 +67,18 @@ void CLogic::Init()
 void CLogic::Update( Coordinate mouseCoordinate )
 {
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
-	IndexedPosition indexedPosition;
-	indexedPosition = CalcualteIndex(mouseCoordinate);
+	IndexedPosition indexedPosition; 
+	indexedPosition = CalcualteIndex(mouseCoordinate); //SM9: 이렇게 객체를 그냥 대입 하려면 복사대입 생성자 만들어 놓는게 좋다.
 
+	//SM9: 콘솔창 찍는거는 디버그일때만 쓰는거니까 이런식으로 감싸줘서 release모드에서는 동작하지 않도록.
+#ifdef _DEBUG
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
-	
+#endif	
 	//IsPossible 체크 후에 gameMap 호출해서 반영
 	m_Map->GetInstance()->DrawLine(indexedPosition);
 
 	//IsClosed()
-	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE] = {{0}};
+	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE] ; 
 	
 	if (IsClosed(indexedPosition, tempArray) )
 	{
@@ -114,6 +116,7 @@ IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height);
 
 	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
+	//SM9: C++에서는 웬만해서는 (거시기) 형태의 형변환은 쓰지 말 것. static_cast<int>(거시기) 처럼 써라.
 	indexedPosition.m_PosI = 
 		( mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
 		+ ( ( mouseCoordinate.m_PosY % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
@@ -127,6 +130,7 @@ IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 bool CLogic::GetPlayerNumber()
 {
 	//선택화면에서 플레이어 수를 선택!
+	//SM9: 아래 상수 박아 놓은건 나중에 고칠거지?
 	m_PlayerNumber = 3;
 
 	return true;
@@ -180,19 +184,19 @@ bool CLogic::SetPlayerTurn()
 bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTIleList )
 {
 	//선택된 울타리의 위쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_UP) )
+	if (ExploreTile(indexedPosition, candidateTIleList, DI_UP) )
 		return true;
 
 	//선택된 울타리의 오른쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_RIGHT) )
+	if (ExploreTile(indexedPosition, candidateTIleList, DI_RIGHT) )
 		return true;
 
 	//선택된 울타리의 아래쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_DOWN) )
+	if (ExploreTile(indexedPosition, candidateTIleList, DI_DOWN) )
 		return true;
 
 	//선택된 울타리의 왼쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_LEFT) )
+	if (ExploreTile(indexedPosition, candidateTIleList, DI_LEFT) )
 		return true;
 
 	return false;
@@ -215,10 +219,11 @@ bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPositio
 	return false;
 }
 
-bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction){
+bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction){ //SM9: { } 위치는 항상 동일 컬럼에 정렬.
+
 	std::queue<IndexedPosition> searchTiles;
 
-	IndexedPosition currentTile = {0,0};
+	IndexedPosition currentTile ;
 	IndexedPosition nextTile;
 
 	//확인 할 방향을 지정
@@ -258,12 +263,13 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		
 	while (!searchTiles.empty() )
 	{
-		currentTile = searchTiles.front();
+		currentTile = searchTiles.front(); //SM9: 사실 이렇게 객체를 copy하는것은 좋은 습관은 아니다. 다행히 IndexedPosition의 크기가 작아서 허용함.
 		searchTiles.pop();
 
 		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
 		if (CGameMap::GetInstance()->GetMapType(currentTile) == MO_SENTINEL)
 		{
+			//SM9: 위험한 코딩... 계산 잘못하면 메모리 덮어씀... 이럴때는 sizeof(*candidateTIleList) 이것 보다 sizeof(IndexedPosition)로 타입을 명확히 쓸 것
 			memset(candidateTIleList, 0, sizeof(*candidateTIleList) * CHECKED_TILE_ARRAY_SIZE);
 
 			/*
@@ -283,6 +289,9 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 			nextTile.m_PosI = currentTile.m_PosI - 2;
 			nextTile.m_PosJ = currentTile.m_PosJ;
+
+			//SM9: 아래의 IsAlreadyChecked안에서 candidateTIleList의 주소값을 주고 또 루프를 도는데, 더 좋은 방법은 없을까?
+			// 그리고 아래 함수 안에서 candidateTIleList의 변경이 없다면 반드시 const IndexedPosition& 형태로 넘겨라.
 			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
 			{
 				searchTiles.push(nextTile);
@@ -340,7 +349,7 @@ void CLogic::InitRandomMap()
 //	int startTrashNumber =	m_PlayerNumber * 2;
 	
 	IndexedPosition RandomTargetPosition;
-	IndexedPosition checkList[100] = {{0}};
+	IndexedPosition checkList[100] ;
 
 	srand( (unsigned int)time(NULL) );
 	
@@ -349,7 +358,10 @@ void CLogic::InitRandomMap()
 		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
 
-		if(m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED && m_Map->IsPossible(RandomTargetPosition) && !IsClosed(RandomTargetPosition, checkList))
+		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED  //SM9: if 키워드 위에 ( 는 반드시 한칸 띄우고
+			&& m_Map->IsPossible(RandomTargetPosition)  //SM9: 이렇게 조건문이 복잡할 경우는 라인을 바꿔서 읽기 좋게.
+			&& !IsClosed(RandomTargetPosition, checkList)
+			)
 		{
 			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
 			m_Map->SetMapType(RandomTargetPosition, MO_LINE_CONNECTED);
@@ -384,5 +396,5 @@ void CLogic::InitRandomMap()
 	//	}
 	//}
 
-	return;
+	return; //SM9: 멍미
 }

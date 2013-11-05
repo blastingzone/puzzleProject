@@ -6,6 +6,7 @@
 
 struct IndexedPosition
 {
+	IndexedPosition() : m_PosI(0), m_PosJ(0) {} //SM9: 벡터 같은 STL 컨테이너 안에서 쓸거면 이런식으로 반드시 데이터를 초기화해주는 생성자를 만드는 습관을 들일 것.
 	int m_PosI;
 	int m_PosJ;
 };
@@ -55,7 +56,7 @@ public:
 	~CGameMap(void);
 
 	void				Init();
-	static CGameMap*	GetInstance();
+	static CGameMap*	GetInstance(); //SM9: 이 프로젝트에서는 굳이 싱글톤을 쓸 이유가 없음. 어차피 전역 객체처럼 쓰고 있는 상황
 	static bool			ReleaseInstance();
 	bool				Release();
 

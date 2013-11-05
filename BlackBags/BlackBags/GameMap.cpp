@@ -239,6 +239,8 @@ MapObject CGameMap::GetMapType(int iPos, int jPos)
 	tempPos.m_PosI = iPos;
 	tempPos.m_PosJ = jPos;
 
+	//SM9: 이런거는 인자 2개 받는 생성자 만든 다음에, return GetMapType(IndexedPosition(iPos, jPos)) 처럼 코드 간단하게 된다.
+
 	return GetMapType(tempPos);
 }
 

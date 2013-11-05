@@ -3,7 +3,7 @@
 #include "Player.h"
 #include <time.h>
 
-enum Direction{
+enum Direction{ //SM9: 중괄호 시작 위치 수정.
 	DI_UP,
 	DI_RIGHT,
 	DI_DOWN,
@@ -36,11 +36,11 @@ public:
 	void CheckScore();
 
 	void Update(Coordinate mouseCoordinate);
-	bool DrawLine(IndexedPosition indexedPosition);
+	bool DrawLine(IndexedPosition indexedPosition); //SM9: 넘기는 객체가 함수 안에서 변화가 없을 때는, bool DrawLine(const IndexedPosition& indexedPos) 처럼 넘기는 습관을 가질 것
 
-	IndexedPosition CalcualteIndex(Coordinate mouseCoordinate);
+	IndexedPosition CalcualteIndex(Coordinate mouseCoordinate); 
 
-	bool IsClosed(IndexedPosition indexedPosition, IndexedPosition* tempArray);
+	bool IsClosed(IndexedPosition indexedPosition, OUT IndexedPosition* tempArray); //SM9: tempArray 가 출력용이라면 OUT 붙일 것, 뭔가 임시 배열을 밖으로 보낸다는것은 별로 좋은 구조는 아님.
 
 	bool IsEnd();
 
@@ -51,6 +51,7 @@ private:
 	static CLogic*	m_pInstance; //singleton instance
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다.
+	//SM9: 왜 멤버 함수에 CLogic:: 붙여놨나?
 	bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다. (switch문이 너무 늘어나고 포인터로 넘길 데이터가 많아서 그냥 구현 안 함)
@@ -60,7 +61,7 @@ private:
 	bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile);
 
 	int			m_PlayerNumber;
-	CPlayer*	m_Player[4];
+	CPlayer*	m_Player[4]; //SM9: 배열 크기 지정 상수는 반드시 밖으로 뺄 것. config.h 같은데 몰아 넣기를 추천
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
 };

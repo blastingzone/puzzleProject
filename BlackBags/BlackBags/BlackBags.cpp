@@ -21,8 +21,8 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer*		renderer;								// Renderer
-CGameMap*		gameMap;
+CRenderer*		renderer;								//SM9: 게임에서 참조해야 되는 전역 객체(변수)는 반드시 g_renderer 또는 GRenderer 처럼 변수이름 구분할 것!
+CGameMap*		gameMap;								//SM9: 아래 전역 변수들도 마찬가지
 CLogic*			logic;
 RECT			clientRect;								//window client size
 
@@ -138,9 +138,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		return FALSE;
 	}
 
+	//SM9: 이렇게 처음에 초기화해서 쓸 것이면 싱글톤으로 만들 이유가 전혀 없다.
 	renderer = renderer->GetInstance();
-	renderer->Init(hWnd);
+	//SM9: g_renderer = new CRenderer(); 처럼 해서 언제 어디서든 g_renderer를 바로 참조하면 됨.
+	// (이런 전역 객체는 프로그램 종료시에 delete g_renderer; 처럼 하면 됨)
+	renderer->Init(hWnd); //SM9: init이 true/false 리턴하는데.. 그 이유는?
 
+	//SM9: 아래 것들도 마찬가지
 	gameMap = gameMap->GetInstance();
 	gameMap->Init();
 
@@ -190,7 +194,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_CREATE:
 		//client 영역 크기 설정
-		SetRect(&clientRect, 0, 0, 799, 599); 
+		SetRect(&clientRect, 0, 0, 799, 599);  //SM9: 이런 799 599같은 상수들은 따로 config.h 같은데로 #define이나 const int로 빼거라
 		
 		//윈도우 크기를 계산
 		AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
