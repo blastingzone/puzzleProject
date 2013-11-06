@@ -13,7 +13,7 @@ public:
 	int				GetPlayerTurn(){return m_Turn;}
 
 private:
-	int				m_Turn;
+	int					m_Turn;
 	std::string		m_Name;
 };
 

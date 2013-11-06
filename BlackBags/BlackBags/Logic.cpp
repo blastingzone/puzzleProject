@@ -92,18 +92,8 @@ void CLogic::Update( Coordinate mouseCoordinate )
 		while (tempArray[i].m_PosI != 0 && tempArray[i].m_PosJ != 0 )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-			switch ( m_Map->GetMapType(tempArray[i]) )
-			{
-				case MO_TILE_VOID:
-					m_Map->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
-					break;
-				case MO_TILE_TRASH:
-					m_Map->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
-					break;
-				case MO_TILE_GOLD:
-					m_Map->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
-					break;
-			}
+			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
+			m_Map->SetMapOwner(tempArray[i],  MO_PLAYER1 );
 			i++;
 		}
 #ifdef _DEBUG
@@ -192,22 +182,22 @@ bool CLogic::SetPlayerTurn()
 	return true;
 }
 
-bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTIleList )
+bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTileList )
 {
 	//선택된 울타리의 위쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_UP) )
+	if (ExploreTile(indexedPosition, candidateTileList, DI_UP) )
 		return true;
 
 	//선택된 울타리의 오른쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_RIGHT) )
+	if (ExploreTile(indexedPosition, candidateTileList, DI_RIGHT) )
 		return true;
 
 	//선택된 울타리의 아래쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_DOWN) )
+	if (ExploreTile(indexedPosition, candidateTileList, DI_DOWN) )
 		return true;
 
 	//선택된 울타리의 왼쪽 확인
-	if(ExploreTile(indexedPosition, candidateTIleList, DI_LEFT) )
+	if (ExploreTile(indexedPosition, candidateTileList, DI_LEFT) )
 		return true;
 
 	return false;
@@ -220,20 +210,16 @@ bool CLogic::IsPossible(IndexedPosition indexedPosition)
 		int tileVoidCount = 0;
 
 		//입력된 울타리 주변을 확인해서 소유주가 없는 타일과 센티널의 숫자를 센다
-		if (m_Map->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_TILE_VOID 
-			|| m_Map->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+		if (m_Map->GetMapOwner(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_TILE_VOID 
-			|| m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+		if (m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_TILE_VOID 
-			|| m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_SENTINEL) { ++tileVoidCount; }
+		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_TILE_VOID 
-			|| m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_SENTINEL) { ++tileVoidCount; }
+		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_NOBODY) { ++tileVoidCount; }
 		
-		//확인된 타일의 수가 2가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음
-		if (tileVoidCount == 2)
+		//확인된 타일의 수가 4가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음??
+		if (tileVoidCount == 4)
 		{
 			return true;
 		}
@@ -242,24 +228,25 @@ bool CLogic::IsPossible(IndexedPosition indexedPosition)
 	return false;
 }
 
-bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, const IndexedPosition& nextTile)
+bool CLogic::IsAlreadyChecked(const IndexedPosition& nextTile)
 {
-	int i = 0;
+// 	int i = 0;
+// 
+// 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
+// 	{
+// 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
+// 		{
+// 			return true;
+// 		}
+// 
+// 		i++;
+// 	}
 
-	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
-	{
-		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
-		{
-			return true;
-		}
-
-		i++;
-	}
-
-	return false;
+	return m_Map->GetMapFlag(nextTile);
 }
 
-bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction){
+bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTileList, Direction direction)
+{
 	std::queue<IndexedPosition> searchTiles;
 
 	IndexedPosition currentTile;
@@ -298,7 +285,7 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 	int i = 0;
 
 	searchTiles.push(currentTile);
-	candidateTIleList[i++] = currentTile;
+	candidateTileList[i++] = currentTile;
 		
 	while (!searchTiles.empty() )
 	{
@@ -309,7 +296,13 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
 		if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 		{
-			memset(candidateTIleList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
+			int checkIdx = 0;
+			while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
+			{
+				m_Map->SetMapFlag(candidateTileList[checkIdx],false);
+				checkIdx++;
+			}
+			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
 
 			/*
 			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
@@ -328,10 +321,10 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 			nextTile.m_PosI = currentTile.m_PosI - 2;
 			nextTile.m_PosJ = currentTile.m_PosJ;
-			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTIleList[i++] = nextTile;
+				candidateTileList[i++] = nextTile;
 			}				
 		}
 
@@ -341,10 +334,10 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 			nextTile.m_PosI = currentTile.m_PosI;
 			nextTile.m_PosJ = currentTile.m_PosJ + 2;
-			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTIleList[i++] = nextTile;
+				candidateTileList[i++] = nextTile;
 			}				
 		}
 
@@ -354,10 +347,10 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 			nextTile.m_PosI = currentTile.m_PosI + 2;
 			nextTile.m_PosJ = currentTile.m_PosJ;
-			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTIleList[i++] = nextTile;
+				candidateTileList[i++] = nextTile;
 			}				
 		}
 		
@@ -367,10 +360,10 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 			nextTile.m_PosI = currentTile.m_PosI;
 			nextTile.m_PosJ = currentTile.m_PosJ - 2;
-			if (!IsAlreadyChecked(candidateTIleList, nextTile) )
+			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTIleList[i++] = nextTile;
+				candidateTileList[i++] = nextTile;
 			}				
 		}
 	}
@@ -402,7 +395,7 @@ void CLogic::InitRandomMap()
 			&& !IsClosed(RandomTargetPosition, checkList))
 		{
 			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
-			m_Map->SetMapType(RandomTargetPosition, MO_LINE_CONNECTED);
+			m_Map->DrawLine(RandomTargetPosition);
 			startLineNumber--;
 		}
 	}
@@ -416,7 +409,7 @@ void CLogic::InitRandomMap()
 	//{
 	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
 	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
-	//	if(m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
+	//	if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
 	//	{
 	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_GOLD);
 	//		startGoldNumber--;
@@ -427,7 +420,7 @@ void CLogic::InitRandomMap()
 	//{
 	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
 	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
-	//	if(m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
+	//	if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
 	//	{
 	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_TRASH);
 	//		startTrashNumber--;

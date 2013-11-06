@@ -37,7 +37,6 @@ public:
 	void CheckScore();
 
 	void Update(Coordinate mouseCoordinate);
-	bool DrawLine(IndexedPosition indexedPosition);
 	void Render();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
@@ -60,7 +59,7 @@ private:
 	//void CLogic::CheckTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction lineDirection, std::queue<IndexedPosition>* searchTiles);
 
 	// IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다
-	bool IsAlreadyChecked(IndexedPosition* candidateTileList, const IndexedPosition& nextTile);
+	bool IsAlreadyChecked(const IndexedPosition& nextTile);
 
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[MAX_PLAYER_NUM];

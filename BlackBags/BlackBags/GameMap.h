@@ -34,7 +34,7 @@ struct MapSize
 	int m_Height;
 };
 
-enum MapObject
+enum MO_TYPE
 {
 	MO_SENTINEL,
 	MO_DOT = 10,
@@ -42,20 +42,33 @@ enum MapObject
 	MO_LINE_CONNECTED,
 	MO_LINE_HIDDEN,
 	MO_TILE_VOID = 30,
-	MO_TILE_GOLD,
-	MO_TILE_TRASH,
-	MO_TILE_VOID_P1 = 100,
-	MO_TILE_GOLD_P1,
-	MO_TILE_TRASH_P1,
-	MO_TILE_VOID_P2 = 200,
-	MO_TILE_GOLD_P2,
-	MO_TILE_TRASH_P2,
-	MO_TILE_VOID_P3 = 300,
-	MO_TILE_GOLD_P3,
-	MO_TILE_TRASH_P3,
-	MO_TILE_VOID_P4 = 400,
-	MO_TILE_GOLD_P4,
-	MO_TILE_TRASH_P4
+};
+
+enum MO_OWNER
+{
+	MO_NOBODY = -1,
+	MO_PLAYER1,
+	MO_PLAYER2,
+	MO_PLAYER3,
+	MO_PLAYER4
+};
+
+enum MO_ITEM
+{
+	MO_NOTHING,
+	MO_GOLD,
+	MO_TRASH
+};
+
+struct MapObject
+{
+	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY),m_Item(MO_NOTHING),m_Flag(false) {}
+
+	MO_TYPE		m_Type;
+	MO_OWNER		m_Owner;
+	MO_ITEM		m_Item;
+	
+	bool m_Flag;
 };
 
 const float TILE_SIZE = 80.0f;
@@ -81,11 +94,20 @@ public:
 	
 	D2D1_SIZE_F GetStartPosition();
 
-	MapObject	GetMapType(IndexedPosition indexedPosition);
-	MapObject	GetMapType(const int& iPos, const int& jPos);
+	MO_TYPE	GetMapType(IndexedPosition indexedPosition);
+	MO_TYPE	GetMapType(const int& iPos, const int& jPos);
 
-	void SetMapType(IndexedPosition indexedPosition, MapObject newMapObject);
-	void SetMapType(const int& iPos, const int& jPos, MapObject newMapObject);
+	MO_OWNER GetMapOwner(IndexedPosition indexedPosition);
+	MO_OWNER GetMapOwner(const int& iPos, const int& jPos);
+
+	void SetMapOwner(IndexedPosition indexedPosition, MO_OWNER owner);
+	void SetMapOwner(const int& iPos, const int& jPos, MO_OWNER owner);
+
+	void SetItem(IndexedPosition indexedPosition, MO_ITEM item);
+	void SetItem(const int& iPos, const int& jPos, MO_ITEM item);
+
+	bool GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
+	void SetMapFlag(IndexedPosition indexedPosition,bool flag);
 
 private: 
 	void CreateMap();
