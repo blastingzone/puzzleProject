@@ -359,8 +359,8 @@ void CLogic::InitRandomMap()
 		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
 
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED  //SM9: if 키워드 위에 ( 는 반드시 한칸 띄우고
-			&& m_Map->IsPossible(RandomTargetPosition)  //SM9: 이렇게 조건문이 복잡할 경우는 라인을 바꿔서 읽기 좋게.
-			&& !IsClosed(RandomTargetPosition, checkList)
+			&& ( m_Map->IsPossible(RandomTargetPosition)  //SM9: 이렇게 조건문이 복잡할 경우는 라인을 바꿔서 읽기 좋게.
+			&& !IsClosed(RandomTargetPosition, checkList) )
 			)
 		{
 			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
