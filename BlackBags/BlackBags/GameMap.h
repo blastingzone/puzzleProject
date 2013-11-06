@@ -6,6 +6,20 @@
 
 struct IndexedPosition
 {
+	IndexedPosition() : m_PosI(0), m_PosJ(0) {}
+
+	IndexedPosition(const IndexedPosition& inputIndexedPosition)
+	{
+		m_PosI = inputIndexedPosition.m_PosI;
+		m_PosJ = inputIndexedPosition.m_PosJ;
+	}
+
+	IndexedPosition(int PosI, int PosJ)
+	{
+		m_PosI = PosI;
+		m_PosJ = PosJ;
+	}
+
 	int m_PosI;
 	int m_PosJ;
 };
@@ -55,24 +69,23 @@ public:
 	~CGameMap(void);
 
 	void				Init();
-	static CGameMap*	GetInstance();
-	static bool			ReleaseInstance();
+	//static CGameMap*	GetInstance();
+	//bool				ReleaseInstance();
 	bool				Release();
 
 	void				Render();
 
 	bool SetMapSize(MapSize mapsize);
-	void DrawLine(IndexedPosition indexedPosition);
-	void DrawLine(int iPos, int jPos);
+	void DrawLine(const IndexedPosition& indexedPosition);
+	void DrawLine(const int& iPos, const int& jPos);
 	
-	bool		IsPossible(IndexedPosition indexedPosition);
 	D2D1_SIZE_F GetStartPosition();
 
 	MapObject	GetMapType(IndexedPosition indexedPosition);
-	MapObject	GetMapType(int iPos, int jPos);
+	MapObject	GetMapType(const int& iPos, const int& jPos);
 
 	void SetMapType(IndexedPosition indexedPosition, MapObject newMapObject);
-	void SetMapType(int iPos, int jPos, MapObject newMapObject);
+	void SetMapType(const int& iPos, const int& jPos, MapObject newMapObject);
 
 private: 
 	void CreateMap();
@@ -82,7 +95,7 @@ private:
 	MapSize		m_MapSize;
 	D2D1_SIZE_F	m_StartPosition;
 
-	static CGameMap*	m_pInstance; //singleton instance
+	//static CGameMap*	m_pInstance; //singleton instance
 
 	//renderer를 위한 임시 배열입니다. 
 	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];

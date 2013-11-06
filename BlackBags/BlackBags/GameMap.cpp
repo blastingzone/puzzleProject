@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "MacroSet.h"
 
-CGameMap* CGameMap::m_pInstance = nullptr;
+//CGameMap* CGameMap::m_pInstance = nullptr;
 
 CGameMap::CGameMap(void)
 {
@@ -18,7 +18,7 @@ CGameMap::~CGameMap(void)
 {
 	//SafeArrayDelete(m_Map);
 }
-
+/*
 CGameMap* CGameMap::GetInstance()
 {
 	if (m_pInstance == nullptr)
@@ -36,7 +36,7 @@ bool CGameMap::ReleaseInstance()
 
 	return true;
 }
-
+*/
 bool CGameMap::Release()
 {
 	SafeRelease(m_pDotBrush);
@@ -102,35 +102,6 @@ void CGameMap::Init()
 	return;
 }
 
-bool CGameMap::IsPossible(IndexedPosition indexedPosition)
-{
-	if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
-	{
-		int tileVoidCount = 0;
-
-		//입력된 울타리 주변을 확인해서 소유주가 없는 타일과 센티널의 숫자를 센다
-		if (m_pInstance->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_TILE_VOID ||
-			m_pInstance->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
-
-		if (m_pInstance->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_TILE_VOID ||
-			m_pInstance->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
-
-		if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_TILE_VOID ||
-			m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_SENTINEL) { ++tileVoidCount; }
-
-		if (m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_TILE_VOID ||
-			m_pInstance->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_SENTINEL) { ++tileVoidCount; }
-		
-		//확인된 타일의 수가 2가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음
-		if (tileVoidCount == 2)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
 void CGameMap::Render()
 {
 	D2D1_ELLIPSE	m_DotEllipse;
@@ -148,11 +119,11 @@ void CGameMap::Render()
 			m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
 			rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
 			
-			if (m_pInstance->GetMapType(i,j) == MO_TILE_VOID)
+			if (GetMapType(i,j) == MO_TILE_VOID)
 			{
 				m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 			}
-			if (m_pInstance->GetMapType(i,j) == MO_TILE_VOID_P1)
+			if (GetMapType(i,j) == MO_TILE_VOID_P1)
 			{
 				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
 			}
@@ -176,7 +147,7 @@ void CGameMap::Render()
 				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
 				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
 			}
-			switch (m_pInstance->GetMapType(i,j))
+			switch (GetMapType(i,j) )
 			{
 			case MO_LINE_UNCONNECTED:
 				m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
@@ -195,7 +166,7 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_HEIGHT; ++j)
 		{
-			if (m_pInstance->GetMapType(i,j) == MO_DOT)
+			if (GetMapType(i,j) == MO_DOT)
 			{
 				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
 				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
@@ -233,13 +204,9 @@ MapObject CGameMap::GetMapType(IndexedPosition indexedPosition)
 	return MO_SENTINEL;
 }
 
-MapObject CGameMap::GetMapType(int iPos, int jPos)
+MapObject CGameMap::GetMapType(const int& iPos, const int& jPos)
 {
-	IndexedPosition tempPos;
-	tempPos.m_PosI = iPos;
-	tempPos.m_PosJ = jPos;
-
-	return GetMapType(tempPos);
+	return GetMapType(IndexedPosition(iPos, jPos) );
 }
 
 void CGameMap::SetMapType(IndexedPosition indexedPosition, MapObject newMapObject)
@@ -249,13 +216,9 @@ void CGameMap::SetMapType(IndexedPosition indexedPosition, MapObject newMapObjec
 	return;
 }
 
-void CGameMap::SetMapType(int iPos, int jPos, MapObject newMapObject)
+void CGameMap::SetMapType(const int& iPos, const int& jPos, MapObject newMapObject)
 {
-	IndexedPosition tempPos;
-	tempPos.m_PosI = iPos;
-	tempPos.m_PosJ = jPos;
-
-	SetMapType(tempPos, newMapObject);
+	SetMapType(IndexedPosition(iPos, jPos), newMapObject);
 
 	return;
 }
@@ -308,17 +271,13 @@ bool CGameMap::CreateResource()
 	return false;
 }
 
-void CGameMap::DrawLine(IndexedPosition indexedPosition)
+void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 {
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ] = MO_LINE_CONNECTED;
 }
-void CGameMap::DrawLine(int iPos, int jPos)
+void CGameMap::DrawLine(const int& iPos, const int& jPos)
 {
-	IndexedPosition indexedPosition;
-	indexedPosition.m_PosI=iPos;
-	indexedPosition.m_PosJ =jPos;
-
-	DrawLine(indexedPosition);
+	DrawLine(IndexedPosition(iPos, jPos) );
 }
 
 void CGameMap::CalcStartPosition()

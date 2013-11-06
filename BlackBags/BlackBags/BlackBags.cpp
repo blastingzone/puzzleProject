@@ -21,10 +21,10 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-CRenderer*		renderer;								// Renderer
-CGameMap*		gameMap;
-CLogic*			logic;
-RECT			clientRect;								//window client size
+//CRenderer*		renderer;								// Renderer
+//CGameMap*		gameMap;
+CLogic*			g_Logic;
+RECT			g_ClientRect;								//window client size
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -77,9 +77,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		}
 	}
 
-	gameMap->ReleaseInstance();
-	renderer->ReleaseInstance();
-	logic->ReleaseInstance();
+	CRenderer::GetInstance()->ReleaseInstance();
+	delete g_Logic;
 
 	FreeConsole();
 
@@ -138,14 +137,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		return FALSE;
 	}
 
-	renderer = renderer->GetInstance();
-	renderer->Init(hWnd);
-
-	gameMap = gameMap->GetInstance();
-	gameMap->Init();
-
-	logic = logic->GetInstance();
-	logic->Init();
+	if (!CRenderer::GetInstance()->Init(hWnd) )
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
+	else 
+	{
+		g_Logic = new CLogic();
+		g_Logic->Init();
+	}
 	
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
 	ShowWindow(hWnd, nCmdShow);
@@ -190,15 +190,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_CREATE:
 		//client 영역 크기 설정
-		SetRect(&clientRect, 0, 0, 799, 599); 
+		SetRect(&g_ClientRect, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
 		
 		//윈도우 크기를 계산
-		AdjustWindowRect(&clientRect, WS_OVERLAPPEDWINDOW, FALSE);
+		AdjustWindowRect(&g_ClientRect, WS_OVERLAPPEDWINDOW, FALSE);
 		
 		//윈도우 크기를 바꿔주고 클라이언트 영역을 새로 그려준다.
 		MoveWindow(hWnd, 0, 0,
-			clientRect.right - clientRect.left,
-			clientRect.bottom - clientRect.top,
+			g_ClientRect.right - g_ClientRect.left,
+			g_ClientRect.bottom - g_ClientRect.top,
 			TRUE); 
 		break;
 	case WM_LBUTTONDOWN:
@@ -209,17 +209,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
 		//여기에서 라인을 그을 수 있는 자리인지 확인해서 가능하다면 타이머 리셋하고 맵 업데이트 할 것
-		if (gameMap->IsPossible(logic->CalcualteIndex(mouseCoordinate) ) )
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//IsPossible()을 g_Logic으로 뺄 것
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		//
+		if (g_Logic->IsPossible(g_Logic->CalculateIndex(mouseCoordinate) ) )
 		{
-			logic -> Update(mouseCoordinate);
+			g_Logic->Update(mouseCoordinate);
 		}
 
 		break;
 	case WM_PAINT:
-		renderer->Begin();
-		renderer->Clear();
-		gameMap->Render();
-		renderer->End();
+		CRenderer::GetInstance()->Begin();
+		CRenderer::GetInstance()->Clear();
+		g_Logic->Render();
+		CRenderer::GetInstance()->End();
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlackBags.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="MacroSet.h" />

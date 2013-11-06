@@ -3,7 +3,8 @@
 #include "Player.h"
 #include <time.h>
 
-enum Direction{
+enum Direction
+{
 	DI_UP,
 	DI_RIGHT,
 	DI_DOWN,
@@ -19,8 +20,8 @@ public:
 	~CLogic(void);
 
 	void				Init();
-	static CLogic*		GetInstance();
-	static bool			ReleaseInstance();
+	//static CLogic*		GetInstance();
+	//static bool			ReleaseInstance();
 
 	bool Release();
 
@@ -37,9 +38,11 @@ public:
 
 	void Update(Coordinate mouseCoordinate);
 	bool DrawLine(IndexedPosition indexedPosition);
+	void Render();
 
-	IndexedPosition CalcualteIndex(Coordinate mouseCoordinate);
+	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 
+	bool IsPossible(IndexedPosition indexedPosition);
 	bool IsClosed(IndexedPosition indexedPosition, IndexedPosition* tempArray);
 
 	bool IsEnd();
@@ -57,10 +60,10 @@ private:
 	//void CLogic::CheckTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction lineDirection, std::queue<IndexedPosition>* searchTiles);
 
 	// IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다
-	bool IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile);
+	bool IsAlreadyChecked(IndexedPosition* candidateTileList, const IndexedPosition& nextTile);
 
 	int			m_PlayerNumber;
-	CPlayer*	m_Player[4];
+	CPlayer*	m_Player[MAX_PLAYER_NUM];
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
 };

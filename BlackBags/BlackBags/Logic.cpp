@@ -3,21 +3,26 @@
 #include "MacroSet.h"
 #include <queue>
 
-CLogic* CLogic::m_pInstance = nullptr;
+//CLogic* CLogic::m_pInstance = nullptr;
+
 CLogic::CLogic(void)
 {
 	AllocConsole();
 	FILE* pFile;
 	freopen_s(&pFile, "CONOUT$", "wb", stdout);
+
 	m_PlayerTurn = 0;
+	m_Map = nullptr;
 }
 
 
 CLogic::~CLogic(void)
 {
+	Release();
+	delete m_Map;
 }
-
-CLogic* CLogic::GetInstance()
+/*
+CLogic* g_Logic
 {
 	if (m_pInstance == nullptr)
 	{
@@ -26,7 +31,7 @@ CLogic* CLogic::GetInstance()
 
 	return m_pInstance;
 }
-
+*/
 bool CLogic::Release()
 {
 	for ( int i = 0; i< m_PlayerNumber ; ++i)
@@ -41,8 +46,7 @@ bool CLogic::Release()
 
 	return true;
 }
-
-
+/*
 bool CLogic::ReleaseInstance()
 {
 	m_pInstance->Release();
@@ -50,33 +54,36 @@ bool CLogic::ReleaseInstance()
 
 	return true;
 }
+*/
 
-
-//Logic관련 초기화 함수
+//g_Logic관련 초기화 함수
 void CLogic::Init()
 {
-	m_Map = m_Map->GetInstance();
 	memset(m_Player,0,sizeof(m_Player));
 	GetPlayerNumber();
 	CreatePlayers();
 	SetPlayerTurn();
+
+	m_Map = new CGameMap();
+	m_Map->Init();
 	InitRandomMap();
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
 void CLogic::Update( Coordinate mouseCoordinate )
 {
-	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
-	IndexedPosition indexedPosition;
-	indexedPosition = CalcualteIndex(mouseCoordinate);
-
-	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
+	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 	
+#ifdef _DEBUG
+	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
+	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
+#endif  
+
 	//IsPossible 체크 후에 gameMap 호출해서 반영
-	m_Map->GetInstance()->DrawLine(indexedPosition);
+	m_Map->DrawLine(indexedPosition);
 
 	//IsClosed()
-	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE] = {{0}};
+	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE];
 	
 	if (IsClosed(indexedPosition, tempArray) )
 	{
@@ -88,38 +95,45 @@ void CLogic::Update( Coordinate mouseCoordinate )
 			switch ( m_Map->GetMapType(tempArray[i]) )
 			{
 				case MO_TILE_VOID:
-					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
+					m_Map->SetMapType( tempArray[i], MO_TILE_VOID_P1 );
 					break;
 				case MO_TILE_TRASH:
-					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
+					m_Map->SetMapType( tempArray[i], MO_TILE_TRASH_P1 );
 					break;
 				case MO_TILE_GOLD:
-					m_Map->GetInstance()->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
+					m_Map->SetMapType( tempArray[i], MO_TILE_GOLD_P1 );
 					break;
 			}
 			i++;
 		}
+#ifdef _DEBUG
 		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
+#endif
 	}
 	m_PlayerTurn++;
 }
 
+void CLogic::Render()
+{
+	m_Map->Render();
+}
+
 //마우스 좌표값을 index로 바꾸는 함수
-IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
+IndexedPosition CLogic::CalculateIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 
 	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
-	mouseCoordinate.m_PosX -= (int)(m_Map->GetInstance()->GetStartPosition().width);
-	mouseCoordinate.m_PosY -= (int)(m_Map->GetInstance()->GetStartPosition().height);
+	mouseCoordinate.m_PosX -= static_cast<int>(m_Map->GetStartPosition().width);
+	mouseCoordinate.m_PosY -= static_cast<int>(m_Map->GetStartPosition().height);
 
 	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
 	indexedPosition.m_PosI = 
-		( mouseCoordinate.m_PosY / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
-		+ ( ( mouseCoordinate.m_PosY % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
+		( mouseCoordinate.m_PosY / static_cast<int> (TILE_SIZE + LINE_WEIGHT) ) * 2 
+		+ ( ( mouseCoordinate.m_PosY % static_cast<int> (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
 	indexedPosition.m_PosJ = 
-		( mouseCoordinate.m_PosX / (int) (TILE_SIZE + LINE_WEIGHT) ) * 2 
-		+ ( ( mouseCoordinate.m_PosX % (int) (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
+		( mouseCoordinate.m_PosX / static_cast<int> (TILE_SIZE + LINE_WEIGHT) ) * 2 
+		+ ( ( mouseCoordinate.m_PosX % static_cast<int> (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
 	
 	return indexedPosition;
 }
@@ -127,6 +141,7 @@ IndexedPosition CLogic::CalcualteIndex( Coordinate mouseCoordinate )
 bool CLogic::GetPlayerNumber()
 {
 	//선택화면에서 플레이어 수를 선택!
+	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
 	m_PlayerNumber = 3;
 
 	return true;
@@ -198,7 +213,36 @@ bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candida
 	return false;
 }
 
-bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPosition nextTile)
+bool CLogic::IsPossible(IndexedPosition indexedPosition)
+{
+	if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
+	{
+		int tileVoidCount = 0;
+
+		//입력된 울타리 주변을 확인해서 소유주가 없는 타일과 센티널의 숫자를 센다
+		if (m_Map->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_TILE_VOID 
+			|| m_Map->GetMapType(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_TILE_VOID 
+			|| m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_TILE_VOID 
+			|| m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_SENTINEL) { ++tileVoidCount; }
+
+		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_TILE_VOID 
+			|| m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_SENTINEL) { ++tileVoidCount; }
+		
+		//확인된 타일의 수가 2가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음
+		if (tileVoidCount == 2)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, const IndexedPosition& nextTile)
 {
 	int i = 0;
 
@@ -218,7 +262,7 @@ bool CLogic::IsAlreadyChecked(IndexedPosition* candidateTileList, IndexedPositio
 bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction){
 	std::queue<IndexedPosition> searchTiles;
 
-	IndexedPosition currentTile = {0,0};
+	IndexedPosition currentTile;
 	IndexedPosition nextTile;
 
 	//확인 할 방향을 지정
@@ -258,27 +302,28 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		
 	while (!searchTiles.empty() )
 	{
-		currentTile = searchTiles.front();
+		currentTile.m_PosI = searchTiles.front().m_PosI;
+		currentTile.m_PosJ = searchTiles.front().m_PosJ;
 		searchTiles.pop();
 
 		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
-		if (CGameMap::GetInstance()->GetMapType(currentTile) == MO_SENTINEL)
+		if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 		{
-			memset(candidateTIleList, 0, sizeof(*candidateTIleList) * CHECKED_TILE_ARRAY_SIZE);
+			memset(candidateTIleList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
 
 			/*
 			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
 			while(!searchTiles.empty())
 				searchTiles.pop();
 			*/
-
+#ifdef _DEBUG
 			printf("센티넬을 만났어요\n");
-
+#endif
 			return false;
 		}
 
 		//현재 타일의 위쪽 확인
-		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+		if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 		{
 
 			nextTile.m_PosI = currentTile.m_PosI - 2;
@@ -291,7 +336,7 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		}
 
 		//현재 타일의 오른쪽 확인
-		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
+		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
 		{
 
 			nextTile.m_PosI = currentTile.m_PosI;
@@ -304,7 +349,7 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		}
 
 		//현재 타일의 아래쪽 확인
-		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
+		if (m_Map->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 		{
 
 			nextTile.m_PosI = currentTile.m_PosI + 2;
@@ -317,7 +362,7 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		}
 		
 		//현재 타일의 왼쪽 확인
-		if (CGameMap::GetInstance()->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
+		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
 		{
 
 			nextTile.m_PosI = currentTile.m_PosI;
@@ -340,9 +385,9 @@ void CLogic::InitRandomMap()
 //	int startTrashNumber =	m_PlayerNumber * 2;
 	
 	IndexedPosition RandomTargetPosition;
-	IndexedPosition checkList[100] = {{0}};
+	IndexedPosition checkList[100];
 
-//	srand( (unsigned int)time(NULL) );
+//	srand( static_cast<unsingned int>time(NULL) );
 	
 	// 버그 발생하는 시드값을 넣어두겠습니다
 	srand	(1383706550);
@@ -352,7 +397,9 @@ void CLogic::InitRandomMap()
 		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
 
-		if(m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED && m_Map->IsPossible(RandomTargetPosition) && !IsClosed(RandomTargetPosition, checkList))
+		if (m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED 
+			&& IsPossible(RandomTargetPosition) 
+			&& !IsClosed(RandomTargetPosition, checkList))
 		{
 			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
 			m_Map->SetMapType(RandomTargetPosition, MO_LINE_CONNECTED);
