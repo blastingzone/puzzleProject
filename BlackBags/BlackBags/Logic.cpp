@@ -316,8 +316,15 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 				}
 			}
 			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
-
+			
 			/*
+			int checkIdx = 0;
+			while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
+			{
+				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
+			}
+			memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
+			
 			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
 			while(!searchTiles.empty())
 				searchTiles.pop();

@@ -82,7 +82,7 @@ void CGameMap::CreateMap()
 				} 
 				else 
 				{
-					m_Map[targetRow][targetColumn].m_Type = MO_TILE_VOID;
+					m_Map[targetRow][targetColumn].m_Type = MO_TILE;
 				}
 			}
 		}
@@ -114,29 +114,32 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_HEIGHT; ++j)
 		{
-			m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1) + LINE_WEIGHT / 2;
-			m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-			rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
-			
-			switch (GetMapOwner(i, j) )
+			if (GetMapType(i, j) == MO_TILE)
 			{
-			case MO_NOBODY:
-				m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
-				break;
-			case MO_PLAYER1:
-				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
-				break;
-			case MO_PLAYER2:
-				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
-				break;
-			case MO_PLAYER3:
-				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
-				break;
-			case MO_PLAYER4:
-				m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
-				break;
-			default:
-				break;
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1) + LINE_WEIGHT / 2;
+				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
+				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
+			
+				switch (GetMapOwner(i, j) )
+				{
+				case MO_NOBODY:
+					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+					break;
+				case MO_PLAYER1:
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					break;
+				case MO_PLAYER2:
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					break;
+				case MO_PLAYER3:
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					break;
+				case MO_PLAYER4:
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
@@ -146,28 +149,31 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_HEIGHT; ++j)
 		{
-			if (i%2==0)
+			if ( GetMapType(i, j) == MO_LINE_UNCONNECTED || GetMapType(i, j) == MO_LINE_CONNECTED )
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-				rectElement = D2D1::Rect( m_pos.x - LINE_WEIGHT / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + LINE_WEIGHT / 2, m_pos.y + TILE_SIZE / 2);
-			}
-			else
-			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
-			}
-			switch (GetMapType(i, j) )
-			{
-			case MO_LINE_UNCONNECTED:
-				m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
-				break;
-			case MO_LINE_CONNECTED:
-				m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
-				break;
-			default:
-				break;
+				if (i%2==0)
+				{
+					m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
+					m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
+					rectElement = D2D1::Rect( m_pos.x - LINE_WEIGHT / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + LINE_WEIGHT / 2, m_pos.y + TILE_SIZE / 2);
+				}
+				else
+				{
+					m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
+					m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
+					rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
+				}
+				switch (GetMapType(i, j) )
+				{
+				case MO_LINE_UNCONNECTED:
+					m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
+					break;
+				case MO_LINE_CONNECTED:
+					m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
