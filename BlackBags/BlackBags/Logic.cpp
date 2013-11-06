@@ -342,8 +342,11 @@ void CLogic::InitRandomMap()
 	IndexedPosition RandomTargetPosition;
 	IndexedPosition checkList[100] = {{0}};
 
-	srand( (unsigned int)time(NULL) );
+//	srand( (unsigned int)time(NULL) );
 	
+	// 버그 발생하는 시드값을 넣어두겠습니다
+	srand	(1383706550);
+
 	while (startLineNumber)
 	{
 		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
