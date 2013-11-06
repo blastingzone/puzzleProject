@@ -7,7 +7,6 @@
 
 CGameMap::CGameMap(void)
 {
-	memset(m_Map, 0, sizeof(m_Map)); 
 	m_pRenderTarget = nullptr;
 
 	m_MapSize.m_Width = 7;
@@ -119,7 +118,7 @@ void CGameMap::Render()
 			m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
 			rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
 			
-			switch (GetMapOwner(i,j))
+			switch (GetMapOwner(i, j) )
 			{
 			case MO_NOBODY:
 				m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
@@ -159,7 +158,7 @@ void CGameMap::Render()
 				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
 				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
 			}
-			switch (GetMapType(i,j) )
+			switch (GetMapType(i, j) )
 			{
 			case MO_LINE_UNCONNECTED:
 				m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
@@ -180,8 +179,9 @@ void CGameMap::Render()
 		{
 			if (GetMapType(i,j) == MO_DOT)
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
 				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
+				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
+				
 				m_DotEllipse = D2D1::Ellipse( m_pos, DOT_RADIUS, DOT_RADIUS );
 				m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
 			}
@@ -192,8 +192,8 @@ void CGameMap::Render()
 	rectElement = D2D1::Rect( 
 		m_StartPosition.width, 
 		m_StartPosition.height, 
-		m_StartPosition.width + m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT, 
-		m_StartPosition.height + m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT);
+		m_StartPosition.width + m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT, 
+		m_StartPosition.height + m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT);
 
 	m_pRenderTarget->DrawRectangle(rectElement,m_pConnectedLineBrush);
 }
@@ -325,7 +325,7 @@ void CGameMap::SetItem(const int& iPos, const int& jPos, MO_ITEM item )
 	SetItem(IndexedPosition(iPos,jPos),item);
 }
 
-void CGameMap::SetMapFlag( IndexedPosition indexedPosition,bool flag )
+void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
 {
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag = flag;
 }

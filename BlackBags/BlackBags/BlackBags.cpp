@@ -209,23 +209,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
 		//여기에서 라인을 그을 수 있는 자리인지 확인해서 가능하다면 타이머 리셋하고 맵 업데이트 할 것
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//IsPossible()을 g_Logic으로 뺄 것
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
 		if (g_Logic->IsPossible(g_Logic->CalculateIndex(mouseCoordinate) ) )
 		{
 			g_Logic->Update(mouseCoordinate);

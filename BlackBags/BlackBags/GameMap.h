@@ -62,10 +62,10 @@ enum MO_ITEM
 
 struct MapObject
 {
-	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY),m_Item(MO_NOTHING),m_Flag(false) {}
+	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false) {}
 
 	MO_TYPE		m_Type;
-	MO_OWNER		m_Owner;
+	MO_OWNER	m_Owner;
 	MO_ITEM		m_Item;
 	
 	bool m_Flag;
@@ -120,7 +120,7 @@ private:
 	//static CGameMap*	m_pInstance; //singleton instance
 
 	//renderer를 위한 임시 배열입니다. 
-	MapObject	m_Map[MAX_WIDTH][MAX_HEIGHT];
+	MapObject				m_Map[MAX_WIDTH][MAX_HEIGHT];
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 

@@ -184,6 +184,11 @@ bool CLogic::SetPlayerTurn()
 
 bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTileList )
 {
+	
+#ifdef _DEBUG
+	printf("idx I : %d / idx J : %d\n", indexedPosition.m_PosI, indexedPosition.m_PosJ);
+#endif
+
 	//선택된 울타리의 위쪽 확인
 	if (ExploreTile(indexedPosition, candidateTileList, DI_UP) )
 		return true;
@@ -212,11 +217,11 @@ bool CLogic::IsPossible(IndexedPosition indexedPosition)
 		//입력된 울타리 주변을 확인해서 소유주가 없는 타일과 센티널의 숫자를 센다
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
+		if (m_Map->GetMapOwner(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_NOBODY) { ++tileVoidCount; }
+		if (m_Map->GetMapOwner(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_NOBODY) { ++tileVoidCount; }
 
-		if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_NOBODY) { ++tileVoidCount; }
+		if (m_Map->GetMapOwner(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_NOBODY) { ++tileVoidCount; }
 		
 		//확인된 타일의 수가 4가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음??
 		if (tileVoidCount == 4)
@@ -286,6 +291,7 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 
 	searchTiles.push(currentTile);
 	candidateTileList[i++] = currentTile;
+	m_Map->SetMapFlag(currentTile, true);
 		
 	while (!searchTiles.empty() )
 	{
@@ -296,11 +302,18 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
 		if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 		{
+			/*
 			int checkIdx = 0;
 			while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
 			{
-				m_Map->SetMapFlag(candidateTileList[checkIdx],false);
+				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
 				checkIdx++;
+			}
+			*/
+			for(int tempI = 0 ; tempI < MAX_WIDTH; ++tempI){
+				for(int tempJ = 0 ; tempJ < MAX_HEIGHT; ++tempJ){
+					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
+				}
 			}
 			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
 
@@ -314,56 +327,58 @@ bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candi
 #endif
 			return false;
 		}
-
+#ifdef _DEBUG
+			printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
+#endif
 		//현재 타일의 위쪽 확인
 		if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 		{
-
 			nextTile.m_PosI = currentTile.m_PosI - 2;
 			nextTile.m_PosJ = currentTile.m_PosJ;
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
 				candidateTileList[i++] = nextTile;
+				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
 
 		//현재 타일의 오른쪽 확인
 		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
 		{
-
 			nextTile.m_PosI = currentTile.m_PosI;
 			nextTile.m_PosJ = currentTile.m_PosJ + 2;
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
 				candidateTileList[i++] = nextTile;
+				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
 
 		//현재 타일의 아래쪽 확인
 		if (m_Map->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 		{
-
 			nextTile.m_PosI = currentTile.m_PosI + 2;
 			nextTile.m_PosJ = currentTile.m_PosJ;
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
 				candidateTileList[i++] = nextTile;
+				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
 		
 		//현재 타일의 왼쪽 확인
 		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
 		{
-
 			nextTile.m_PosI = currentTile.m_PosI;
 			nextTile.m_PosJ = currentTile.m_PosJ - 2;
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
 				candidateTileList[i++] = nextTile;
+				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
 	}
