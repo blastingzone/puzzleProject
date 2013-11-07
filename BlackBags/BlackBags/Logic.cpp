@@ -412,14 +412,20 @@ void CLogic::InitRandomMap()
 		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
 
-		if (m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED 
-			&& IsPossible(RandomTargetPosition) 
-			&& !IsClosed(RandomTargetPosition, checkList))
-		{
-			//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
-			m_Map->DrawLine(RandomTargetPosition);
-			startLineNumber--;
-		}
+		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
+			if ( IsPossible(RandomTargetPosition) )
+				{
+					//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
+					m_Map->DrawLine(RandomTargetPosition);
+					--startLineNumber;
+					
+					if ( IsClosed(RandomTargetPosition, checkList) )
+					{
+						m_Map->DeleteLine(RandomTargetPosition);
+						++startLineNumber;
+					}
+				}
+				
 	}
 
 	// 타일 속성을 얘네들로 바꾸기 전에

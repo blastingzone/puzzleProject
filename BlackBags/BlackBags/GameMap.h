@@ -92,6 +92,9 @@ public:
 	void DrawLine(const IndexedPosition& indexedPosition);
 	void DrawLine(const int& iPos, const int& jPos);
 	
+	void DeleteLine(const IndexedPosition& indexedPosition);
+	void DeleteLine(const int& iPos, const int& jPos);
+
 	D2D1_SIZE_F GetStartPosition();
 
 	MO_TYPE	GetMapType(IndexedPosition indexedPosition);

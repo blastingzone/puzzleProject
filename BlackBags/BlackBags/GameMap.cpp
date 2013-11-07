@@ -335,3 +335,14 @@ void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
 {
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag = flag;
 }
+
+void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
+}
+
+
+void CGameMap::DeleteLine( const int& iPos, const int& jPos )
+{
+	DeleteLine( IndexedPosition(iPos, jPos) );
+}
