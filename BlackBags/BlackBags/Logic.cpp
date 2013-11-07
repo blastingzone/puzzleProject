@@ -402,10 +402,10 @@ void CLogic::InitRandomMap()
 	IndexedPosition RandomTargetPosition;
 	IndexedPosition checkList[100];
 
-//	srand( static_cast<unsingned int>time(NULL) );
+	//srand( static_cast<unsigned int>(time(NULL)) );
 	
 	// 버그 발생하는 시드값을 넣어두겠습니다
-	srand	(1383706550);
+	srand(1383706550);
 
 	while (startLineNumber)
 	{

@@ -9,8 +9,8 @@ CGameMap::CGameMap(void)
 {
 	m_pRenderTarget = nullptr;
 
-	m_MapSize.m_Width = 7;
-	m_MapSize.m_Height = 6;
+	m_MapSize.m_Width = 5;
+	m_MapSize.m_Height = 5;
 }
 
 CGameMap::~CGameMap(void)
