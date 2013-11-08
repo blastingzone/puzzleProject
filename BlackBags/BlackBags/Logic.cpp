@@ -131,7 +131,7 @@ bool CLogic::GetPlayerNumber()
 {
 	//선택화면에서 플레이어 수를 선택!
 	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
-	m_PlayerNumber = 3;
+	m_PlayerNumber = 4;
 
 	return true;
 }

@@ -129,13 +129,13 @@ void CGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
 					break;
 				case MO_PLAYER2:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP2);
 					break;
 				case MO_PLAYER3:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP3);
 					break;
 				case MO_PLAYER4:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					m_pRenderTarget->FillRectangle(rectElement, m_pTileP4);
 					break;
 				default:
 					break;
