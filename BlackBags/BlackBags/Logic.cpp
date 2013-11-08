@@ -92,8 +92,7 @@ void CLogic::Update( Coordinate mouseCoordinate )
 		while (tempArray[i].m_PosI != 0 && tempArray[i].m_PosJ != 0 )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
-			m_Map->SetMapOwner(tempArray[i],  MO_PLAYER1 );
+			m_Map->SetMapOwner(tempArray[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
 			i++;
 		}
 #ifdef _DEBUG
@@ -145,6 +144,7 @@ bool CLogic::CreatePlayers()
 
 		m_Player[i]->SetPlayerName("hihihi");
 		m_Player[i]->SetPlayerTurn(-1);
+		m_Player[i]->SetPlayerId(i);
 	}
 
 	return true;

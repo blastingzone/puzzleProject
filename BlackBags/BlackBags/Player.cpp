@@ -20,3 +20,8 @@ void CPlayer::SetPlayerTurn( int playerTurn )
 {
 	m_Turn = playerTurn;
 }
+
+void CPlayer::SetPlayerId(int playerId)
+{
+	m_Id = playerId;
+}
