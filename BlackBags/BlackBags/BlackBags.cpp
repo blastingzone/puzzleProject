@@ -193,11 +193,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_SIZE:
 		GetClientRect(hWnd, &g_ClientRect);
-		if (CRenderer::GetInstance()->GetHwndRenderTarget() == NULL)
-		{
-			break;
-		}
-		else
+		if (CRenderer::GetInstance()->GetHwndRenderTarget() != NULL)
 		{
 			CRenderer::GetInstance()->GetHwndRenderTarget()->Resize(D2D1::SizeU(
 				g_ClientRect.right - g_ClientRect.left, 
