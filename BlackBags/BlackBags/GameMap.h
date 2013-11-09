@@ -112,6 +112,8 @@ public:
 	void SubtractVoidCount() { --m_VoidTileCount; }
 	int	GetVoidTileCount() { return m_VoidTileCount; }
 
+	void ResizeClient();
+
 private: 
 	void CreateMap();
 	bool CreateResource();

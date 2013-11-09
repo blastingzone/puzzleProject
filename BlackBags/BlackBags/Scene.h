@@ -22,11 +22,12 @@ public:
 	CScene(void);
 	virtual~CScene(void);
 
-	void Render();
-	virtual SceneName Update(Coordinate mouseCoordinate) = 0;
-	void AddObject(CSceneObject* inputObject);
+	void				Render();
+	virtual SceneName	Update(Coordinate mouseCoordinate) = 0;
+	void				AddObject(CSceneObject* inputObject);
+	void				ResizeClient();
 
-	SceneName getCurrentScene() {return m_SceneStatus;}
+	SceneName			getCurrentScene() {return m_SceneStatus;}
 
 protected:
 	void RemoveObject();

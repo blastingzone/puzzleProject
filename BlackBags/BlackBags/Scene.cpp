@@ -19,6 +19,14 @@ void CScene::Render()
 	}
 }
 
+void CScene::ResizeClient()
+{
+	for (int i = 0 ; i < m_ObjectCount ; ++i )
+	{
+		m_Object[i]->ResizeClient();
+	}
+}
+
 void CScene::AddObject( CSceneObject* inputObject )
 {
 	if (m_ObjectCount < OBJECT_MAX)

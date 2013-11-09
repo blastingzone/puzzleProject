@@ -43,7 +43,7 @@ public:
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 
 	bool IsPossible(IndexedPosition indexedPosition);
-	bool IsClosed(IndexedPosition indexedPosition, IndexedPosition* tempArray);
+	bool IsClosed(IndexedPosition indexedPosition, OUT IndexedPosition* tempArray);
 
 	bool IsEnd();
 
@@ -54,7 +54,7 @@ private:
 	static CPlayScene*	m_pInstance; //singleton instance
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다.
-	bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
+	bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTIleList, Direction direction);
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다. (switch문이 너무 늘어나고 포인터로 넘길 데이터가 많아서 그냥 구현 안 함)
 	//void CLogic::CheckTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction lineDirection, std::queue<IndexedPosition>* searchTiles);

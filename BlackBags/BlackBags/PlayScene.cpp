@@ -111,14 +111,12 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 #endif
 	}
 	m_PlayerTurn++;
-	//////////////////////////////////////////////////////////////////////////////////////
-	// 조심해!!
-	// 여기서 종료조건 체크해서 return Result로 보내버릴 것
+
 	if (IsEnd() )
 	{
 		return SC_RESULT;
 	}
-	//////////////////////////////////////////////////////////////////////////////////////
+
 	return SC_PLAY;
 }
 
@@ -198,7 +196,7 @@ bool CPlayScene::SetPlayerTurn()
 	return true;
 }
 
-bool CPlayScene::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTileList )
+bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList )
 {
 	
 #ifdef _DEBUG
@@ -266,7 +264,7 @@ bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 	return m_Map->GetMapFlag(nextTile);
 }
 
-bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTileList, Direction direction)
+bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList, Direction direction)
 {
 	std::queue<IndexedPosition> searchTiles;
 

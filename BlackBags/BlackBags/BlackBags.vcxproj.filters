@@ -13,14 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Logic Element">
-      <UniqueIdentifier>{116ad042-b789-4850-a40f-cc5165d557fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{a8248b6b-c274-40b1-986f-f8fc4a705318}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{7e222d43-f2c9-4cb5-9a65-a6ac7b9d9f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayScene">
+      <UniqueIdentifier>{8c710fba-757b-425e-9590-5c049869f860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util Elements">
+      <UniqueIdentifier>{116ad042-b789-4850-a40f-cc5165d557fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +41,6 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameMap.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -48,10 +48,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="MacroSet.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
+      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
       <Filter>Header Files</Filter>
@@ -65,39 +62,39 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
     <ClInclude Include="OpeningScene.h">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="MainScene.h">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="ResultScene.h">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="SettingScene.h">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="CreditScene.h">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameMap.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="BlackBags.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
@@ -109,23 +106,29 @@
     <ClCompile Include="SceneObject.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
     <ClCompile Include="OpeningScene.cpp">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="MainScene.cpp">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="SettingScene.cpp">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="CreditScene.cpp">
-      <Filter>Logic Element</Filter>
+      <Filter>Util Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap.cpp">
+      <Filter>PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

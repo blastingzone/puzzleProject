@@ -303,6 +303,11 @@ void CGameMap::CalcStartPosition()
 		- (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
 }
 
+void CGameMap::ResizeClient()
+{
+		CalcStartPosition();
+}
+
 MO_OWNER CGameMap::GetMapOwner( IndexedPosition indexedPosition )
 {
 	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Owner;

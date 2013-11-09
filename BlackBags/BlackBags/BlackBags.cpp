@@ -20,8 +20,6 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-//CRenderer*		renderer;								// Renderer
-//CGameMap*		gameMap;
 RECT			g_ClientRect;							//window client size
 CSceneManager	g_Manager;
 
@@ -46,7 +44,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	// TODO: Place code here.
 	MSG		msg;
 	HACCEL	hAccelTable;
 
@@ -61,15 +58,11 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags));
+	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_BlackBags) );
 
-	//int a = 0;
-	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		//printf("COUNT : %d\n", a);
-		
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+	{	
+		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg) )
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -134,7 +127,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		return FALSE;
 	}
-
+	
 	if (!CRenderer::GetInstance()->Init(hWnd) )
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
@@ -198,26 +191,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			g_ClientRect.bottom - g_ClientRect.top,
 			TRUE); 
 		break;
+	case WM_SIZE:
+		GetClientRect(hWnd, &g_ClientRect);
+		if (CRenderer::GetInstance()->GetHwndRenderTarget() == NULL)
+		{
+			break;
+		}
+		else
+		{
+			CRenderer::GetInstance()->GetHwndRenderTarget()->Resize(D2D1::SizeU(
+				g_ClientRect.right - g_ClientRect.left, 
+				g_ClientRect.bottom - g_ClientRect.top) );
+			g_Manager.ResizeClientSize();
+		}
+		break;
 	case WM_LBUTTONDOWN:
-
 		// 마우스 좌표 받아오는 부분
 		Coordinate mouseCoordinate;
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
-		//여기에서 라인을 그을 수 있는 자리인지 확인해서 가능하다면 타이머 리셋하고 맵 업데이트 할 것
-// 		if (g_Logic->IsPossible(g_Logic->CalculateIndex(mouseCoordinate) ) )
-// 		{
-// 			g_Logic->Update(mouseCoordinate);
-// 		}
 		g_Manager.Update(mouseCoordinate);
-
 		break;
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
 		g_Manager.Render();
-
 		CRenderer::GetInstance()->End();
 		break;
 	case WM_DESTROY:
