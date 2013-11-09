@@ -3,9 +3,8 @@
 
 #include "stdafx.h"
 #include "BlackBags.h"
-#include "GameMap.h"
 #include "Renderer.h"
-#include "Logic.h"
+#include "SceneManager.h"
 #include <windowsx.h>
 #include <crtdbg.h>
 #include <stdio.h>
@@ -23,8 +22,8 @@ TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 //CRenderer*		renderer;								// Renderer
 //CGameMap*		gameMap;
-CLogic*			g_Logic;
-RECT			g_ClientRect;								//window client size
+RECT			g_ClientRect;							//window client size
+CSceneManager	g_Manager;
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -78,7 +77,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	CRenderer::GetInstance()->ReleaseInstance();
-	delete g_Logic;
 
 	FreeConsole();
 
@@ -143,8 +141,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	else 
 	{
-		g_Logic = new CLogic();
-		g_Logic->Init();
+		g_Manager = CSceneManager();
 	}
 	
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
@@ -209,16 +206,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
 		//여기에서 라인을 그을 수 있는 자리인지 확인해서 가능하다면 타이머 리셋하고 맵 업데이트 할 것
-		if (g_Logic->IsPossible(g_Logic->CalculateIndex(mouseCoordinate) ) )
-		{
-			g_Logic->Update(mouseCoordinate);
-		}
+// 		if (g_Logic->IsPossible(g_Logic->CalculateIndex(mouseCoordinate) ) )
+// 		{
+// 			g_Logic->Update(mouseCoordinate);
+// 		}
+		g_Manager.Update(mouseCoordinate);
 
 		break;
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
-		g_Logic->Render();
+		g_Manager.Render();
+
 		CRenderer::GetInstance()->End();
 		break;
 	case WM_DESTROY:

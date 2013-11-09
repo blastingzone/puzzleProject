@@ -86,21 +86,37 @@
   <ItemGroup>
     <ClInclude Include="BlackBags.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="CreditScene.h" />
     <ClInclude Include="GameMap.h" />
-    <ClInclude Include="Logic.h" />
     <ClInclude Include="MacroSet.h" />
+    <ClInclude Include="MainScene.h" />
+    <ClInclude Include="OpeningScene.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="SettingScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBags.cpp" />
+    <ClCompile Include="CreditScene.cpp" />
     <ClCompile Include="GameMap.cpp" />
-    <ClCompile Include="Logic.cpp" />
+    <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="OpeningScene.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SceneObject.cpp" />
+    <ClCompile Include="SettingScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

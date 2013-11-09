@@ -23,3 +23,9 @@ inline void SafeArrayDelete( T* &p )
 #define SINGLETON(type) \
 	public: \
 	static type* GetInstance() {static type s; return &s;}
+
+struct Coordinate
+{
+	int m_PosX;
+	int m_PosY;
+};

@@ -19,6 +19,9 @@
     <Filter Include="Renderer">
       <UniqueIdentifier>{a8248b6b-c274-40b1-986f-f8fc4a705318}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{7e222d43-f2c9-4cb5-9a65-a6ac7b9d9f82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -41,9 +44,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Logic.h">
-      <Filter>Logic Element</Filter>
-    </ClInclude>
     <ClInclude Include="BlackBags.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -56,6 +56,33 @@
     <ClInclude Include="config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="OpeningScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScene.h">
+      <Filter>Logic Element</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -67,14 +94,38 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Logic.cpp">
-      <Filter>Logic Element</Filter>
-    </ClCompile>
     <ClCompile Include="BlackBags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObject.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningScene.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingScene.cpp">
+      <Filter>Logic Element</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScene.cpp">
+      <Filter>Logic Element</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

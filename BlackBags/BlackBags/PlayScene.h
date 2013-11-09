@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "GameMap.h"
 #include "Player.h"
+#include "Scene.h"
 #include <time.h>
 
 enum Direction
@@ -13,11 +14,11 @@ enum Direction
 
 const int CHECKED_TILE_ARRAY_SIZE = 100;
 
-class CLogic
+class CPlayScene : public CScene
 {
 public:
-	CLogic(void);
-	~CLogic(void);
+	CPlayScene(void);
+	~CPlayScene(void);
 
 	void				Init();
 	//static CLogic*		GetInstance();
@@ -36,7 +37,7 @@ public:
 	void ShowResult();
 	void CheckScore();
 
-	void Update(Coordinate mouseCoordinate);
+	SceneName Update(Coordinate mouseCoordinate);
 	void Render();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
@@ -50,10 +51,10 @@ public:
 	void GetMapSize();
 
 private:
-	static CLogic*	m_pInstance; //singleton instance
+	static CPlayScene*	m_pInstance; //singleton instance
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다.
-	bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
+	bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction direction);
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다. (switch문이 너무 늘어나고 포인터로 넘길 데이터가 많아서 그냥 구현 안 함)
 	//void CLogic::CheckTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction lineDirection, std::queue<IndexedPosition>* searchTiles);

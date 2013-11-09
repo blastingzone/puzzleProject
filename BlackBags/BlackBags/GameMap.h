@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "d2d1.h"
+#include "SceneObject.h"
 
 #define MAX_WIDTH	21
 #define MAX_HEIGHT	21
@@ -23,11 +24,7 @@ struct IndexedPosition
 	int m_PosI;
 	int m_PosJ;
 };
-struct Coordinate
-{
-	int m_PosX;
-	int m_PosY;
-};
+
 struct MapSize
 {
 	int m_Width;
@@ -75,7 +72,7 @@ const float TILE_SIZE = 80.0f;
 const float LINE_WEIGHT = 10.0f;
 const float DOT_RADIUS = 6.0f;
 
-class CGameMap
+class CGameMap : public CSceneObject
 {
 public:
 	CGameMap(void);
