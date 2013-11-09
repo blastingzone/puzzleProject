@@ -36,6 +36,6 @@ void CScene::RemoveObject()
 {
 	for (int i = 0 ; i < m_ObjectCount ; ++i )
 	{
-		SafeRelease( m_Object[i] );
+		delete( m_Object[i] );
 	}
 }

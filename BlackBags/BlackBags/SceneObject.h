@@ -5,6 +5,6 @@ public:
 	CSceneObject(void);
 	virtual ~CSceneObject(void);
 
-	virtual void Render();
+	virtual void Render() = 0;
 };
 

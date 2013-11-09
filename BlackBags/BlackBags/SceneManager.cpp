@@ -24,7 +24,7 @@ void CSceneManager::Update( Coordinate mouseCoordinate )
 
 	if (m_CurrentScene->getCurrentScene() != tempName)
 	{
-		SafeRelease(m_CurrentScene);
+		delete m_CurrentScene;
 		switch ( tempName )
 		{
 		case SC_OPENING:
