@@ -15,6 +15,8 @@ CPlayScene::CPlayScene(void)
 	m_Map = nullptr;
 
 	Init();
+	m_SceneStatus = SC_PLAY;
+	AddObject(m_Map);
 }
 
 
@@ -74,8 +76,13 @@ void CPlayScene::Init()
 //지도 관련 정보를 업데이트 해주는 함수
 SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 {
-	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 	
+	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
+	if (!IsPossible(indexedPosition) )
+	{
+		return SC_PLAY;
+	}
+
 #ifdef _DEBUG
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
@@ -95,7 +102,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
 			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
-			m_Map->SetMapOwner(tempArray[i],  MO_PLAYER1 );
+			m_Map->SetMapOwner(tempArray[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
 			i++;
 		}
 #ifdef _DEBUG
@@ -110,11 +117,6 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	return SC_PLAY;
 }
 
-// 나중에 Object가 늘어나면 ObjectList에 넣고 순차적으로 Render()
-void CPlayScene::Render()
-{
-	m_Map->Render();
-}
 
 //마우스 좌표값을 index로 바꾸는 함수
 IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
@@ -140,7 +142,7 @@ bool CPlayScene::GetPlayerNumber()
 {
 	//선택화면에서 플레이어 수를 선택!
 	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
-	m_PlayerNumber = 3;
+	m_PlayerNumber = 4;
 
 	return true;
 }
@@ -153,6 +155,7 @@ bool CPlayScene::CreatePlayers()
 
 		m_Player[i]->SetPlayerName("hihihi");
 		m_Player[i]->SetPlayerTurn(-1);
+		m_Player[i]->SetPlayerId(i);
 	}
 
 	return true;

@@ -11,12 +11,12 @@ public:
 	void			SetPlayerName(std::string playerName);
 	void			SetPlayerTurn(int playerTurn);
 	int				GetPlayerTurn(){return m_Turn;}
-	void				SetPlayerId(int playerId);
-	int		GetPlayerId(){return m_Id;}
+	void		    SetPlayerId(int playerId);
+	int			    GetPlayerId(){return m_Id;}
 
 private:
 	int					m_Turn;
 	std::string		m_Name;
-	int		m_Id;
+	int				  m_Id;
 };
 

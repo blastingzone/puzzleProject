@@ -20,7 +20,6 @@ class CScene
 {
 public:
 	CScene(void);
-	CScene(SceneName currentScene);
 	virtual~CScene(void);
 
 	void Render();

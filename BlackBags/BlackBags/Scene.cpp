@@ -2,14 +2,9 @@
 #include "Scene.h"
 
 
-CScene::CScene(SceneName currentScene)
-{
-	m_SceneStatus = currentScene;
-	m_ObjectCount = 0;
-}
-
 CScene::CScene(void)
 {
+	m_ObjectCount = 0;
 }
 
 CScene::~CScene(void)
