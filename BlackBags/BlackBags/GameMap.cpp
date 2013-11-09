@@ -11,6 +11,8 @@ CGameMap::CGameMap(void)
 
 	m_MapSize.m_Width = 5;
 	m_MapSize.m_Height = 5;
+
+	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
 }
 
 CGameMap::~CGameMap(void)

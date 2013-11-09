@@ -109,11 +109,15 @@ public:
 	bool GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
 	void SetMapFlag(IndexedPosition indexedPosition,bool flag);
 
+	void SubtractVoidCount() { --m_VoidTileCount; }
+	int	GetVoidTileCount() { return m_VoidTileCount; }
+
 private: 
 	void CreateMap();
 	bool CreateResource();
 	void CalcStartPosition();
 
+	int			m_VoidTileCount;
 	MapSize		m_MapSize;
 	D2D1_SIZE_F	m_StartPosition;
 

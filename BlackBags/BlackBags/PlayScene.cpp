@@ -103,6 +103,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
 			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
 			m_Map->SetMapOwner(tempArray[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
+			m_Map->SubtractVoidCount();
 			i++;
 		}
 #ifdef _DEBUG
@@ -113,6 +114,10 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	//////////////////////////////////////////////////////////////////////////////////////
 	// 조심해!!
 	// 여기서 종료조건 체크해서 return Result로 보내버릴 것
+	if (IsEnd() )
+	{
+		return SC_RESULT;
+	}
 	//////////////////////////////////////////////////////////////////////////////////////
 	return SC_PLAY;
 }
@@ -467,4 +472,9 @@ void CPlayScene::InitRandomMap()
 	//}
 
 	return;
+}
+
+bool CPlayScene::IsEnd()
+{
+	return (m_Map->GetVoidTileCount() == 0);
 }
