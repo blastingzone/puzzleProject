@@ -1,6 +1,17 @@
 ﻿#pragma once
 
 template <typename T>
+inline void SafeDelete( T* &p )
+{
+	if ( p != nullptr )
+	{
+		delete p;
+		p = nullptr;
+	}
+}
+
+
+template <typename T>
 inline void SafeRelease( T* &p )
 {
 	if ( p!= nullptr )
@@ -8,6 +19,7 @@ inline void SafeRelease( T* &p )
 		p->Release();
 		p = nullptr;
 	}
+
 }
 
 template <typename T>

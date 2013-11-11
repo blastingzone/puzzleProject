@@ -16,6 +16,8 @@ public:
 	void Update(Coordinate mouseCoordinate);
 	void ResizeClientSize(){m_CurrentScene->ResizeClient();}
 
+	void Release();
+
 protected:
 	CScene* m_CurrentScene;
 

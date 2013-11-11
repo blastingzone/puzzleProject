@@ -11,8 +11,6 @@ CRenderer::CRenderer(void)
 
 CRenderer::~CRenderer(void)
 {
-	//ReleaseInstance();
-	//Release();
 }
 
 CRenderer* CRenderer::GetInstance()

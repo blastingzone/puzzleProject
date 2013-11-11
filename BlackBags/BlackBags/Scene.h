@@ -26,11 +26,11 @@ public:
 	virtual SceneName	Update(Coordinate mouseCoordinate) = 0;
 	void				AddObject(CSceneObject* inputObject);
 	void				ResizeClient();
+	void				RemoveObject();
 
 	SceneName			getCurrentScene() {return m_SceneStatus;}
 
 protected:
-	void RemoveObject();
 	
 	SceneName m_SceneStatus;
 	CSceneObject* m_Object[OBJECT_MAX];

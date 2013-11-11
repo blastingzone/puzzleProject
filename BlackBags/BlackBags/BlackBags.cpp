@@ -20,7 +20,7 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-RECT			g_ClientRect;							//window client size
+RECT				g_ClientRect;							//window client size
 CSceneManager	g_Manager;
 
 // Forward declarations of functions included in this code module:
@@ -72,6 +72,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CRenderer::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
+	g_Manager.Release();
 
 	return (int) msg.wParam;
 }

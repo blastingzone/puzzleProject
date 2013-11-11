@@ -9,6 +9,7 @@ CScene::CScene(void)
 
 CScene::~CScene(void)
 {
+	
 }
 
 void CScene::Render()
@@ -37,8 +38,11 @@ void CScene::AddObject( CSceneObject* inputObject )
 
 void CScene::RemoveObject()
 {
-	for (int i = 0 ; i < m_ObjectCount ; ++i )
+	for (int i = 0 ; i < OBJECT_MAX ; ++i )
 	{
-		delete( m_Object[i] );
+		if (m_Object[i])
+		{
+			m_Object[i] = NULL;
+		}
 	}
 }

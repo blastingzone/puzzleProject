@@ -18,6 +18,7 @@ CSceneManager::~CSceneManager(void)
 {
 }
 
+
 void CSceneManager::Update( Coordinate mouseCoordinate )
 {
 	SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
@@ -49,4 +50,9 @@ void CSceneManager::Update( Coordinate mouseCoordinate )
 			break;
 		}
 	}
+}
+
+void CSceneManager::Release()
+{
+	delete m_CurrentScene;
 }

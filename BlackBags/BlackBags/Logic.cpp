@@ -1,11 +1,11 @@
 ﻿#include "stdafx.h"
-#include "PlayScene.h"
+#include "Logic.h"
 #include "MacroSet.h"
 #include <queue>
 
 //CLogic* CLogic::m_pInstance = nullptr;
 
-CPlayScene::CPlayScene(void)
+CLogic::CLogic(void)
 {
 	AllocConsole();
 	FILE* pFile;
@@ -13,22 +13,13 @@ CPlayScene::CPlayScene(void)
 
 	m_PlayerTurn = 0;
 	m_Map = nullptr;
-
-	Init();
-	m_SceneStatus = SC_PLAY;
-	AddObject(m_Map);
 }
 
 
-CPlayScene::~CPlayScene(void)
+CLogic::~CLogic(void)
 {
 	Release();
-	m_Map->Release();
 	delete m_Map;
-
-	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
-	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
-	RemoveObject();
 }
 /*
 CLogic* g_Logic
@@ -41,7 +32,7 @@ CLogic* g_Logic
 	return m_pInstance;
 }
 */
-bool CPlayScene::Release()
+bool CLogic::Release()
 {
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
 	{
@@ -66,7 +57,7 @@ bool CLogic::ReleaseInstance()
 */
 
 //g_Logic관련 초기화 함수
-void CPlayScene::Init()
+void CLogic::Init()
 {
 	memset(m_Player,0,sizeof(m_Player));
 	GetPlayerNumber();
@@ -79,15 +70,10 @@ void CPlayScene::Init()
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
-SceneName CPlayScene::Update( Coordinate mouseCoordinate )
+void CLogic::Update( Coordinate mouseCoordinate )
 {
-	
 	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
-	if (!IsPossible(indexedPosition) )
-	{
-		return SC_PLAY;
-	}
-
+	
 #ifdef _DEBUG
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
@@ -106,9 +92,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 		while (tempArray[i].m_PosI != 0 && tempArray[i].m_PosJ != 0 )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
 			m_Map->SetMapOwner(tempArray[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
-			m_Map->SubtractVoidCount();
 			i++;
 		}
 #ifdef _DEBUG
@@ -116,18 +100,15 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 #endif
 	}
 	m_PlayerTurn++;
-
-	if (IsEnd() )
-	{
-		return SC_RESULT;
-	}
-
-	return SC_PLAY;
 }
 
+void CLogic::Render()
+{
+	m_Map->Render();
+}
 
 //마우스 좌표값을 index로 바꾸는 함수
-IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
+IndexedPosition CLogic::CalculateIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 
@@ -146,7 +127,7 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 	return indexedPosition;
 }
 
-bool CPlayScene::GetPlayerNumber()
+bool CLogic::GetPlayerNumber()
 {
 	//선택화면에서 플레이어 수를 선택!
 	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
@@ -155,7 +136,7 @@ bool CPlayScene::GetPlayerNumber()
 	return true;
 }
 
-bool CPlayScene::CreatePlayers()
+bool CLogic::CreatePlayers()
 {
 	for (int i = 0; i<m_PlayerNumber;++i)
 	{
@@ -169,7 +150,7 @@ bool CPlayScene::CreatePlayers()
 	return true;
 }
 
-bool CPlayScene::SetPlayerTurn()
+bool CLogic::SetPlayerTurn()
 {
 	CPlayer * tempPlayer[4];
 	memcpy(tempPlayer,m_Player,sizeof(m_Player));
@@ -201,7 +182,7 @@ bool CPlayScene::SetPlayerTurn()
 	return true;
 }
 
-bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList )
+bool CLogic::IsClosed( IndexedPosition indexedPosition, IndexedPosition* candidateTileList )
 {
 	
 #ifdef _DEBUG
@@ -227,7 +208,7 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition*
 	return false;
 }
 
-bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
+bool CLogic::IsPossible(IndexedPosition indexedPosition)
 {
 	if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
 	{
@@ -252,7 +233,7 @@ bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 	return false;
 }
 
-bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
+bool CLogic::IsAlreadyChecked(const IndexedPosition& nextTile)
 {
 // 	int i = 0;
 // 
@@ -269,7 +250,7 @@ bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 	return m_Map->GetMapFlag(nextTile);
 }
 
-bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList, Direction direction)
+bool CLogic::ExploreTile(IndexedPosition indexedPosition, IndexedPosition* candidateTileList, Direction direction)
 {
 	std::queue<IndexedPosition> searchTiles;
 
@@ -329,8 +310,8 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 				checkIdx++;
 			}
 			*/
-			for (int tempI = 0 ; tempI < MAX_WIDTH; ++tempI){
-				for (int tempJ = 0 ; tempJ < MAX_HEIGHT; ++tempJ){
+			for(int tempI = 0 ; tempI < MAX_WIDTH; ++tempI){
+				for(int tempJ = 0 ; tempJ < MAX_HEIGHT; ++tempJ){
 					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 				}
 			}
@@ -345,7 +326,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 			memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
 			
 			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
-			while (!searchTiles.empty())
+			while(!searchTiles.empty())
 				searchTiles.pop();
 			*/
 #ifdef _DEBUG
@@ -412,7 +393,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 	return true;
 }
 
-void CPlayScene::InitRandomMap()
+void CLogic::InitRandomMap()
 {
 	int startLineNumber =	m_PlayerNumber * 5;
 //	int startGoldNumber =	m_PlayerNumber * 2;
@@ -475,9 +456,4 @@ void CPlayScene::InitRandomMap()
 	//}
 
 	return;
-}
-
-bool CPlayScene::IsEnd()
-{
-	return (m_Map->GetVoidTileCount() == 0);
 }
