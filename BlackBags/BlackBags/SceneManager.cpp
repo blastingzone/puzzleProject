@@ -6,6 +6,7 @@
 #include "ResultScene.h"
 #include "SettingScene.h"
 #include "CreditScene.h"
+#include "Renderer.h"
 
 
 CSceneManager::CSceneManager(void)
@@ -55,4 +56,9 @@ void CSceneManager::Update( Coordinate mouseCoordinate )
 void CSceneManager::Release()
 {
 	delete m_CurrentScene;
+}
+
+void CSceneManager::ResizeClientSize()
+{
+	m_CurrentScene->ResizeClient();
 }

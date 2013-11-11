@@ -90,3 +90,20 @@ bool CRenderer::RenderAll()
 	
 	return true;
 }
+
+void CRenderer::SetDisplayScale()
+{
+	float widthScale, heightScale;
+	D2D1_SIZE_F tempSize;
+	tempSize = m_ipRenderTarget->GetSize();
+	
+	widthScale = tempSize.width / WINDOW_WIDTH;
+	heightScale = tempSize.height / WINDOW_HEIGHT;
+
+	m_DisplayScale = (widthScale < heightScale) ? widthScale : heightScale;
+
+	if (m_DisplayScale > 1)
+	{
+		m_DisplayScale = 1.0f;
+	}
+}

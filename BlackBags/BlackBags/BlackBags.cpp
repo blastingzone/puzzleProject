@@ -20,7 +20,7 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-RECT				g_ClientRect;							//window client size
+RECT			g_ClientRect;							//window client size
 CSceneManager	g_Manager;
 
 // Forward declarations of functions included in this code module:
@@ -196,9 +196,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		GetClientRect(hWnd, &g_ClientRect);
 		if (CRenderer::GetInstance()->GetHwndRenderTarget() != NULL)
 		{
+			//현재 렌더 타겟의 사이즈를 변경된 사이즈로 바꿈
 			CRenderer::GetInstance()->GetHwndRenderTarget()->Resize(D2D1::SizeU(
 				g_ClientRect.right - g_ClientRect.left, 
 				g_ClientRect.bottom - g_ClientRect.top) );
+
+			//실제 게임 화면에 변경 사항을 적용
+			CRenderer::GetInstance()->SetDisplayScale();
 			g_Manager.ResizeClientSize();
 		}
 		break;

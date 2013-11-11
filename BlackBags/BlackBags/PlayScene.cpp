@@ -2,6 +2,7 @@
 #include "PlayScene.h"
 #include "MacroSet.h"
 #include <queue>
+#include "Renderer.h"
 
 //CLogic* CLogic::m_pInstance = nullptr;
 
@@ -135,13 +136,16 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 	mouseCoordinate.m_PosX -= static_cast<int>(m_Map->GetStartPosition().width);
 	mouseCoordinate.m_PosY -= static_cast<int>(m_Map->GetStartPosition().height);
 
+	//조심해!!!
+	//지금은 스케일 값을 반영하기 위해서 반복적으로 작업하는데 나중에 따로 담아두고 쓰도록 할 것
+	float scale = CRenderer::GetInstance()->GetDisplayScale();
 	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
 	indexedPosition.m_PosI = 
-		( mouseCoordinate.m_PosY / static_cast<int> (TILE_SIZE + LINE_WEIGHT) ) * 2 
-		+ ( ( mouseCoordinate.m_PosY % static_cast<int> (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
+		( mouseCoordinate.m_PosY / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
+		+ ( ( mouseCoordinate.m_PosY % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
 	indexedPosition.m_PosJ = 
-		( mouseCoordinate.m_PosX / static_cast<int> (TILE_SIZE + LINE_WEIGHT) ) * 2 
-		+ ( ( mouseCoordinate.m_PosX % static_cast<int> (TILE_SIZE + LINE_WEIGHT) > LINE_WEIGHT ) ? 2 : 1);
+		( mouseCoordinate.m_PosX / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
+		+ ( ( mouseCoordinate.m_PosX % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
 	
 	return indexedPosition;
 }

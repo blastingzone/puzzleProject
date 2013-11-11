@@ -68,9 +68,11 @@ struct MapObject
 	bool m_Flag;
 };
 
-const float TILE_SIZE = 80.0f;
-const float LINE_WEIGHT = 10.0f;
-const float DOT_RADIUS = 6.0f;
+/*
+const float m_TileSize = 80.0f;
+const float m_LineWeight = 10.0f;
+const float m_DotRadius = 6.0f;
+*/
 
 class CGameMap : public CSceneObject
 {
@@ -113,6 +115,7 @@ public:
 	int	GetVoidTileCount() { return m_VoidTileCount; }
 
 	void ResizeClient();
+	void SetObjectSize();
 
 private: 
 	void CreateMap();
@@ -129,6 +132,10 @@ private:
 	MapObject				m_Map[MAX_WIDTH][MAX_HEIGHT];
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
+
+	float m_TileSize;
+	float m_LineWeight;
+	float m_DotRadius;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;

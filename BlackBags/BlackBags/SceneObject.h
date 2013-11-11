@@ -7,5 +7,6 @@ public:
 
 	virtual void Render() = 0;
 	virtual void ResizeClient() = 0;
+	virtual void SetObjectSize() = 0;
 };
 

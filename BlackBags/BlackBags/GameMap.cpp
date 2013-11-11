@@ -3,8 +3,6 @@
 #include "Renderer.h"
 #include "MacroSet.h"
 
-//CGameMap* CGameMap::m_pInstance = nullptr;
-
 CGameMap::CGameMap(void)
 {
 	m_pRenderTarget = nullptr;
@@ -96,7 +94,8 @@ void CGameMap::CreateMap()
 void CGameMap::Init()
 {
 	CreateResource();
-	CalcStartPosition();
+	SetObjectSize();
+	ResizeClient();
 	SetMapSize(m_MapSize);
 	CreateMap();
 
@@ -118,9 +117,9 @@ void CGameMap::Render()
 		{
 			if (GetMapType(i, j) == MO_TILE)
 			{
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i -1) + LINE_WEIGHT / 2;
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-				rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + TILE_SIZE / 2);
+				m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i -1) + m_LineWeight / 2;
+				m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
+				rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
 			
 				switch (GetMapOwner(i, j) )
 				{
@@ -155,15 +154,15 @@ void CGameMap::Render()
 			{
 				if (i%2==0)
 				{
-					m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
-					m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-					rectElement = D2D1::Rect( m_pos.x - LINE_WEIGHT / 2, m_pos.y - TILE_SIZE / 2, m_pos.x + LINE_WEIGHT / 2, m_pos.y + TILE_SIZE / 2);
+					m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
+					m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
+					rectElement = D2D1::Rect( m_pos.x - m_LineWeight / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_LineWeight / 2, m_pos.y + m_TileSize / 2);
 				}
 				else
 				{
-					m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
-					m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-					rectElement = D2D1::Rect( m_pos.x - TILE_SIZE / 2, m_pos.y - LINE_WEIGHT / 2, m_pos.x + TILE_SIZE / 2, m_pos.y + LINE_WEIGHT / 2);
+					m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
+					m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
+					rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_LineWeight / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_LineWeight / 2);
 				}
 				switch (GetMapType(i, j) )
 				{
@@ -187,10 +186,10 @@ void CGameMap::Render()
 		{
 			if (GetMapType(i,j) == MO_DOT)
 			{
-				m_pos.x = m_StartPosition.width + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (j - 1) + LINE_WEIGHT / 2;
-				m_pos.y = m_StartPosition.height + ( (LINE_WEIGHT + TILE_SIZE) / 2 ) * (i - 1) + LINE_WEIGHT / 2;
+				m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
+				m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
 				
-				m_DotEllipse = D2D1::Ellipse( m_pos, DOT_RADIUS, DOT_RADIUS );
+				m_DotEllipse = D2D1::Ellipse( m_pos, m_DotRadius, m_DotRadius );
 				m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pDotBrush);
 			}
 		}
@@ -200,8 +199,8 @@ void CGameMap::Render()
 	rectElement = D2D1::Rect( 
 		m_StartPosition.width, 
 		m_StartPosition.height, 
-		m_StartPosition.width + m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT, 
-		m_StartPosition.height + m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT);
+		m_StartPosition.width + m_MapSize.m_Width * (m_LineWeight + m_TileSize) + m_LineWeight, 
+		m_StartPosition.height + m_MapSize.m_Height * (m_LineWeight + m_TileSize) + m_LineWeight);
 
 	m_pRenderTarget->DrawRectangle(rectElement,m_pConnectedLineBrush);
 }
@@ -302,16 +301,26 @@ void CGameMap::CalcStartPosition()
 
 	m_StartPosition.height = 
 		centerPosition.height 
-		- (m_MapSize.m_Height * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
+		- (m_MapSize.m_Height * (m_LineWeight + m_TileSize) + m_LineWeight) / 2;
 
 	m_StartPosition.width = 
 		centerPosition.width 
-		- (m_MapSize.m_Width * (LINE_WEIGHT + TILE_SIZE) + LINE_WEIGHT) / 2;
+		- (m_MapSize.m_Width * (m_LineWeight + m_TileSize) + m_LineWeight) / 2;
 }
 
 void CGameMap::ResizeClient()
 {
-		CalcStartPosition();
+	CalcStartPosition();
+	SetObjectSize();
+}
+
+void CGameMap::SetObjectSize()
+{
+	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
+	//구현 할 것!
+	m_TileSize = tempScale * DEFAULT_TILE_SIZE;
+	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT;
+	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS;
 }
 
 MO_OWNER CGameMap::GetMapOwner( IndexedPosition indexedPosition )
