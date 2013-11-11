@@ -6,6 +6,7 @@ CRenderer* CRenderer::m_pInstance = nullptr;
 
 CRenderer::CRenderer(void)
 {
+	m_DisplayScale = 1.0f;
 }
 
 
