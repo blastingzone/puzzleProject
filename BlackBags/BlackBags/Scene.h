@@ -27,6 +27,7 @@ public:
 	void				AddObject(CSceneObject* inputObject);
 	void				ResizeClient();
 	void				RemoveObject();
+	void				Init();
 
 	SceneName			getCurrentScene() {return m_SceneStatus;}
 

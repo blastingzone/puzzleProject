@@ -23,25 +23,16 @@ CPlayScene::CPlayScene(void)
 
 CPlayScene::~CPlayScene(void)
 {
+	RemoveObject();
 	Release();
 	m_Map->Release();
 	delete m_Map;
 
 	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
 	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
-	RemoveObject();
+	
 }
-/*
-CLogic* g_Logic
-{
-	if (m_pInstance == nullptr)
-	{
-		m_pInstance = new CLogic();
-	}
 
-	return m_pInstance;
-}
-*/
 bool CPlayScene::Release()
 {
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
@@ -56,15 +47,6 @@ bool CPlayScene::Release()
 
 	return true;
 }
-/*
-bool CLogic::ReleaseInstance()
-{
-	m_pInstance->Release();
-	delete m_pInstance;
-
-	return true;
-}
-*/
 
 //g_Logic관련 초기화 함수
 void CPlayScene::Init()
@@ -175,11 +157,9 @@ bool CPlayScene::CreatePlayers()
 
 bool CPlayScene::SetPlayerTurn()
 {
-	CPlayer * tempPlayer[4];
-	memcpy(tempPlayer,m_Player,sizeof(m_Player));
-	
 	bool flag;
 	int i = 0;
+	CPlayer tempP;
 	while (i < m_PlayerNumber)
 	{
 		int tempTurn = rand()%m_PlayerNumber;
@@ -193,15 +173,17 @@ bool CPlayScene::SetPlayerTurn()
 				flag = false;
 			}
 		}
-
 		if (flag == false)
 			continue;
-
-		tempPlayer[tempTurn] = m_Player[i];
 		++i;
-	}
-	memcpy(m_Player,tempPlayer,sizeof(m_Player));
 
+	}
+	for(int i = 0; i<m_PlayerNumber;++i)
+	{
+		tempP = *m_Player[m_Player[i]->GetPlayerTurn()];
+		*m_Player[m_Player[i]->GetPlayerTurn()] = *m_Player[i];
+		*m_Player[i] = tempP;
+	}
 	return true;
 }
 

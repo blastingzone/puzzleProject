@@ -15,7 +15,7 @@ CGameMap::CGameMap(void)
 
 CGameMap::~CGameMap(void)
 {
-	//SafeArrayDelete(m_Map);
+	/*SafeArrayDelete(m_Map);*/
 }
 /*
 CGameMap* CGameMap::GetInstance()
