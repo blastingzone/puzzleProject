@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,6 +87,7 @@
     <ClInclude Include="BlackBags.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="CreditScene.h" />
+    <ClInclude Include="FPS.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainScene.h" />
@@ -106,6 +107,7 @@
   <ItemGroup>
     <ClCompile Include="BlackBags.cpp" />
     <ClCompile Include="CreditScene.cpp" />
+    <ClCompile Include="FPS.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="OpeningScene.cpp" />

@@ -5,10 +5,13 @@
 #include "BlackBags.h"
 #include "Renderer.h"
 #include "SceneManager.h"
+#include "FPS.h"
 #include <windowsx.h>
 #include <crtdbg.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
 
 #define MAX_LOADSTRING 100
 
@@ -22,6 +25,7 @@ TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 RECT			g_ClientRect;							//window client size
 CSceneManager	g_Manager;
+
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -68,11 +72,14 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
-
+#ifdef _DEBUG
+	CFPS::GetInstance()->ReleaseInstance();
+#endif
 	CRenderer::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
 	g_Manager.Release();
+
 
 	return (int) msg.wParam;
 }
@@ -137,10 +144,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		g_Manager = CSceneManager();
 	}
-	
+
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
+	CFPS::GetInstance()->makeBrush();
 	
 	return TRUE;
 }

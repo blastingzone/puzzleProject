@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Scene.h"
-
+#ifdef _DEBUG
+#include "FPS.h"
+#endif
 
 CScene::CScene(void)
 {
@@ -17,6 +19,10 @@ void CScene::Render()
 	for (int i = 0 ; i < m_ObjectCount ; ++i )
 	{
 		m_Object[i]->Render();
+#ifdef _DEBUG		
+		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->Render();
+#endif
 	}
 }
 

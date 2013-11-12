@@ -86,6 +86,9 @@
     <ClInclude Include="GameMap.h">
       <Filter>PlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="FPS.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -129,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="GameMap.cpp">
       <Filter>PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -86,6 +86,8 @@ bool CRenderer::End()
 	return true;
 }
 
+
+//얘는 구조가 바뀌면서 쓸모없어 진 것 같은데 지워버릴까요?
 bool CRenderer::RenderAll()
 {
 	
