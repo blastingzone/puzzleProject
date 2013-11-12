@@ -2,7 +2,7 @@
 #include "d2d1.h"
 #include "SceneObject.h"
 
-#define MAX_WIDTH	21
+#define MAX_WIDTH	21 //SM9: 이름이 모호하다. 윈도우 사이즈를 표현할 때 이걸 많이 쓴다. 여기에서는 다른 의미니까.. 네이밍 바꾸고 config.h로 빼도록
 #define MAX_HEIGHT	21
 
 struct IndexedPosition
@@ -13,6 +13,15 @@ struct IndexedPosition
 	{
 		m_PosI = inputIndexedPosition.m_PosI;
 		m_PosJ = inputIndexedPosition.m_PosJ;
+	}
+
+	//SM9: 이 객체는 보니까 여기저기 대입도 많이 하는 것 같은데.. 그럴 경우 아래처럼 복사 대입 연산자가 불린다.
+	IndexedPosition& operator=(const IndexedPosition& inputIndexedPosition) 
+	{
+		//아래에 브레이크 포인트 찍고 언제 불리는지 확인해보삼.
+		m_PosI = inputIndexedPosition.m_PosI;
+		m_PosJ = inputIndexedPosition.m_PosJ;
+		return *this ;
 	}
 
 	IndexedPosition(int PosI, int PosJ)
@@ -31,6 +40,7 @@ struct MapSize
 	int m_Height;
 };
 
+//SM9: 아래 enum 들이  GameMap안에서만 쓰이는게 아니기 때문에 따로 enum만 모아놓은 헤더로 빼는것도 방법.
 enum MO_TYPE
 {
 	MO_SENTINEL,
@@ -102,10 +112,10 @@ public:
 	MO_OWNER GetMapOwner(IndexedPosition indexedPosition);
 	MO_OWNER GetMapOwner(const int& iPos, const int& jPos);
 
-	void SetMapOwner(IndexedPosition indexedPosition, MO_OWNER owner);
+	void SetMapOwner(IndexedPosition indexedPosition, MO_OWNER owner); //SM9: 같은 함수를 이렇게 2개씩 만들어 놓은 이유는 무엇인가? 
 	void SetMapOwner(const int& iPos, const int& jPos, MO_OWNER owner);
 
-	void SetItem(IndexedPosition indexedPosition, MO_ITEM item);
+	void SetItem(IndexedPosition indexedPosition, MO_ITEM item); //SM9: 꼭 필요한 경우 아니라면 이렇게 오버로딩은 안쓰는게 좋다. 이렇게 간단한 경우는 호출하는 부분에서 통일
 	void SetItem(const int& iPos, const int& jPos, MO_ITEM item);
 
 	bool GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}

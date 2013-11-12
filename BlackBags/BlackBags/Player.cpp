@@ -11,7 +11,7 @@ CPlayer::~CPlayer(void)
 {
 }
 
-void CPlayer::SetPlayerName( std::string playerName)
+void CPlayer::SetPlayerName(const std::string&  playerName)
 {
 	m_Name = playerName;
 }

@@ -54,6 +54,8 @@ private:
 	static CPlayScene*	m_pInstance; //singleton instance
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다.
+	//SM9: 저번주에 준 피드백 반영 안했네... 멤버 함수 앞에 CPlayScene:: 쓰지 말 것
+
 	bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTIleList, Direction direction);
 
 	//주어진 index의 울타리 주변 타일을 확인 합니다. (switch문이 너무 늘어나고 포인터로 넘길 데이터가 많아서 그냥 구현 안 함)

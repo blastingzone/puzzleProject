@@ -33,7 +33,7 @@ public:
 protected:
 	
 	SceneName m_SceneStatus;
-	CSceneObject* m_Object[OBJECT_MAX];
+	CSceneObject* m_Object[OBJECT_MAX]; //SM9: 이런거는 std::list나 std::vector로 관리하는게 낫다. 배열로 관리할 경우 범위 벗어나면 위험한 경우가 발생
 
 	int m_ObjectCount;
 

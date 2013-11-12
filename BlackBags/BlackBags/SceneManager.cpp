@@ -20,7 +20,8 @@ CSceneManager::~CSceneManager(void)
 }
 
 
-void CSceneManager::Update( Coordinate mouseCoordinate )
+void CSceneManager::Update( Coordinate mouseCoordinate ) //SM9: 사실 이 함수의 의미는 ChangeScene아닌가? 
+	// 게임 클라에서 Update 함수가 갖는 의미는 프레임마다 뭔가 계산해주는 함수를 의미하니까 이렇게 쓰면 헷갈리게됨.
 {
 	SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
 

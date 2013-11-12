@@ -17,7 +17,7 @@ CPlayScene::CPlayScene(void)
 
 	Init();
 	m_SceneStatus = SC_PLAY;
-	AddObject(m_Map);
+	AddObject(m_Map); // AddObject는  CPlayScene에서만 사용하는거면.. 괜히 CScene에 둘 필요 없고, 여기에서 바로 배열에 집어 넣어도 된다.
 }
 
 
@@ -29,6 +29,9 @@ CPlayScene::~CPlayScene(void)
 
 	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
 	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
+	
+	//SM9: 해제 순서는 생성 순서 반대로 한다.. 그래야 순서 보장이 됨.
+
 	RemoveObject();
 }
 /*
@@ -42,17 +45,21 @@ CLogic* g_Logic
 	return m_pInstance;
 }
 */
+
+//SM9: 이 Release가 불리는 곳이 CPlayScene::~CPlayScene(void)에서만 불린다면 괜히 멤버 함수 따로 만들지 말고... 괜히 헷갈림
 bool CPlayScene::Release()
 {
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
 	{
-
+		
 		if (m_Player[i])
 		{
 			delete m_Player[i];
 			m_Player[i] = NULL;
 		}
 	}
+
+	//SM9: 어떤 경우에 return false 되지? 리턴을 bool로 만든 이유는?
 
 	return true;
 }
@@ -98,6 +105,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	m_Map->DrawLine(indexedPosition);
 
 	//IsClosed()
+	//SM9: 이거 저번주에도 말한 것 같은데.. tempArray를 함수 내부에서 받아서 처리하는것은 최대한 지양할 것. 구조적으로 좋지 않다는 반증임.
 	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE];
 	
 	if (IsClosed(indexedPosition, tempArray) )
@@ -176,6 +184,8 @@ bool CPlayScene::CreatePlayers()
 bool CPlayScene::SetPlayerTurn()
 {
 	CPlayer * tempPlayer[4];
+
+	//SM9: 이렇게 임시 변수로 만들어서 할 이유가 없어 보이는데? 어차피 플레이어 순서 shuffle하는거면, 더 간단하게 할 수 있을텐데..
 	memcpy(tempPlayer,m_Player,sizeof(m_Player));
 	
 	bool flag;
@@ -205,6 +215,8 @@ bool CPlayScene::SetPlayerTurn()
 	return true;
 }
 
+//SM9: IsClosed 함수의 역할이 2개 이상(닫힘여부 검사와 후보타일 출력) 되는 경우인데... 
+//이런거는 코드 구조를 잘 바꿔서 각각의 역할에 맞는 함수를 따로 모듈화해야 한다.
 bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList )
 {
 	
@@ -423,7 +435,7 @@ void CPlayScene::InitRandomMap()
 //	int startTrashNumber =	m_PlayerNumber * 2;
 	
 	IndexedPosition RandomTargetPosition;
-	IndexedPosition checkList[100];
+	IndexedPosition checkList[100]; //SM9: 이거 배열 범위 넘어가면 어떻할라고? 초기화 잘 하고 배열 수는  DEFINE으로 뺀다.
 
 	//srand( static_cast<unsigned int>(time(NULL)) );
 	

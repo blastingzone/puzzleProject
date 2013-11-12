@@ -96,7 +96,7 @@ void CGameMap::Init()
 	CreateResource();
 	SetObjectSize();
 	ResizeClient();
-	SetMapSize(m_MapSize);
+	SetMapSize(m_MapSize); //SM9: 이미 생성자에서 맵사이즈 설정했는데 여기서 왜 또?? 
 	CreateMap();
 
 	return;
@@ -210,11 +210,16 @@ bool CGameMap::SetMapSize(MapSize mapsize)
 	m_MapSize.m_Width = mapsize.m_Width;
 	m_MapSize.m_Height = mapsize.m_Height;
 
+	//SM9: 사실 의미 함수
+
+
+	// 밖에서 이 리턴 값을 쓰지 않는다면 의미 없는 리턴
 	return true;
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
 {
+	//SM9: 배열 범위를 벗어날 수 있는 조건 체크
 	if (indexedPosition.m_PosI <= MAX_HEIGHT && indexedPosition.m_PosJ <= MAX_WIDTH)
 	{
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
@@ -282,8 +287,15 @@ bool CGameMap::CreateResource()
 	return false;
 }
 
+//SM9: stdafx.h안에 넣어줘라.
+#include <assert.h>
+
 void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 {
+	//SM9: 이런 배열 범위를 벗어날 수 있는 경우를 대비하여, 반드시 인자를 검사할 것. 
+	// 아래 처럼 assert 걸어두는게 좋다.
+	assert(indexedPosition.m_PosI < MAX_WIDTH && indexedPosition.m_PosJ<MAX_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
 }
 void CGameMap::DrawLine(const int& iPos, const int& jPos)
