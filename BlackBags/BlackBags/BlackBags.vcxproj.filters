@@ -138,11 +138,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="BlackBags.ico">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>PlayScene</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
