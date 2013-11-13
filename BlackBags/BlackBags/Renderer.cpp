@@ -1,11 +1,11 @@
 ﻿#include "stdafx.h"
 #include "Renderer.h"
-#include "MacroSet.h"
 
 CRenderer* CRenderer::m_pInstance = nullptr;
 
 CRenderer::CRenderer(void)
 {
+	/* 최초에 생성 될 때 화면 크기는 기본값을 가지므로 m_DisplayScale도 1을 할당한다 */
 	m_DisplayScale = 1.0f;
 }
 
@@ -50,23 +50,9 @@ bool CRenderer::Init(HWND hwnd)
 	return true;
 }
 
-bool CRenderer::ReleaseInstance()
+void CRenderer::ReleaseInstance()
 {
-	m_pInstance->Release();
-	delete m_pInstance;
-
-	return true;
-}
-
-bool CRenderer::Release()
-{
-	/*
-	내부에서 추가로 할당한 자원이 없으므로 소멸되기 전에 반납할 자원도 없음
-
-	SafeRelease(m_ipRenderTarget);
-	SafeRelease(m_ipD2DFactory);
-	*/
-	return true;
+	SafeDelete(m_pInstance);
 }
 
 bool CRenderer::Clear()

@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "PlayScene.h"
-#include "MacroSet.h"
 #include <queue>
 #include "Renderer.h"
 
@@ -35,12 +34,7 @@ CPlayScene::~CPlayScene(void)
 		}
 	}
 
-	m_Map->Release();
-	delete m_Map;
-
-	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
-	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
-	
+	SafeDelete(m_Map);
 }
 
 //g_Logic관련 초기화 함수
@@ -75,7 +69,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	m_Map->DrawLine(indexedPosition);
 
 	//IsClosed()
-	IndexedPosition tempArray[CHECKED_TILE_ARRAY_SIZE];
+	IndexedPosition tempArray[CHECKLIST_LENGTH];
 	
 	if (IsClosed(indexedPosition, tempArray) )
 	{
@@ -315,7 +309,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 				}
 			}
-			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKED_TILE_ARRAY_SIZE);
+			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 			
 			/*
 			int checkIdx = 0;

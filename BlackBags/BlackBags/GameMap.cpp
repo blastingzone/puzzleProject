@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "GameMap.h"
 #include "Renderer.h"
-#include "MacroSet.h"
 
 CGameMap::CGameMap(void)
 {
@@ -16,30 +15,13 @@ CGameMap::CGameMap(void)
 
 CGameMap::~CGameMap(void)
 {
-	/*SafeArrayDelete(m_Map);*/
 }
 
-void CGameMap::Release()
-{
-	/*
-	어차피 렌더 타겟에 생성된 자원이므로 렌더 타겟이 반환되면 같이 반환되므로 여기서 해제하려고 하지 않아도 될 것 같음
-
-	SafeRelease(m_pDotBrush);
-	SafeRelease(m_pUnconnectedLineBrush);
-	SafeRelease(m_pConnectedLineBrush);
-	SafeRelease(m_pPossibleLineBrush);
-	SafeRelease(m_pTileBrush);
-	SafeRelease(m_pVoidTileBrush);
-
-	SafeRelease(m_pTileP1);
-	SafeRelease(m_pTileP2);
-	SafeRelease(m_pTileP3);
-	SafeRelease(m_pTileP4);
-	*/
-}
 
 void CGameMap::CreateMap()
 {
+	/*	실제로 게임에 사용되는 타일 외에도 울타리와 점을 표시하기 위한 칸도 필요
+		생성된 게임 주변은 기본값인 MO_SENTINEL로 두어서 IsClosed()와 같은 작업시 활용할 수 있도록 함 */
 	int targetRow, targetColumn;
 
 	for (targetRow = 1; targetRow <= m_MapSize.m_Height*2 + 1; ++targetRow)
@@ -93,9 +75,11 @@ void CGameMap::Render()
 	D2D1_RECT_F		rectElement;
 	D2D1_POINT_2F	m_pos;
 
-	//layer : background - tile - line - dot
+	/*	layer : background - tile - line - dot 순서대로 렌더링 
+		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
+		추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
 
-	//tile
+	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
@@ -130,7 +114,7 @@ void CGameMap::Render()
 		}
 	}
 	
-	//line
+	/*	line layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
@@ -164,7 +148,7 @@ void CGameMap::Render()
 		}
 	}
 
-	//dot
+	/*	dot layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
@@ -179,15 +163,6 @@ void CGameMap::Render()
 			}
 		}
 	}
-
-	//dev tool : check the start / end Points
-	rectElement = D2D1::Rect( 
-		m_StartPosition.width, 
-		m_StartPosition.height, 
-		m_StartPosition.width + m_MapSize.m_Width * (m_LineWeight + m_TileSize) + m_LineWeight, 
-		m_StartPosition.height + m_MapSize.m_Height * (m_LineWeight + m_TileSize) + m_LineWeight);
-
-	m_pRenderTarget->DrawRectangle(rectElement,m_pConnectedLineBrush);
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)
@@ -196,28 +171,10 @@ void CGameMap::SetMapSize(MapSize mapsize)
 	m_MapSize.m_Height = mapsize.m_Height;
 }
 
-MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
-{
-	if (indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosJ < MAX_MAP_WIDTH)
-	{
-		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
-	}
-
-	return MO_SENTINEL;
-}
-
-MO_TYPE CGameMap::GetMapType(const int& i, const int& j)
-{
-	return GetMapType(IndexedPosition(i, j) );
-}
-
-D2D1_SIZE_F CGameMap::GetStartPosition()
-{
-	return m_StartPosition;
-}
-
 bool CGameMap::CreateResource()
 {
+	// 조심해!
+	// 현재 주석 처리된 색들 나중에 정리해서 define으로 따로 저장하고 쓸 것
 	HRESULT hr;
 
 	if (m_pRenderTarget == nullptr)
@@ -262,20 +219,29 @@ bool CGameMap::CreateResource()
 			return true;
 	}
 
-	//
 	return false;
 }
 
 void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 {
-	// 범위를 벗어나면 에러나면서 죽음
+	// 범위를 벗어난 경우 예외 처리
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
 }
 
+void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
+{
+	// 범위를 벗어난 경우 예외 처리
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
+}
+
 void CGameMap::CalcStartPosition()
 {
+	/*	현재 화면의 중심점을 기준으로 생성된 맵의 크기의 반만큼
+		왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
 	D2D1_SIZE_F centerPosition;
 	centerPosition = m_pRenderTarget->GetSize();
 
@@ -299,11 +265,30 @@ void CGameMap::ResizeClient()
 
 void CGameMap::SetObjectSize()
 {
+	/*	현재 렌더러에 저장된 화면 스케일에 맞춰서 
+		렌더링 할 때 사용된 오브젝트들 크기 조정 */
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
-	//구현 할 것!
+
 	m_TileSize = tempScale * DEFAULT_TILE_SIZE;
 	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT;
 	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS;
+}
+
+MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
+{
+	if (indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosJ < MAX_MAP_WIDTH)
+	{
+		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
+	}
+
+	/* 게임이 진행되는 맵 영역 밖은 모두 MO_SENTINEL로 간주하므로 
+		배열 범위 밖을 벗어나도 모두 MO_SENTINEL로 처리	*/
+	return MO_SENTINEL;
+}
+
+MO_TYPE CGameMap::GetMapType(const int& i, const int& j)
+{
+	return GetMapType(IndexedPosition(i, j) );
 }
 
 MO_OWNER CGameMap::GetMapOwner( IndexedPosition indexedPosition )
@@ -329,10 +314,5 @@ void CGameMap::SetItem( IndexedPosition indexedPosition, MO_ITEM item )
 void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
 {
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag = flag;
-}
-
-void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
-{
-	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
 }
 

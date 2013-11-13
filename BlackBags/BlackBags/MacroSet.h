@@ -10,7 +10,7 @@ inline void SafeDelete( T* &p )
 	}
 }
 
-
+//사실 상 하는 일 없는 애
 template <typename T>
 inline void SafeRelease( T* &p )
 {
@@ -19,7 +19,6 @@ inline void SafeRelease( T* &p )
 		//p->Release();
 		p = nullptr;
 	}
-
 }
 
 #define SINGLETON(type) \

@@ -1,29 +1,40 @@
-/* °ÔÀÓ È­¸é ±âº» Å©±âÀÔ´Ï´Ù */
+ï»¿/* ê²Œìž„ í™”ë©´ ê¸°ë³¸ í¬ê¸°ìž…ë‹ˆë‹¤ */
 const int WINDOW_WIDTH = 1250;
 const int WINDOW_HEIGHT = 700;
 
 
-/* ÃÖ´ë ÇÃ·¹ÀÌ °¡´É ÀÎ¿øÀÔ´Ï´Ù */
+/* ìµœëŒ€ í”Œë ˆì´ ê°€ëŠ¥ ì¸ì›ìž…ë‹ˆë‹¤ */
 const int MAX_PLAYER_NUM= 4;
 
 
-/* °ÔÀÓ ¸Ê ¿ÀºêÁ§Æ®µéÀÇ ±âº» Å©±âÀÔ´Ï´Ù */
+/* ê²Œìž„ ë§µ ì˜¤ë¸Œì íŠ¸ë“¤ì˜ ê¸°ë³¸ í¬ê¸°ìž…ë‹ˆë‹¤ */
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
 
 
-/* °ÔÀÓ ¸Ê Å©±âÀÔ´Ï´Ù */
+/* ê²Œìž„ ë§µ í¬ê¸°ìž…ë‹ˆë‹¤ */
 const int MAX_MAP_WIDTH = 21;
 const int MAX_MAP_HEIGHT = 21;
 
 
-/* Áöµµ ÃÊ±âÈ­ ÇÒ ¶§ ¸Ê Å½»çÇÏ´Â ¹è¿­ ±æÀÌ (ÇÔ¼ö ±¸Á¶ º¯°æ ÈÄ »èÁ¦ ¿¹Á¤) */
+/* ì§€ë„ ì´ˆê¸°í™” í•  ë•Œ ë§µ íƒì‚¬í•˜ëŠ” ë°°ì—´ ê¸¸ì´ (í•¨ìˆ˜ êµ¬ì¡° ë³€ê²½ í›„ ì‚­ì œ ì˜ˆì •) */
 const int CHECKLIST_LENGTH = 100;
 
 
-/* enum Å¸ÀÔµéÀÔ´Ï´Ù. */
-enum MO_TYPE	//°ÔÀÓ ¸Ê ±âº» ÀÚ·áÇü
+/* enum íƒ€ìž…ë“¤ìž…ë‹ˆë‹¤. */
+enum SceneName	//Scene ì´ë¦„ë“¤
+{
+	SC_OPENING,
+	SC_MAIN,
+	SC_SETTING,
+	SC_PLAY,
+	SC_RESULT,
+	SC_CREDIT,
+	SC_NOSCENE
+};
+
+enum MO_TYPE	//ê²Œìž„ ë§µ ê¸°ë³¸ ìžë£Œí˜•
 {
 	MO_SENTINEL,
 	MO_DOT = 10,
@@ -33,7 +44,7 @@ enum MO_TYPE	//°ÔÀÓ ¸Ê ±âº» ÀÚ·áÇü
 	MO_TILE = 30,
 };
 
-enum MO_OWNER	//°ÔÀÓ ¸Ê °¢ Å¸ÀÏ ¼ÒÀ¯ÁÖ
+enum MO_OWNER	//ê²Œìž„ ë§µ ê° íƒ€ì¼ ì†Œìœ ì£¼
 {
 	MO_NOBODY = -1,
 	MO_PLAYER1,
@@ -42,9 +53,17 @@ enum MO_OWNER	//°ÔÀÓ ¸Ê °¢ Å¸ÀÏ ¼ÒÀ¯ÁÖ
 	MO_PLAYER4
 };
 
-enum MO_ITEM	//Å¸ÀÏ¿¡ ÁöÁ¤µÈ ¾ÆÀÌÅÛ
+enum MO_ITEM	//íƒ€ì¼ì— ì§€ì •ëœ ì•„ì´í…œ
 {
 	MO_NOTHING,
 	MO_GOLD,
 	MO_TRASH
+};
+
+enum Direction	//ê²Œìž„ ë§µ íƒìƒ‰ ì‹œ í™œìš©ë˜ëŠ” ë°©í–¥
+{
+	DI_UP,
+	DI_RIGHT,
+	DI_DOWN,
+	DI_LEFT
 };

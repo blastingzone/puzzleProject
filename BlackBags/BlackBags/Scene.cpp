@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include "Scene.h"
 #ifdef _DEBUG
 #include "FPS.h"
@@ -34,7 +34,6 @@ void CScene::ResizeClient()
 	}
 }
 
-
 void CScene::AddObject( CSceneObject* inputObject )
 {
 	m_Object.push_back(inputObject);
@@ -47,6 +46,5 @@ void CScene::RemoveObject()
 
 void CScene::Init()
 {
-	// √ ±‚»≠ §§§§
 
 }

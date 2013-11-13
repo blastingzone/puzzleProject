@@ -4,15 +4,7 @@
 #include "Scene.h"
 #include <time.h>
 
-enum Direction
-{
-	DI_UP,
-	DI_RIGHT,
-	DI_DOWN,
-	DI_LEFT
-};
 
-const int CHECKED_TILE_ARRAY_SIZE = 100;
 
 class CPlayScene : public CScene
 {
@@ -49,13 +41,10 @@ public:
 private:
 	static CPlayScene*	m_pInstance; //singleton instance
 
-	//주어진 index의 울타리 주변 타일을 확인 합니다.
+	/*	주어진 index의 울타리 주변 타일을 확인 합니다 */
 	bool ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTIleList, Direction direction);
 
-	//주어진 index의 울타리 주변 타일을 확인 합니다. (switch문이 너무 늘어나고 포인터로 넘길 데이터가 많아서 그냥 구현 안 함)
-	//void CLogic::CheckTile(IndexedPosition indexedPosition, IndexedPosition* candidateTIleList, Direction lineDirection, std::queue<IndexedPosition>* searchTiles);
-
-	// IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다
+	/*	IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다 */
 	bool IsAlreadyChecked(const IndexedPosition& nextTile);
 
 	int			m_PlayerNumber;

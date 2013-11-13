@@ -23,8 +23,8 @@
 HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
-RECT			g_ClientRect;							//window client size
-CSceneManager*	g_Manager;
+RECT			g_ClientRect;							// window client size
+CSceneManager*	g_Manager;								
 
 
 // Forward declarations of functions included in this code module:

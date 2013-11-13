@@ -1,7 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "FPS.h"
 #include "Renderer.h"
-#include "MacroSet.h"
 
 CFPS* CFPS::m_pInstance = nullptr;
 

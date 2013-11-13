@@ -18,5 +18,6 @@
 #include <tchar.h>
 #include <assert.h>
 #include "config.h"
+#include "MacroSet.h"
 
 // TODO: reference additional headers your program requires here
