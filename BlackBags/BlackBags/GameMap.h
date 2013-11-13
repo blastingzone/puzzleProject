@@ -61,9 +61,7 @@ public:
 	~CGameMap(void);
 
 	void				Init();
-	//static CGameMap*	GetInstance();
-	//bool				ReleaseInstance();
-	bool				Release();
+	void				Release();
 
 	void				Render();
 

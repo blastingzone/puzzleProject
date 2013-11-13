@@ -7,7 +7,6 @@ CGameMap::CGameMap(void)
 {
 	m_pRenderTarget = nullptr;
 
-
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = 5;
 	m_MapSize.m_Height = 5;
@@ -19,27 +18,12 @@ CGameMap::~CGameMap(void)
 {
 	/*SafeArrayDelete(m_Map);*/
 }
-/*
-CGameMap* CGameMap::GetInstance()
-{
-	if (m_pInstance == nullptr)
-	{
-		m_pInstance = new CGameMap();
-	}
 
-	return m_pInstance;
-}
-
-bool CGameMap::ReleaseInstance()
+void CGameMap::Release()
 {
-	m_pInstance->Release();
-	delete m_pInstance;
+	/*
+	어차피 렌더 타겟에 생성된 자원이므로 렌더 타겟이 반환되면 같이 반환되므로 여기서 해제하려고 하지 않아도 될 것 같음
 
-	return true;
-}
-*/
-bool CGameMap::Release()
-{
 	SafeRelease(m_pDotBrush);
 	SafeRelease(m_pUnconnectedLineBrush);
 	SafeRelease(m_pConnectedLineBrush);
@@ -51,8 +35,7 @@ bool CGameMap::Release()
 	SafeRelease(m_pTileP2);
 	SafeRelease(m_pTileP3);
 	SafeRelease(m_pTileP4);
-
-	return true;
+	*/
 }
 
 void CGameMap::CreateMap()

@@ -24,7 +24,7 @@ HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 RECT			g_ClientRect;							//window client size
-CSceneManager	g_Manager;
+CSceneManager*	g_Manager;
 
 
 // Forward declarations of functions included in this code module:
@@ -78,8 +78,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CRenderer::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
-	g_Manager.Release();
-
+	delete g_Manager;
 
 	return (int) msg.wParam;
 }
@@ -142,7 +141,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	else 
 	{
-		g_Manager = CSceneManager();
+		g_Manager = new CSceneManager();
 	}
 
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
@@ -211,7 +210,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			//실제 게임 화면에 변경 사항을 적용
 			CRenderer::GetInstance()->SetDisplayScale();
-			g_Manager.ResizeClientSize();
+			g_Manager->ResizeClientSize();
 		}
 		break;
 	case WM_LBUTTONDOWN:
@@ -220,12 +219,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
-		g_Manager.Update(mouseCoordinate);
+		g_Manager->Update(mouseCoordinate);
 		break;
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
-		g_Manager.Render();
+		g_Manager->Render();
 		CRenderer::GetInstance()->End();
 		break;
 	case WM_DESTROY:

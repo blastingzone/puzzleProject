@@ -37,6 +37,7 @@ bool CRenderer::Init(HWND hwnd)
 	GetClientRect(hwnd, &rt);
 	D2D1_SIZE_U size = D2D1::SizeU(rt.right - rt.left, rt.bottom - rt.top);
 
+	//일단 프레임률 하락 구간 확인을 위해서 vsync는 끈 상태로 생성
 	hr = m_ipD2DFactory->CreateHwndRenderTarget( D2D1::RenderTargetProperties(),
 												 D2D1::HwndRenderTargetProperties(hwnd, size, D2D1_PRESENT_OPTIONS_IMMEDIATELY),
 												 &m_ipRenderTarget );
@@ -59,9 +60,12 @@ bool CRenderer::ReleaseInstance()
 
 bool CRenderer::Release()
 {
+	/*
+	내부에서 추가로 할당한 자원이 없으므로 소멸되기 전에 반납할 자원도 없음
+
 	SafeRelease(m_ipRenderTarget);
 	SafeRelease(m_ipD2DFactory);
-
+	*/
 	return true;
 }
 
@@ -86,23 +90,18 @@ bool CRenderer::End()
 	return true;
 }
 
-
-//얘는 구조가 바뀌면서 쓸모없어 진 것 같은데 지워버릴까요?
-bool CRenderer::RenderAll()
-{
-	
-	return true;
-}
-
 void CRenderer::SetDisplayScale()
 {
-	float widthScale, heightScale;
 	D2D1_SIZE_F tempSize;
+	float widthScale, heightScale;
+	
 	tempSize = m_ipRenderTarget->GetSize();
 	
 	widthScale = tempSize.width / WINDOW_WIDTH;
 	heightScale = tempSize.height / WINDOW_HEIGHT;
 
+	/*	게임 화면이 윈도우 크기를 벗어나는 경우를 방지하기 위해서
+		화면의 가로 비율과 세로 비율 중 더 작은 것을 전체 비율로 채택한다. */
 	m_DisplayScale = (widthScale < heightScale) ? widthScale : heightScale;
 
 	if (m_DisplayScale > 1)

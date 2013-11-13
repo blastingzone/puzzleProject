@@ -17,6 +17,7 @@ CSceneManager::CSceneManager(void)
 
 CSceneManager::~CSceneManager(void)
 {
+	delete m_CurrentScene;
 }
 
 
@@ -51,11 +52,6 @@ void CSceneManager::Update( Coordinate mouseCoordinate )
 			break;
 		}
 	}
-}
-
-void CSceneManager::Release()
-{
-	delete m_CurrentScene;
 }
 
 void CSceneManager::ResizeClientSize()
