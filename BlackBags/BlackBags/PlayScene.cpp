@@ -24,17 +24,7 @@ CPlayScene::CPlayScene(void)
 CPlayScene::~CPlayScene(void)
 {
 	RemoveObject();
-	Release();
-	m_Map->Release();
-	delete m_Map;
-
-	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
-	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
 	
-}
-
-bool CPlayScene::Release()
-{
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
 	{
 
@@ -45,7 +35,12 @@ bool CPlayScene::Release()
 		}
 	}
 
-	return true;
+	m_Map->Release();
+	delete m_Map;
+
+	//조심해!! - [메모리누수]이 부분을 다시 생각해봐야해!! 뭔가 이상햇!
+	//왜 m_Object에 이상한 값이 막 다 써있지. 처음부터 0이아니라서 나중에 해제할때.. 뭔가 이상햇!
+	
 }
 
 //g_Logic관련 초기화 함수
@@ -215,7 +210,7 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition*
 
 bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 {
-	if (m_Map->GetMapType(indexedPosition.m_PosI, indexedPosition.m_PosJ) == MO_LINE_UNCONNECTED)
+	if (m_Map->GetMapType(indexedPosition) == MO_LINE_UNCONNECTED)
 	{
 		int tileVoidCount = 0;
 
@@ -315,8 +310,8 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 				checkIdx++;
 			}
 			*/
-			for (int tempI = 0 ; tempI < MAX_WIDTH; ++tempI){
-				for (int tempJ = 0 ; tempJ < MAX_HEIGHT; ++tempJ){
+			for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI){
+				for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ){
 					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 				}
 			}
@@ -405,7 +400,7 @@ void CPlayScene::InitRandomMap()
 //	int startTrashNumber =	m_PlayerNumber * 2;
 	
 	IndexedPosition RandomTargetPosition;
-	IndexedPosition checkList[100];
+	IndexedPosition checkList[CHECKLIST_LENGTH];
 
 	//srand( static_cast<unsigned int>(time(NULL)) );
 	
@@ -414,8 +409,8 @@ void CPlayScene::InitRandomMap()
 
 	while (startLineNumber)
 	{
-		RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2; 
-		RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
+		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 2; 
+		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 2;
 
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 			if ( IsPossible(RandomTargetPosition) )

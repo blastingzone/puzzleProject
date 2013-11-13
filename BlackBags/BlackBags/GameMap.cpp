@@ -111,17 +111,17 @@ void CGameMap::Render()
 	//layer : background - tile - line - dot
 
 	//tile
-	for (int i = 0; i <= MAX_WIDTH; ++i)
+	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
-		for (int j = 0; j <= MAX_HEIGHT; ++j)
+		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if (GetMapType(i, j) == MO_TILE)
+			if (GetMapType(IndexedPosition(i, j) ) == MO_TILE)
 			{
 				m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i -1) + m_LineWeight / 2;
 				m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
 				rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
 			
-				switch (GetMapOwner(i, j) )
+				switch (GetMapOwner(IndexedPosition(i, j) ) )
 				{
 				case MO_NOBODY:
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
@@ -146,11 +146,11 @@ void CGameMap::Render()
 	}
 	
 	//line
-	for (int i = 0; i <= MAX_WIDTH; ++i)
+	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
-		for (int j = 0; j <= MAX_HEIGHT; ++j)
+		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if ( GetMapType(i, j) == MO_LINE_UNCONNECTED || GetMapType(i, j) == MO_LINE_CONNECTED )
+			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED )
 			{
 				if (i%2==0)
 				{
@@ -164,7 +164,7 @@ void CGameMap::Render()
 					m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
 					rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_LineWeight / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_LineWeight / 2);
 				}
-				switch (GetMapType(i, j) )
+				switch (GetMapType(IndexedPosition(i, j)) )
 				{
 				case MO_LINE_UNCONNECTED:
 					m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
@@ -180,11 +180,11 @@ void CGameMap::Render()
 	}
 
 	//dot
-	for (int i = 0; i <= MAX_WIDTH; ++i)
+	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
-		for (int j = 0; j <= MAX_HEIGHT; ++j)
+		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if (GetMapType(i,j) == MO_DOT)
+			if (GetMapType(IndexedPosition(i, j) ) == MO_DOT)
 			{
 				m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
 				m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
@@ -205,17 +205,15 @@ void CGameMap::Render()
 	m_pRenderTarget->DrawRectangle(rectElement,m_pConnectedLineBrush);
 }
 
-bool CGameMap::SetMapSize(MapSize mapsize)
+void CGameMap::SetMapSize(MapSize mapsize)
 {
 	m_MapSize.m_Width = mapsize.m_Width;
 	m_MapSize.m_Height = mapsize.m_Height;
-
-	return true;
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
 {
-	if (indexedPosition.m_PosI <= MAX_HEIGHT && indexedPosition.m_PosJ <= MAX_WIDTH)
+	if (indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosJ < MAX_MAP_WIDTH)
 	{
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
 	}
@@ -223,12 +221,13 @@ MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
 	return MO_SENTINEL;
 }
 
-MO_TYPE CGameMap::GetMapType(const int& iPos, const int& jPos)
+MO_TYPE CGameMap::GetMapType(const int& i, const int& j)
 {
-	return GetMapType(IndexedPosition(iPos, jPos) );
+	return GetMapType(IndexedPosition(i, j) );
 }
 
-D2D1_SIZE_F CGameMap::GetStartPosition(){
+D2D1_SIZE_F CGameMap::GetStartPosition()
+{
 	return m_StartPosition;
 }
 
@@ -284,11 +283,10 @@ bool CGameMap::CreateResource()
 
 void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 {
+	// 범위를 벗어나면 에러나면서 죽음
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
-}
-void CGameMap::DrawLine(const int& iPos, const int& jPos)
-{
-	DrawLine(IndexedPosition(iPos, jPos) );
 }
 
 void CGameMap::CalcStartPosition()
@@ -328,9 +326,9 @@ MO_OWNER CGameMap::GetMapOwner( IndexedPosition indexedPosition )
 	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Owner;
 }
 
-MO_OWNER CGameMap::GetMapOwner( const int& iPos, const int& jPos )
+MO_OWNER CGameMap::GetMapOwner( const int& i , const int& j )
 {
-	return GetMapOwner(IndexedPosition(iPos,jPos));
+	return GetMapOwner( IndexedPosition(i, j) );
 }
 
 void CGameMap::SetMapOwner( IndexedPosition indexedPosition, MO_OWNER owner )
@@ -338,19 +336,9 @@ void CGameMap::SetMapOwner( IndexedPosition indexedPosition, MO_OWNER owner )
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Owner = owner;
 }
 
-void CGameMap::SetMapOwner( const int& iPos, const int& jPos, MO_OWNER owner )
-{
-	SetMapOwner(IndexedPosition(iPos,jPos), owner);
-}
-
 void CGameMap::SetItem( IndexedPosition indexedPosition, MO_ITEM item )
 {
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item = item;
-}
-
-void CGameMap::SetItem(const int& iPos, const int& jPos, MO_ITEM item )
-{
-	SetItem(IndexedPosition(iPos,jPos),item);
 }
 
 void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
@@ -363,8 +351,3 @@ void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
 }
 
-
-void CGameMap::DeleteLine( const int& iPos, const int& jPos )
-{
-	DeleteLine( IndexedPosition(iPos, jPos) );
-}

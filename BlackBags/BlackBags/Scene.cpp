@@ -6,58 +6,53 @@
 
 CScene::CScene(void)
 {
-	m_ObjectCount = 0;
 	Init();
 }
 
 CScene::~CScene(void)
 {
-	
+
 }
 
 void CScene::Render()
 {
-	for (int i = 0 ; i < m_ObjectCount ; ++i )
+	if (!m_Object.empty() )
 	{
-		m_Object[i]->Render();
+		for (m_Iter = m_Object.begin(); m_Iter != m_Object.end(); ++m_Iter);
+		{
+			(*m_Iter)->Render();
 #ifdef _DEBUG		
-		CFPS::GetInstance()->Update();
-		CFPS::GetInstance()->Render();
+CFPS::GetInstance()->Update();
+CFPS::GetInstance()->Render();
 #endif
+		}
 	}
 }
 
 void CScene::ResizeClient()
 {
-	for (int i = 0 ; i < m_ObjectCount ; ++i )
+	for (m_Iter = m_Object.begin(); m_Iter != m_Object.end(); ++m_Iter);
 	{
-		m_Object[i]->ResizeClient();
+		(*m_Iter)->ResizeClient();
 	}
 }
 
 void CScene::AddObject( CSceneObject* inputObject )
 {
-	if (m_ObjectCount < OBJECT_MAX)
-	{
-		m_Object[m_ObjectCount++] = inputObject;
-	}
+	m_Object.push_back(inputObject);
 }
 
 void CScene::RemoveObject()
 {
-	for (int i = 0 ; i < m_ObjectCount ; ++i )
+	for (m_Iter = m_Object.begin(); m_Iter != m_Object.end(); ++m_Iter)
 	{
-		if (m_Object[i])
-		{
-			m_Object[i] = nullptr;
-		}
+		delete (*m_Iter);
 	}
+	m_Object.clear();
 }
 
 void CScene::Init()
 {
-	for (int i = 0 ; i < OBJECT_MAX ; ++i )
-		{
-			m_Object[i] = nullptr;
-		}
+	// ÃÊ±âÈ­ ¤¤¤¤
+
 }

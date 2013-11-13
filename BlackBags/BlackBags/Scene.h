@@ -2,8 +2,7 @@
 
 #include "SceneObject.h"
 #include "MacroSet.h"
-
-#define OBJECT_MAX 100
+#include <vector>
 
 enum SceneName
 {
@@ -29,14 +28,12 @@ public:
 	void				RemoveObject();
 	void				Init();
 
-	SceneName			getCurrentScene() {return m_SceneStatus;}
+	SceneName			GetCurrentScene() {return m_SceneStatus;}
 
 protected:
 	
-	SceneName m_SceneStatus;
-	CSceneObject* m_Object[OBJECT_MAX];
-
-	int m_ObjectCount;
-
+	SceneName								m_SceneStatus;
+	std::vector<CSceneObject*>				m_Object;
+	std::vector<CSceneObject*>::iterator	m_Iter;
 };
 

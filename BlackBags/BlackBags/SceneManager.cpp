@@ -24,7 +24,7 @@ void CSceneManager::Update( Coordinate mouseCoordinate )
 {
 	SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
 
-	if (m_CurrentScene->getCurrentScene() != tempName)
+	if (m_CurrentScene->GetCurrentScene() != tempName)
 	{
 		delete m_CurrentScene;
 		switch ( tempName )

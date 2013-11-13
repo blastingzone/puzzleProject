@@ -2,9 +2,6 @@
 #include "d2d1.h"
 #include "SceneObject.h"
 
-#define MAX_WIDTH	21
-#define MAX_HEIGHT	21
-
 struct IndexedPosition
 {
 	IndexedPosition() : m_PosI(0), m_PosJ(0) {}
@@ -13,6 +10,15 @@ struct IndexedPosition
 	{
 		m_PosI = inputIndexedPosition.m_PosI;
 		m_PosJ = inputIndexedPosition.m_PosJ;
+	}
+
+	// 복사 대입 연산자 오버라이딩입니다
+	IndexedPosition& operator=(const IndexedPosition& inputIndexedPosition) 
+	{
+		//아래에 브레이크 포인트 찍고 언제 불리는지 확인해보삼.
+		m_PosI = inputIndexedPosition.m_PosI;
+		m_PosJ = inputIndexedPosition.m_PosJ;
+		return *this ;
 	}
 
 	IndexedPosition(int PosI, int PosJ)
@@ -29,32 +35,6 @@ struct MapSize
 {
 	int m_Width;
 	int m_Height;
-};
-
-enum MO_TYPE
-{
-	MO_SENTINEL,
-	MO_DOT = 10,
-	MO_LINE_UNCONNECTED = 20,
-	MO_LINE_CONNECTED,
-	MO_LINE_HIDDEN,
-	MO_TILE = 30,
-};
-
-enum MO_OWNER
-{
-	MO_NOBODY = -1,
-	MO_PLAYER1,
-	MO_PLAYER2,
-	MO_PLAYER3,
-	MO_PLAYER4
-};
-
-enum MO_ITEM
-{
-	MO_NOTHING,
-	MO_GOLD,
-	MO_TRASH
 };
 
 struct MapObject
@@ -87,26 +67,23 @@ public:
 
 	void				Render();
 
-	bool SetMapSize(MapSize mapsize);
+	void SetMapSize(MapSize mapsize);
+
 	void DrawLine(const IndexedPosition& indexedPosition);
-	void DrawLine(const int& iPos, const int& jPos);
-	
+
 	void DeleteLine(const IndexedPosition& indexedPosition);
-	void DeleteLine(const int& iPos, const int& jPos);
 
 	D2D1_SIZE_F GetStartPosition();
 
 	MO_TYPE	GetMapType(IndexedPosition indexedPosition);
-	MO_TYPE	GetMapType(const int& iPos, const int& jPos);
+	MO_TYPE GetMapType(const int& i, const int& j);
 
 	MO_OWNER GetMapOwner(IndexedPosition indexedPosition);
-	MO_OWNER GetMapOwner(const int& iPos, const int& jPos);
+	MO_OWNER GetMapOwner( const int& i , const int& j );
 
 	void SetMapOwner(IndexedPosition indexedPosition, MO_OWNER owner);
-	void SetMapOwner(const int& iPos, const int& jPos, MO_OWNER owner);
 
 	void SetItem(IndexedPosition indexedPosition, MO_ITEM item);
-	void SetItem(const int& iPos, const int& jPos, MO_ITEM item);
 
 	bool GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
 	void SetMapFlag(IndexedPosition indexedPosition,bool flag);
@@ -129,7 +106,7 @@ private:
 	//static CGameMap*	m_pInstance; //singleton instance
 
 	//renderer를 위한 임시 배열입니다. 
-	MapObject				m_Map[MAX_WIDTH][MAX_HEIGHT];
+	MapObject				m_Map[MAX_MAP_WIDTH][MAX_MAP_HEIGHT];
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
