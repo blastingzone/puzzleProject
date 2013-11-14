@@ -387,34 +387,44 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 	return true;
 }
 
+// 초기에 맵에 랜덤으로 아이템과 울타리를 배치하는 함수입니다.
 void CPlayScene::InitRandomMap()
 {
+	// 울타리, 금, 쓰레기의 초기값을 각각 설정해줍니다.
 	int startLineNumber =	m_PlayerNumber * 5;
 //	int startGoldNumber =	m_PlayerNumber * 2;
 //	int startTrashNumber =	m_PlayerNumber * 2;
 	
+	// IsClosed에서 사용할 변수들입니다.
 	IndexedPosition RandomTargetPosition;
 	IndexedPosition checkList[CHECKLIST_LENGTH];
 
-	//srand( static_cast<unsigned int>(time(NULL)) );
+	srand( static_cast<unsigned int>(time(NULL)) );
 	
-	// 버그 발생하는 시드값을 넣어두겠습니다
-	srand(1383706550);
+	// 고정적인 시드값이 필요할 경우 아래 시드를 써보시기 바랍니다.
+	//srand(1383706550);
 
+	// 울타리를 뿌려주는 함수입니다.
 	while (startLineNumber)
 	{
-		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 2; 
-		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 2;
+		// 울타리는 (2,1), (1,2) 부터 시작하므로
+		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 1; 
+		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 1;
 
+		// 랜덤 값으로 뽑은 좌표가 MO_LINE_UNCONNECTED일 경우에
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
+			// IsPossible을 만족하면
 			if ( IsPossible(RandomTargetPosition) )
 				{
+					// 일단 그립니다(IsClosed 검사를 위해서)
 					//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
 					m_Map->DrawLine(RandomTargetPosition);
 					--startLineNumber;
 					
+					// 지금 막 그려진 선이 IsClosed() 조건을 만족하지 않으면 그대로 종료
 					if ( IsClosed(RandomTargetPosition, checkList) )
 					{
+						// 만약 지금 막 그려진 선이 어떤 도형을 닫는다면 해당 선을 삭제하고 라인 카운터를 복구
 						m_Map->DeleteLine(RandomTargetPosition);
 						++startLineNumber;
 					}
