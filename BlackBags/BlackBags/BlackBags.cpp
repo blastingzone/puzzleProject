@@ -1,6 +1,7 @@
 ﻿// BlackBags.cpp : Defines the entry point for the application.
 //
 
+#include "config.h"
 #include "stdafx.h"
 #include "BlackBags.h"
 #include "Renderer.h"
@@ -221,11 +222,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		
 		g_Manager->Update(mouseCoordinate);
 		break;
+
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
 		g_Manager->Render();
 		CRenderer::GetInstance()->End();
+		break;
+	case WM_KEYDOWN:
+		 case VK_END: 
+			 g_Manager->ChangeScene(SC_MAIN);
+			 //PostQuitMessage(0);
+			 break;
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);

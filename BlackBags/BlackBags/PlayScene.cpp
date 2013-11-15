@@ -123,13 +123,14 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 
 bool CPlayScene::GetPlayerNumber()
 {
-	//선택화면에서 플레이어 수를 선택!
+	//SettingScene에서의 플레이어 수를 받아온다.
 	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
 	m_PlayerNumber = 4;
 
 	return true;
 }
 
+//플레이어 수에 맞춰 CPlayer 생성 후 m_Player에 넣는다. 순서는 입력 순서와 같다.
 bool CPlayScene::CreatePlayers()
 {
 	for (int i = 0; i<m_PlayerNumber;++i)
@@ -144,6 +145,7 @@ bool CPlayScene::CreatePlayers()
 	return true;
 }
 
+//플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
 bool CPlayScene::SetPlayerTurn()
 {
 	bool flag;

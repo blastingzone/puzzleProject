@@ -18,9 +18,10 @@ public:
 
 	/*	현재 화면 스케일에 맞춰서 각각의 씬들의 오브젝트 크기를 변경하도록 하는 함수 */
 	void ResizeClientSize();
+	void ChangeScene(const SceneName& newScene);
 
 protected:
-	void ChangeScene(const SceneName& newScene);
+	
 
 	CScene* m_CurrentScene;
 };

@@ -79,6 +79,7 @@ public:
 	void		SetItem(IndexedPosition indexedPosition, MO_ITEM item);
 	MO_ITEM		GetItem(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item;}
 
+	/*타일 탐색 시 탐색 여부를 확인하는 flag 지정 및 확인*/
 	void		SetMapFlag(IndexedPosition indexedPosition,bool flag);
 	bool		GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
 	
