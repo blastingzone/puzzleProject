@@ -7,8 +7,8 @@ CGameMap::CGameMap(void)
 	m_pRenderTarget = nullptr;
 
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
-	m_MapSize.m_Width = 5;
-	m_MapSize.m_Height = 5;
+	m_MapSize.m_Width = 9;
+	m_MapSize.m_Height = 8;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
 }

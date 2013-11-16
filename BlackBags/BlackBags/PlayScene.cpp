@@ -1,9 +1,6 @@
 ﻿#include "stdafx.h"
 #include "PlayScene.h"
 #include <queue>
-#include "Renderer.h"
-
-//CLogic* CLogic::m_pInstance = nullptr;
 
 CPlayScene::CPlayScene(void)
 {
@@ -67,19 +64,17 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 
 	//IsPossible 체크 후에 gameMap 호출해서 반영
 	m_Map->DrawLine(indexedPosition);
+	memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 
-	//IsClosed()
-	IndexedPosition tempArray[CHECKLIST_LENGTH];
-	
-	if (IsClosed(indexedPosition, tempArray) )
+	if (IsClosed(indexedPosition))
 	{
 		int i = 0;
 
-		while (tempArray[i].m_PosI != 0 && tempArray[i].m_PosJ != 0 )
+		while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
 		{
 			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
 			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
-			m_Map->SetMapOwner(tempArray[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
+			m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
 			m_Map->SubtractVoidCount();
 			i++;
 		}
@@ -178,7 +173,7 @@ bool CPlayScene::SetPlayerTurn()
 	return true;
 }
 
-bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList )
+bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 {
 	
 #ifdef _DEBUG
@@ -186,19 +181,19 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition, OUT IndexedPosition*
 #endif
 
 	//선택된 울타리의 위쪽 확인
-	if (ExploreTile(indexedPosition, candidateTileList, DI_UP) )
+	if (ExploreTile(indexedPosition,DI_UP) )
 		return true;
 
 	//선택된 울타리의 오른쪽 확인
-	if (ExploreTile(indexedPosition, candidateTileList, DI_RIGHT) )
+	if (ExploreTile(indexedPosition, DI_RIGHT) )
 		return true;
 
 	//선택된 울타리의 아래쪽 확인
-	if (ExploreTile(indexedPosition, candidateTileList, DI_DOWN) )
+	if (ExploreTile(indexedPosition, DI_DOWN) )
 		return true;
 
 	//선택된 울타리의 왼쪽 확인
-	if (ExploreTile(indexedPosition, candidateTileList, DI_LEFT) )
+	if (ExploreTile(indexedPosition, DI_LEFT) )
 		return true;
 
 	return false;
@@ -246,7 +241,7 @@ bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 	return m_Map->GetMapFlag(nextTile);
 }
 
-bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTileList, Direction direction)
+bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, Direction direction)
 {
 	std::queue<IndexedPosition> searchTiles;
 
@@ -286,7 +281,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 	int i = 0;
 
 	searchTiles.push(currentTile);
-	candidateTileList[i++] = currentTile;
+	m_ClosedTile[i++] = currentTile;
 	m_Map->SetMapFlag(currentTile, true);
 		
 	while (!searchTiles.empty() )
@@ -311,7 +306,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 				}
 			}
-			memset(candidateTileList, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+			memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 			
 			/*
 			int checkIdx = 0;
@@ -341,7 +336,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTileList[i++] = nextTile;
+				m_ClosedTile[i++] = nextTile;
 				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
@@ -354,7 +349,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTileList[i++] = nextTile;
+				m_ClosedTile[i++] = nextTile;
 				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
@@ -367,7 +362,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTileList[i++] = nextTile;
+				m_ClosedTile[i++] = nextTile;
 				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
@@ -380,7 +375,7 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, OUT IndexedPositio
 			if (!IsAlreadyChecked(nextTile) )
 			{
 				searchTiles.push(nextTile);
-				candidateTileList[i++] = nextTile;
+				m_ClosedTile[i++] = nextTile;
 				m_Map->SetMapFlag(nextTile, true);
 			}				
 		}
@@ -399,7 +394,6 @@ void CPlayScene::InitRandomMap()
 	
 	// IsClosed에서 사용할 변수들입니다.
 	IndexedPosition RandomTargetPosition;
-	IndexedPosition checkList[CHECKLIST_LENGTH];
 
 	srand( static_cast<unsigned int>(time(NULL)) );
 	
@@ -415,6 +409,7 @@ void CPlayScene::InitRandomMap()
 
 		// 랜덤 값으로 뽑은 좌표가 MO_LINE_UNCONNECTED일 경우에
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
+		{
 			// IsPossible을 만족하면
 			if ( IsPossible(RandomTargetPosition) )
 				{
@@ -424,13 +419,14 @@ void CPlayScene::InitRandomMap()
 					--startLineNumber;
 					
 					// 지금 막 그려진 선이 IsClosed() 조건을 만족하지 않으면 그대로 종료
-					if ( IsClosed(RandomTargetPosition, checkList) )
+					if ( IsClosed(RandomTargetPosition) )
 					{
 						// 만약 지금 막 그려진 선이 어떤 도형을 닫는다면 해당 선을 삭제하고 라인 카운터를 복구
 						m_Map->DeleteLine(RandomTargetPosition);
 						++startLineNumber;
 					}
 				}
+		}
 				
 	}
 

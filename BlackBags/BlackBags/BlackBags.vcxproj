@@ -88,6 +88,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="CreditScene.h" />
     <ClInclude Include="FPS.h" />
+    <ClInclude Include="GameData.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainScene.h" />
@@ -108,6 +109,7 @@
     <ClCompile Include="BlackBags.cpp" />
     <ClCompile Include="CreditScene.cpp" />
     <ClCompile Include="FPS.cpp" />
+    <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="OpeningScene.cpp" />

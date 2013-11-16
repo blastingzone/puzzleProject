@@ -31,7 +31,7 @@ public:
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 
 	bool IsPossible(IndexedPosition indexedPosition);
-	bool IsClosed(IndexedPosition indexedPosition, OUT IndexedPosition* tempArray);
+	bool IsClosed(IndexedPosition indexedPosition);
 
 	bool IsEnd();
 
@@ -42,7 +42,7 @@ private:
 	static CPlayScene*	m_pInstance; //singleton instance
 
 	/*	주어진 index의 울타리 주변 타일을 확인 합니다 */
-	bool ExploreTile(IndexedPosition indexedPosition, OUT IndexedPosition* candidateTIleList, Direction direction);
+	bool ExploreTile(IndexedPosition indexedPosition, Direction direction);
 
 	/*	IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다 */
 	bool IsAlreadyChecked(const IndexedPosition& nextTile);
@@ -51,5 +51,6 @@ private:
 	CPlayer*	m_Player[MAX_PLAYER_NUM];
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
+	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
 };
 
