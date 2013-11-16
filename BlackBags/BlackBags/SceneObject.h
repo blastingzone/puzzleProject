@@ -1,4 +1,6 @@
 #pragma once
+#include "GameData.h"
+
 class CSceneObject
 {
 public:

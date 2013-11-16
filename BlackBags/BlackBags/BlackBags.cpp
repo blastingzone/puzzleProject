@@ -77,6 +77,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CFPS::GetInstance()->ReleaseInstance();
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
+	CGameData::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
 	delete g_Manager;

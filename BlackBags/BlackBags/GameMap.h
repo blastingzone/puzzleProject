@@ -32,12 +32,6 @@ struct IndexedPosition
 	int m_PosJ;
 };
 
-struct MapSize
-{
-	int m_Width;
-	int m_Height;
-};
-
 struct MapObject
 {
 	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false) {}
@@ -52,7 +46,7 @@ struct MapObject
 class CGameMap : public CSceneObject
 {
 public:
-	CGameMap(void);
+	CGameMap(MapSize mapsize);
 	~CGameMap(void);
 
 	void Init();
@@ -90,6 +84,9 @@ public:
 
 	/*	화면에 표시될 SceneObject 크기 지정 */
 	void SetObjectSize();
+
+	// 게임 결과를 GameData 클래스에 기록하는 메소드
+	void WriteResult();
 
 private: 
 	bool CreateResource();

@@ -42,7 +42,7 @@ void CPlayScene::Init()
 	CreatePlayers();
 	SetPlayerTurn();
 
-	m_Map = new CGameMap();
+	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	m_Map->Init();
 	InitRandomMap();
 }
@@ -86,6 +86,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 
 	if (IsEnd() )
 	{
+		m_Map->WriteResult();
 		return SC_RESULT;
 	}
 
@@ -119,8 +120,8 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 bool CPlayScene::GetPlayerNumber()
 {
 	//SettingScene에서의 플레이어 수를 받아온다.
-	//조심해!! - 나중에 플레이어 수 입력 받으면 바꿔주는 걸로 수정할 것
-	m_PlayerNumber = 4;
+	
+	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
 
 	return true;
 }
@@ -132,7 +133,7 @@ bool CPlayScene::CreatePlayers()
 	{
 		m_Player[i] = new CPlayer();
 
-		m_Player[i]->SetPlayerName("hihihi");
+		m_Player[i]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(i));
 		m_Player[i]->SetPlayerTurn(-1);
 		m_Player[i]->SetPlayerId(i);
 	}

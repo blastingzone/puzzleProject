@@ -35,8 +35,9 @@ public:
 
 	bool IsEnd();
 
-	//맵사이즈는 사실상 좌표를 클릭하는 것이 될텐데 어떻게 받아서 넘겨줄 것인가?
 	void GetMapSize();
+
+	void WriteResult();
 
 private:
 	static CPlayScene*	m_pInstance; //singleton instance

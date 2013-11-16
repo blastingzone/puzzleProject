@@ -25,6 +25,9 @@
     <Filter Include="Util Elements">
       <UniqueIdentifier>{116ad042-b789-4850-a40f-cc5165d557fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameData">
+      <UniqueIdentifier>{2e406798-e4d9-4140-a766-7274f2ddebe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -90,7 +93,7 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GameData.h">
-      <Filter>Header Files</Filter>
+      <Filter>GameData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,7 +143,7 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="GameData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

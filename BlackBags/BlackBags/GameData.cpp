@@ -39,19 +39,67 @@ void CGameData::ReleaseInstance()
 	SafeDelete(m_pInstance);
 }
 
-void CGameData::SetPlayerTileNumber( int playerId, int tileNumber )
+void CGameData::IncreasePlayerTileNumber( MO_OWNER playerId )
 {
-	m_PlayerData[playerId].m_MyTile = tileNumber;
+	switch (playerId)
+	{
+	case MO_PLAYER1:
+		++m_PlayerData[MO_PLAYER1].m_MyTile;
+		break;
+	case MO_PLAYER2:
+		++m_PlayerData[MO_PLAYER2].m_MyTile;
+		break;
+	case MO_PLAYER3:
+		++m_PlayerData[MO_PLAYER3].m_MyTile;
+		break;
+	case MO_PLAYER4:
+		++m_PlayerData[MO_PLAYER4].m_MyTile;
+		break;
+	case MO_NOBODY:
+		break;
+	}
 }
 
-void CGameData::SetPlayerGoldNumber( int playerId, int goldNumber )
+void CGameData::IncreasePlayerGoldNumber( int playerId )
 {
-	m_PlayerData[playerId].m_MyGold = goldNumber;
+	switch (playerId)
+	{
+	case MO_PLAYER1:
+		++m_PlayerData[MO_PLAYER1].m_MyGold;
+		break;
+	case MO_PLAYER2:
+		++m_PlayerData[MO_PLAYER2].m_MyGold;
+		break;
+	case MO_PLAYER3:
+		++m_PlayerData[MO_PLAYER3].m_MyGold;
+		break;
+	case MO_PLAYER4:
+		++m_PlayerData[MO_PLAYER4].m_MyGold;
+		break;
+	case MO_NOBODY:
+		break;
+	}
 }
 
-void CGameData::SetPlayerTrashNumber( int playerId, int trashNumber )
+void CGameData::IncreasePlayerTrashNumber( int playerId )
 {
-	m_PlayerData[playerId].m_MyTrash = trashNumber;
+	switch (playerId)
+	{
+	case MO_PLAYER1:
+		++m_PlayerData[MO_PLAYER1].m_MyTrash;
+		break;
+	case MO_PLAYER2:
+		++m_PlayerData[MO_PLAYER2].m_MyTrash;
+		break;
+	case MO_PLAYER3:
+		++m_PlayerData[MO_PLAYER3].m_MyTrash;
+		break;
+	case MO_PLAYER4:
+		++m_PlayerData[MO_PLAYER4].m_MyTrash;
+		break;
+	case MO_NOBODY:
+		break;
+	}
 }
 
 void CGameData::Init()
@@ -62,4 +110,12 @@ void CGameData::Init()
 		m_PlayerData[i].m_MyGold = 0;
 		m_PlayerData[i].m_MyTrash = 0;
 	}
+
+	SetMapSize(0, 0);
+}
+
+void CGameData::SetMapSize(int x, int y)
+{
+	m_MapSize.m_Height = y;
+	m_MapSize.m_Width = x;
 }

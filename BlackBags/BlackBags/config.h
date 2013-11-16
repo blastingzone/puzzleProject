@@ -67,3 +67,9 @@ enum Direction	//게임 맵 탐색 시 활용되는 방향
 	DI_DOWN,
 	DI_LEFT
 };
+
+struct MapSize //맵 크기값을 위한 구조체입니다
+{
+	int m_Width;
+	int m_Height;
+};
