@@ -7,6 +7,11 @@ const int WINDOW_HEIGHT = 700;
 const int MAX_PLAYER_NUM= 4;
 
 
+/* 메인 메뉴 오브젝트들의 기본 크기입니다 */
+const float DEFAULT_MENU_BUTTON_WIDTH = 1000.0f;
+const float DEFAULT_MENU_BUTTON_HEIGHT = 30.0f;
+
+
 /* 게임 맵 오브젝트들의 기본 크기입니다 */
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;

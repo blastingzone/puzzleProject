@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "GameMap.h"
-#include "Renderer.h"
 
 CGameMap::CGameMap(MapSize mapSize)
 {

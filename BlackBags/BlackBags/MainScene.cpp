@@ -9,6 +9,12 @@ CMainScene::CMainScene(void)
 
 CMainScene::~CMainScene(void)
 {
+	RemoveObject();
+}
+
+void	CMainScene::Init()
+{
+	m_MainMenu = new CMainMenu();
 }
 
 SceneName CMainScene::Update(Coordinate mouseCoordinate)

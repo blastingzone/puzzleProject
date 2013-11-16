@@ -28,6 +28,9 @@
     <Filter Include="GameData">
       <UniqueIdentifier>{2e406798-e4d9-4140-a766-7274f2ddebe0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainScene">
+      <UniqueIdentifier>{bf8a529b-3e39-411e-8aeb-20c9291d73a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -68,9 +71,6 @@
     <ClInclude Include="OpeningScene.h">
       <Filter>Util Elements</Filter>
     </ClInclude>
-    <ClInclude Include="MainScene.h">
-      <Filter>Util Elements</Filter>
-    </ClInclude>
     <ClInclude Include="ResultScene.h">
       <Filter>Util Elements</Filter>
     </ClInclude>
@@ -95,6 +95,12 @@
     <ClInclude Include="GameData.h">
       <Filter>GameData</Filter>
     </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>MainScene</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>MainScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -116,9 +122,6 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="OpeningScene.cpp">
-      <Filter>Util Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="MainScene.cpp">
       <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
@@ -144,6 +147,12 @@
     </ClCompile>
     <ClCompile Include="GameData.cpp">
       <Filter>GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>MainScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

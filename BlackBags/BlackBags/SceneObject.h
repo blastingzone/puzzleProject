@@ -1,5 +1,6 @@
 #pragma once
 #include "GameData.h"
+#include "Renderer.h"
 
 class CSceneObject
 {
