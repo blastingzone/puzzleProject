@@ -93,6 +93,15 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	return SC_PLAY;
 }
 
+void CPlayScene::MouseOver(Coordinate mouseCoordinate)
+{
+	//조심해!!
+	//아래를 지우고 자동 완성 기능을 구현합니다.
+	if (mouseCoordinate.m_PosX > 0)
+	{
+
+	}
+}
 
 //마우스 좌표값을 index로 바꾸는 함수
 IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )

@@ -8,8 +8,9 @@ const int MAX_PLAYER_NUM= 4;
 
 
 /* 메인 메뉴 오브젝트들의 기본 크기입니다 */
-const float DEFAULT_MENU_BUTTON_WIDTH = 1000.0f;
-const float DEFAULT_MENU_BUTTON_HEIGHT = 30.0f;
+const float DEFAULT_MENU_BUTTON_WIDTH = 310.0f;
+const float DEFAULT_MENU_BUTTON_HEIGHT = 40.0f;
+const float DEFAULT_TEXT_MARGIN = 5.0F;
 
 
 /* 게임 맵 오브젝트들의 기본 크기입니다 */

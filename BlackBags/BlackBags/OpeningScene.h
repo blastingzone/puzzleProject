@@ -8,4 +8,5 @@ public:
 	~COpeningScene(void);
 
 	SceneName Update(Coordinate mouseCoordinate);
+	void MouseOver(Coordinate mouseCoordinate);
 };

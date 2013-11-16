@@ -215,6 +215,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			g_Manager->ResizeClientSize();
 		}
 		break;
+	case WM_MOUSEMOVE:
+		Coordinate mouseOver;
+		mouseOver.m_PosX = GET_X_LPARAM(lParam);
+		mouseOver.m_PosY = GET_Y_LPARAM(lParam);
+		
+		g_Manager->MouseOver(mouseOver);
+		break;
 	case WM_LBUTTONDOWN:
 		// 마우스 좌표 받아오는 부분
 		Coordinate mouseCoordinate;
@@ -223,7 +230,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		
 		g_Manager->Update(mouseCoordinate);
 		break;
-
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();

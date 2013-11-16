@@ -20,7 +20,6 @@ CSceneManager::~CSceneManager(void)
 	SafeDelete(m_CurrentScene);
 }
 
-
 void CSceneManager::Update( Coordinate mouseCoordinate )
 {
 	SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
@@ -58,6 +57,14 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		break;
 	default:
 		break;
+	}
+}
+
+void CSceneManager::MouseOver(Coordinate mouseCoordinate) 
+{
+	if (m_CurrentScene != nullptr)
+	{
+		m_CurrentScene->MouseOver(mouseCoordinate);
 	}
 }
 

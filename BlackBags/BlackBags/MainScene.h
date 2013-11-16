@@ -12,7 +12,8 @@ public:
 	void	Init();
 	void	Render();
 
-	SceneName Update(Coordinate mouseCoordinate);
+	SceneName	Update(Coordinate mouseCoordinate);
+	void		MouseOver(Coordinate mouseCoordinate);
 
 private:
 	CMainMenu*	m_MainMenu;

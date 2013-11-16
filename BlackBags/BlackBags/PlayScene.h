@@ -4,8 +4,6 @@
 #include "Scene.h"
 #include <time.h>
 
-
-
 class CPlayScene : public CScene
 {
 public:
@@ -25,8 +23,9 @@ public:
 	void ShowResult();
 	void CheckScore();
 
-	SceneName Update(Coordinate mouseCoordinate);
-	void Render();
+	SceneName	Update(Coordinate mouseCoordinate);
+	void		MouseOver(Coordinate mouseCoordinate);
+	void		Render();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 

@@ -8,5 +8,6 @@ public:
 	~CCreditScene(void);
 
 	SceneName Update(Coordinate mouseCoordinate);
+	void MouseOver(Coordinate mouseCoordinate);
 };
 
