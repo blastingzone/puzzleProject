@@ -318,9 +318,9 @@ void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
 
 void CGameMap::WriteResult()
 {
-	for (int i = 0 ; i < MAX_MAP_HEIGHT; ++i)
+	for (int i = 2 ; i < MAX_MAP_HEIGHT; ++i)
 	{
-		for (int j = 0; j < MAX_MAP_WIDTH; ++j)
+		for (int j = 2 ; j < MAX_MAP_WIDTH; ++j)
 		{
 			if ( GetMapType(i, j) == MO_TILE )
 			{
