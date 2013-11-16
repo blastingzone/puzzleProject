@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MainMenu.h"
 #include <string.h>
 
@@ -10,6 +10,10 @@ CMainMenu::CMainMenu(void)
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
 	m_TextFormat = nullptr;
+
+	//ì¡°ì‹¬í•´!!
+	//ìš°ì•„í•˜ê²Œ í•´ê²°í•  ê²ƒ
+	m_MenuTextSize = CRenderer::GetInstance()->GetDisplayScale() * SC_M_DEFAULT_TEXT_SIZE;
 }
 
 
@@ -24,7 +28,7 @@ void CMainMenu::Render()
 
 	for (int i = 0; i < BUTTON_NUMBER; ++i)
 	{
-		//pos´Â ¸Þ´º ¹öÆ°ÀÇ ¿ÞÂÊ »ó´Ü
+		//posëŠ” ë©”ë‰´ ë²„íŠ¼ì˜ ì™¼ìª½ ìƒë‹¨
 		pos.x = m_StartPosition.width - m_MenuButtonWidth;
 		pos.y = m_StartPosition.height + (m_MenuButtonHeight * i);
 
@@ -62,11 +66,11 @@ void CMainMenu::Render()
 
 void CMainMenu::Init()
 {
-	//ÀÚ¿ø »ý¼º
+	//ìžì› ìƒì„±
 	if (!CreateResource() )
 	{
-		//Á¶½ÉÇØ!!
-		//Á¾·á ¸Þ½ÃÁö »ý¼º ÇÒ °Í
+		//ì¡°ì‹¬í•´!!
+		//ì¢…ë£Œ ë©”ì‹œì§€ ìƒì„± í•  ê²ƒ
 	}
 	SetObjectSize();
 	ResizeClient();
@@ -74,14 +78,14 @@ void CMainMenu::Init()
 
 void CMainMenu::ResizeClient()
 {
-	//È­¸é Å©±â Á¶Àý
+	//í™”ë©´ í¬ê¸° ì¡°ì ˆ
 	CalcStartPosition();
 	SetObjectSize();
 }
 
 void CMainMenu::CalcStartPosition()
 {
-	/*	ÇöÀç È­¸éÀÇ ¿À¸¥ÂÊ °¡¿îµ¥¸¦ ±âÁØÁ¡À¸·Î »ç¿ë */
+	/*	í˜„ìž¬ í™”ë©´ì˜ ì˜¤ë¥¸ìª½ ê°€ìš´ë°ë¥¼ ê¸°ì¤€ì ìœ¼ë¡œ ì‚¬ìš© */
 	D2D1_SIZE_F rightPosition;
 	rightPosition = m_pRenderTarget->GetSize();
 
@@ -93,13 +97,32 @@ void CMainMenu::CalcStartPosition()
 
 void CMainMenu::SetObjectSize()
 {
-	/*	ÇöÀç ·»´õ·¯¿¡ ÀúÀåµÈ È­¸é ½ºÄÉÀÏ¿¡ ¸ÂÃç¼­ 
-	·»´õ¸µ ÇÒ ¶§ »ç¿ëµÈ ¿ÀºêÁ§Æ®µé Å©±â Á¶Á¤ */
+	/*	í˜„ìž¬ ë Œë”ëŸ¬ì— ì €ìž¥ëœ í™”ë©´ ìŠ¤ì¼€ì¼ì— ë§žì¶°ì„œ 
+	ë Œë”ë§ í•  ë•Œ ì‚¬ìš©ëœ ì˜¤ë¸Œì íŠ¸ë“¤ í¬ê¸° ì¡°ì • */
+	HRESULT hr;
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
-	m_MenuButtonWidth = tempScale * DEFAULT_MENU_BUTTON_WIDTH;
-	m_MenuButtonHeight = tempScale * DEFAULT_MENU_BUTTON_HEIGHT;
-	m_MenuTextMagin = tempScale * DEFAULT_TEXT_MARGIN;
+	m_MenuButtonWidth = tempScale * SC_M_DEFAULT_MENU_BUTTON_WIDTH;
+	m_MenuButtonHeight = tempScale * SC_M_DEFAULT_MENU_BUTTON_HEIGHT;
+	m_MenuTextMagin = tempScale * SC_M_DEFAULT_TEXT_MARGIN;
+	
+	m_TextFormat->Release();
+	m_MenuTextSize = tempScale * SC_M_DEFAULT_TEXT_SIZE;
+
+	hr = m_DWriteFactory->CreateTextFormat(
+			L"Segoe UI",                // Font family name.
+			NULL,							// Font collection (NULL sets it to use the system font collection).
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_MenuTextSize,
+			L"ko",
+			&m_TextFormat
+			);
+
+	if (SUCCEEDED(hr) )
+		hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		
 }
 
 void CMainMenu::InitMouseOver()
@@ -113,7 +136,7 @@ void CMainMenu::InitMouseOver()
 void CMainMenu::SetMouseOver(int idx)
 {
 	InitMouseOver();
-	// ¹üÀ§¸¦ ¹þ¾î³­ °æ¿ì ¿¹¿Ü Ã³¸®
+	// ë²”ìœ„ë¥¼ ë²—ì–´ë‚œ ê²½ìš° ì˜ˆì™¸ ì²˜ë¦¬
 	assert(idx < BUTTON_NUMBER);
 	m_ButtonList[idx].m_MouseOver = true;
 }
@@ -126,7 +149,6 @@ bool CMainMenu::CreateResource()
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-		//hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pMenuButtonBrush);
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pMenuButtonBrush);
 
 		if (SUCCEEDED(hr) )
@@ -144,12 +166,12 @@ bool CMainMenu::CreateResource()
 
 		if (SUCCEEDED(hr) )
 			hr = m_DWriteFactory->CreateTextFormat(
-				L"Segoe UI",                // Font family name.
-				NULL,							// Font collection (NULL sets it to use the system font collection).
+				L"Segoe UI",                
+				NULL,
 				DWRITE_FONT_WEIGHT_THIN,
 				DWRITE_FONT_STYLE_NORMAL,
 				DWRITE_FONT_STRETCH_NORMAL,
-				20.0f,
+				m_MenuTextSize,
 				L"ko",
 				&m_TextFormat
 				);

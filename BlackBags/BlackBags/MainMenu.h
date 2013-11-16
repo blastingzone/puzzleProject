@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <dwrite.h>
 #include <d2d1.h>
 #include "sceneobject.h"
@@ -41,18 +41,10 @@ private:
 
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
-	/*	°ÔÀÓ ¸ÊÀ» ±×¸®±âÀ§ÇÑ È­¸é ±âÁØ Á¡
-		°ÔÀÓ ¸ÊÀÇ °¡Àå ¿ŞÂÊ »ó´Ü À§Ä¡ */
+	/*	ê²Œì„ ë§µì„ ê·¸ë¦¬ê¸°ìœ„í•œ í™”ë©´ ê¸°ì¤€ ì 
+		ê²Œì„ ë§µì˜ ê°€ì¥ ì™¼ìª½ ìƒë‹¨ ìœ„ì¹˜ */
 	D2D1_SIZE_F	m_StartPosition;
 
-	//³ªÁß¿¡ »ó¼ö·Î »¬ ¼ö ÀÖÀ¸¸é »©ÀÚ
-	/*
-	std::string	m_TextNewGame;
-	std::string	m_TextNetwork;
-	std::string	m_TextCredits;
-	std::string	m_TextCinematicMovie;
-	std::string	m_TextExit;
-	*/
 	Button m_ButtonList[BUTTON_NUMBER];
 
 	IDWriteFactory*			m_DWriteFactory;
@@ -61,6 +53,7 @@ private:
 	float m_MenuButtonWidth;
 	float m_MenuButtonHeight;
 	float m_MenuTextMagin;
+	float m_MenuTextSize;
 
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
