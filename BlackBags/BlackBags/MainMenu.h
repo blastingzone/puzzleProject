@@ -39,12 +39,16 @@ public:
 private:
 	bool CreateResource();
 
+	/*	현재 화면 스케일에 맞춰서 m_TextFormat 갱신  */
+	void RefreshTextSize();
+
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	/*	게임 맵을 그리기위한 화면 기준 점
 		게임 맵의 가장 왼쪽 상단 위치 */
 	D2D1_SIZE_F	m_StartPosition;
 
+	/*	화면에 표시되는 버튼들 */
 	Button m_ButtonList[BUTTON_NUMBER];
 
 	IDWriteFactory*			m_DWriteFactory;

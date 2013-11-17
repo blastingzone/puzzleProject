@@ -10,10 +10,6 @@ CMainMenu::CMainMenu(void)
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
 	m_TextFormat = nullptr;
-
-	//조심해!!
-	//우아하게 해결할 것
-	m_MenuTextSize = CRenderer::GetInstance()->GetDisplayScale() * SC_M_DEFAULT_TEXT_SIZE;
 }
 
 
@@ -35,6 +31,7 @@ void CMainMenu::Render()
 		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MenuButtonWidth, pos.y + m_MenuButtonHeight);
 		textPosition =  D2D1::Rect( rectElement.left + m_MenuTextMagin, rectElement.top, rectElement.right, rectElement.bottom);
 
+		/*	해당 버튼에 mouseOver상태가 true이면 버튼을 화면에 표시하고 그 위에 텍스트를 렌더 */
 		if (m_ButtonList[i].m_MouseOver)
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_pMenuButtonBrush);
@@ -81,6 +78,7 @@ void CMainMenu::ResizeClient()
 	//화면 크기 조절
 	CalcStartPosition();
 	SetObjectSize();
+	RefreshTextSize();
 }
 
 void CMainMenu::CalcStartPosition()
@@ -99,19 +97,24 @@ void CMainMenu::SetObjectSize()
 {
 	/*	현재 렌더러에 저장된 화면 스케일에 맞춰서 
 	렌더링 할 때 사용된 오브젝트들 크기 조정 */
-	HRESULT hr;
+	
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
 	m_MenuButtonWidth = tempScale * SC_M_DEFAULT_MENU_BUTTON_WIDTH;
 	m_MenuButtonHeight = tempScale * SC_M_DEFAULT_MENU_BUTTON_HEIGHT;
 	m_MenuTextMagin = tempScale * SC_M_DEFAULT_TEXT_MARGIN;
-	
-	m_TextFormat->Release();
 	m_MenuTextSize = tempScale * SC_M_DEFAULT_TEXT_SIZE;
+}
+
+void CMainMenu::RefreshTextSize()
+{
+	HRESULT hr;
+
+	m_TextFormat->Release();
 
 	hr = m_DWriteFactory->CreateTextFormat(
-			L"Segoe UI",                // Font family name.
-			NULL,							// Font collection (NULL sets it to use the system font collection).
+			L"Segoe UI",
+			NULL,
 			DWRITE_FONT_WEIGHT_THIN,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
@@ -122,8 +125,8 @@ void CMainMenu::SetObjectSize()
 
 	if (SUCCEEDED(hr) )
 		hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-		
 }
+
 
 void CMainMenu::InitMouseOver()
 {
@@ -163,6 +166,8 @@ bool CMainMenu::CreateResource()
             __uuidof(IDWriteFactory),
             reinterpret_cast<IUnknown**>(&m_DWriteFactory)
             );
+
+		SetObjectSize();
 
 		if (SUCCEEDED(hr) )
 			hr = m_DWriteFactory->CreateTextFormat(

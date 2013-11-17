@@ -25,6 +25,7 @@ void CMainScene::Init()
 
 SceneName CMainScene::Update(Coordinate mouseCoordinate)
 {
+	/* 각각의 메뉴 버튼 선택에 따라 return되는 다음 scene이 달라짐 */
 	int idx = 0;
 
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
@@ -63,6 +64,7 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
+	/*	마우스 포인터가 메뉴 버튼 영역에 들어올 경우 그때의 버튼 idx를 계산해서 MainMenu에 넘겨주고, 해당하는 버튼이 화면에 표시되게 함 */
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() 
 		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height)
 	{
@@ -71,6 +73,10 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 		if (idx < BUTTON_NUMBER)
 		{
 			m_MainMenu->SetMouseOver(idx);
+		}
+		else
+		{
+			m_MainMenu->InitMouseOver();
 		}
 	}
 	else

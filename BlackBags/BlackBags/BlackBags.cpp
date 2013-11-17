@@ -216,6 +216,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_MOUSEMOVE:
+		//마우스오버 이펙트를 위한 메시지 처리
 		Coordinate mouseOver;
 		mouseOver.m_PosX = GET_X_LPARAM(lParam);
 		mouseOver.m_PosY = GET_Y_LPARAM(lParam);
