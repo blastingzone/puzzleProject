@@ -478,6 +478,7 @@ bool CPlayScene::IsEnd()
 	return (m_Map->GetVoidTileCount() == 0);
 }
 
+// 조심해!! 이 메소드로 오버라이드 되지 않습니다!
 void CPlayScene::Render()
 {
 	for (auto iter: m_Object)

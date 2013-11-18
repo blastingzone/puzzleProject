@@ -22,7 +22,7 @@ public:
 
 private:
 	// 시간 경과를 계산하기 위한 변수들
-	WORD			m_TimeRest;
+	int				m_TimeRest;
 	SYSTEMTIME		m_StartTime;
 	SYSTEMTIME		m_CurrentTime;
 
@@ -37,6 +37,6 @@ private:
 	D2D1::Matrix3x2F		m_Matrix;
 
 	// 렌더할 결과를 담는 변수
-	wchar_t m_Result[16];
+	wchar_t m_Result[32];
 };
 

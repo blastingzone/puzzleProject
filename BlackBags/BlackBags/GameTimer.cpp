@@ -58,13 +58,24 @@ void CGameTimer::SetTimerStart()
 {
 	GetSystemTime(&m_StartTime);
 	m_TimeRest = TimeLimit;
+	swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
 }
 
 // 주의 : 반드시 SetTimerStart()이 먼저 불려온 다음에 실행해야 함
 void CGameTimer::Update()
 {
-	m_TimeRest -= (m_StartTime.wSecond * 1000 + m_StartTime.wMilliseconds - m_CurrentTime.wSecond * 1000 - m_CurrentTime.wMilliseconds) / 1000;
-	swprintf_s(m_Result, L"Time Rest : %.2f", m_TimeRest);
+	GetSystemTime(&m_CurrentTime);
+
+	int interval = m_CurrentTime.wSecond * 1000 + m_CurrentTime.wMilliseconds - m_StartTime.wSecond * 1000 - m_StartTime.wMilliseconds;
+
+	if (interval > 1000)
+	{
+		--m_TimeRest;
+		swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
+		m_StartTime = m_CurrentTime;
+	}
+
+	// 처음 시간 - 현재 시간이 TimeLimit(여기서는 20초)를 넘어가면 if문 작동
 	if (m_TimeRest <= 0)
 	{
 		DrawRandomLine();
@@ -96,4 +107,5 @@ void CGameTimer::Render()
 void CGameTimer::DrawRandomLine()
 {
 	printf_s("랜덤라인이닷!\n");
+	SetTimerStart();
 }
