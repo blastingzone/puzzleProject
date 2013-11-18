@@ -184,6 +184,8 @@ bool CMainMenu::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
+		//조심해!!
+		//저 문자열 주소를 덮어 써버리면 어쩌지?
 		if (SUCCEEDED(hr) ){
 			m_ButtonList[0].m_ButtonText = L"NEW GAME";
 			m_ButtonList[0].m_StrLength  = (UINT32) wcslen(m_ButtonList[0].m_ButtonText);
