@@ -1,5 +1,7 @@
 ﻿#include "stdafx.h"
 #include "PlayScene.h"
+#include "FPS.h"
+#include "GameTimer.h"
 #include <queue>
 
 CPlayScene::CPlayScene(void)
@@ -14,6 +16,8 @@ CPlayScene::CPlayScene(void)
 	Init();
 	m_SceneStatus = SC_PLAY;
 	AddObject(m_Map);
+
+	CGameTimer::GetInstance()->SetTimerStart();
 }
 
 
@@ -60,8 +64,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 #ifdef _DEBUG
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
-#endif  
-
+#endif
 	//IsPossible 체크 후에 gameMap 호출해서 반영
 	m_Map->DrawLine(indexedPosition);
 	memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
@@ -441,9 +444,9 @@ void CPlayScene::InitRandomMap()
 	}
 
 	// 타일 속성을 얘네들로 바꾸기 전에
-	// 1. 브러쉬를 새로 준비하고
-	// 2. IsClosed() 로직에 얘네들도 반영해야됩니다 ㄷㄷ;
-	// 지금은 그냥 돌려버리면 IsClosed에서 길을 못 찾아감;
+	// 1. 브러쉬를 새로 준비해서 타일 위에 그려줘야 합니다
+	// 2. 그리고 IsClosed 에서 잘 돌아가는지 한 번 테스트 해 보고 진짜 반영
+	// 3. 얘네들은 이미지 파일로 넣어주는게 예쁠 듯 합니다
 
 	//while (startGoldNumber)
 	//{
@@ -473,4 +476,18 @@ void CPlayScene::InitRandomMap()
 bool CPlayScene::IsEnd()
 {
 	return (m_Map->GetVoidTileCount() == 0);
+}
+
+void CPlayScene::Render()
+{
+	for (auto iter: m_Object)
+	{
+		iter->Render();
+#ifdef _DEBUG		
+		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->Render();
+#endif
+	}
+	CGameTimer::GetInstance()->Update();
+	CGameTimer::GetInstance()->Render();
 }

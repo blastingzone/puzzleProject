@@ -101,6 +101,9 @@
     <ClInclude Include="MainMenu.h">
       <Filter>MainScene</Filter>
     </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>PlayScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="MainMenu.cpp">
       <Filter>MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

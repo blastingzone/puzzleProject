@@ -40,7 +40,7 @@ CFPS::~CFPS(void)
 }
 
 // Brush를 할당하는 함수입니다.
-void CFPS::makeBrush()
+void CFPS::MakeBrush()
 {
 	CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF::DarkSlateGray)

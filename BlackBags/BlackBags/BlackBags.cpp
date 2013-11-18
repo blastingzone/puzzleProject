@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "FPS.h"
+#include "GameTimer.h"
 #include <windowsx.h>
 #include <crtdbg.h>
 #include <stdio.h>
@@ -78,6 +79,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
+	CGameTimer::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
 	delete g_Manager;
@@ -149,8 +151,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
-	CFPS::GetInstance()->makeBrush();
-	
+#ifdef _DEBUG
+	CFPS::GetInstance()->MakeBrush();
+#endif
+	CGameTimer::GetInstance()->MakeBrush();
+
 	return TRUE;
 }
 
