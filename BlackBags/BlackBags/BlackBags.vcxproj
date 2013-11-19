@@ -53,12 +53,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;dwrite.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,6 +84,10 @@
     <Text Include="updateNote.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bandivid.h" />
+    <ClInclude Include="BandiVideoLibrary.h" />
+    <ClInclude Include="BandiVideoTexture.h" />
+    <ClInclude Include="BandiVideoTexture_DX9.h" />
     <ClInclude Include="BlackBags.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="CreditScene.h" />
@@ -106,8 +110,11 @@
     <ClInclude Include="SettingScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VideoRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BandiVideoLibrary.cpp" />
+    <ClCompile Include="BandiVideoTexture_DX9.cpp" />
     <ClCompile Include="BlackBags.cpp" />
     <ClCompile Include="CreditScene.cpp" />
     <ClCompile Include="FPS.cpp" />
@@ -129,6 +136,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="VideoRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BlackBags.rc" />

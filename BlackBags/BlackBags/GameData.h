@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 
 struct PlayerData
@@ -11,6 +12,7 @@ struct PlayerData
 	int m_MyTrash;
 
 };
+
 class CGameData
 {
 public:
@@ -41,10 +43,8 @@ public:
 
 private:
 	static CGameData*		m_pInstance; //singleton instance
-	
 	MapSize m_MapSize;
 
 	int m_PlayerNumber;
 	PlayerData m_PlayerData[MAX_PLAYER_NUM];
-
 };

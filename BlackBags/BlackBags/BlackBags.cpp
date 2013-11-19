@@ -12,6 +12,7 @@
 #include <crtdbg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "VideoRender.h"
 
 
 
@@ -78,6 +79,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CFPS::GetInstance()->ReleaseInstance();
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
+	CVideoRender::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
 
@@ -140,6 +142,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	
 	if (!CRenderer::GetInstance()->Init(hWnd) )
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
+	if (CVideoRender::GetInstance()->Init(hWnd) !=S_OK)
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}

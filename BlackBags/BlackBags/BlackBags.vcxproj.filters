@@ -31,6 +31,9 @@
     <Filter Include="MainScene">
       <UniqueIdentifier>{bf8a529b-3e39-411e-8aeb-20c9291d73a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpeningScene">
+      <UniqueIdentifier>{4f0dc0cc-2921-4fde-8e42-7d28f706c26e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -68,9 +71,6 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="OpeningScene.h">
-      <Filter>Util Elements</Filter>
-    </ClInclude>
     <ClInclude Include="ResultScene.h">
       <Filter>Util Elements</Filter>
     </ClInclude>
@@ -104,6 +104,24 @@
     <ClInclude Include="GameTimer.h">
       <Filter>PlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="OpeningScene.h">
+      <Filter>OpeningScene</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoRender.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="bandivid.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="BandiVideoLibrary.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="BandiVideoTexture.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="BandiVideoTexture_DX9.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -123,9 +141,6 @@
     </ClCompile>
     <ClCompile Include="SceneObject.cpp">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="OpeningScene.cpp">
-      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
       <Filter>Util Elements</Filter>
@@ -159,6 +174,18 @@
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningScene.cpp">
+      <Filter>OpeningScene</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoRender.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="BandiVideoLibrary.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="BandiVideoTexture_DX9.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
