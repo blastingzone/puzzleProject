@@ -21,7 +21,7 @@ SceneName COpeningScene::Update(Coordinate mouseCoordinate)
 	// 조심해!!!!!!!
 	// if문 빼야 합니다
 	///////////////////////////////////////////////////////////////////////////
-	if(mouseCoordinate.m_PosX > 0)
+	if (mouseCoordinate.m_PosX > 0)
 		return SC_MAIN;
 	return SC_MAIN;
 }
@@ -43,7 +43,7 @@ void COpeningScene::Init()
 
 void COpeningScene::RenderVideo()
 {
-	if(!CVideoRender::GetInstance()->IsVideoEnd())
+	if (!CVideoRender::GetInstance()->IsVideoEnd())
 	{
 		CVideoRender::GetInstance()->RenderVideo();
 	}
