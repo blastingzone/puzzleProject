@@ -64,7 +64,7 @@ public:
 	D2D1_SIZE_F GetStartPosition(){return m_StartPosition;}
 
 	MO_TYPE		GetMapType(IndexedPosition indexedPosition);
-	MO_TYPE		GetMapType(const int& i, const int& j);
+	MO_TYPE		GetMapType(const int& i, const int& j);  //SM9: 굳이 primitive type까지 const ref를 쓸 필요가 없다.
 
 	void		SetMapOwner(IndexedPosition indexedPosition, MO_OWNER owner);
 	MO_OWNER	GetMapOwner(IndexedPosition indexedPosition);

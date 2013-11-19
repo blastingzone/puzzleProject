@@ -10,6 +10,8 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_MapSize.m_Height = mapSize.m_Height;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
+
+	//SM9: 왜 멤버 변수들 초기화를 다 해주지 않는가? m_pDotBrush 같은 포인터 멤버들은 항상 초기화를 해주기 바람.
 }
 
 CGameMap::~CGameMap(void)

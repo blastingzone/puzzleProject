@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameTimer.h"
 #include "Renderer.h"
 
@@ -14,13 +14,13 @@ CGameTimer::CGameTimer(void)
 	, m_TextBrush(nullptr)
 	, m_TextFormat(nullptr)
 {
-	// ÀÚ¿ø ÇÒ´ç
+	// ìì› í• ë‹¹
 	DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
 		,__uuidof(m_DWriteFactory)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 		);
 
-	m_DWriteFactory->CreateTextFormat(L"Consolas"
+	m_DWriteFactory->CreateTextFormat(L"Consolas" //SM9: ë‚˜ì¤‘ì— ì´ëŸ° í°íŠ¸ ì´ë¦„ ë”°ë¡œ ë‹¤ ëº„ ê²ƒ. ì½˜ì†”ë¼ìŠ¤ í°íŠ¸ê°€ ì—†ëŠ” ì»´í“¨í„°ë¼ë©´?
 		, NULL
 		, DWRITE_FONT_WEIGHT_NORMAL
 		, DWRITE_FONT_STYLE_NORMAL
@@ -61,10 +61,10 @@ void CGameTimer::SetTimerStart()
 	swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
 }
 
-// ÁÖÀÇ : ¹İµå½Ã SetTimerStart()ÀÌ ¸ÕÀú ºÒ·Á¿Â ´ÙÀ½¿¡ ½ÇÇàÇØ¾ß ÇÔ
+// ì£¼ì˜ : ë°˜ë“œì‹œ SetTimerStart()ì´ ë¨¼ì € ë¶ˆë ¤ì˜¨ ë‹¤ìŒì— ì‹¤í–‰í•´ì•¼ í•¨
 void CGameTimer::Update()
 {
-	GetSystemTime(&m_CurrentTime);
+	GetSystemTime(&m_CurrentTime); //SM9: ì‚¬ì‹¤ ì´ APIëŠ” ë¶€í•˜ê°€ ì¢€ í¬ë‹¤.. GetTickCount() ì‚¬ìš©ì„ ê³ ë ¤í•´ë´ë¼.
 
 	int interval = m_CurrentTime.wSecond * 1000 + m_CurrentTime.wMilliseconds - m_StartTime.wSecond * 1000 - m_StartTime.wMilliseconds;
 
@@ -75,7 +75,7 @@ void CGameTimer::Update()
 		m_StartTime = m_CurrentTime;
 	}
 
-	// Ã³À½ ½Ã°£ - ÇöÀç ½Ã°£ÀÌ TimeLimit(¿©±â¼­´Â 20ÃÊ)¸¦ ³Ñ¾î°¡¸é if¹® ÀÛµ¿
+	// ì²˜ìŒ ì‹œê°„ - í˜„ì¬ ì‹œê°„ì´ TimeLimit(ì—¬ê¸°ì„œëŠ” 20ì´ˆ)ë¥¼ ë„˜ì–´ê°€ë©´ ifë¬¸ ì‘ë™
 	if (m_TimeRest <= 0)
 	{
 		DrawRandomLine();
@@ -106,6 +106,6 @@ void CGameTimer::Render()
 
 void CGameTimer::DrawRandomLine()
 {
-	printf_s("·£´ı¶óÀÎÀÌ´å!\n");
+	printf_s("ëœë¤ë¼ì¸ì´ë‹·!\n");
 	SetTimerStart();
 }

@@ -17,12 +17,16 @@ CPlayScene::CPlayScene(void)
 	m_SceneStatus = SC_PLAY;
 	AddObject(m_Map);
 
+	//SM9: 모든 멤버 변수들 초기화 시킬 것
+
 	CGameTimer::GetInstance()->SetTimerStart();
 }
 
 
 CPlayScene::~CPlayScene(void)
 {
+	//SM9: FreeConsole이 여기에 있어야 한다. 항상 생성자와 소멸자는 대칭되도록.
+
 	RemoveObject();
 	
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
@@ -30,7 +34,8 @@ CPlayScene::~CPlayScene(void)
 
 		if (m_Player[i])
 		{
-			delete m_Player[i];
+			delete m_Player[i]; //SM9: new와 delete는 대칭되도록 설계하는게 좋다 delete는 소멸자에 있는데 new는 Init->CreatePlayers()에 있으면 구조적으로 좋지 못함
+			//SM9: 심지어 CreatePlayers는 딱 한번만 하면 되는데 따로 함수를 만들어 놓은 이유는? 일종의 over-engineering
 			m_Player[i] = NULL;
 		}
 	}
@@ -156,6 +161,8 @@ bool CPlayScene::CreatePlayers()
 //플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
 bool CPlayScene::SetPlayerTurn()
 {
+	//SM9: 이거 이렇게 복잡하게 안해도 되는데... 
+
 	bool flag;
 	int i = 0;
 	CPlayer tempP;

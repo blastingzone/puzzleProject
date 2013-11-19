@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MainScene.h"
 
 
@@ -25,18 +25,20 @@ void CMainScene::Init()
 
 SceneName CMainScene::Update(Coordinate mouseCoordinate)
 {
-	/* ������ �޴� ��ư ���ÿ� ���� return�Ǵ� ���� scene�� �޶��� */
+	/* 각각의 메뉴 버튼 선택에 따라 return되는 다음 scene이 달라짐 */
 	int idx = 0;
 
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
 	{
+		//SM9: idx로 나오는 값의 의미를 알아보기 쉽도록 해놓기. 지금 상태로는 왜 0이 SC_SETTING인지 2가 SC_CREDIT인지 알기 힘들다.
 		idx = static_cast<int> ( (mouseCoordinate.m_PosY - m_MainMenu->GetStartPosition().height) / m_MainMenu->GetButtonHeight() );
 	}
 	else
 	{
-		idx = 5;
+		idx = 5; //SM9: 숫자 5의 의미는? 
 	}
 
+	
 	switch(idx)
 	{
 	case 0:
@@ -51,7 +53,7 @@ SceneName CMainScene::Update(Coordinate mouseCoordinate)
 		return SC_OPENING;
 		break;
 	case 4:
-		//���� �޽��� �߻� ��ų ��
+		//종료 메시지 발생 시킬 것
 		break;
 	default:
 		break;
@@ -64,7 +66,7 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
-	/*	���콺 �����Ͱ� �޴� ��ư ������ ���� ��� �׶��� ��ư idx�� ����ؼ� MainMenu�� �Ѱ��ְ�, �ش��ϴ� ��ư�� ȭ�鿡 ǥ�õǰ� �� */
+	/*	마우스 포인터가 메뉴 버튼 영역에 들어올 경우 그때의 버튼 idx를 계산해서 MainMenu에 넘겨주고, 해당하는 버튼이 화면에 표시되게 함 */
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() 
 		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height)
 	{

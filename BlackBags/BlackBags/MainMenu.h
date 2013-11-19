@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <dwrite.h>
+#include <dwrite.h> //SM9: 헤더파일에서는 인클루드를 최소한으로 해라. 대부분 전방 선언으로 해결 된다.
 #include <d2d1.h>
 #include "sceneobject.h"
 
@@ -10,7 +10,7 @@ struct Button
 	Button() : m_MouseOver(false), m_ButtonText(NULL), m_StrLength(0) {}
 
 	bool m_MouseOver;
-	const wchar_t* m_ButtonText;
+	const wchar_t* m_ButtonText; //SM9: 여기에 const는 어떤 의도로 썼는가?
 	UINT32 m_StrLength; 
 };
 

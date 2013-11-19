@@ -10,6 +10,8 @@ CMainMenu::CMainMenu(void)
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
 	m_TextFormat = nullptr;
+
+	//SM9: 왜 모든 멤버 변수들의 초기화를 안 하는거지?? 릴리스모드에서는 위험해진다.
 }
 
 
@@ -63,13 +65,15 @@ void CMainMenu::Render()
 
 void CMainMenu::Init()
 {
-	//자원 생성
+	
+	//자원 생성ㅇ
 	if (!CreateResource() )
 	{
 		//조심해!!
 		//종료 메시지 생성 할 것
+		//SM9: 이런데서 에러나면 보통 return false하고, 이 함수를 호출한 곳에서 프로그램 종료 처리해준다.
 	}
-	SetObjectSize();
+	SetObjectSize(); //SM9: 이거 어차피 아래의 ResizeClient()에서 할건데.. 여기서 왜 호출? 중복.
 	ResizeClient();
 }
 
@@ -84,8 +88,7 @@ void CMainMenu::ResizeClient()
 void CMainMenu::CalcStartPosition()
 {
 	/*	현재 화면의 오른쪽 가운데를 기준점으로 사용 */
-	D2D1_SIZE_F rightPosition;
-	rightPosition = m_pRenderTarget->GetSize();
+	D2D1_SIZE_F rightPosition = m_pRenderTarget->GetSize(); //SM9: 바로 이렇게 선언과 동시에 초기화.
 
 	rightPosition.height /= 2;
 
@@ -182,11 +185,14 @@ bool CMainMenu::CreateResource()
 				);
 
 		if (SUCCEEDED(hr) )
+		{
 			hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
 		//조심해!!
 		//저 문자열 주소를 덮어 써버리면 어쩌지?
-		if (SUCCEEDED(hr) ){
+
+		//SM9: 아래는 위험한 코드가 될 수 있다.. 그냥 string 객체 쓰는게 좋을 것 같은데?
+
 			m_ButtonList[0].m_ButtonText = L"NEW GAME";
 			m_ButtonList[0].m_StrLength  = (UINT32) wcslen(m_ButtonList[0].m_ButtonText);
 

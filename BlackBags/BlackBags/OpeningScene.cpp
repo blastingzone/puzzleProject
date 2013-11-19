@@ -21,6 +21,8 @@ SceneName COpeningScene::Update(Coordinate mouseCoordinate)
 	// 조심해!!!!!!!
 	// if문 빼야 합니다
 	///////////////////////////////////////////////////////////////////////////
+
+	//SM9: 무슨 의미가 있는 코드인가?
 	if (mouseCoordinate.m_PosX > 0)
 		return SC_MAIN;
 	return SC_MAIN;

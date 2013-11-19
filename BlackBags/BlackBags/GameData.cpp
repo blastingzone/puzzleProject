@@ -1,11 +1,11 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameData.h"
 
 CGameData* CGameData::m_pInstance = nullptr;
 CGameData::CGameData(void)
 {
 	m_PlayerData[0].m_Id = 0;
-	m_PlayerData[0].m_PlayerName = "Jake Kim";
+	m_PlayerData[0].m_PlayerName = "Jake Kim"; //SM9: 이것들은 나중에 고칠거지? ㅋㅋ
 
 	m_PlayerData[1].m_Id = 1;
 	m_PlayerData[1].m_PlayerName = "Cassie Kim";
@@ -16,7 +16,7 @@ CGameData::CGameData(void)
 	m_PlayerData[3].m_Id = 3;
 	m_PlayerData[3].m_PlayerName = "Lucy Kim";
 
-	Init();
+	Init(); //SM9: 어차피 이 함수는 여기서밖에 안 쓰는데, 따로 분리한 이유가 있나?
 }
 
 
@@ -41,6 +41,12 @@ void CGameData::ReleaseInstance()
 
 void CGameData::IncreasePlayerTileNumber( MO_OWNER playerId )
 {
+	//SM9: 이거 이렇게 스위치 쓸 필요 없다
+
+	//이렇게 한줄로 써도 된다. ++m_PlayerData[playerId].m_MyTile ;
+	//그리고 MO_NOBODY가 playerId로 들어오는 일이 발생하지 않도록 프로그래밍 할 것
+	//여기서는 단순히 assert(MO_NOBODY != playerId); 이렇게 어서트만 해주삼.
+
 	switch (playerId)
 	{
 	case MO_PLAYER1:
@@ -62,6 +68,7 @@ void CGameData::IncreasePlayerTileNumber( MO_OWNER playerId )
 
 void CGameData::IncreasePlayerGoldNumber( int playerId )
 {
+	//SM9: 아래도 마찬가지지... 
 	switch (playerId)
 	{
 	case MO_PLAYER1:
@@ -83,6 +90,7 @@ void CGameData::IncreasePlayerGoldNumber( int playerId )
 
 void CGameData::IncreasePlayerTrashNumber( int playerId )
 {
+	//SM9: 이어동문
 	switch (playerId)
 	{
 	case MO_PLAYER1:
