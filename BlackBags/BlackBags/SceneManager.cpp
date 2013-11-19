@@ -72,3 +72,8 @@ void CSceneManager::ResizeClientSize()
 {
 	m_CurrentScene->ResizeClient();
 }
+
+void CSceneManager::Render()
+{
+	m_CurrentScene->Render();
+}

@@ -31,3 +31,15 @@ void CResultScene::MouseOver(Coordinate mouseCoordinate)
 
 	}
 }
+
+void CResultScene::Render()
+{
+	for (auto iter: m_Object)
+	{
+		iter->Render();
+#ifdef _DEBUG		
+		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->Render();
+#endif
+	}
+}

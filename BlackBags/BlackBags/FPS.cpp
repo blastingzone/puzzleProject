@@ -29,6 +29,9 @@ CFPS::CFPS(void)
 		, L"ko"
 		, &m_TextFormat);
 
+	//m_Result 초기값을 0으로
+	swprintf_s(m_Result, L"FPS : %.2f", m_FPS);
+
 	// Init 될 때 SystemTime을 한 번 받습니다.
 	// 이것 때문에 최초에 한 번 찍히는 FPS는 부정확하지만 크게 중요하지 않습니다. (곧 다음 값이 덮어버리니까요)
 	GetSystemTime(&m_PreviousTime);

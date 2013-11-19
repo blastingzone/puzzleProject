@@ -9,5 +9,6 @@ public:
 
 	SceneName Update(Coordinate mouseCoordinate);
 	void MouseOver(Coordinate mouseCoordinate);
+	void Render();
 };
 

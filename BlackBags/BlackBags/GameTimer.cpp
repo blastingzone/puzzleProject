@@ -106,6 +106,7 @@ void CGameTimer::Render()
 
 void CGameTimer::DrawRandomLine()
 {
+	
 	printf_s("·£´ı¶óÀÎÀÌ´å!\n");
 	SetTimerStart();
 }

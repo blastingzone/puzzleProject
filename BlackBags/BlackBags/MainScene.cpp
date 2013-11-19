@@ -84,3 +84,15 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 		m_MainMenu->InitMouseOver();
 	}
 }
+
+void CMainScene::Render()
+{
+	for (auto iter: m_Object)
+	{
+		iter->Render();
+#ifdef _DEBUG		
+		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->Render();
+#endif
+	}
+}
