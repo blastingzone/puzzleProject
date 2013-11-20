@@ -33,6 +33,10 @@ void CCreditScene::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
+void CCreditScene::TimeOut()
+{
+}
+
 void CCreditScene::Render()
 {
 	for (auto iter: m_Object)

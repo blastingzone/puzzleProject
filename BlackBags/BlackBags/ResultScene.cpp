@@ -32,6 +32,10 @@ void CResultScene::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
+void CResultScene::TimeOut()
+{
+}
+
 void CResultScene::Render()
 {
 	for (auto iter: m_Object)

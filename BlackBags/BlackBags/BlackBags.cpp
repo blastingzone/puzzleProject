@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "VideoRender.h"
-
+#include "Timer.h"
 
 
 #define MAX_LOADSTRING 100
@@ -79,6 +79,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CFPS::GetInstance()->ReleaseInstance();
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
+	CTimer::GetInstance()->ReleaseInstance();
 	CVideoRender::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
@@ -151,6 +152,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	else 
 	{
+		CTimer::GetInstance()->Init(hWnd);
 		g_Manager = new CSceneManager();
 	}
 
@@ -241,6 +243,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
 		g_Manager->Update(mouseCoordinate);
+		break;
+	case WM_TIMER:
+		g_Manager->TimeOut();
 		break;
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();

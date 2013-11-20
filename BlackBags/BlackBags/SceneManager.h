@@ -16,6 +16,7 @@ public:
 		만약 m_CurrentScene이 종료되어야 하는 상황이면 현재의 scene을 해제하고 다음 scene을 생성한다. */
 	void Update(Coordinate mouseCoordinate);
 	void MouseOver(Coordinate mouseCoordinate);
+	void TimeOut();
 
 	/*	현재 화면 스케일에 맞춰서 각각의 씬들의 오브젝트 크기를 변경하도록 하는 함수 */
 	void ResizeClientSize();

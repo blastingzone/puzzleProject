@@ -89,6 +89,10 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
+void CMainScene::TimeOut()
+{
+}
+
 void CMainScene::Render()
 {
 	for (auto iter: m_Object)

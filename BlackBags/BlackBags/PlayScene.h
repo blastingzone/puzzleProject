@@ -25,6 +25,7 @@ public:
 
 	SceneName	Update(Coordinate mouseCoordinate);
 	void		MouseOver(Coordinate mouseCoordinate);
+	void		TimeOut();
 	void		Render();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);

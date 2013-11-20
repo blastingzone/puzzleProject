@@ -192,7 +192,8 @@ bool CMainMenu::CreateResource()
 		//최경욱 조심해!!
 		//저 문자열 주소를 덮어 써버리면 어쩌지?
 		//그냥 string 객체 쓰는게 좋을 것 같은데?
-		if (SUCCEEDED(hr) ){
+		if (SUCCEEDED(hr) )
+		{
 			m_ButtonList[0].m_ButtonText = L"NEW GAME";
 			m_ButtonList[0].m_StrLength  = (UINT32) wcslen(m_ButtonList[0].m_ButtonText);
 

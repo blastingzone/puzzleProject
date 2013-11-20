@@ -53,6 +53,10 @@ void CPlayScene::Init()
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	m_Map->Init();
 	InitRandomMap();
+
+	//조심해!!
+	//일단은 화면 바뀌면서 바로 시작하지만 나중에는 잠시 대기 시간 줄 것
+	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
@@ -90,6 +94,8 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 #endif
 	}
 	
+	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
+
 	if (IsEnd() )
 	{
 		m_Map->WriteResult();
@@ -97,7 +103,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	}
 
 	m_PlayerTurn++;
-	CGameTimer::GetInstance()->SetTimerStart();
+	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 
 	return SC_PLAY;
 }
@@ -110,6 +116,16 @@ void CPlayScene::MouseOver(Coordinate mouseCoordinate)
 	{
 
 	}
+}
+
+void CPlayScene::TimeOut()
+{
+	//조심해!!
+	printf("time over\n");
+	printf("random line\n");
+
+	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
+	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 }
 
 //마우스 좌표값을 index로 바꾸는 함수
@@ -323,8 +339,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					checkIdx++;
 				}
 				*/
-				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI){
-					for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ){
+				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
+				{
+					for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
+					{
 						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 					}
 				}
