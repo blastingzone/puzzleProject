@@ -34,7 +34,7 @@ void CTimer::ReleaseInstance()
 
 void CTimer::StartTimer(UINT timerID, UINT elapse)
 {
-	SetTimer(m_HWND, timerID, elapse, NULL);
+	int a = m_CurrentTimer = SetTimer(m_HWND, timerID, elapse, NULL);
 }
 
 void CTimer::EndTimer(UINT timerID)

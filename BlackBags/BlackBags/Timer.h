@@ -16,6 +16,7 @@ public:
 private:
 	static CTimer*		m_pInstance; //singleton instance
 
-	HWND m_HWND;		//window handle
+	HWND		m_HWND;		//window handle
+	UINT_PTR	m_CurrentTimer;
 };
 

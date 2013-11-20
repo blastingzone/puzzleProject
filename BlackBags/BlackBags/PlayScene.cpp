@@ -69,6 +69,8 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 		return SC_PLAY;
 	}
 
+	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
+
 #ifdef _DEBUG
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
@@ -94,8 +96,6 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 #endif
 	}
 	
-	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
-
 	if (IsEnd() )
 	{
 		m_Map->WriteResult();
@@ -141,13 +141,38 @@ void CPlayScene::TimeOut()
 			// IsPossible을 만족하면
 			if ( IsPossible(RandomTargetPosition) )
 			{
-				Update(RandomTargetPosition);
+				m_Map->DrawLine(RandomTargetPosition);
+				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+
+				if (IsClosed(RandomTargetPosition))
+				{
+					int i = 0;
+
+					while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
+					{
+						m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
+						m_Map->SubtractVoidCount();
+						i++;
+					}
+			#ifdef _DEBUG
+					printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
+			#endif
+				}
+	
+				if (IsEnd() )
+				{
+					m_Map->WriteResult();
+					//return SC_RESULT;
+				}
+
+				m_PlayerTurn++;
+				CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
+
+				//return SC_PLAY;
 				break;
 			}
 		}
 	}
-
-	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 }
 
 //마우스 좌표값을 index로 바꾸는 함수
@@ -538,5 +563,6 @@ void CPlayScene::Render()
 #endif
 	}
 	CGameTimer::GetInstance()->Update();
+	//timer 여기에 추가할 것
 	CGameTimer::GetInstance()->Render();
 }
