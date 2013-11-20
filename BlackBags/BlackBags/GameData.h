@@ -22,18 +22,17 @@ public:
 	static CGameData* CGameData::GetInstance();
 	static void				ReleaseInstance();
 
-	void Init();
 
-	int			GetPlayerTileNumber(int playerId)	{return m_PlayerData[playerId].m_MyTile;}
+	int			GetPlayerTileNumber(int playerId);
 	void		IncreasePlayerTileNumber(MO_OWNER playerId);
 
-	int			GetPlayerGoldNumber(int playerId)	{return m_PlayerData[playerId].m_MyGold;}
+	int			GetPlayerGoldNumber(int playerId);
 	void		IncreasePlayerGoldNumber(int playerId);
 
-	int			GetPlayerTrashNumber(int playerId)	{return m_PlayerData[playerId].m_MyTrash;}
+	int			GetPlayerTrashNumber(int playerId);
 	void		IncreasePlayerTrashNumber(int playerId);
 
-	std::string GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
+	const std::string GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}

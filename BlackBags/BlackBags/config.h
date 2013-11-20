@@ -28,7 +28,8 @@ const int MAX_MAP_HEIGHT = 21;
 /* 지도 초기화 할 때 맵 탐사하는 배열 길이 (함수 구조 변경 후 삭제 예정) */
 const int CHECKLIST_LENGTH = 100;
 
-
+/*Timer ~ 이름바꿔쭹*/
+const int TIME_LEFT_TEXT_LENGTH = 32;
 /* enum 타입들입니다. */
 enum SceneName	//Scene 이름들
 {

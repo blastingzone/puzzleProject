@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <dwrite.h>
 #include <d2d1.h>
 #include "sceneobject.h"
 
@@ -10,9 +9,14 @@ struct Button
 	Button() : m_MouseOver(false), m_ButtonText(NULL), m_StrLength(0) {}
 
 	bool m_MouseOver;
+	//최경욱 조심해!!
+	// 여기에 const는 어떤 의도로 썼는가?
 	const wchar_t* m_ButtonText;
 	UINT32 m_StrLength; 
 };
+
+class IDWriteFactory;		
+class IDWriteTextFormat;
 
 class CMainMenu :
 	public CSceneObject

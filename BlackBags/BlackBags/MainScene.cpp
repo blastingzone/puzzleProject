@@ -26,6 +26,9 @@ void CMainScene::Init()
 SceneName CMainScene::Update(Coordinate mouseCoordinate)
 {
 	/* 각각의 메뉴 버튼 선택에 따라 return되는 다음 scene이 달라짐 */
+	//최경욱 조심해!
+	//idx로 나오는 값의 의미를 알아보기 쉽도록 해놓기. 지금 상태로는 왜 0이 SC_SETTING인지 2가 SC_CREDIT인지 알기 힘들다.
+	//enum값으로 해주세요
 	int idx = 0;
 
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
@@ -34,6 +37,7 @@ SceneName CMainScene::Update(Coordinate mouseCoordinate)
 	}
 	else
 	{
+		//최경욱 조심해~~ 마찬가지입니다.
 		idx = 5;
 	}
 

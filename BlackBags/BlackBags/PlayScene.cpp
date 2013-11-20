@@ -11,7 +11,9 @@ CPlayScene::CPlayScene(void)
 
 	m_PlayerTurn = 0;
 	m_Map = nullptr;
+	m_PlayerNumber = 0;
 
+	//조심해!!
 	Init();
 	m_SceneStatus = SC_PLAY;
 	AddObject(m_Map);
@@ -22,11 +24,14 @@ CPlayScene::CPlayScene(void)
 
 CPlayScene::~CPlayScene(void)
 {
+	FreeConsole();
 	RemoveObject();
 	
 	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
 	{
-
+		//조심해!!
+		// new와 delete는 대칭되도록 설계하는게 좋다 delete는 소멸자에 있는데 new는 Init->CreatePlayers()에 있으면 구조적으로 좋지 못함
+		//심지어 CreatePlayers는 딱 한번만 하면 되는데 따로 함수를 만들어 놓은 이유는? 일종의 over-engineering
 		if (m_Player[i])
 		{
 			delete m_Player[i];
@@ -155,6 +160,8 @@ bool CPlayScene::CreatePlayers()
 //플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
 bool CPlayScene::SetPlayerTurn()
 {
+	//정서경 조심해!!
+	//createplayer랑 합쳐버려도 될 것 같아!!
 	bool flag;
 	int i = 0;
 	CPlayer tempP;

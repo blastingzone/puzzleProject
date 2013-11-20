@@ -5,6 +5,18 @@ CGameMap::CGameMap(MapSize mapSize)
 {
 	m_pRenderTarget = nullptr;
 
+	m_pDotBrush = nullptr;
+	m_pUnconnectedLineBrush = nullptr;
+	m_pConnectedLineBrush = nullptr;
+	m_pPossibleLineBrush = nullptr;
+	m_pTileBrush = nullptr;
+	m_pVoidTileBrush = nullptr;
+
+	m_pTileP1 = nullptr;
+	m_pTileP2 = nullptr;
+	m_pTileP3 = nullptr;
+	m_pTileP4 = nullptr;
+
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
 	m_MapSize.m_Height = mapSize.m_Height;

@@ -51,6 +51,8 @@ private:
 	CPlayer*	m_Player[MAX_PLAYER_NUM];
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
+
+	//조심해. 이게 정말 해결한 것일까?
 	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
 };
 

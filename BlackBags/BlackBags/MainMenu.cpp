@@ -1,15 +1,20 @@
 ﻿#include "stdafx.h"
 #include "MainMenu.h"
 #include <string.h>
+#include "dwrite.h"
 
 
 CMainMenu::CMainMenu(void)
 {
 	m_pRenderTarget = nullptr;
+
 	m_DWriteFactory = nullptr;
+	m_TextFormat = nullptr;
+
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
-	m_TextFormat = nullptr;
+	m_pMenuButtonBrush = nullptr;
+	m_pBackgroundBrush = nullptr;
 }
 
 
@@ -63,13 +68,14 @@ void CMainMenu::Render()
 
 void CMainMenu::Init()
 {
+	//최경욱 조심해!!
+	//이런데서 에러나면 보통 return false하고, 이 함수를 호출한 곳에서 프로그램 종료 처리해준다.
 	//자원 생성
 	if (!CreateResource() )
 	{
 		//조심해!!
 		//종료 메시지 생성 할 것
 	}
-	SetObjectSize();
 	ResizeClient();
 }
 
@@ -84,8 +90,7 @@ void CMainMenu::ResizeClient()
 void CMainMenu::CalcStartPosition()
 {
 	/*	현재 화면의 오른쪽 가운데를 기준점으로 사용 */
-	D2D1_SIZE_F rightPosition;
-	rightPosition = m_pRenderTarget->GetSize();
+	D2D1_SIZE_F rightPosition = m_pRenderTarget->GetSize();
 
 	rightPosition.height /= 2;
 
@@ -184,8 +189,9 @@ bool CMainMenu::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-		//조심해!!
+		//최경욱 조심해!!
 		//저 문자열 주소를 덮어 써버리면 어쩌지?
+		//그냥 string 객체 쓰는게 좋을 것 같은데?
 		if (SUCCEEDED(hr) ){
 			m_ButtonList[0].m_ButtonText = L"NEW GAME";
 			m_ButtonList[0].m_StrLength  = (UINT32) wcslen(m_ButtonList[0].m_ButtonText);
