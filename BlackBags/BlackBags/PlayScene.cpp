@@ -125,6 +125,28 @@ void CPlayScene::TimeOut()
 	printf("random line\n");
 
 	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
+
+	IndexedPosition RandomTargetPosition;
+
+	//random line creation
+	while (true)
+	{
+		// 울타리는 (2,1), (1,2) 부터 시작하므로
+		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 1; 
+		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 1;
+
+		// 랜덤 값으로 뽑은 좌표가 MO_LINE_UNCONNECTED일 경우에
+		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
+		{
+			// IsPossible을 만족하면
+			if ( IsPossible(RandomTargetPosition) )
+			{
+				Update(RandomTargetPosition);
+				break;
+			}
+		}
+	}
+
 	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 }
 
