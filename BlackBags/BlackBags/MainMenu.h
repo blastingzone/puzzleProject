@@ -15,8 +15,8 @@ struct Button
 	UINT32 m_StrLength; 
 };
 
-class IDWriteFactory;		
-class IDWriteTextFormat;
+struct IDWriteFactory;		
+struct IDWriteTextFormat;
 
 class CMainMenu :
 	public CSceneObject

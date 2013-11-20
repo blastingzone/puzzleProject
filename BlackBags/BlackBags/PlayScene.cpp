@@ -89,13 +89,15 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
 	}
-	m_PlayerTurn++;
-
+	
 	if (IsEnd() )
 	{
 		m_Map->WriteResult();
 		return SC_RESULT;
 	}
+
+	m_PlayerTurn++;
+	CGameTimer::GetInstance()->SetTimerStart();
 
 	return SC_PLAY;
 }
@@ -200,19 +202,23 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 #endif
 
 	//선택된 울타리의 위쪽 확인
-	if (ExploreTile(indexedPosition,DI_UP) )
+	CollectClosedTile(indexedPosition,DI_UP);
+	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
 	//선택된 울타리의 오른쪽 확인
-	if (ExploreTile(indexedPosition, DI_RIGHT) )
+	CollectClosedTile(indexedPosition, DI_RIGHT);
+	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
 	//선택된 울타리의 아래쪽 확인
-	if (ExploreTile(indexedPosition, DI_DOWN) )
+	CollectClosedTile(indexedPosition, DI_DOWN);
+	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
 	//선택된 울타리의 왼쪽 확인
-	if (ExploreTile(indexedPosition, DI_LEFT) )
+	CollectClosedTile(indexedPosition, DI_LEFT);
+	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
 	return false;
@@ -260,7 +266,7 @@ bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 	return m_Map->GetMapFlag(nextTile);
 }
 
-bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, Direction direction)
+void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction direction)
 {
 	std::queue<IndexedPosition> searchTiles;
 
@@ -291,116 +297,112 @@ bool CPlayScene::ExploreTile(IndexedPosition indexedPosition, Direction directio
 	}
 
 	//확인 할 방향의 출발점이 점이면 확인 안 함
-	if (m_Map->GetMapType(currentTile) == MO_DOT)
+	if (m_Map->GetMapType(currentTile) != MO_DOT)
 	{
-		return false;
-	}
+		//앞에서 갱신한 탐색 출발 지점을 큐와 배열에 넣는다.
+		int i = 0;
 
-	//앞에서 갱신한 탐색 출발 지점을 큐와 배열에 넣는다.
-	int i = 0;
-
-	searchTiles.push(currentTile);
-	m_ClosedTile[i++] = currentTile;
-	m_Map->SetMapFlag(currentTile, true);
+		searchTiles.push(currentTile);
+		m_ClosedTile[i++] = currentTile;
+		m_Map->SetMapFlag(currentTile, true);
 		
-	while (!searchTiles.empty() )
-	{
-		currentTile.m_PosI = searchTiles.front().m_PosI;
-		currentTile.m_PosJ = searchTiles.front().m_PosJ;
-		searchTiles.pop();
-
-		//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
-		if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
+		while (!searchTiles.empty() )
 		{
-			/*
-			int checkIdx = 0;
-			while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
+			currentTile.m_PosI = searchTiles.front().m_PosI;
+			currentTile.m_PosJ = searchTiles.front().m_PosJ;
+			searchTiles.pop();
+
+			//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
+			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-				checkIdx++;
-			}
-			*/
-			for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI){
-				for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ){
-					m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
+				/*
+				int checkIdx = 0;
+				while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
+				{
+					m_Map->SetMapFlag(candidateTileList[checkIdx], false);
+					checkIdx++;
 				}
-			}
-			memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+				*/
+				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI){
+					for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ){
+						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
+					}
+				}
+				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 			
-			/*
-			int checkIdx = 0;
-			while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
-			{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-			}
-			memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
+				/*
+				int checkIdx = 0;
+				while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
+				{
+					m_Map->SetMapFlag(candidateTileList[checkIdx], false);
+				}
+				memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
 			
-			//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
-			while (!searchTiles.empty())
-				searchTiles.pop();
-			*/
-#ifdef _DEBUG
-			printf("센티넬을 만났어요\n");
-#endif
-			return false;
-		}
-#ifdef _DEBUG
-			printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
-#endif
-		//현재 타일의 위쪽 확인
-		if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
-		{
-			nextTile.m_PosI = currentTile.m_PosI - 2;
-			nextTile.m_PosJ = currentTile.m_PosJ;
-			if (!IsAlreadyChecked(nextTile) )
+				//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
+				while (!searchTiles.empty())
+					searchTiles.pop();
+				*/
+	#ifdef _DEBUG
+				printf("센티넬을 만났어요\n");
+	#endif
+				break;
+			}
+	#ifdef _DEBUG
+				printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
+	#endif
+			//현재 타일의 위쪽 확인
+			if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 			{
-				searchTiles.push(nextTile);
-				m_ClosedTile[i++] = nextTile;
-				m_Map->SetMapFlag(nextTile, true);
-			}				
-		}
+				nextTile.m_PosI = currentTile.m_PosI - 2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(nextTile) )
+				{
+					searchTiles.push(nextTile);
+					m_ClosedTile[i++] = nextTile;
+					m_Map->SetMapFlag(nextTile, true);
+				}				
+			}
 
-		//현재 타일의 오른쪽 확인
-		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
-		{
-			nextTile.m_PosI = currentTile.m_PosI;
-			nextTile.m_PosJ = currentTile.m_PosJ + 2;
-			if (!IsAlreadyChecked(nextTile) )
+			//현재 타일의 오른쪽 확인
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
 			{
-				searchTiles.push(nextTile);
-				m_ClosedTile[i++] = nextTile;
-				m_Map->SetMapFlag(nextTile, true);
-			}				
-		}
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ + 2;
+				if (!IsAlreadyChecked(nextTile) )
+				{
+					searchTiles.push(nextTile);
+					m_ClosedTile[i++] = nextTile;
+					m_Map->SetMapFlag(nextTile, true);
+				}				
+			}
 
-		//현재 타일의 아래쪽 확인
-		if (m_Map->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
-		{
-			nextTile.m_PosI = currentTile.m_PosI + 2;
-			nextTile.m_PosJ = currentTile.m_PosJ;
-			if (!IsAlreadyChecked(nextTile) )
+			//현재 타일의 아래쪽 확인
+			if (m_Map->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 			{
-				searchTiles.push(nextTile);
-				m_ClosedTile[i++] = nextTile;
-				m_Map->SetMapFlag(nextTile, true);
-			}				
-		}
+				nextTile.m_PosI = currentTile.m_PosI + 2;
+				nextTile.m_PosJ = currentTile.m_PosJ;
+				if (!IsAlreadyChecked(nextTile) )
+				{
+					searchTiles.push(nextTile);
+					m_ClosedTile[i++] = nextTile;
+					m_Map->SetMapFlag(nextTile, true);
+				}				
+			}
 		
-		//현재 타일의 왼쪽 확인
-		if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
-		{
-			nextTile.m_PosI = currentTile.m_PosI;
-			nextTile.m_PosJ = currentTile.m_PosJ - 2;
-			if (!IsAlreadyChecked(nextTile) )
+			//현재 타일의 왼쪽 확인
+			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
 			{
-				searchTiles.push(nextTile);
-				m_ClosedTile[i++] = nextTile;
-				m_Map->SetMapFlag(nextTile, true);
-			}				
+				nextTile.m_PosI = currentTile.m_PosI;
+				nextTile.m_PosJ = currentTile.m_PosJ - 2;
+				if (!IsAlreadyChecked(nextTile) )
+				{
+					searchTiles.push(nextTile);
+					m_ClosedTile[i++] = nextTile;
+					m_Map->SetMapFlag(nextTile, true);
+				}				
+			}
 		}
 	}
-
-	return true;
 }
 
 // 초기에 맵에 랜덤으로 아이템과 울타리를 배치하는 함수입니다.

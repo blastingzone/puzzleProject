@@ -25,8 +25,10 @@ private:
 
 	// 시간 경과를 계산하기 위한 변수들
 	int				m_TimeRest;
-	SYSTEMTIME		m_StartTime;
-	SYSTEMTIME		m_CurrentTime;
+	//SYSTEMTIME		m_StartTime;
+	//SYSTEMTIME		m_CurrentTime;
+	DWORD			m_StartTime;
+	DWORD			m_CurrentTime;
 
 	// Timer 렌더링을 위한 변수들
 	IDWriteFactory*			m_DWriteFactory;

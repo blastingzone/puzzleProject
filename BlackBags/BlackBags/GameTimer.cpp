@@ -57,7 +57,7 @@ void CGameTimer::ReleaseInstance()
 
 void CGameTimer::SetTimerStart()
 {
-	GetSystemTime(&m_StartTime);
+	m_StartTime = GetTickCount();
 	m_TimeRest = TimeLimit;
 	swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
 }
@@ -67,9 +67,10 @@ void CGameTimer::Update()
 {
 	//조심해!!!!
 	//사실 이 API는 부하가 좀 크다.. GetTickCount() 사용
-	GetSystemTime(&m_CurrentTime);
+	//GetSystemTime(&m_CurrentTime);
+	m_CurrentTime = GetTickCount();
 
-	int interval = m_CurrentTime.wSecond * 1000 + m_CurrentTime.wMilliseconds - m_StartTime.wSecond * 1000 - m_StartTime.wMilliseconds;
+	DWORD interval = m_CurrentTime - m_StartTime;
 
 	if (interval > 1000)
 	{
