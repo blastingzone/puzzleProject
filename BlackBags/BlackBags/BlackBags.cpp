@@ -152,7 +152,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	else 
 	{
-		CTimer::GetInstance()->Init(hWnd);
 		g_Manager = new CSceneManager();
 	}
 
@@ -202,6 +201,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_CREATE:
+		CTimer::GetInstance()->Init(hWnd);
+
 		//client 영역 크기 설정
 		SetRect(&g_ClientRect, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
 		
@@ -244,14 +245,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		
 		g_Manager->Update(mouseCoordinate);
 		break;
-	case WM_TIMER:
-		g_Manager->TimeOut();
-		break;
 	case WM_PAINT:
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
 		g_Manager->Render();
 		CRenderer::GetInstance()->End();
+		break;
+	case WM_TIMER:
+		g_Manager->TimeOut();
 		break;
 	case WM_KEYDOWN:
 		 case VK_END: 

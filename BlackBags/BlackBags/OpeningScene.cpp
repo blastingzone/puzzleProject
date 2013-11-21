@@ -6,13 +6,12 @@
 COpeningScene::COpeningScene(void)
 {
 	m_SceneStatus = SC_OPENING;	
-
 	Init();
 }
 
 COpeningScene::~COpeningScene(void)
 {
-	CVideoRender::GetInstance()->ReleaseInstance();
+	//CVideoRender::GetInstance()->CleanUp();
 }
 
 SceneName COpeningScene::Update(Coordinate mouseCoordinate)
