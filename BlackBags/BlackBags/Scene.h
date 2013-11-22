@@ -2,7 +2,6 @@
 
 #include "SceneObject.h"
 #include <vector>
-#include "GameData.h"
 #include "Renderer.h"
 #ifdef _DEBUG
 #include "FPS.h"

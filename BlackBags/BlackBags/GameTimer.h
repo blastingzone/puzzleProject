@@ -9,17 +9,16 @@ public:
 	CGameTimer(void);
 	~CGameTimer(void);
 
-	void		MakeBrush();
-	void		SetTimerStart();
+	static CGameTimer* CGameTimer::GetInstance();
+	void		ReleaseInstance();
+
 	void		Update();
 	void        Render();
-	void		ReleaseInstance();
-	void		DrawRandomLine();
 
-	static CGameTimer* CGameTimer::GetInstance();
-
+	void		SetTimerStart();
 
 private:
+	void		MakeBrush();
 
 	static CGameTimer* m_pInstance;
 

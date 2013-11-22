@@ -29,6 +29,8 @@ CGameTimer::CGameTimer(void)
 		, 20.0f
 		, L"ko"
 		, &m_TextFormat);
+
+	MakeBrush();
 }
 
 CGameTimer::~CGameTimer(void)
@@ -82,7 +84,8 @@ void CGameTimer::Update()
 	// 처음 시간 - 현재 시간이 TimeLimit(여기서는 20초)를 넘어가면 if문 작동
 	if (m_TimeRest <= 0)
 	{
-		DrawRandomLine();
+		CGameData::GetInstance()->SetPlaySceneTimerFlag();
+		SetTimerStart();
 	}
 }
 
@@ -106,11 +109,4 @@ void CGameTimer::Render()
 			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
 			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
 		,m_TextBrush);
-}
-
-void CGameTimer::DrawRandomLine()
-{
-	
-	printf_s("랜덤라인이닷!\n");
-	SetTimerStart();
 }

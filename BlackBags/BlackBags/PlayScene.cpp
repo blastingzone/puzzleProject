@@ -56,10 +56,15 @@ void CPlayScene::Init()
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
-SceneName CPlayScene::Update( Coordinate mouseCoordinate )
+SceneName CPlayScene::Update(Coordinate mouseCoordinate)
 {
 	
 	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
+	return Update(indexedPosition);
+}
+
+SceneName CPlayScene::Update(IndexedPosition indexedPosition)
+{
 	if (!IsPossible(indexedPosition) )
 	{
 		return SC_PLAY;
@@ -118,8 +123,6 @@ void CPlayScene::TimeOut()
 	printf("time over\n");
 	printf("random line\n");
 
-	//CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
-
 	IndexedPosition RandomTargetPosition;
 
 	//random line creation
@@ -132,36 +135,12 @@ void CPlayScene::TimeOut()
 		// 랜덤 값으로 뽑은 좌표가 MO_LINE_UNCONNECTED일 경우에
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 		{
-			// IsPossible을 만족하면
+			//조심해!! IsPossible() 중복임
+			//그리고 update() 리턴값 활용하지 못하고 있음
+			//update()의 리턴 값을 없애고 timeOut()처럼 flag만 바꾸고 밖에서 flag 확인하고 필요한 작업 수행하는 게 좋지 않을까?
 			if ( IsPossible(RandomTargetPosition) )
 			{
-				m_Map->DrawLine(RandomTargetPosition);
-				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
-
-				if (IsClosed(RandomTargetPosition))
-				{
-					int i = 0;
-
-					while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
-					{
-						m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
-						m_Map->SubtractVoidCount();
-						i++;
-					}
-			#ifdef _DEBUG
-					printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
-			#endif
-				}
-	
-				if (IsEnd() )
-				{
-					m_Map->WriteResult();
-					//return SC_RESULT;
-				}
-
-				m_PlayerTurn++;
-
-				//return SC_PLAY;
+				Update(RandomTargetPosition);
 				break;
 			}
 		}
@@ -555,6 +534,12 @@ void CPlayScene::Render()
 	CGameTimer::GetInstance()->Update();
     //timer 여기에 추가할 것
     CGameTimer::GetInstance()->Render();
+
+	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() )
+	{
+		TimeOut();
+		CGameData::GetInstance()->InitPlaySceneTimerFlag();
+	}
 
 #ifdef _DEBUG		
 		CFPS::GetInstance()->Update();

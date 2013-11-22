@@ -159,7 +159,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #ifdef _DEBUG
 	CFPS::GetInstance()->MakeBrush();
 #endif
-	CGameTimer::GetInstance()->MakeBrush();
 
 	return TRUE;
 }

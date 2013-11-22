@@ -40,9 +40,15 @@ public:
 	void		SetPlayerNumber(int playerNumber)	{m_PlayerNumber = playerNumber;}
 	int			GetplayerNumber()					{return m_PlayerNumber; }
 
+	void InitPlaySceneTimerFlag() { m_PlaySceneTimerFlag = false; }
+	void SetPlaySceneTimerFlag() { m_PlaySceneTimerFlag = true; }
+	bool GetPlaySceneTimerFlag() { return m_PlaySceneTimerFlag; }
+
 private:
 	static CGameData*		m_pInstance; //singleton instance
 	MapSize m_MapSize;
+
+	bool m_PlaySceneTimerFlag;
 
 	int m_PlayerNumber;
 	PlayerData m_PlayerData[MAX_PLAYER_NUM];
