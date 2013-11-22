@@ -35,10 +35,6 @@ void COpeningScene::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
-void COpeningScene::TimeOut()
-{
-}
-
 void COpeningScene::Init()
 {
 	CVideoRender::GetInstance()->StartVideo();

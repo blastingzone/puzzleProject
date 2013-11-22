@@ -68,14 +68,6 @@ void CSceneManager::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
-void CSceneManager::TimeOut() 
-{
-	if (m_CurrentScene != nullptr)
-	{
-		m_CurrentScene->TimeOut();
-	}
-}
-
 void CSceneManager::ResizeClientSize()
 {
 	m_CurrentScene->ResizeClient();

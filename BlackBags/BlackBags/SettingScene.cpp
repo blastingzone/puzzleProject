@@ -40,10 +40,6 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 	}
 }
 
-void CSettingScene::TimeOut()
-{
-}
-
 void CSettingScene::Render()
 {
 	for (auto iter: m_Object)

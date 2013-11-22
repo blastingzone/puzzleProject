@@ -34,9 +34,6 @@
     <Filter Include="OpeningScene">
       <UniqueIdentifier>{4f0dc0cc-2921-4fde-8e42-7d28f706c26e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Timer">
-      <UniqueIdentifier>{7e00884c-adf1-4cab-b4d6-7a1307f1d811}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ReusltScene">
       <UniqueIdentifier>{fa830e96-8976-48cc-86aa-3e45e0bc1592}</UniqueIdentifier>
     </Filter>
@@ -125,9 +122,6 @@
     <ClInclude Include="BandiVideoTexture_DX9.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Timer</Filter>
-    </ClInclude>
     <ClInclude Include="ResultScene.h">
       <Filter>ReusltScene</Filter>
     </ClInclude>
@@ -192,9 +186,6 @@
     </ClCompile>
     <ClCompile Include="BandiVideoTexture_DX9.cpp">
       <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Timer</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
       <Filter>ReusltScene</Filter>

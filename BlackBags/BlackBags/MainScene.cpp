@@ -25,40 +25,19 @@ void CMainScene::Init()
 
 SceneName CMainScene::Update(Coordinate mouseCoordinate)
 {
-	/* 각각의 메뉴 버튼 선택에 따라 return되는 다음 scene이 달라짐 */
-	//최경욱 조심해!
-	//idx로 나오는 값의 의미를 알아보기 쉽도록 해놓기. 지금 상태로는 왜 0이 SC_SETTING인지 2가 SC_CREDIT인지 알기 힘들다.
-	//enum값으로 해주세요
 	int idx = 0;
 
+	/*	메뉴 버튼 범위 안에서 클릭이 발생하면 해당 인덱스에 해당하는 버튼에 연결된 SceneName을 반환하고 
+		그렇지 않은 경우에는 현재 scene 유지 */
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
 	{
 		idx = static_cast<int> ( (mouseCoordinate.m_PosY - m_MainMenu->GetStartPosition().height) / m_MainMenu->GetButtonHeight() );
-	}
-	else
-	{
-		//최경욱 조심해~~ 마찬가지입니다.
-		idx = 5;
-	}
 
-	switch(idx)
-	{
-	case 0:
-		return SC_SETTING;
-		break;
-	case 1:
-		break;
-	case 2:
-		return SC_CREDIT;
-		break;
-	case 3:
-		return SC_OPENING;
-		break;
-	case 4:
-		//종료 메시지 발생 시킬 것
-		break;
-	default:
-		break;
+		SceneName nextScene = m_MainMenu->GetLinkedSceneName(idx);
+		if (nextScene != SC_NOSCENE)
+		{
+			return nextScene;
+		}
 	}
 
 	return SC_MAIN;
@@ -87,10 +66,6 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 	{
 		m_MainMenu->InitMouseOver();
 	}
-}
-
-void CMainScene::TimeOut()
-{
 }
 
 void CMainScene::Render()

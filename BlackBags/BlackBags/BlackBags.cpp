@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "VideoRender.h"
-#include "Timer.h"
 
 
 #define MAX_LOADSTRING 100
@@ -79,7 +78,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CFPS::GetInstance()->ReleaseInstance();
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
-	CTimer::GetInstance()->ReleaseInstance();
 	CVideoRender::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
@@ -201,8 +199,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_CREATE:
-		CTimer::GetInstance()->Init(hWnd);
-
 		//client 영역 크기 설정
 		SetRect(&g_ClientRect, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT); 
 		
@@ -250,9 +246,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		CRenderer::GetInstance()->Clear();
 		g_Manager->Render();
 		CRenderer::GetInstance()->End();
-		break;
-	case WM_TIMER:
-		g_Manager->TimeOut();
 		break;
 	case WM_KEYDOWN:
 		 case VK_END: 

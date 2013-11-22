@@ -53,10 +53,6 @@ void CPlayScene::Init()
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	m_Map->Init();
 	InitRandomMap();
-
-	//조심해!!
-	//일단은 화면 바뀌면서 바로 시작하지만 나중에는 잠시 대기 시간 줄 것
-	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 }
 
 //지도 관련 정보를 업데이트 해주는 함수
@@ -68,8 +64,6 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	{
 		return SC_PLAY;
 	}
-
-	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
 
 #ifdef _DEBUG
 	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
@@ -103,7 +97,7 @@ SceneName CPlayScene::Update( Coordinate mouseCoordinate )
 	}
 
 	m_PlayerTurn++;
-	CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
+	CGameTimer::GetInstance()->SetTimerStart();
 
 	return SC_PLAY;
 }
@@ -124,7 +118,7 @@ void CPlayScene::TimeOut()
 	printf("time over\n");
 	printf("random line\n");
 
-	CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
+	//CTimer::GetInstance()->EndTimer(static_cast<UINT>(SC_PLAY) );
 
 	IndexedPosition RandomTargetPosition;
 
@@ -166,7 +160,6 @@ void CPlayScene::TimeOut()
 				}
 
 				m_PlayerTurn++;
-				CTimer::GetInstance()->StartTimer(static_cast<UINT>(SC_PLAY), TIME_LIMIT);
 
 				//return SC_PLAY;
 				break;
@@ -557,12 +550,14 @@ void CPlayScene::Render()
 	for (auto iter: m_Object)
 	{
 		iter->Render();
+	}
+
+	CGameTimer::GetInstance()->Update();
+    //timer 여기에 추가할 것
+    CGameTimer::GetInstance()->Render();
+
 #ifdef _DEBUG		
 		CFPS::GetInstance()->Update();
 		CFPS::GetInstance()->Render();
 #endif
-	}
-	CGameTimer::GetInstance()->Update();
-	//timer 여기에 추가할 것
-	CGameTimer::GetInstance()->Render();
 }

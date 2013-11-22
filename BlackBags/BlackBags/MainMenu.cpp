@@ -44,8 +44,8 @@ void CMainMenu::Render()
 			rectElement.left += m_MenuTextMagin;
 
 			m_pRenderTarget->DrawText(
-			m_ButtonList[i].m_ButtonText,
-			m_ButtonList[i].m_StrLength,
+			m_ButtonList[i].m_ButtonText.c_str(),
+			m_ButtonList[i].m_ButtonText.length(),
 			m_TextFormat,
 			textPosition,
 			m_pSelectedTextBrush
@@ -56,8 +56,8 @@ void CMainMenu::Render()
 			rectElement.left -= m_MenuTextMagin;
 
 			m_pRenderTarget->DrawText(
-				m_ButtonList[i].m_ButtonText,
-				m_ButtonList[i].m_StrLength,
+				m_ButtonList[i].m_ButtonText.c_str(),
+				m_ButtonList[i].m_ButtonText.length(),
 				m_TextFormat,
 				textPosition,
 				m_pUnselectedTextBrush
@@ -149,6 +149,16 @@ void CMainMenu::SetMouseOver(int idx)
 	m_ButtonList[idx].m_MouseOver = true;
 }
 
+SceneName CMainMenu::GetLinkedSceneName(int idx)
+{
+	if (idx < BUTTON_NUMBER)
+	{
+		return m_ButtonList[idx].m_LinkedScene;
+	}
+	
+	return SC_NOSCENE;
+}
+
 bool CMainMenu::CreateResource()
 {
 	HRESULT hr;
@@ -189,25 +199,24 @@ bool CMainMenu::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-		//최경욱 조심해!!
-		//저 문자열 주소를 덮어 써버리면 어쩌지?
-		//그냥 string 객체 쓰는게 좋을 것 같은데?
 		if (SUCCEEDED(hr) )
 		{
 			m_ButtonList[0].m_ButtonText = L"NEW GAME";
-			m_ButtonList[0].m_StrLength  = (UINT32) wcslen(m_ButtonList[0].m_ButtonText);
+			m_ButtonList[0].m_LinkedScene = SC_SETTING;
 
+			//조심해!
+			//나중에 네트워크 추가되면 씬도 추가해서 수정 할 것
 			m_ButtonList[1].m_ButtonText = L"NETWORK";
-			m_ButtonList[1].m_StrLength  = (UINT32) wcslen(m_ButtonList[1].m_ButtonText);
+			m_ButtonList[1].m_LinkedScene = SC_NOSCENE;
 
 			m_ButtonList[2].m_ButtonText = L"CREDITS";
-			m_ButtonList[2].m_StrLength  = (UINT32) wcslen(m_ButtonList[2].m_ButtonText);
+			m_ButtonList[2].m_LinkedScene = SC_CREDIT;
 
 			m_ButtonList[3].m_ButtonText = L"OPENNING";
-			m_ButtonList[3].m_StrLength  = (UINT32) wcslen(m_ButtonList[3].m_ButtonText);
+			m_ButtonList[3].m_LinkedScene = SC_OPENING;
 
 			m_ButtonList[4].m_ButtonText = L"EXIT";
-			m_ButtonList[4].m_StrLength  = (UINT32) wcslen(m_ButtonList[4].m_ButtonText);
+			m_ButtonList[4].m_LinkedScene = SC_EXIT;
 
 			return true;
 		}

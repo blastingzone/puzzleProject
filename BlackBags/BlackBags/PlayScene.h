@@ -25,7 +25,6 @@ public:
 
 	SceneName	Update(Coordinate mouseCoordinate);
 	void		MouseOver(Coordinate mouseCoordinate);
-	void		TimeOut();
 	void		Render();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
@@ -47,6 +46,8 @@ private:
 
 	/*	IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다 */
 	bool IsAlreadyChecked(const IndexedPosition& nextTile);
+
+	void TimeOut();
 
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[MAX_PLAYER_NUM];

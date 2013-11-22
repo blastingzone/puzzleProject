@@ -6,13 +6,11 @@
 
 struct Button
 {
-	Button() : m_MouseOver(false), m_ButtonText(NULL), m_StrLength(0) {}
+	Button() : m_MouseOver(false), m_ButtonText(L""), m_LinkedScene(SC_NOSCENE) {}
 
 	bool m_MouseOver;
-	//최경욱 조심해!!
-	// 여기에 const는 어떤 의도로 썼는가?
-	const wchar_t* m_ButtonText;
-	UINT32 m_StrLength; 
+	std::wstring m_ButtonText;
+	SceneName m_LinkedScene;
 };
 
 struct IDWriteFactory;		
@@ -31,6 +29,8 @@ public:
 
 	void InitMouseOver();
 	void SetMouseOver(int idx);
+
+	SceneName GetLinkedSceneName(int idx);
 
 	void CalcStartPosition();
 
