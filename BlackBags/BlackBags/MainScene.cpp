@@ -39,8 +39,6 @@ void CMainScene::EventHandle(Coordinate mouseCoordinate)
 			CGameData::GetInstance()->SetCurrentScene( nextScene );
 		}
 	}
-
-	CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 }
 
 void CMainScene::MouseOver(Coordinate mouseCoordinate)

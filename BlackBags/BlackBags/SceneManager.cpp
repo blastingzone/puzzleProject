@@ -13,6 +13,8 @@ CSceneManager::CSceneManager(void)
 {
 	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
 	m_CurrentScene = nullptr;
+
+	m_CurrentScene = new COpeningScene();
 }
 
 
