@@ -94,6 +94,7 @@
     <ClInclude Include="FPS.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameMap.h" />
+    <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainMenu.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameMap.cpp" />
+    <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainScene.cpp" />

@@ -35,6 +35,25 @@ const int CHECKLIST_LENGTH = 100;
 const int TIME_LEFT_TEXT_LENGTH = 32;
 
 
+/*	결과 화면 오브젝트들의 기본 크기입니다 */
+const float SC_RT_VERTICAL_MARGIN = 34.0f;
+const float SC_RT_HORIZONTAL_MARGIN = 63.0f;
+
+const float SC_RT_TITLE_TEXT_SIZE = 72.0f;
+
+const float SC_RT_PLAYER_NAME_TEXT_SIZE = 48.0f;
+const float SC_RT_PLAYER_POINT_TEXT_SIZE = 36.0f;
+const float SC_RT_PLAYER_TILE_SIZE = 18.0f;
+const float SC_RT_PLAYER_BOX_HEIGHT = 63.0f;
+
+const float SC_RT_WINNER_TEXT_SIZE = 72.0f;
+
+const float SC_RT_BUTTON_WIDTH = 210.0f;
+const float SC_RT_BUTTON_HEIGHT = 60.0f;
+const float SC_RT_BUTTON_TEXT_SIZE = 36.0f;
+const float SC_RT_BUTTON_TEXT_MARGIN = 0.0f;
+
+
 /*	폰트들입니다	*/
 /*	조심해! if / def로 폰트 있는지 없는지 검사해서 없을 경우의 대책도 마련할 것! */
 #define _DEBUG_FONT L"Consolas"

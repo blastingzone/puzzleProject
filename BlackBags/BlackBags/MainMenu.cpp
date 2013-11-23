@@ -20,6 +20,13 @@ CMainMenu::CMainMenu(void)
 
 CMainMenu::~CMainMenu(void)
 {
+	SafeRelease(m_DWriteFactory);
+	SafeRelease(m_TextFormat);
+
+	SafeRelease(m_pUnselectedTextBrush);
+	SafeRelease(m_pSelectedTextBrush);
+	SafeRelease(m_pMenuButtonBrush);
+	SafeRelease(m_pBackgroundBrush);
 }
 
 void CMainMenu::Render()
@@ -115,7 +122,7 @@ void CMainMenu::RefreshTextSize()
 {
 	HRESULT hr;
 
-	m_TextFormat->Release();
+	SafeRelease(m_TextFormat);
 
 	hr = m_DWriteFactory->CreateTextFormat(
 			_MENU_FONT,
@@ -183,21 +190,7 @@ bool CMainMenu::CreateResource()
             );
 
 		SetObjectSize();
-
-		if (SUCCEEDED(hr) )
-			hr = m_DWriteFactory->CreateTextFormat(
-				_MENU_FONT,                
-				NULL,
-				DWRITE_FONT_WEIGHT_THIN,
-				DWRITE_FONT_STYLE_NORMAL,
-				DWRITE_FONT_STRETCH_NORMAL,
-				m_MenuTextSize,
-				L"ko",
-				&m_TextFormat
-				);
-
-		if (SUCCEEDED(hr) )
-			hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		RefreshTextSize();
 
 		if (SUCCEEDED(hr) )
 		{
