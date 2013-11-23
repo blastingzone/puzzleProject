@@ -37,6 +37,9 @@
     <Filter Include="ReusltScene">
       <UniqueIdentifier>{fa830e96-8976-48cc-86aa-3e45e0bc1592}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SettingScene">
+      <UniqueIdentifier>{5866b183-6a75-4fee-83f4-10b72e4e9c86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -73,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="SceneObject.h">
       <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="SettingScene.h">
-      <Filter>Util Elements</Filter>
     </ClInclude>
     <ClInclude Include="CreditScene.h">
       <Filter>Util Elements</Filter>
@@ -125,6 +125,9 @@
     <ClInclude Include="ResultScene.h">
       <Filter>ReusltScene</Filter>
     </ClInclude>
+    <ClInclude Include="SettingScene.h">
+      <Filter>SettingScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,9 +147,6 @@
     </ClCompile>
     <ClCompile Include="SceneObject.cpp">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="SettingScene.cpp">
-      <Filter>Util Elements</Filter>
     </ClCompile>
     <ClCompile Include="CreditScene.cpp">
       <Filter>Util Elements</Filter>
@@ -189,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
       <Filter>ReusltScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingScene.cpp">
+      <Filter>SettingScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

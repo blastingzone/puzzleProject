@@ -51,3 +51,15 @@ void CSettingScene::Render()
 #endif
 	}
 }
+
+void CSettingScene::CreateResource()
+{
+	HRESULT hr;
+
+	if (m_pRenderTarget == nullptr)
+	{
+		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
+
+
+	}
+}

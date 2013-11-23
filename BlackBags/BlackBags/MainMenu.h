@@ -13,7 +13,7 @@ struct Button
 	SceneName m_LinkedScene;
 };
 
-struct IDWriteFactory;		
+struct IDWriteFactory;
 struct IDWriteTextFormat;
 
 class CMainMenu :

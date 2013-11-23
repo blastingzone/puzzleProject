@@ -37,12 +37,12 @@ public:
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}
 
-	void		SetPlayerNumber(int playerNumber)	{m_PlayerNumber = playerNumber;}
-	int			GetplayerNumber()					{return m_PlayerNumber; }
+	void		SetPlayerNumber(int playerNumber)			{m_PlayerNumber = playerNumber;}
+	int			GetplayerNumber()							{return m_PlayerNumber; }
 
-	void InitPlaySceneTimerFlag() { m_PlaySceneTimerFlag = false; }
-	void SetPlaySceneTimerFlag() { m_PlaySceneTimerFlag = true; }
-	bool GetPlaySceneTimerFlag() { return m_PlaySceneTimerFlag; }
+	void InitPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = false; }
+	void SetPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = true; }
+	bool GetPlaySceneTimerFlag()							{ return m_PlaySceneTimerFlag; }
 
 private:
 	static CGameData*		m_pInstance; //singleton instance
