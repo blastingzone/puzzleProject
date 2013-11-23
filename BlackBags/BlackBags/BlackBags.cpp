@@ -239,9 +239,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
-		g_Manager->Update(mouseCoordinate);
+		g_Manager->EventHandle(mouseCoordinate);
 		break;
 	case WM_PAINT:
+		g_Manager->Update();
+
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
 		g_Manager->Render();

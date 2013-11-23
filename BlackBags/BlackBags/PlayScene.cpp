@@ -41,55 +41,51 @@ CPlayScene::~CPlayScene(void)
 
 
 //지도 관련 정보를 업데이트 해주는 함수
-SceneName CPlayScene::Update(Coordinate mouseCoordinate)
+void CPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
 
 	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
-	return Update(indexedPosition);
+	return EventHandle(indexedPosition);
 }
 
-SceneName CPlayScene::Update(IndexedPosition indexedPosition)
+void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 {
-	if (!IsPossible(indexedPosition) )
+	if (IsPossible(indexedPosition) )
 	{
-		return SC_PLAY;
-	}
-
 #ifdef _DEBUG
-	printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
-	printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
+		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
+		printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
 #endif
-	//IsPossible 체크 후에 gameMap 호출해서 반영
-	m_Map->DrawLine(indexedPosition);
-	memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+		//IsPossible 체크 후에 gameMap 호출해서 반영
+		m_Map->DrawLine(indexedPosition);
+		memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 
-	if (IsClosed(indexedPosition))
-	{
-		int i = 0;
-
-		while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
+		if (IsClosed(indexedPosition))
 		{
-			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-			//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
-			m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
-			m_Map->SubtractVoidCount();
-			i++;
-		}
+			int i = 0;
+
+			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
+			{
+				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
+				//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
+				m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
+				m_Map->SubtractVoidCount();
+				i++;
+			}
 #ifdef _DEBUG
-		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
+			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
+		}
+
+		if (IsEnd() )
+		{
+			m_Map->WriteResult();
+			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+		}
+
+		m_PlayerTurn++;
+		CGameTimer::GetInstance()->SetTimerStart();
 	}
-
-	if (IsEnd() )
-	{
-		m_Map->WriteResult();
-		return SC_RESULT;
-	}
-
-	m_PlayerTurn++;
-	CGameTimer::GetInstance()->SetTimerStart();
-
-	return SC_PLAY;
 }
 
 void CPlayScene::MouseOver(Coordinate mouseCoordinate)
@@ -123,11 +119,11 @@ void CPlayScene::TimeOut()
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 		{
 			//조심해!! IsPossible() 중복임
-			//그리고 update() 리턴값 활용하지 못하고 있음
-			//update()의 리턴 값을 없애고 timeOut()처럼 flag만 바꾸고 밖에서 flag 확인하고 필요한 작업 수행하는 게 좋지 않을까?
+			//그리고 EventHandle() 리턴값 활용하지 못하고 있음
+			//EventHandle()의 리턴 값을 없애고 timeOut()처럼 flag만 바꾸고 밖에서 flag 확인하고 필요한 작업 수행하는 게 좋지 않을까?
 			if ( IsPossible(RandomTargetPosition) )
 			{
-				Update(RandomTargetPosition);
+				EventHandle(RandomTargetPosition);
 				break;
 			}
 		}

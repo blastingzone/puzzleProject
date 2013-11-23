@@ -25,6 +25,8 @@ CGameData::CGameData(void)
 
 	SetMapSize(0, 0);
 
+	m_CurrentScene = SC_NOSCENE;
+
 	m_PlaySceneTimerFlag = false;
 }
 

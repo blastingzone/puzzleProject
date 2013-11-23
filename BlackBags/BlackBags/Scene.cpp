@@ -19,14 +19,14 @@ void CScene::Render()
 	{
 		iter->Render();
 #ifdef _DEBUG		
-		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->EventHandle();
 		CFPS::GetInstance()->Render();
 #endif
 	}*/
 	// 조심해!! 이렇게 짜면 안됩니다! 얘들을 PlayScene에 넣을 방법을 생각해보세요!
 	//if (CScene::GetCurrentScene() == SC_PLAY)
 	//{
-	//	CGameTimer::GetInstance()->Update();
+	//	CGameTimer::GetInstance()->EventHandle();
 	//	CGameTimer::GetInstance()->Render();
 	//}
 }

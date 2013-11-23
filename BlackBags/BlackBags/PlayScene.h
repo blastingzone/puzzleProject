@@ -22,8 +22,8 @@ public:
 	void ShowResult();
 	void CheckScore();
 
-	SceneName	Update(Coordinate mouseCoordinate);
-	SceneName	Update(IndexedPosition indexedPosition);
+	void		EventHandle(Coordinate mouseCoordinate);
+	void		EventHandle(IndexedPosition indexedPosition);
 	void		MouseOver(Coordinate mouseCoordinate);
 	void		Render();
 

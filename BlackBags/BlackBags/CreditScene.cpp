@@ -11,7 +11,7 @@ CCreditScene::~CCreditScene(void)
 {
 }
 
-SceneName CCreditScene::Update(Coordinate mouseCoordinate)
+void CCreditScene::EventHandle(Coordinate mouseCoordinate)
 {
 	///////////////////////////////////////////////////////////////////////////
 	// !!!!!!!
@@ -20,9 +20,9 @@ SceneName CCreditScene::Update(Coordinate mouseCoordinate)
 	///////////////////////////////////////////////////////////////////////////
 	if (mouseCoordinate.m_PosX > 0)
 	{
-		return SC_OPENING;
+		CGameData::GetInstance()->SetCurrentScene( SC_OPENING );
 	}
-	return SC_OPENING;
+	CGameData::GetInstance()->SetCurrentScene( SC_OPENING );
 }
 
 void CCreditScene::MouseOver(Coordinate mouseCoordinate)

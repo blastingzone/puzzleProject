@@ -20,7 +20,7 @@ CResultScene::~CResultScene(void)
 {
 }
 
-SceneName CResultScene::Update(Coordinate mouseCoordinate)
+void CResultScene::EventHandle(Coordinate mouseCoordinate)
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Á¶½ÉÇØ!!!!!!!
@@ -28,9 +28,9 @@ SceneName CResultScene::Update(Coordinate mouseCoordinate)
 	///////////////////////////////////////////////////////////////////////////
 	if (mouseCoordinate.m_PosX > 0)
 	{
-		return SC_OPENING;
+		CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
 	}
-	return SC_OPENING;
+	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
 }
 
 void CResultScene::MouseOver(Coordinate mouseCoordinate)

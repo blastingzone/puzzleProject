@@ -1,5 +1,16 @@
 ﻿몇 가지 다시 잡아야 할 것들을 정리해봅니다.
 
+13.11.23
+
+1.	if (IsEnd() )
+		{
+			m_Map->WriteResult();
+			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+		}
+
+	여기서 바로 Result로 넘어가는게 아니라 뭐 빠방 같은거라도 넣어줘야
+
+
 13.11.20 
 
 1.	wooq/GDI사용하지 말고 D2D사용할 것(FPS 부분 확인 필요)

@@ -14,15 +14,17 @@ COpeningScene::~COpeningScene(void)
 	//CVideoRender::GetInstance()->CleanUp();
 }
 
-SceneName COpeningScene::Update(Coordinate mouseCoordinate)
+void COpeningScene::EventHandle(Coordinate mouseCoordinate)
 {
 	///////////////////////////////////////////////////////////////////////////
 	// 조심해!!!!!!!
 	// if문 빼야 합니다
 	///////////////////////////////////////////////////////////////////////////
 	if (mouseCoordinate.m_PosX > 0)
-		return SC_MAIN;
-	return SC_MAIN;
+	{
+		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
+	}
+	CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 }
 
 void COpeningScene::MouseOver(Coordinate mouseCoordinate)

@@ -7,7 +7,7 @@ public:
 	CCreditScene(void);
 	~CCreditScene(void);
 
-	SceneName Update(Coordinate mouseCoordinate);
+	void EventHandle(Coordinate mouseCoordinate);
 	void MouseOver(Coordinate mouseCoordinate);
 	void Render();
 };

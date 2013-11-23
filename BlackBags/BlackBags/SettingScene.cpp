@@ -11,7 +11,7 @@ CSettingScene::~CSettingScene(void)
 {
 }
 
-SceneName CSettingScene::Update(Coordinate mouseCoordinate)
+void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 {
 	///////////////////////////////////////////////////////////////////////////
 	// Á¶½ÉÇØ!!!!!!!
@@ -25,9 +25,9 @@ SceneName CSettingScene::Update(Coordinate mouseCoordinate)
 		///////////////////////////////////////////////////////////////////////////
 		CGameData::GetInstance()->SetMapSize(8,7);
 		CGameData::GetInstance()->SetPlayerNumber(4);
-		return SC_PLAY;
+		CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
 	}
-	return SC_PLAY;
+	CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
 }
 
 void CSettingScene::MouseOver(Coordinate mouseCoordinate)

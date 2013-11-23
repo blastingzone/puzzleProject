@@ -23,7 +23,7 @@ void CMainScene::Init()
 	m_MainMenu->Init();
 }
 
-SceneName CMainScene::Update(Coordinate mouseCoordinate)
+void CMainScene::EventHandle(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
@@ -36,11 +36,11 @@ SceneName CMainScene::Update(Coordinate mouseCoordinate)
 		SceneName nextScene = m_MainMenu->GetLinkedSceneName(idx);
 		if (nextScene != SC_NOSCENE)
 		{
-			return nextScene;
+			CGameData::GetInstance()->SetCurrentScene( nextScene );
 		}
 	}
 
-	return SC_MAIN;
+	CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 }
 
 void CMainScene::MouseOver(Coordinate mouseCoordinate)
