@@ -61,7 +61,7 @@ HRESULT CVideoRender::Init(HWND hwnd)
 	}
 
 	m_VideoTexture = new CBandiVideoTexture_DX9((CBandiVideoDevice_DX9*)m_VideoDevice);
-	//if(!m_VideoTexture || FAILED(m_VideoTexture->Open(info.width , info.height)))
+	//if (!m_VideoTexture || FAILED(m_VideoTexture->Open(info.width , info.height)))
 	if (!m_VideoTexture || FAILED(m_VideoTexture->Open(m_VideoInfo.width , m_VideoInfo.height)))
 	{
 		if (m_VideoDevice) delete m_VideoDevice;

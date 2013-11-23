@@ -10,11 +10,10 @@ public:
 	CPlayScene(void);
 	~CPlayScene(void);
 
-	void Init();
-
 	void StartGame();
 	bool GetPlayerNumber();
 	bool CreatePlayers();
+	void DeletePlayers();
 	bool SetPlayerTurn();
 
 	//맵 초기화 할 때 유저 수에 맞게 울타리랑 아이템 랜덤 배치하는 메소드
@@ -55,7 +54,6 @@ private:
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
 
-	//조심해. 이게 정말 해결한 것일까?
 	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
 };
 

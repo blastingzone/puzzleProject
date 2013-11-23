@@ -38,7 +38,7 @@ public:
 
 	float		GetButtonWidth() {return m_MenuButtonWidth;}
 	float		GetButtonHeight() {return m_MenuButtonHeight;}
-	D2D1_SIZE_F GetStartPosition(){return m_StartPosition;}
+	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
 
 private:
 	bool CreateResource();

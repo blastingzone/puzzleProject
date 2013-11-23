@@ -20,7 +20,7 @@ CFPS::CFPS(void)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 		);
 
-	m_DWriteFactory->CreateTextFormat(L"Consolas"
+	m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
 		, NULL
 		, DWRITE_FONT_WEIGHT_NORMAL
 		, DWRITE_FONT_STYLE_NORMAL

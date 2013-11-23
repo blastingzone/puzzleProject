@@ -19,9 +19,7 @@ CGameTimer::CGameTimer(void)
 		,__uuidof(m_DWriteFactory)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 		);
-	//조심해!!
-	//폰트 명을 밖으로 뺴줘야해~!..config?  if/def에서 해주면 될듯.
-	m_DWriteFactory->CreateTextFormat(L"Consolas"
+	m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
 		, NULL
 		, DWRITE_FONT_WEIGHT_NORMAL
 		, DWRITE_FONT_STYLE_NORMAL
@@ -67,9 +65,6 @@ void CGameTimer::SetTimerStart()
 // 주의 : 반드시 SetTimerStart()이 먼저 불려온 다음에 실행해야 함
 void CGameTimer::Update()
 {
-	//조심해!!!!
-	//사실 이 API는 부하가 좀 크다.. GetTickCount() 사용
-	//GetSystemTime(&m_CurrentTime);
 	m_CurrentTime = GetTickCount();
 
 	DWORD interval = m_CurrentTime - m_StartTime;

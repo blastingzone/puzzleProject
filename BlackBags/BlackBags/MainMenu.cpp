@@ -186,7 +186,7 @@ bool CMainMenu::CreateResource()
 
 		if (SUCCEEDED(hr) )
 			hr = m_DWriteFactory->CreateTextFormat(
-				L"Segoe UI",                
+				_MENU_FONT,                
 				NULL,
 				DWRITE_FONT_WEIGHT_THIN,
 				DWRITE_FONT_STYLE_NORMAL,

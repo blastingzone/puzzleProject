@@ -13,8 +13,15 @@ CPlayScene::CPlayScene(void)
 	m_Map = nullptr;
 	m_PlayerNumber = 0;
 
-	//조심해!!
-	Init();
+	memset(m_Player,0,sizeof(m_Player));
+	GetPlayerNumber();
+	CreatePlayers();
+	SetPlayerTurn();
+
+	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
+	m_Map->Init();
+	InitRandomMap();
+
 	m_SceneStatus = SC_PLAY;
 	AddObject(m_Map);
 
@@ -26,39 +33,17 @@ CPlayScene::~CPlayScene(void)
 {
 	FreeConsole();
 	RemoveObject();
-	
-	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
-	{
-		//조심해!!
-		// new와 delete는 대칭되도록 설계하는게 좋다 delete는 소멸자에 있는데 new는 Init->CreatePlayers()에 있으면 구조적으로 좋지 못함
-		//심지어 CreatePlayers는 딱 한번만 하면 되는데 따로 함수를 만들어 놓은 이유는? 일종의 over-engineering
-		if (m_Player[i])
-		{
-			delete m_Player[i];
-			m_Player[i] = NULL;
-		}
-	}
+
+	DeletePlayers();
 
 	SafeDelete(m_Map);
 }
 
-//g_Logic관련 초기화 함수
-void CPlayScene::Init()
-{
-	memset(m_Player,0,sizeof(m_Player));
-	GetPlayerNumber();
-	CreatePlayers();
-	SetPlayerTurn();
-
-	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
-	m_Map->Init();
-	InitRandomMap();
-}
 
 //지도 관련 정보를 업데이트 해주는 함수
 SceneName CPlayScene::Update(Coordinate mouseCoordinate)
 {
-	
+
 	IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 	return Update(indexedPosition);
 }
@@ -94,7 +79,7 @@ SceneName CPlayScene::Update(IndexedPosition indexedPosition)
 		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
 	}
-	
+
 	if (IsEnd() )
 	{
 		m_Map->WriteResult();
@@ -119,9 +104,11 @@ void CPlayScene::MouseOver(Coordinate mouseCoordinate)
 
 void CPlayScene::TimeOut()
 {
-	//조심해!!
+	// Test Code
+#ifdef _DEBUG
 	printf("time over\n");
 	printf("random line\n");
+#endif
 
 	IndexedPosition RandomTargetPosition;
 
@@ -166,14 +153,14 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 	indexedPosition.m_PosJ = 
 		( mouseCoordinate.m_PosX / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
 		+ ( ( mouseCoordinate.m_PosX % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
-	
+
 	return indexedPosition;
 }
 
 bool CPlayScene::GetPlayerNumber()
 {
 	//SettingScene에서의 플레이어 수를 받아온다.
-	
+
 	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
 
 	return true;
@@ -194,6 +181,17 @@ bool CPlayScene::CreatePlayers()
 	return true;
 }
 
+void CPlayScene::DeletePlayers()
+{
+	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
+	{
+		if (m_Player[i])
+		{
+			SafeDelete(m_Player[i]);
+		}
+	}
+}
+
 //플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
 bool CPlayScene::SetPlayerTurn()
 {
@@ -208,7 +206,7 @@ bool CPlayScene::SetPlayerTurn()
 		flag = true;
 		m_Player[i]->SetPlayerTurn(tempTurn);
 
-		for (int j = 0; j<i ; ++j)
+		for (int j = 0; j < i ; ++j)
 		{
 			if (m_Player[i]->GetPlayerTurn() == m_Player[j]->GetPlayerTurn())
 			{
@@ -220,7 +218,7 @@ bool CPlayScene::SetPlayerTurn()
 		++i;
 
 	}
-	for(int i = 0; i<m_PlayerNumber;++i)
+	for (int i = 0; i<m_PlayerNumber;++i)
 	{
 		tempP = *m_Player[m_Player[i]->GetPlayerTurn()];
 		*m_Player[m_Player[i]->GetPlayerTurn()] = *m_Player[i];
@@ -231,7 +229,7 @@ bool CPlayScene::SetPlayerTurn()
 
 bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 {
-	
+
 #ifdef _DEBUG
 	printf("idx I : %d / idx J : %d\n", indexedPosition.m_PosI, indexedPosition.m_PosJ);
 #endif
@@ -273,7 +271,7 @@ bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI, indexedPosition.m_PosJ + 1) == MO_NOBODY) { ++tileVoidCount; }
 
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_NOBODY) { ++tileVoidCount; }
-		
+
 		//확인된 타일의 수가 4가 되면 입력된 울타리는 열린 타일들 사이에 있으므로 그을 수 있음??
 		if (tileVoidCount == 4)
 		{
@@ -286,17 +284,17 @@ bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 
 bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 {
-// 	int i = 0;
-// 
-// 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
-// 	{
-// 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
-// 		{
-// 			return true;
-// 		}
-// 
-// 		i++;
-// 	}
+	// 	int i = 0;
+	// 
+	// 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
+	// 	{
+	// 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
+	// 		{
+	// 			return true;
+	// 		}
+	// 
+	// 		i++;
+	// 	}
 
 	return m_Map->GetMapFlag(nextTile);
 }
@@ -340,7 +338,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 		searchTiles.push(currentTile);
 		m_ClosedTile[i++] = currentTile;
 		m_Map->SetMapFlag(currentTile, true);
-		
+
 		while (!searchTiles.empty() )
 		{
 			currentTile.m_PosI = searchTiles.front().m_PosI;
@@ -354,8 +352,8 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 				int checkIdx = 0;
 				while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
 				{
-					m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-					checkIdx++;
+				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
+				checkIdx++;
 				}
 				*/
 				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
@@ -366,27 +364,27 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					}
 				}
 				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
-			
+
 				/*
 				int checkIdx = 0;
 				while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
 				{
-					m_Map->SetMapFlag(candidateTileList[checkIdx], false);
+				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
 				}
 				memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
-			
+
 				//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
 				while (!searchTiles.empty())
-					searchTiles.pop();
+				searchTiles.pop();
 				*/
-	#ifdef _DEBUG
+#ifdef _DEBUG
 				printf("센티넬을 만났어요\n");
-	#endif
+#endif
 				break;
 			}
-	#ifdef _DEBUG
-				printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
-	#endif
+#ifdef _DEBUG
+			printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
+#endif
 			//현재 타일의 위쪽 확인
 			if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 			{
@@ -425,7 +423,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					m_Map->SetMapFlag(nextTile, true);
 				}				
 			}
-		
+
 			//현재 타일의 왼쪽 확인
 			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
 			{
@@ -447,14 +445,14 @@ void CPlayScene::InitRandomMap()
 {
 	// 울타리, 금, 쓰레기의 초기값을 각각 설정해줍니다.
 	int startLineNumber =	m_PlayerNumber * 5;
-//	int startGoldNumber =	m_PlayerNumber * 2;
-//	int startTrashNumber =	m_PlayerNumber * 2;
-	
+	//	int startGoldNumber =	m_PlayerNumber * 2;
+	//	int startTrashNumber =	m_PlayerNumber * 2;
+
 	// IsClosed에서 사용할 변수들입니다.
 	IndexedPosition RandomTargetPosition;
 
 	srand( static_cast<unsigned int>(time(NULL)) );
-	
+
 	// 고정적인 시드값이 필요할 경우 아래 시드를 써보시기 바랍니다.
 	//srand(1383706550);
 
@@ -470,22 +468,22 @@ void CPlayScene::InitRandomMap()
 		{
 			// IsPossible을 만족하면
 			if ( IsPossible(RandomTargetPosition) )
+			{
+				// 일단 그립니다(IsClosed 검사를 위해서)
+				//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
+				m_Map->DrawLine(RandomTargetPosition);
+				--startLineNumber;
+
+				// 지금 막 그려진 선이 IsClosed() 조건을 만족하지 않으면 그대로 종료
+				if ( IsClosed(RandomTargetPosition) )
 				{
-					// 일단 그립니다(IsClosed 검사를 위해서)
-					//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
-					m_Map->DrawLine(RandomTargetPosition);
-					--startLineNumber;
-					
-					// 지금 막 그려진 선이 IsClosed() 조건을 만족하지 않으면 그대로 종료
-					if ( IsClosed(RandomTargetPosition) )
-					{
-						// 만약 지금 막 그려진 선이 어떤 도형을 닫는다면 해당 선을 삭제하고 라인 카운터를 복구
-						m_Map->DeleteLine(RandomTargetPosition);
-						++startLineNumber;
-					}
+					// 만약 지금 막 그려진 선이 어떤 도형을 닫는다면 해당 선을 삭제하고 라인 카운터를 복구
+					m_Map->DeleteLine(RandomTargetPosition);
+					++startLineNumber;
 				}
+			}
 		}
-				
+
 	}
 
 	// 타일 속성을 얘네들로 바꾸기 전에
@@ -532,8 +530,8 @@ void CPlayScene::Render()
 	}
 
 	CGameTimer::GetInstance()->Update();
-    //timer 여기에 추가할 것
-    CGameTimer::GetInstance()->Render();
+	//timer 여기에 추가할 것
+	CGameTimer::GetInstance()->Render();
 
 	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() )
 	{
@@ -542,7 +540,7 @@ void CPlayScene::Render()
 	}
 
 #ifdef _DEBUG		
-		CFPS::GetInstance()->Update();
-		CFPS::GetInstance()->Render();
+	CFPS::GetInstance()->Update();
+	CFPS::GetInstance()->Render();
 #endif
 }

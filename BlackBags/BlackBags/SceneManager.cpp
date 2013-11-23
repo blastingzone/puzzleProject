@@ -22,11 +22,14 @@ CSceneManager::~CSceneManager(void)
 
 void CSceneManager::Update( Coordinate mouseCoordinate )
 {
-	SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
-
-	if (m_CurrentScene->GetCurrentScene() != tempName)
+	if (m_CurrentScene != nullptr)
 	{
-		ChangeScene(tempName);
+		SceneName tempName = m_CurrentScene->Update( mouseCoordinate );
+
+		if (m_CurrentScene->GetCurrentScene() != tempName)
+		{
+			ChangeScene(tempName);
+		}
 	}
 }
 
@@ -34,6 +37,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 {
 	/*	현재 scene을 해제하고 적절한 다음 scene을 생성한다 */
 	delete m_CurrentScene;
+	m_CurrentScene = nullptr;
 
 	switch ( newScene )
 	{

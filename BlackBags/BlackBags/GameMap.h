@@ -61,7 +61,7 @@ public:
 		(게임을 생성하면서 랜덤으로 울타리 배칠 할 때 사용됨) */
 	void DeleteLine(const IndexedPosition& indexedPosition);
 
-	D2D1_SIZE_F GetStartPosition(){return m_StartPosition;}
+	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
 
 	MO_TYPE		GetMapType(IndexedPosition indexedPosition);
 	MO_TYPE		GetMapType(const int& i, const int& j);
@@ -71,11 +71,11 @@ public:
 	MO_OWNER	GetMapOwner( const int& i , const int& j );
 
 	void		SetItem(IndexedPosition indexedPosition, MO_ITEM item);
-	MO_ITEM		GetItem(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item;}
+	MO_ITEM		GetItem(IndexedPosition indexedPosition) {return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item;}
 
 	/*타일 탐색 시 탐색 여부를 확인하는 flag 지정 및 확인*/
 	void		SetMapFlag(IndexedPosition indexedPosition,bool flag);
-	bool		GetMapFlag(IndexedPosition indexedPosition){return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
+	bool		GetMapFlag(IndexedPosition indexedPosition) {return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
 	
 	void SubtractVoidCount() { --m_VoidTileCount; }
 	int	GetVoidTileCount() { return m_VoidTileCount; }

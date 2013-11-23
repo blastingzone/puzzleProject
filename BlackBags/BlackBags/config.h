@@ -1,20 +1,20 @@
-﻿/* 게임 화면 기본 크기입니다 */
+﻿/*	게임 화면 기본 크기입니다 */
 const int WINDOW_WIDTH = 1250;
 const int WINDOW_HEIGHT = 700;
 
 
-/* 최대 플레이 가능 인원입니다 */
+/*	최대 플레이 가능 인원입니다 */
 const int MAX_PLAYER_NUM= 4;
 
 
-/* 메인 메뉴 오브젝트들의 기본 크기입니다 */
+/*	메인 메뉴 오브젝트들의 기본 크기입니다 */
 const float SC_M_DEFAULT_MENU_BUTTON_WIDTH = 290.0f;
 const float SC_M_DEFAULT_MENU_BUTTON_HEIGHT = 40.0f;
 const float SC_M_DEFAULT_TEXT_MARGIN = 15.0F;
 const float SC_M_DEFAULT_TEXT_SIZE = 20.0F;
 
 
-/* 게임 맵 오브젝트들의 기본 크기입니다 */
+/*	게임 맵 오브젝트들의 기본 크기입니다 */
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
@@ -22,20 +22,25 @@ const float DEFAULT_DOT_RADIUS = 6.0f;
 const UINT TIME_LIMIT = 20 * 1000;
 
 
-/* 게임 맵 크기입니다 */
+/*	게임 맵 크기입니다 */
 const int MAX_MAP_WIDTH = 21;
 const int MAX_MAP_HEIGHT = 21;
 
 
-/* 지도 초기화 할 때 맵 탐사하는 배열 길이 (함수 구조 변경 후 삭제 예정) */
+/*	지도 초기화 할 때 맵 탐사하는 배열 길이 (함수 구조 변경 후 삭제 예정) */
 const int CHECKLIST_LENGTH = 100;
 
 
-/*Timer ~ 이름바꿔쭹*/
+/*	Timer ~ 이름바꿔쭹	*/
 const int TIME_LEFT_TEXT_LENGTH = 32;
 
 
-/* enum 타입들입니다. */
+/*	폰트들입니다	*/
+/*	조심해! if / def로 폰트 있는지 없는지 검사해서 없을 경우의 대책도 마련할 것! */
+#define _DEBUG_FONT L"Consolas"
+#define _MENU_FONT L"Segoe UI"
+
+/*	enum 타입들입니다. */
 enum SceneName	//Scene 이름들
 {
 	SC_OPENING,

@@ -27,12 +27,12 @@ static BOOL GetTextureFormat(LPDIRECT3D9 d3d9, D3DFORMAT &texture_fmt_d3d, BVL_P
 
 	D3DDISPLAYMODE d3ddm;
 	HRESULT	hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
-	if(SUCCEEDED(hr))
+	if (SUCCEEDED(hr))
 	{
 		int fmt_count = sizeof(fmt_list)/sizeof(fmt_list[0]);
-		for(int i = 0; i < fmt_count; i++ )
+		for (int i = 0; i < fmt_count; i++ )
 		{
-			if(SUCCEEDED(d3d9->CheckDeviceFormat(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3ddm.Format, 0, D3DRTYPE_TEXTURE, fmt_list[i].d3d_fmt)))
+			if (SUCCEEDED(d3d9->CheckDeviceFormat(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3ddm.Format, 0, D3DRTYPE_TEXTURE, fmt_list[i].d3d_fmt)))
 			{
 				texture_fmt_d3d = fmt_list[i].d3d_fmt;
 				texture_fmt_bvl = fmt_list[i].bvl_fmt;
@@ -85,14 +85,14 @@ HRESULT	CBandiVideoDevice_DX9::Open(HWND hWnd)
 	D3DPRESENT_PARAMETERS	d3dpp = {0};;
 
 	d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
-	if(d3d9 == NULL)
+	if (d3d9 == NULL)
 	{
 		ASSERT(0);
 		return E_FAIL;
 	}
 
 	hr = d3d9->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		ASSERT(0);
 		return hr;
@@ -104,15 +104,15 @@ HRESULT	CBandiVideoDevice_DX9::Open(HWND hWnd)
 	d3dpp.BackBufferFormat = d3ddm.Format;
 	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 
-	if(FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
+	if (FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
 									D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &d3d9_device)))
 	{
 		ASSERT(0);
-		if(FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
+		if (FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
 									D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &d3d9_device)))
 		{
 			ASSERT(0);
-			if(FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, hWnd,
+			if (FAILED(d3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, hWnd,
 										D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &d3d9_device)))
 			{
 				ASSERT(0);
@@ -137,13 +137,13 @@ HRESULT	CBandiVideoDevice_DX9::Open(HWND hWnd)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void	CBandiVideoDevice_DX9::Close()
 {
-	if(m_d3d9_device)
+	if (m_d3d9_device)
 	{
 		m_d3d9_device->Release();
 		m_d3d9_device = NULL;
 	}
 
-	if(m_d3d9)
+	if (m_d3d9)
 	{
 		m_d3d9->Release( );
 		m_d3d9 = NULL;
@@ -160,7 +160,7 @@ void	CBandiVideoDevice_DX9::Close()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT	CBandiVideoDevice_DX9::Resize(INT width, INT height)
 {
-	if(m_d3d9_device == NULL)
+	if (m_d3d9_device == NULL)
 		return E_FAIL;
 
 	width = max(1, width);
@@ -182,7 +182,7 @@ HRESULT	CBandiVideoDevice_DX9::Resize(INT width, INT height)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT	CBandiVideoDevice_DX9::StartFrame()
 {
-	if(m_d3d9_device == NULL)
+	if (m_d3d9_device == NULL)
 		return E_FAIL;
 
 	m_d3d9_device->Clear( 0, NULL, D3DCLEAR_TARGET, 0, 1.0f, 0 );
@@ -199,7 +199,7 @@ HRESULT	CBandiVideoDevice_DX9::StartFrame()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT	CBandiVideoDevice_DX9::EndFrame()
 {
-	if(m_d3d9_device == NULL)
+	if (m_d3d9_device == NULL)
 		return E_FAIL;
 
     m_d3d9_device->EndScene();
@@ -234,7 +234,7 @@ CBandiVideoTexture_DX9::CBandiVideoTexture_DX9(BV_DEVICE_DX9* device)
 	m_vid_width = m_vid_height = 0;
 	m_tex_width = m_tex_height = 0;
 
-	if(!GetTextureFormat(device->m_d3d9, m_fmt_d3d, m_fmt_bvl, m_pixel_size))
+	if (!GetTextureFormat(device->m_d3d9, m_fmt_d3d, m_fmt_bvl, m_pixel_size))
 		ASSERT(0);
 }
 
@@ -259,7 +259,7 @@ HRESULT	CBandiVideoTexture_DX9::Open(INT vid_width, INT vid_height)
 
 	D3DCAPS9 Caps;
 	d3d9_device->GetDeviceCaps(&Caps);
-	if(!!(Caps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL))
+	if (!!(Caps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL))
 	{
 		pow2 = FALSE;
 	}
@@ -270,11 +270,11 @@ HRESULT	CBandiVideoTexture_DX9::Open(INT vid_width, INT vid_height)
 	// try to create a dynamic texture first
 	hr = d3d9_device->CreateTexture(tex_width, tex_height, 1,D3DUSAGE_DYNAMIC, 
 									m_fmt_d3d, D3DPOOL_DEFAULT, &texture, 0);
-	if(FAILED(hr))
+	if (FAILED(hr))
 	{
 		hr = d3d9_device->CreateTexture(tex_width, tex_height, 1, 0, 
 									m_fmt_d3d, D3DPOOL_MANAGED, &texture, 0);
-		if(FAILED(hr))
+		if (FAILED(hr))
 		{
 			Beep(1000, 1000);
 			ASSERT(0);
@@ -285,13 +285,13 @@ HRESULT	CBandiVideoTexture_DX9::Open(INT vid_width, INT vid_height)
 	D3DLOCKED_RECT locked_rect;
 
 	// Clear the texture to black.
-	if(SUCCEEDED(texture->LockRect(0, &locked_rect, NULL, NULL)))
+	if (SUCCEEDED(texture->LockRect(0, &locked_rect, NULL, NULL)))
 	{
 		// Clear the pixels.
 		BYTE* dest = (BYTE*) locked_rect.pBits;
 		int bytes = tex_width*m_pixel_size;
 
-		for(int y = 0 ; y < tex_height ; y++)
+		for (int y = 0 ; y < tex_height ; y++)
 		{
 			memset(dest, 0, bytes);
 			dest += locked_rect.Pitch;
@@ -322,7 +322,7 @@ void	CBandiVideoTexture_DX9::Close()
 	m_vid_width = m_vid_height = 0;
 	m_tex_width = m_tex_height = 0;
 
-	if(m_texture)
+	if (m_texture)
 	{
 		m_texture->Release();
 		m_texture = NULL;
@@ -368,7 +368,7 @@ HRESULT	CBandiVideoTexture_DX9::Draw(INT x, INT y, INT width, INT height)
 {
 	HRESULT hr;
 	hr = m_device.m_d3d9_device->SetTexture(0, m_texture);
-	if(FAILED(hr)) return hr;
+	if (FAILED(hr)) return hr;
 
 	static DWORD dwAddressU, dwAddressV;
 
@@ -442,7 +442,7 @@ int CBandiVideoTexture_DX9::CalcTexSize(int vid_size, BOOL pow2)
 	// Power-of-2 texture dimensions are required.
 	D3DCAPS9 caps;
 	m_device.m_d3d9_device->GetDeviceCaps(&caps);
-	if(pow2 && caps.TextureCaps & D3DPTEXTURECAPS_POW2)
+	if (pow2 && caps.TextureCaps & D3DPTEXTURECAPS_POW2)
 	{
 		int tex_size = 16;
 		while (tex_size < vid_size)
