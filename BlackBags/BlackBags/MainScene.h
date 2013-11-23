@@ -1,6 +1,7 @@
 #pragma once
 #include "scene.h"
-#include "MainMenu.h"
+
+class CMainMenu;
 
 class CMainScene :
 	public CScene

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <d2d1.h>
 #include "MainScene.h"
+#include "MainMenu.h"
 
 CMainScene::CMainScene(void)
 {

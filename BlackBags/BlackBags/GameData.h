@@ -5,7 +5,7 @@
 struct PlayerData
 {
 	int m_Id;
-	std::string m_PlayerName;
+	std::wstring m_PlayerName;
 
 	int m_MyTile;
 	int m_MyGold;
@@ -32,7 +32,7 @@ public:
 	int			GetPlayerTrashNumber(int playerId);
 	void		IncreasePlayerTrashNumber(int playerId);
 
-	const std::string GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
+	const std::wstring GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}

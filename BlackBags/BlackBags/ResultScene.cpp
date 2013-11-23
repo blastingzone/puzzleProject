@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "ResultScene.h"
-
+#include "GameResult.h"
 
 CResultScene::CResultScene(void)
 {
+	m_GameResult = nullptr;
+
 	for (int i = 0; i<MAX_PLAYER_NUM;++i)
 	{
 		m_PlayerScore[i] = 0;
@@ -13,11 +15,20 @@ CResultScene::CResultScene(void)
 	//테스트용으로 생성자에 일단 추가
 	CalculateScore();
 	DecideWinner();
+
+	m_GameResult = new CGameResult();
+	m_GameResult->Init();
+
+	m_SceneStatus = SC_RESULT;
+
+	AddObject(m_GameResult);
 }
 
 
 CResultScene::~CResultScene(void)
 {
+	RemoveObject();
+	SafeDelete(m_GameResult);
 }
 
 void CResultScene::EventHandle(Coordinate mouseCoordinate)

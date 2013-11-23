@@ -5,16 +5,16 @@ CGameData* CGameData::m_pInstance = nullptr;
 CGameData::CGameData(void)
 {
 	m_PlayerData[0].m_Id = 0;
-	m_PlayerData[0].m_PlayerName = "Jake Kim";
+	m_PlayerData[0].m_PlayerName = L"Jake Kim";
 
 	m_PlayerData[1].m_Id = 1;
-	m_PlayerData[1].m_PlayerName = "Cassie Kim";
+	m_PlayerData[1].m_PlayerName = L"Cassie Kim";
 
 	m_PlayerData[2].m_Id = 2;
-	m_PlayerData[2].m_PlayerName = "Donald Kim";
+	m_PlayerData[2].m_PlayerName = L"Donald Kim";
 
 	m_PlayerData[3].m_Id = 3;
-	m_PlayerData[3].m_PlayerName = "Lucy Kim";
+	m_PlayerData[3].m_PlayerName = L"Lucy Kim";
 
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{

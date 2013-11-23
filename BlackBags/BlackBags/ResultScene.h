@@ -4,6 +4,8 @@
 struct IDWriteFactory;
 struct IDWriteTextFormat;
 
+class CGameResult;
+
 class CResultScene :
 	public CScene
 {
@@ -19,6 +21,8 @@ public:
 private:
 	void CalculateScore();
 	void DecideWinner();
+
+	CGameResult* m_GameResult;
 
 	MO_OWNER m_Winner;
 
