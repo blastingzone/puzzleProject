@@ -1,5 +1,9 @@
 #pragma once
 #include "scene.h"
+
+struct IDWriteFactory;
+struct IDWriteTextFormat;
+
 class CResultScene :
 	public CScene
 {
@@ -7,15 +11,16 @@ public:
 	CResultScene(void);
 	~CResultScene(void);
 
-	void EventHandle(Coordinate mouseCoordinate);
-	void MouseOver(Coordinate mouseCoordinate);
 	void Render();
-	void TimeOut();
+	void EventHandle(Coordinate mouseCoordinate);
 
+	void MouseOver(Coordinate mouseCoordinate);
+
+private:
 	void CalculateScore();
 	void DecideWinner();
 
-private:
 	MO_OWNER m_Winner;
+
 	int m_PlayerScore[MAX_PLAYER_NUM];
 };

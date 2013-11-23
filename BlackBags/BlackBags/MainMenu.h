@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <d2d1.h>
 #include "sceneobject.h"
 
 #define BUTTON_NUMBER 5

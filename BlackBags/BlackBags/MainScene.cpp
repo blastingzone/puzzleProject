@@ -1,10 +1,14 @@
 #include "stdafx.h"
+#include <d2d1.h>
 #include "MainScene.h"
-
 
 CMainScene::CMainScene(void)
 {
-	Init();
+	m_MainMenu = nullptr;
+
+	m_MainMenu = new CMainMenu();
+	m_MainMenu->Init();
+
 	m_SceneStatus = SC_MAIN;
 
 	AddObject(m_MainMenu);
@@ -15,12 +19,6 @@ CMainScene::~CMainScene(void)
 {
 	RemoveObject();
 	SafeDelete(m_MainMenu);
-}
-
-void CMainScene::Init()
-{
-	m_MainMenu = new CMainMenu();
-	m_MainMenu->Init();
 }
 
 void CMainScene::EventHandle(Coordinate mouseCoordinate)

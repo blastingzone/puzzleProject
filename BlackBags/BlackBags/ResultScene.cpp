@@ -22,10 +22,9 @@ CResultScene::~CResultScene(void)
 
 void CResultScene::EventHandle(Coordinate mouseCoordinate)
 {
-	///////////////////////////////////////////////////////////////////////////
-	// 조심해!!!!!!!
-	// if문 빼야 합니다
-	///////////////////////////////////////////////////////////////////////////
+	/*	finish button을 클릭하면 메인으로 넘어가고 
+		그렇지 않은 경우에는 현재 scene 유지 */
+
 	if (mouseCoordinate.m_PosX > 0)
 	{
 		CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
@@ -36,15 +35,11 @@ void CResultScene::EventHandle(Coordinate mouseCoordinate)
 void CResultScene::MouseOver(Coordinate mouseCoordinate)
 {
 	//조심해!!
-	//아래를 지우고 자동 완성 기능을 구현합니다.
+	//finish button mouse over 기능 구현
 	if (mouseCoordinate.m_PosX > 0)
 	{
 
 	}
-}
-
-void CResultScene::TimeOut()
-{
 }
 
 void CResultScene::Render()
