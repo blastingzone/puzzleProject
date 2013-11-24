@@ -5,11 +5,15 @@
 CSettingScene::CSettingScene(void)
 {
 	m_SceneStatus = SC_SETTING;
+	m_SettingMenu = new CSettingMenu();
+
+	AddObject(m_SettingMenu);
 }
 
 
 CSettingScene::~CSettingScene(void)
 {
+	RemoveObject();
 }
 
 void CSettingScene::EventHandle(Coordinate mouseCoordinate)
@@ -50,17 +54,5 @@ void CSettingScene::Render()
 		CFPS::GetInstance()->Update();
 		CFPS::GetInstance()->Render();
 #endif
-	}
-}
-
-void CSettingScene::CreateResource()
-{
-	HRESULT hr;
-
-	if (m_pRenderTarget == nullptr)
-	{
-		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
-
-
 	}
 }

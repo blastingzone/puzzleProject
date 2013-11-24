@@ -131,6 +131,9 @@
     <ClInclude Include="GameResult.h">
       <Filter>ReusltScene</Filter>
     </ClInclude>
+    <ClInclude Include="SettingMenu.h">
+      <Filter>SettingScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -198,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="GameResult.cpp">
       <Filter>ReusltScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingMenu.cpp">
+      <Filter>SettingScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
