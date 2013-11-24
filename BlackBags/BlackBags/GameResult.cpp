@@ -19,6 +19,14 @@ CGameResult::CGameResult(void)
 	m_pWinnerBoxBrush = nullptr;
 	m_pButtonBrush = nullptr;
 
+	m_pGoldBrush = nullptr;
+	m_pTrashBrush = nullptr;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		 m_TileBrush[i] = nullptr;
+	}
+	
 	m_Title = L"";
 	m_WinnerText = L"";
 	m_ButtonText = L"";
@@ -99,17 +107,28 @@ void CGameResult::Render()
 		);
 
 	//player part
-	for (int i = 0; i < CGameData::GetInstance()->GetplayerNumber(); ++i) //플레이어 수 4보다 적을 때 고려할 것
+	for (int i = 0; i < CGameData::GetInstance()->GetplayerNumber(); ++i)
 	{
-		//player name
 		pos.x = SC_RT_HORIZONTAL_MARGIN;
 		pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
+		
+		/*
+		//player name back ground
+		rectElement = D2D1::Rect(
+			pos.x, 
+			pos.y, 
+			pos.x + m_PlayerNameTextWidth, 
+			pos.y + m_PlayerNameTextHeight);
 
+		m_pRenderTarget->FillRectangle(rectElement, m_pButtonBrush);
+		*/
+
+		//player name
 		textPosition = D2D1::Rect(
 			pos.x, 
 			pos.y, 
-			CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - SC_RT_HORIZONTAL_MARGIN, 
-			pos.y + m_PlayerBoxHeight);
+			pos.x + m_PlayerNameTextWidth, 
+			pos.y + m_PlayerNameTextHeight);
 
 		m_pRenderTarget->DrawText(
 			CGameData::GetInstance()->GetPlayerName(i).c_str(),
@@ -119,9 +138,62 @@ void CGameResult::Render()
 			m_pTextBrush
 			);
 
-		//////////////////////////
-		/*	tile + gold + trash */
-		//////////////////////////
+		//tile part
+		for (int tileCount = 0; tileCount < CGameData::GetInstance()->GetPlayerTileNumber(i); ++tileCount)
+		{
+			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * (tileCount / 2) );
+			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+				+ m_PlayerTileMargin 
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * (tileCount % 2) );
+
+			rectElement = D2D1::Rect(
+				pos.x, 
+				pos.y, 
+				pos.x + m_PlayerTileSize, 
+				pos.y + m_PlayerTileSize);
+
+			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+		}
+
+		//gold part
+		for (int goldCount = 0; goldCount < CGameData::GetInstance()->GetPlayerGoldNumber(i); ++goldCount)
+		{
+			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * goldCount);
+			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+				+ m_PlayerTileMargin
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * 2 );
+
+			rectElement = D2D1::Rect(
+				pos.x, 
+				pos.y, 
+				pos.x + m_PlayerTileSize, 
+				pos.y + m_PlayerTileSize);
+
+			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+		}
+
+		//gold part
+		for (int trachCount = 0; trachCount < CGameData::GetInstance()->GetPlayerTrashNumber(i); ++trachCount)
+		{
+			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * trachCount);
+			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+				+ m_PlayerTileMargin
+				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * 3 );
+
+			rectElement = D2D1::Rect(
+				pos.x, 
+				pos.y, 
+				pos.x + m_PlayerTileSize, 
+				pos.y + m_PlayerTileSize);
+
+			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+		}
 
 		//player score
 		std::wstring playerScore = std::to_wstring(m_PlayerScore[i]);
@@ -212,12 +284,18 @@ void CGameResult::SetObjectSize()
 	m_SceneTitleHeight = tempScale * SC_RT_TITLE_HEIGHT;
 	m_SceneTitleWidth = tempScale * SC_RT_TITLE_WIDTH;
 
+	m_PlayerBoxHeight = tempScale * SC_RT_PLAYER_BOX_HEIGHT;
+
 	m_PlayerNameTextSize = tempScale * SC_RT_PLAYER_NAME_TEXT_SIZE;
+	m_PlayerNameTextWidth = tempScale * SC_RT_PLAYER_NAME_TEXT_WIDTH;
+	m_PlayerNameTextHeight = tempScale * SC_RT_PLAYER_NAME_TEXT_HEIGHT;
+
 	m_PlayerScoreTextSize = tempScale * SC_RT_PLAYER_SCORE_TEXT_SIZE;
 	m_PlayerScorePosition = tempScale * SC_RT_PLAYER_SCORE_POSITION;
 	m_playerScoreWidth = tempScale * SC_RT_PLAYER_SCORE_WIDTH;
+
 	m_PlayerTileSize = tempScale * SC_RT_PLAYER_TILE_SIZE;
-	m_PlayerBoxHeight = tempScale * SC_RT_PLAYER_BOX_HEIGHT;
+	m_PlayerTileMargin = tempScale * SC_RT_PLAYER_TILE_MARGIN;
 
 	m_WinnerTextSize = tempScale * SC_RT_WINNER_TEXT_SIZE;
 	m_WinnerTextWidth = tempScale * SC_RT_WINNER_TEXT_WIDTH;
@@ -264,7 +342,7 @@ void CGameResult::RefreshTextSize()
 		);
 
 	if (SUCCEEDED(hr) )
-		hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -334,7 +412,25 @@ bool CGameResult::CreateResource()
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pWinnerTextBrush);
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::MediumVioletRed), &m_pWinnerBoxBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
+		
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+		
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_TileBrush[0]);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_TileBrush[1]);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_TileBrush[2]);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_TileBrush[3]);
 
 		if (SUCCEEDED(hr) )
 			hr = DWriteCreateFactory(

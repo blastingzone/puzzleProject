@@ -59,10 +59,13 @@ private:
 	float m_SceneTitleTextSize;
 
 	float m_PlayerNameTextSize;
+	float m_PlayerNameTextWidth;
+	float m_PlayerNameTextHeight;
 	float m_PlayerScoreTextSize;
 	float m_PlayerScorePosition;
 	float m_playerScoreWidth;
 	float m_PlayerTileSize;
+	float m_PlayerTileMargin;
 	float m_PlayerBoxHeight;
 
 	float m_WinnerTextSize;
@@ -77,5 +80,11 @@ private:
 	ID2D1SolidColorBrush*	m_pWinnerTextBrush;
 	ID2D1SolidColorBrush*	m_pWinnerBoxBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
+
+	ID2D1SolidColorBrush*	m_pGoldBrush;
+	ID2D1SolidColorBrush*	m_pTrashBrush;
+
+	//나중에 다른 씬과 공유하는 브러시들은 새로 생성하지 말고 공유하도록 할 것
+	ID2D1SolidColorBrush* m_TileBrush[MAX_PLAYER_NUM];
 };
 
