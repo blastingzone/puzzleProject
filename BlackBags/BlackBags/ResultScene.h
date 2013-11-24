@@ -19,12 +19,5 @@ public:
 	void MouseOver(Coordinate mouseCoordinate);
 
 private:
-	void CalculateScore();
-	void DecideWinner();
-
 	CGameResult* m_GameResult;
-
-	MO_OWNER m_Winner;
-
-	int m_PlayerScore[MAX_PLAYER_NUM];
 };

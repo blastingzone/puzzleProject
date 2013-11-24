@@ -29,28 +29,26 @@ private:
 	/*	현재 화면 스케일에 맞춰서 m_TextFormat 갱신  */
 	void RefreshTextSize();
 
+	void CalculateScore();
+	void DecideWinner();
+
+	int m_PlayerScore[MAX_PLAYER_NUM];
+	MO_OWNER m_Winner;
+
+	bool m_ButtonMouseOver;
+
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
 	IDWriteTextFormat*		m_TitleTextFormat;
 	IDWriteTextFormat*		m_PlayerNameTextFormat;
-	IDWriteTextFormat*		m_PlayerPointTextFormat;
+	IDWriteTextFormat*		m_PlayerScoreTextFormat;
 	IDWriteTextFormat*		m_WinnerTextFormat;
 	IDWriteTextFormat*		m_ButtonTextFormat;
 
 	std::wstring m_Title;
-	std::wstring m_Winner;
-	std::wstring m_Button;
-
-	//나중에 gameData에서 가져 오는 걸로 수정
-	std::wstring m_Player1;
-	std::wstring m_Player2;
-	std::wstring m_Player3;
-	std::wstring m_Player4;
-	std::wstring m_Player1Point;
-	std::wstring m_Player2Point;
-	std::wstring m_Player3Point;
-	std::wstring m_Player4Point;
+	std::wstring m_WinnerText;
+	std::wstring m_ButtonText;
 
 	float m_HorizontalMargin;
 	float m_VerticalMargin;
@@ -61,11 +59,14 @@ private:
 	float m_SceneTitleTextSize;
 
 	float m_PlayerNameTextSize;
-	float m_PlayerPointTextSize;
+	float m_PlayerScoreTextSize;
+	float m_PlayerScorePosition;
+	float m_playerScoreWidth;
 	float m_PlayerTileSize;
 	float m_PlayerBoxHeight;
 
 	float m_WinnerTextSize;
+	float m_WinnerTextWidth;
 
 	float m_ButtonWidth;
 	float m_ButtonHeight;

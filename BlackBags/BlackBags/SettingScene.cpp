@@ -4,6 +4,7 @@
 
 CSettingScene::CSettingScene(void)
 {
+	m_SceneStatus = SC_SETTING;
 }
 
 

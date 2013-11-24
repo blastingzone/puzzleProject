@@ -45,11 +45,14 @@ const float SC_RT_TITLE_HEIGHT = 72.0f;
 const float SC_RT_TITLE_TEXT_SIZE = 72.0f;
 
 const float SC_RT_PLAYER_NAME_TEXT_SIZE = 48.0f;
-const float SC_RT_PLAYER_POINT_TEXT_SIZE = 36.0f;
+const float SC_RT_PLAYER_SCORE_TEXT_SIZE = 36.0f;
+const float SC_RT_PLAYER_SCORE_POSITION = 680.0f;
+const float SC_RT_PLAYER_SCORE_WIDTH = 80.0f;
 const float SC_RT_PLAYER_TILE_SIZE = 18.0f;
 const float SC_RT_PLAYER_BOX_HEIGHT = 92.0f;
 
 const float SC_RT_WINNER_TEXT_SIZE = 72.0f;
+const float SC_RT_WINNER_TEXT_WIDTH = 326.0f;
 
 const float SC_RT_BUTTON_WIDTH = 210.0f;
 const float SC_RT_BUTTON_HEIGHT = 60.0f;
