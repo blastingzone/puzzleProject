@@ -220,7 +220,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="intro.avi">
+    <None Include="credit.avi">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="opening.avi">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

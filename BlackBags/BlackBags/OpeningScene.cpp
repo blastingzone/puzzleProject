@@ -7,7 +7,7 @@
 COpeningScene::COpeningScene(void)
 {
 	m_SceneStatus = SC_OPENING;	
-	m_VideoPath = "intro.avi";
+	m_VideoPath = "opening.avi";
 	Init();
 }
 

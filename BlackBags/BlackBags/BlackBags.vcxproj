@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="credit.avi" />
-    <None Include="intro.avi" />
+    <None Include="opening.avi" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
