@@ -243,11 +243,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		g_Manager->Update();
-
-		CRenderer::GetInstance()->Begin();
-		CRenderer::GetInstance()->Clear();
 		g_Manager->Render();
-		CRenderer::GetInstance()->End();
 		break;
 	case WM_KEYDOWN:
 		 case VK_END: 

@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "OpeningScene.h"
 #include "VideoRender.h"
+#include "GameData.h"
 
 
 COpeningScene::COpeningScene(void)
 {
 	m_SceneStatus = SC_OPENING;	
+	m_VideoPath = "intro.avi";
 	Init();
 }
 
 COpeningScene::~COpeningScene(void)
 {
-	//CVideoRender::GetInstance()->CleanUp();
+	CVideoRender::GetInstance()->StopVideo();
 }
 
 void COpeningScene::EventHandle(Coordinate mouseCoordinate)
@@ -39,10 +41,20 @@ void COpeningScene::MouseOver(Coordinate mouseCoordinate)
 
 void COpeningScene::Init()
 {
-	CVideoRender::GetInstance()->StartVideo();
+	if (CVideoRender::GetInstance()->CreateLibrary(m_VideoPath))
+	{
+		CVideoRender::GetInstance()->StartVideo();
+	}
+	else
+	{
+		//비디오를 찾지 못하면 그냥 메인 화면으로 넘겨 버립니다.
+		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
+	}
 }
 
-void COpeningScene::RenderVideo()
+
+//고친 부분
+void COpeningScene::Render()
 {
 	if (!CVideoRender::GetInstance()->IsVideoEnd())
 	{
@@ -50,6 +62,7 @@ void COpeningScene::RenderVideo()
 	}
 	else
 	{
-		//다음 씬으로 전환해 버리기
+		//이 부분 수정 필요
+		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 	}
 }

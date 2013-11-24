@@ -220,7 +220,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sample.avi">
+    <None Include="intro.avi">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

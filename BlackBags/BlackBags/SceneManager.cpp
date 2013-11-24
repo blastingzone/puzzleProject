@@ -7,12 +7,14 @@
 #include "PlayScene.h"
 #include "ResultScene.h"
 #include "CreditScene.h"
+#include "GameData.h"
 
 
 CSceneManager::CSceneManager(void)
 {
 	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
-	m_CurrentScene = nullptr;
+	//	m_CurrentScene = new COpeningScene;
+
 
 	m_CurrentScene = new COpeningScene();
 }
@@ -44,7 +46,8 @@ void CSceneManager::Update()
 void CSceneManager::ChangeScene(const SceneName& newScene)
 {
 	/*	현재 scene을 해제하고 적절한 다음 scene을 생성한다 */
-	SafeDelete( m_CurrentScene );
+	if(m_CurrentScene!=nullptr)
+		SafeDelete( m_CurrentScene );
 	m_CurrentScene = nullptr;
 
 	switch ( newScene )
@@ -85,7 +88,17 @@ void CSceneManager::ResizeClientSize()
 	m_CurrentScene->ResizeClient();
 }
 
+//고친 부분
 void CSceneManager::Render()
 {
+	if(m_CurrentScene->GetCurrentScene()!=SC_OPENING)
+	{
+		CRenderer::GetInstance()->Begin();
+		CRenderer::GetInstance()->Clear();
+	}
 	m_CurrentScene->Render();
+	if(m_CurrentScene->GetCurrentScene()!=SC_OPENING)
+	{
+		CRenderer::GetInstance()->End();
+	}
 }

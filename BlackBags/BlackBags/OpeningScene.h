@@ -12,8 +12,11 @@ public:
 
 	void EventHandle(Coordinate mouseCoordinate);
 	void MouseOver(Coordinate mouseCoordinate);
-	void RenderVideo();
+	void Render();
 
 	void Init();
+
+private:
+	std::string m_VideoPath;
 
 };
