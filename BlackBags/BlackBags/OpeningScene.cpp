@@ -13,7 +13,7 @@ COpeningScene::COpeningScene(void)
 
 COpeningScene::~COpeningScene(void)
 {
-	CVideoRender::GetInstance()->StopVideo();
+	CVideoRender::GetInstance()->CleanUp();
 }
 
 void COpeningScene::EventHandle(Coordinate mouseCoordinate)

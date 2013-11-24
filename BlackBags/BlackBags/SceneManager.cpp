@@ -46,8 +46,7 @@ void CSceneManager::Update()
 void CSceneManager::ChangeScene(const SceneName& newScene)
 {
 	/*	현재 scene을 해제하고 적절한 다음 scene을 생성한다 */
-	if(m_CurrentScene!=nullptr)
-		SafeDelete( m_CurrentScene );
+	SafeDelete( m_CurrentScene );
 	m_CurrentScene = nullptr;
 
 	switch ( newScene )
@@ -91,14 +90,15 @@ void CSceneManager::ResizeClientSize()
 //고친 부분
 void CSceneManager::Render()
 {
-	if(m_CurrentScene->GetCurrentScene()!=SC_OPENING)
+	if (m_CurrentScene->GetCurrentScene()==SC_OPENING||m_CurrentScene->GetCurrentScene()==SC_CREDIT)
+	{
+		m_CurrentScene->Render();
+	}
+	else
 	{
 		CRenderer::GetInstance()->Begin();
 		CRenderer::GetInstance()->Clear();
-	}
-	m_CurrentScene->Render();
-	if(m_CurrentScene->GetCurrentScene()!=SC_OPENING)
-	{
+		m_CurrentScene->Render();
 		CRenderer::GetInstance()->End();
 	}
 }
