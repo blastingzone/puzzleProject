@@ -36,25 +36,26 @@ HRESULT CVideoRender::Init(HWND hwnd)
 {
 	m_Hwnd = hwnd;
 
-	if(m_Hwnd!=nullptr)
+	if(m_Hwnd != nullptr)
 		return S_OK;
 }
-
 
 void CVideoRender::CleanUp()
 {
 	m_VideoLibrary.Destroy();
 
-	if (m_VideoTexture)
+	if (m_VideoTexture != nullptr)
 	{
 		m_VideoTexture->Close();
 		delete m_VideoTexture;
+		m_VideoTexture = nullptr;
 	}
 
-	if (m_VideoDevice)
+	if (m_VideoDevice != nullptr)
 	{
 		m_VideoDevice->Close();
 		delete m_VideoDevice;
+		m_VideoDevice = nullptr;
 	}
 }
 
