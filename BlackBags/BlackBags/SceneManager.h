@@ -5,7 +5,7 @@
 class CSceneManager
 {
 public:
-	CSceneManager(void);
+	CSceneManager(HWND hWnd);
 	~CSceneManager(void);
 
 	void SetNextScene();
@@ -24,7 +24,7 @@ public:
 	void ChangeScene(const SceneName& newScene);
 
 protected:
-	
+	HWND	m_WindowHandle;
 	CScene* m_CurrentScene;
 };
 

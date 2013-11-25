@@ -7,11 +7,16 @@ CResultScene::CResultScene(void)
 	m_GameResult = nullptr;
 
 	m_GameResult = new CGameResult();
-	m_GameResult->Init();
 
-	m_SceneStatus = SC_RESULT;
-
-	AddObject(m_GameResult);
+	if (!m_GameResult->Init() )
+	{
+		GameTerminate();
+	}
+	else
+	{
+		m_SceneStatus = SC_RESULT;
+		AddObject(m_GameResult);
+	}
 }
 
 CResultScene::~CResultScene(void)

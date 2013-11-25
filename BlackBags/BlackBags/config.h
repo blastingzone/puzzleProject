@@ -27,6 +27,7 @@ const float SC_DEFAULT_SELECT_MAP_TEXT_SIZE = 20.0F;
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
+const float DEFAULT_ITEM_RADIUS = 4.0f;
 
 const UINT TIME_LIMIT = 20 * 1000;
 

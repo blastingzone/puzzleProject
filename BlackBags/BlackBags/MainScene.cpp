@@ -8,7 +8,10 @@ CMainScene::CMainScene(void)
 	m_MainMenu = nullptr;
 
 	m_MainMenu = new CMainMenu();
-	m_MainMenu->Init();
+	if (!m_MainMenu->Init() )
+	{
+		GameTerminate();
+	}
 
 	m_SceneStatus = SC_MAIN;
 

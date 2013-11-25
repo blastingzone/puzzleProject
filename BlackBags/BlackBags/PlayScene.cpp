@@ -19,7 +19,11 @@ CPlayScene::CPlayScene(void)
 	SetPlayerTurn();
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
-	m_Map->Init();
+	if (!m_Map->Init() )
+	{
+		GameTerminate();
+	}
+
 	InitRandomMap();
 
 	m_SceneStatus = SC_PLAY;
@@ -441,8 +445,8 @@ void CPlayScene::InitRandomMap()
 {
 	// 울타리, 금, 쓰레기의 초기값을 각각 설정해줍니다.
 	int startLineNumber =	m_PlayerNumber * 5;
-	//	int startGoldNumber =	m_PlayerNumber * 2;
-	//	int startTrashNumber =	m_PlayerNumber * 2;
+	int startGoldNumber =	m_PlayerNumber * 2;
+	int startTrashNumber =	m_PlayerNumber * 2;
 
 	// IsClosed에서 사용할 변수들입니다.
 	IndexedPosition RandomTargetPosition;
@@ -487,27 +491,29 @@ void CPlayScene::InitRandomMap()
 	// 2. 그리고 IsClosed 에서 잘 돌아가는지 한 번 테스트 해 보고 진짜 반영
 	// 3. 얘네들은 이미지 파일로 넣어주는게 예쁠 듯 합니다
 
-	//while (startGoldNumber)
-	//{
-	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
-	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
-	//	if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
-	//	{
-	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_GOLD);
-	//		startGoldNumber--;
-	//	}
-	//}
+	while (startGoldNumber)
+	{
+		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 2;
+		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 2;
+		if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE 
+			&& m_Map->GetItem(RandomTargetPosition) == MO_NOTHING)
+		{
+			m_Map->SetItem(RandomTargetPosition, MO_GOLD);
+			startGoldNumber--;
+		}
+	}
 
-	//while (startTrashNumber)
-	//{
-	//	RandomTargetPosition.m_PosI = rand() % MAX_HEIGHT + 2;
-	//	RandomTargetPosition.m_PosJ = rand() % MAX_WIDTH + 2;
-	//	if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE_VOID)
-	//	{
-	//		m_Map->SetMapType(RandomTargetPosition, MO_TILE_TRASH);
-	//		startTrashNumber--;
-	//	}
-	//}
+	while (startTrashNumber)
+	{
+		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 2;
+		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 2;
+		if (m_Map->GetMapType(RandomTargetPosition) == MO_TILE 
+			&& m_Map->GetItem(RandomTargetPosition) == MO_NOTHING)
+		{
+			m_Map->SetItem(RandomTargetPosition, MO_TRASH);
+			startTrashNumber--;
+		}
+	}
 
 	return;
 }

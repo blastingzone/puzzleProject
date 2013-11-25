@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "sceneobject.h"
 
 #define MAX_MAPSIZE_NUM 4
@@ -23,7 +23,7 @@ struct PlayerSelect
 
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;
-	//config¿¡ ÀÖ´Â #define Player Color¸¦ °¡¸®Å°°Ô µÊ
+	//configì— ìˆëŠ” #define Player Colorë¥¼ ê°€ë¦¬í‚¤ê²Œ ë¨
 	std::wstring			m_PlayerColor;
 };
 
@@ -48,7 +48,7 @@ struct MapSelect
 };
 
 
-// ²®µ¥±â
+// ê»ë°ê¸°
 struct IDWriteFactory;
 struct IDWriteTextFormat;
 
@@ -63,7 +63,7 @@ public:
 	void Render();
 
 private:
-	void CreateResource();
+	bool CreateResource();
 
 	void CalcStartPosition();
 	void RefreshTextSize();
@@ -75,11 +75,11 @@ private:
 	IDWriteTextFormat*		m_PlayerSelectTextFormat;
 	IDWriteTextFormat*		m_MapSelectTextFormat;
 
-	// Player¿Í MapÀÌ °øÀ¯ÇÏ´Â ºê·¯½Ã
+	// Playerì™€ Mapì´ ê³µìœ í•˜ëŠ” ë¸ŒëŸ¬ì‹œ
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
-	// °¢ÀÚ »ç¿ëÇÏ´Â ºê·¯½Ã
+	// ê°ì ì‚¬ìš©í•˜ëŠ” ë¸ŒëŸ¬ì‹œ
 	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
 

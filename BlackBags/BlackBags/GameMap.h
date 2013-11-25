@@ -49,7 +49,7 @@ public:
 	CGameMap(MapSize mapsize);
 	~CGameMap(void);
 
-	void Init();
+	bool Init();
 	void Render();
 
 	void SetMapSize(MapSize mapsize);
@@ -120,6 +120,7 @@ private:
 	float m_TileSize;
 	float m_LineWeight;
 	float m_DotRadius;
+	float m_ItemRadius;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
@@ -127,6 +128,9 @@ private:
 	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
+
+	ID2D1SolidColorBrush*	m_pGoldBrush;
+	ID2D1SolidColorBrush*	m_pTrashBrush;
 
 	ID2D1SolidColorBrush*	m_pTileP1;
 	ID2D1SolidColorBrush*	m_pTileP2;

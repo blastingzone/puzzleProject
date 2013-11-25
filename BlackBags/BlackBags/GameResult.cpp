@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameResult.h"
 #include <string.h>
 #include "dwrite.h"
@@ -142,7 +142,7 @@ void CGameResult::Render()
 		for (int tileCount = 0; tileCount < CGameData::GetInstance()->GetPlayerTileNumber(i); ++tileCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
-				+ m_PlayerTileMargin //ÇÊ¿äÇÏ¸é Ãß°¡ margin Æ÷ÇÔ½ÃÅ³ °Í
+				+ m_PlayerTileMargin //í•„ìš”í•˜ë©´ ì¶”ê°€ margin í¬í•¨ì‹œí‚¬ ê²ƒ
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * (tileCount / 2) );
 			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin 
@@ -161,7 +161,7 @@ void CGameResult::Render()
 		for (int goldCount = 0; goldCount < CGameData::GetInstance()->GetPlayerGoldNumber(i); ++goldCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
-				+ m_PlayerTileMargin //ÇÊ¿äÇÏ¸é Ãß°¡ margin Æ÷ÇÔ½ÃÅ³ °Í
+				+ m_PlayerTileMargin //í•„ìš”í•˜ë©´ ì¶”ê°€ margin í¬í•¨ì‹œí‚¬ ê²ƒ
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * goldCount);
 			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin
@@ -173,14 +173,14 @@ void CGameResult::Render()
 				pos.x + m_PlayerTileSize, 
 				pos.y + m_PlayerTileSize);
 
-			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+			m_pRenderTarget->FillRectangle(rectElement, m_pGoldBrush);
 		}
 
-		//gold part
+		//trash part
 		for (int trachCount = 0; trachCount < CGameData::GetInstance()->GetPlayerTrashNumber(i); ++trachCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
-				+ m_PlayerTileMargin //ÇÊ¿äÇÏ¸é Ãß°¡ margin Æ÷ÇÔ½ÃÅ³ °Í
+				+ m_PlayerTileMargin //í•„ìš”í•˜ë©´ ì¶”ê°€ margin í¬í•¨ì‹œí‚¬ ê²ƒ
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * trachCount);
 			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin
@@ -192,7 +192,7 @@ void CGameResult::Render()
 				pos.x + m_PlayerTileSize, 
 				pos.y + m_PlayerTileSize);
 
-			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+			m_pRenderTarget->FillRectangle(rectElement, m_pTrashBrush);
 		}
 
 		//player score
@@ -246,33 +246,32 @@ void CGameResult::Render()
 		);
 }
 
-void CGameResult::Init()
+bool CGameResult::Init()
 {
-	//ÃÖ°æ¿í Á¶½ÉÇØ!!
-	//ÀÌ·±µ¥¼­ ¿¡·¯³ª¸é º¸Åë return falseÇÏ°í, ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÑ °÷¿¡¼­ ÇÁ·Î±×·¥ Á¾·á Ã³¸®ÇØÁØ´Ù.
-	//ÀÚ¿ø »ı¼º
 	if (!CreateResource() )
 	{
-		//Á¶½ÉÇØ!!
-		//Á¾·á ¸Ş½ÃÁö »ı¼º ÇÒ °Í
+		return false;
 	}
+
 	ResizeClient();
 
 	CalculateScore();
 	DecideWinner();
+
+	return true;
 }
 
 void CGameResult::ResizeClient()
 {
-	//È­¸é Å©±â Á¶Àı
+	//í™”ë©´ í¬ê¸° ì¡°ì ˆ
 	SetObjectSize();
 	RefreshTextSize();
 }
 
 void CGameResult::SetObjectSize()
 {
-	/*	ÇöÀç ·»´õ·¯¿¡ ÀúÀåµÈ È­¸é ½ºÄÉÀÏ¿¡ ¸ÂÃç¼­ 
-	·»´õ¸µ ÇÒ ¶§ »ç¿ëµÈ ¿ÀºêÁ§Æ®µé Å©±â Á¶Á¤ */
+	/*	í˜„ì¬ ë Œë”ëŸ¬ì— ì €ì¥ëœ í™”ë©´ ìŠ¤ì¼€ì¼ì— ë§ì¶°ì„œ 
+	ë Œë”ë§ í•  ë•Œ ì‚¬ìš©ëœ ì˜¤ë¸Œì íŠ¸ë“¤ í¬ê¸° ì¡°ì • */
 	
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
@@ -392,7 +391,7 @@ void CGameResult::RefreshTextSize()
 
 void CGameResult::SetMouseOver()
 {
-	//¹öÆ° ¹üÀ§ À§¿¡ ¿À¸é ¹öÆ° »óÅÂ true·Î º¯°æ
+	//ë²„íŠ¼ ë²”ìœ„ ìœ„ì— ì˜¤ë©´ ë²„íŠ¼ ìƒíƒœ trueë¡œ ë³€ê²½
 }
 
 bool CGameResult::CreateResource()
@@ -447,12 +446,13 @@ bool CGameResult::CreateResource()
 			m_Title = L"RESULT";
 			m_WinnerText = L"WINNER";
 			m_ButtonText = L"FINISH";
-
-			return true;
 		}
+		
+		if (!SUCCEEDED(hr) )
+			return false;
 	}
 
-	return false;
+	return true;
 }
 
 

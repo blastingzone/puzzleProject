@@ -10,12 +10,13 @@
 #include "GameData.h"
 
 
-CSceneManager::CSceneManager(void)
+CSceneManager::CSceneManager(HWND hWnd)
 {
+	m_CurrentScene = nullptr;
+	m_WindowHandle = NULL;
+
 	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
-	//	m_CurrentScene = new COpeningScene;
-
-
+	m_WindowHandle = hWnd;
 	m_CurrentScene = new COpeningScene();
 }
 
@@ -69,6 +70,9 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 	case SC_CREDIT:
 		m_CurrentScene = new CCreditScene();
 		break;
+	case SC_EXIT:
+		SendMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
+		break;
 	default:
 		break;
 	}
@@ -90,15 +94,18 @@ void CSceneManager::ResizeClientSize()
 //고친 부분
 void CSceneManager::Render()
 {
-	if (m_CurrentScene->GetCurrentScene()==SC_OPENING||m_CurrentScene->GetCurrentScene()==SC_CREDIT)
+	if (m_CurrentScene != nullptr)
 	{
-		m_CurrentScene->Render();
-	}
-	else
-	{
-		CRenderer::GetInstance()->Begin();
-		CRenderer::GetInstance()->Clear();
-		m_CurrentScene->Render();
-		CRenderer::GetInstance()->End();
+		if (m_CurrentScene->GetCurrentScene() == SC_OPENING || m_CurrentScene->GetCurrentScene() == SC_CREDIT)
+		{
+			m_CurrentScene->Render();
+		}
+		else
+		{
+			CRenderer::GetInstance()->Begin();
+			CRenderer::GetInstance()->Clear();
+			m_CurrentScene->Render();
+			CRenderer::GetInstance()->End();
+		}
 	}
 }

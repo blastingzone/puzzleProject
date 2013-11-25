@@ -150,7 +150,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 	else 
 	{
-		g_Manager = new CSceneManager();
+		g_Manager = new CSceneManager(hWnd);
 	}
 
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음

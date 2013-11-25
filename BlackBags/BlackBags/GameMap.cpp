@@ -11,6 +11,8 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pPossibleLineBrush = nullptr;
 	m_pTileBrush = nullptr;
 	m_pVoidTileBrush = nullptr;
+	m_pGoldBrush = nullptr;
+	m_pTrashBrush = nullptr;
 
 	m_pTileP1 = nullptr;
 	m_pTileP2 = nullptr;
@@ -26,13 +28,26 @@ CGameMap::CGameMap(MapSize mapSize)
 
 CGameMap::~CGameMap(void)
 {
+	SafeRelease(m_pDotBrush);
+	SafeRelease(m_pUnconnectedLineBrush);
+	SafeRelease(m_pConnectedLineBrush);
+	SafeRelease(m_pPossibleLineBrush);
+	SafeRelease(m_pTileBrush);
+	SafeRelease(m_pVoidTileBrush);
+	SafeRelease(m_pGoldBrush);
+	SafeRelease(m_pTrashBrush);
+
+	SafeRelease(m_pTileP1);
+	SafeRelease(m_pTileP2);
+	SafeRelease(m_pTileP3);
+	SafeRelease(m_pTileP4);
 }
 
 
 void CGameMap::CreateMap()
 {
 	/*	실제로 게임에 사용되는 타일 외에도 울타리와 점을 표시하기 위한 칸도 필요
-	생성된 게임 주변은 기본값인 MO_SENTINEL로 두어서 IsClosed()와 같은 작업시 활용할 수 있도록 함 */
+		생성된 게임 주변은 기본값인 MO_SENTINEL로 두어서 IsClosed()와 같은 작업시 활용할 수 있도록 함 */
 	int targetRow, targetColumn;
 
 	for (targetRow = 1; targetRow <= m_MapSize.m_Height*2 + 1; ++targetRow)
@@ -69,15 +84,19 @@ void CGameMap::CreateMap()
 	return;
 }
 
-void CGameMap::Init()
+bool CGameMap::Init()
 {
-	CreateResource();
+	if (!CreateResource() )
+	{
+		return false;
+	}
+
 	SetObjectSize();
 	ResizeClient();
 	SetMapSize(m_MapSize);
 	CreateMap();
 
-	return;
+	return true;
 }
 
 void CGameMap::Render()
@@ -87,8 +106,8 @@ void CGameMap::Render()
 	D2D1_POINT_2F	m_pos;
 
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
-	현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
-	추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
+		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
+		추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
 
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
@@ -120,6 +139,24 @@ void CGameMap::Render()
 					break;
 				default:
 					break;
+				}
+
+				//item draw
+				if (GetItem(IndexedPosition(i, j) ) != MO_NOTHING)
+				{
+					m_DotEllipse = D2D1::Ellipse( m_pos, m_ItemRadius, m_ItemRadius );
+					switch (GetItem(IndexedPosition(i, j) ) )
+					{
+					case MO_GOLD:
+						m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pGoldBrush);
+						break;
+					case MO_TRASH:
+						m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pTrashBrush);
+						break;
+					default:
+						break;
+					}
+					
 				}
 			}
 		}
@@ -209,6 +246,12 @@ bool CGameMap::CreateResource()
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
 
 		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
+
+		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileP1);
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 232.0f/255, 36.0f/255), &m_pTileP1); //ver 1106
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 183.0f/255, 153.0f/255),&m_pTileP1);
@@ -226,11 +269,11 @@ bool CGameMap::CreateResource()
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileP4);
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink), &m_pTileP4);
 
-		if (SUCCEEDED(hr) )
-			return true;
+		if (!SUCCEEDED(hr) )
+			return false;
 	}
 
-	return false;
+	return true;
 }
 
 void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
@@ -252,7 +295,7 @@ void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 void CGameMap::CalcStartPosition()
 {
 	/*	현재 화면의 중심점을 기준으로 생성된 맵의 크기의 반만큼
-	왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
+		왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
 	D2D1_SIZE_F centerPosition;
 	centerPosition = m_pRenderTarget->GetSize();
 
@@ -277,12 +320,13 @@ void CGameMap::ResizeClient()
 void CGameMap::SetObjectSize()
 {
 	/*	현재 렌더러에 저장된 화면 스케일에 맞춰서 
-	렌더링 할 때 사용된 오브젝트들 크기 조정 */
+		렌더링 할 때 사용된 오브젝트들 크기 조정 */
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
 	m_TileSize = tempScale * DEFAULT_TILE_SIZE;
 	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT;
 	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS;
+	m_ItemRadius = tempScale * DEFAULT_ITEM_RADIUS;
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
@@ -292,8 +336,8 @@ MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
 	}
 
-	/* 게임이 진행되는 맵 영역 밖은 모두 MO_SENTINEL로 간주하므로 
-	배열 범위 밖을 벗어나도 모두 MO_SENTINEL로 처리	*/
+	/*	게임이 진행되는 맵 영역 밖은 모두 MO_SENTINEL로 간주하므로 
+		배열 범위 밖을 벗어나도 모두 MO_SENTINEL로 처리	*/
 	return MO_SENTINEL;
 }
 

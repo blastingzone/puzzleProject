@@ -53,3 +53,8 @@ void CScene::Init()
 {
 
 }
+
+void CScene::GameTerminate()
+{
+	CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+}

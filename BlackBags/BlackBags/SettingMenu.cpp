@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "SettingMenu.h"
 #include "dwrite.h"
 
@@ -10,9 +10,12 @@ CSettingMenu::CSettingMenu(void)
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
 
-	CreateResource();
+	if (!CreateResource() )
+	{
+		CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+	}
 
-	// ¹öÆ° ÃÊ±â°ªµéÀ» ¼³Á¤ÇÔ
+	// ë²„íŠ¼ ì´ˆê¸°ê°’ë“¤ì„ ì„¤ì •í•¨
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[1].m_ButtonText = L"8 X 7";
 	m_MapSelect[2].m_ButtonText = L"9 X 8";
@@ -30,7 +33,7 @@ CSettingMenu::~CSettingMenu(void)
 {
 }
 
-// È­¸é ¿ŞÂÊ À§¿¡¼­ºÎÅÍ ±×¸®±â À§ÇØ ½ÃÀÛ ÁöÁ¡ ¼³Á¤
+// í™”ë©´ ì™¼ìª½ ìœ„ì—ì„œë¶€í„° ê·¸ë¦¬ê¸° ìœ„í•´ ì‹œì‘ ì§€ì  ì„¤ì •
 void CSettingMenu::CalcStartPosition()
 {
 	D2D1_SIZE_F Position = m_pRenderTarget->GetSize();
@@ -41,7 +44,7 @@ void CSettingMenu::CalcStartPosition()
 	m_StartPosition = Position;
 }
 
-// SettingMenu¿¡¼­ ·»´õÇÏ´Â °´Ã¼µéÀÇ Å©±â¸¦ Á¶Á¤ÇÑ´Ù
+// SettingMenuì—ì„œ ë Œë”í•˜ëŠ” ê°ì²´ë“¤ì˜ í¬ê¸°ë¥¼ ì¡°ì •í•œë‹¤
 void CSettingMenu::SetObjectSize()
 {
 	float CurrentScale = CRenderer::GetInstance()->GetDisplayScale();
@@ -67,13 +70,13 @@ void CSettingMenu::SetObjectSize()
 
 void CSettingMenu::ResizeClient()
 {
-	//È­¸é Å©±â Á¶Àı
+	//í™”ë©´ í¬ê¸° ì¡°ì ˆ
 	CalcStartPosition();
 	SetObjectSize();
 	RefreshTextSize();
 }
 
-void CSettingMenu::CreateResource()
+bool CSettingMenu::CreateResource()
 {
 	HRESULT hr;
 
@@ -101,10 +104,16 @@ void CSettingMenu::CreateResource()
 			__uuidof(IDWriteFactory),
 			reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 			);
+
+		if (!SUCCEEDED(hr) )
+			return false;
+
 		CalcStartPosition();
 		SetObjectSize();
 		RefreshTextSize();
 	}
+
+	return true;
 }
 
 void CSettingMenu::RefreshTextSize()
@@ -114,7 +123,7 @@ void CSettingMenu::RefreshTextSize()
 	SafeRelease(m_PlayerSelectTextFormat);
 	SafeRelease(m_MapSelectTextFormat);
 
-	// PlayerSelect Ã¢ºÎÅÍ ¹Ù²Ş
+	// PlayerSelect ì°½ë¶€í„° ë°”ê¿ˆ
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
 		NULL,
@@ -129,7 +138,7 @@ void CSettingMenu::RefreshTextSize()
 	if (SUCCEEDED(hr) )
 		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-	// MapSelect Ã¢ÀÇ TextFormatµµ ¹Ù²Ş
+	// MapSelect ì°½ì˜ TextFormatë„ ë°”ê¿ˆ
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
 		NULL,
@@ -147,11 +156,11 @@ void CSettingMenu::RefreshTextSize()
 
 void CSettingMenu::Render()
 {
-	//»óÀÚ¸¦ ¸ÕÀú ±×¸°´Ù.
+	//ìƒìë¥¼ ë¨¼ì € ê·¸ë¦°ë‹¤.
 	D2D1_RECT_F		rectElement, textPosition;
 	D2D1_POINT_2F	pos;
 
-	//Ä³¸¯ÅÍ ¼±ÅÃÃ¢ ·»´õ
+	//ìºë¦­í„° ì„ íƒì°½ ë Œë”
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		pos.x = m_StartPosition.width + ( (i - 1) * m_PlayerSelect[i].m_ButtonWidth);
@@ -184,7 +193,7 @@ void CSettingMenu::Render()
 		}
 	}
 
-	// ¸Ê ¼±ÅÃÃ¢ ·»´õ
+	// ë§µ ì„ íƒì°½ ë Œë”
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		D2D1_RECT_F		rectElement, textPosition;

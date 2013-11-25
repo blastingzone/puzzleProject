@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "sceneobject.h"
 
 struct IDWriteFactory;
@@ -18,7 +18,7 @@ public:
 
 	void CalcStartPosition();
 
-	void Init();
+	bool Init();
 
 	float		GetButtonWidth() {return m_ButtonWidth;}
 	float		GetButtonHeight() {return m_ButtonHeight;}
@@ -26,7 +26,7 @@ public:
 private:
 	bool CreateResource();
 
-	/*	ÇöÀç È­¸é ½ºÄÉÀÏ¿¡ ¸ÂÃç¼­ m_TextFormat °»½Å  */
+	/*	í˜„ì¬ í™”ë©´ ìŠ¤ì¼€ì¼ì— ë§ì¶°ì„œ m_TextFormat ê°±ì‹   */
 	void RefreshTextSize();
 
 	void CalculateScore();
@@ -84,7 +84,7 @@ private:
 	ID2D1SolidColorBrush*	m_pGoldBrush;
 	ID2D1SolidColorBrush*	m_pTrashBrush;
 
-	//³ªÁß¿¡ ´Ù¸¥ ¾À°ú °øÀ¯ÇÏ´Â ºê·¯½ÃµéÀº »õ·Î »ı¼ºÇÏÁö ¸»°í °øÀ¯ÇÏµµ·Ï ÇÒ °Í
+	//ë‚˜ì¤‘ì— ë‹¤ë¥¸ ì”¬ê³¼ ê³µìœ í•˜ëŠ” ë¸ŒëŸ¬ì‹œë“¤ì€ ìƒˆë¡œ ìƒì„±í•˜ì§€ ë§ê³  ê³µìœ í•˜ë„ë¡ í•  ê²ƒ
 	ID2D1SolidColorBrush* m_TileBrush[MAX_PLAYER_NUM];
 };
 

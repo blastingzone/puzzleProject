@@ -73,17 +73,18 @@ void CMainMenu::Render()
 	}
 }
 
-void CMainMenu::Init()
+bool CMainMenu::Init()
 {
 	//최경욱 조심해!!
 	//이런데서 에러나면 보통 return false하고, 이 함수를 호출한 곳에서 프로그램 종료 처리해준다.
 	//자원 생성
 	if (!CreateResource() )
 	{
-		//조심해!!
-		//종료 메시지 생성 할 것
+		return false;
 	}
 	ResizeClient();
+
+	return true;
 }
 
 void CMainMenu::ResizeClient()

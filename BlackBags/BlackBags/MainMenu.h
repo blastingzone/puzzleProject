@@ -33,7 +33,7 @@ public:
 
 	void CalcStartPosition();
 
-	void Init();
+	bool Init();
 
 	float		GetButtonWidth() {return m_MenuButtonWidth;}
 	float		GetButtonHeight() {return m_MenuButtonHeight;}
