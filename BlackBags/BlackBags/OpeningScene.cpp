@@ -18,25 +18,12 @@ COpeningScene::~COpeningScene(void)
 
 void COpeningScene::EventHandle(Coordinate mouseCoordinate)
 {
-	///////////////////////////////////////////////////////////////////////////
-	// 조심해!!!!!!!
-	// if문 빼야 합니다
-	///////////////////////////////////////////////////////////////////////////
-	if (mouseCoordinate.m_PosX > 0)
-	{
-		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
-	}
 	CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 }
 
 void COpeningScene::MouseOver(Coordinate mouseCoordinate)
 {
-	//조심해!!
-	//아래를 지우고 자동 완성 기능을 구현합니다.
-	if (mouseCoordinate.m_PosX > 0)
-	{
-		//
-	}
+	
 }
 
 void COpeningScene::Init()
@@ -53,7 +40,6 @@ void COpeningScene::Init()
 }
 
 
-//고친 부분
 void COpeningScene::Render()
 {
 	if (!CVideoRender::GetInstance()->IsVideoEnd())
@@ -62,7 +48,8 @@ void COpeningScene::Render()
 	}
 	else
 	{
-		//이 부분 수정 필요
+		//재생이 끝나면 다음 화면으로 넘깁니다.
+		Sleep(3*1000);
 		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 	}
 }

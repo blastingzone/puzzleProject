@@ -14,6 +14,7 @@ CSettingScene::CSettingScene(void)
 CSettingScene::~CSettingScene(void)
 {
 	RemoveObject();
+	SafeDelete(m_SettingMenu);
 }
 
 void CSettingScene::EventHandle(Coordinate mouseCoordinate)

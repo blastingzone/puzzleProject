@@ -27,6 +27,7 @@
 
 2013.11.26
 	- SettingScene 및 ResultScene 기능 구현
-	- Openning 동영상 재생 기능 구현
+	-동영상 재생 기능 구현 완료
+	-동영상을 이용하는 Opening, Credit Scene 완성
 	>>게임 기능 부분은 구현 완료
 	- 타이머 버그 수정 및 관련 성능 이슈 반영
