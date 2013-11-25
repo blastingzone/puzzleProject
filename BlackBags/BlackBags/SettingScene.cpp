@@ -40,9 +40,34 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 {
 	//조심해!!
 	//아래를 지우고 자동 완성 기능을 구현합니다.
-	if (mouseCoordinate.m_PosX > 0)
-	{
+	int idx = 0;
 
+	D2D1_SIZE_F startPosition = m_SettingMenu->GetStartPosition();
+	D2D1_SIZE_F playerButton = m_SettingMenu->GetPlayerSelectButtonSize();
+	D2D1_SIZE_F mapButton = m_SettingMenu->GetMapSelectButtonSize();
+
+	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
+	{
+		if (mouseCoordinate.m_PosY > startPosition.height
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height))
+		{
+			m_SettingMenu->InitMouseOver();
+			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			m_SettingMenu->SetPlayerMouseOver(idx);
+		}
+	}
+
+	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
+	{
+		if (mouseCoordinate.m_PosY > (startPosition.height + 2 * playerButton.height)
+			&& mouseCoordinate.m_PosY < (startPosition.height + 2 * playerButton.height + mapButton.height))
+		{
+			m_SettingMenu->InitMouseOver();
+			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			m_SettingMenu->SetMapMouseOver(idx);
+		}
 	}
 }
 

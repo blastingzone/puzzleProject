@@ -25,7 +25,6 @@ CSettingMenu::CSettingMenu(void)
 	m_PlayerSelect[1].m_PlayerId = 1;
 	m_PlayerSelect[2].m_PlayerId = 2;
 	m_PlayerSelect[3].m_PlayerId = 3;
-
 }
 
 
@@ -86,11 +85,23 @@ bool CSettingMenu::CreateResource()
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
 
+		/* 테스트 브러시 */
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
+		/* 테스트 브러시 */
+
+
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pSelectedTextBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
 
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::RosyBrown), &m_pMapBackgroundBrush);
@@ -227,5 +238,50 @@ void CSettingMenu::Render()
 				m_pUnselectedTextBrush
 				);
 		}
+	}
+}
+
+D2D1_SIZE_F CSettingMenu::GetPlayerSelectButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_PlayerSelect[0].m_ButtonHeight;
+	ButtonSize.width = m_PlayerSelect[0].m_ButtonWidth;
+
+	return ButtonSize;
+}
+
+D2D1_SIZE_F CSettingMenu:: GetMapSelectButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_MapSelect[0].m_ButtonHeight;
+	ButtonSize.width = m_MapSelect[0].m_ButtonWidth;
+
+	return ButtonSize;
+}
+
+void CSettingMenu::SetPlayerMouseOver(int idx)
+{
+	assert(idx < MAX_PLAYER_NUM);
+	m_PlayerSelect[idx].m_IsSelected = true;
+}
+
+void CSettingMenu::SetMapMouseOver(int idx)
+{
+	assert(idx < MAX_MAPSIZE_NUM);
+	m_MapSelect[idx].m_IsSelected = true;
+}
+
+void CSettingMenu::InitMouseOver()
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_IsSelected = false;
+	}
+
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_IsSelected = false;
 	}
 }

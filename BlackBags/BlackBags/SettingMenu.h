@@ -62,6 +62,14 @@ public:
 	void ResizeClient();
 	void Render();
 
+	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
+	D2D1_SIZE_F GetPlayerSelectButtonSize();
+	D2D1_SIZE_F GetMapSelectButtonSize();
+
+	void SetPlayerMouseOver(int idx);
+	void SetMapMouseOver(int idx);
+	void InitMouseOver();
+
 private:
 	bool CreateResource();
 
