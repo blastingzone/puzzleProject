@@ -8,6 +8,7 @@ CResultScene::CResultScene(void)
 
 	m_GameResult = new CGameResult();
 
+	//SM9: INIT같은 것은 생성자 밖에서..
 	if (!m_GameResult->Init() )
 	{
 		GameTerminate();

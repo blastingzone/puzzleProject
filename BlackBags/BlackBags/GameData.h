@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 
@@ -32,8 +32,9 @@ public:
 	int			GetPlayerTrashNumber(int playerId);
 	void		IncreasePlayerTrashNumber(int playerId);
 
-	const std::wstring GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
-	void SetPlayerIdAndName(int playerId,std::wstring playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}
+	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: 이렇게..
+	// const::wsrting& 으로 레퍼런스 리턴안하면 효과 없음.
+	void SetPlayerIdAndName(int playerId,std::wstring playerName) {m_PlayerData[playerId].m_PlayerName = playerName;} //SM9: 마찬가지로 const레퍼런스로 넘길 것
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}

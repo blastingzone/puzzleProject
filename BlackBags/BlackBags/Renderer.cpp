@@ -7,6 +7,8 @@ CRenderer::CRenderer(void)
 {
 	/* 최초에 생성 될 때 화면 크기는 기본값을 가지므로 m_DisplayScale도 1을 할당한다 */
 	m_DisplayScale = 1.0f;
+
+	//SM9: 모든 멤버 변수를 초기화 하는 습관을 들일 것
 }
 
 

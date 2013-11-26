@@ -1,11 +1,11 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameData.h"
 
 CGameData* CGameData::m_pInstance = nullptr;
 CGameData::CGameData(void)
 {
 	m_PlayerData[0].m_Id = 0;
-	m_PlayerData[0].m_PlayerName = L"Jake Kim";
+	m_PlayerData[0].m_PlayerName = L"Jake Kim"; //SM9: 나중에 이름 입력 가능하도록 하던가 그렇게 할 것이 아니면 Player #1 이런식으로 하는게 좋음
 
 	m_PlayerData[1].m_Id = 1;
 	m_PlayerData[1].m_PlayerName = L"Cassie Kim";
@@ -50,13 +50,14 @@ void CGameData::ReleaseInstance()
 	SafeDelete(m_pInstance);
 }
 
+//SM9: 아래 3종 함수는 사실 하나로 해도 된다. 그러면 호출하는 쪽에서 switch를 안써도 되고, 
 void CGameData::IncreasePlayerTileNumber( MO_OWNER playerId )
 {
 	assert(MO_NOBODY != playerId);
 	++m_PlayerData[playerId].m_MyTile;
 }
 
-void CGameData::IncreasePlayerGoldNumber( int playerId )
+void CGameData::IncreasePlayerGoldNumber( int playerId ) //SM9: 위에는 MO_OWNER인데 여기는 왜 int??
 {
 	assert(MO_NOBODY != playerId);
 	++m_PlayerData[playerId].m_MyGold;
@@ -76,6 +77,7 @@ void CGameData::SetMapSize(int x, int y)
 	m_MapSize.m_Width = x;
 }
 
+//SM9: 아래 3종 세트도 마찬가지..
 int CGameData::GetPlayerTileNumber( int playerId )
 {
 	assert(MO_NOBODY!=playerId);

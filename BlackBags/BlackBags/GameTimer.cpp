@@ -14,7 +14,9 @@ CGameTimer::CGameTimer(void)
 	, m_TextBrush(nullptr)
 	, m_TextFormat(nullptr)
 {
-	// 자원 할당
+	//SM9:  API 호출 같은 작업은 생성자에서 절대 하지 말것. 예외 핸들링을 할 수 없고, 프로그램을 강제로 죽이는 수밖에 없다.
+
+// 자원 할당
 	DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
 		,__uuidof(m_DWriteFactory)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
@@ -28,6 +30,8 @@ CGameTimer::CGameTimer(void)
 		, L"ko"
 		, &m_TextFormat);
 
+
+	//SM9 : m_Result 같은 멤버는 왜 초기화 안해주는가? 생성자에서는 모든 멤버 초기화를 하는 것을 습관하 할 것
 	MakeBrush();
 }
 

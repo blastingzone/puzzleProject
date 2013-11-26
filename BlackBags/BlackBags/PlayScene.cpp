@@ -18,6 +18,8 @@ CPlayScene::CPlayScene(void)
 	CreatePlayers();
 /*	SetPlayerTurn();*/
 
+	//SM9: 마찬가지로 생성자에서는 최소한의 초기화만..
+
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	if (!m_Map->Init() )
 	{
@@ -27,9 +29,11 @@ CPlayScene::CPlayScene(void)
 	InitRandomMap();
 
 	m_SceneStatus = SC_PLAY;
+
+	//SM9: 만일 AddObject가 virtual이었다면... 큰일난다.. 그래서 생성자에서는 정말 초기화만 하는 습관을 들이도록 함.
 	AddObject(m_Map);
 
-	CGameTimer::GetInstance()->SetTimerStart();
+	CGameTimer::GetInstance()->SetTimerStart(); 
 }
 
 
@@ -162,6 +166,8 @@ bool CPlayScene::GetPlayerNumber()
 	//SettingScene에서의 플레이어 수를 받아온다.
 
 	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
+
+	//SM9: 함수 이름과 하는 행동이 mismatch.. GetPlayerNumber라고 하면 m_PlayerNumber를 리턴해야 할 것 같은데?
 
 	return true;
 }

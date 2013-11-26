@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BandiVideoLibrary.h"
 #include "BandiVideoTexture_DX9.h"
 #include <string>
@@ -12,12 +12,12 @@ public:
 	static CVideoRender*		CVideoRender::GetInstance();
 	void				ReleaseInstance();
 
-	//main¿¡¼­ HWND¸¦ °¡Á®¿À´Â ÇÔ¼ö. ÇÑ¹ø¸¸ ÇØÁÖ¸é µÈ´Ù.
+	//mainì—ì„œ HWNDë¥¼ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜. í•œë²ˆë§Œ í•´ì£¼ë©´ ëœë‹¤.
 	HRESULT Init(HWND hwnd);
 
-	//ºñµð¿À °æ·Î¸¦ ³Ö¾îÁÖ±â¸¸ ÇÏ¸é µÈ´Ù.
+	//ë¹„ë””ì˜¤ ê²½ë¡œë¥¼ ë„£ì–´ì£¼ê¸°ë§Œ í•˜ë©´ ëœë‹¤.
 	//Init->CreateLibrary->StartVideo ->RenderVideo->StopVideo->CleanUp
-	bool CreateLibrary(std::string videopath);
+	bool CreateLibrary(std::string videopath); //SM9: const std::string& .... 
 	void CleanUp();
 
 	void StartVideo();

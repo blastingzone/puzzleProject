@@ -9,6 +9,8 @@ CVideoRender::CVideoRender(void)
 	m_VideoDevice=nullptr;
 	m_VideoTexture = nullptr;
 	m_Hwnd=NULL;
+
+	//SM9: 모든 멤버 변수 초기화 하는 습관
 }
 
 

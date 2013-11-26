@@ -59,6 +59,8 @@ void CGameMap::CreateMap()
 				// dot - line - dot - line
 				if (targetColumn % 2 == 1)
 				{
+					//SM9: 이거 무서운 코드다 m_MapSize 크기가 어떻게 되든 m_Map은 21x21로 고정 되어 있다.
+					//아무리 하드 코딩하더라도 이렇게 놔두지 않는 습관을 들여야 한다. 
 					m_Map[targetRow][targetColumn].m_Type = MO_DOT;
 				} 
 				else 
@@ -92,7 +94,7 @@ bool CGameMap::Init()
 	}
 
 	SetObjectSize();
-	ResizeClient();
+	ResizeClient(); //SM9: 안에서 SetObjectSize하는데 위에서 이미한 것 또 해줄 필요 있나? 중복 계산은 최소화.
 	SetMapSize(m_MapSize);
 	CreateMap();
 

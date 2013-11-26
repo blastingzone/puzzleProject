@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <d2d1.h>
 #include "MainScene.h"
 #include "MainMenu.h"
@@ -8,7 +8,7 @@ CMainScene::CMainScene(void)
 	m_MainMenu = nullptr;
 
 	m_MainMenu = new CMainMenu();
-	if (!m_MainMenu->Init() )
+	if (!m_MainMenu->Init() ) //SM9: ìƒì„±ìžì—ì„œëŠ” ì´ˆê¸°í™”ë§Œ í•˜ê³  ë­”ê°€ ì‹¤í–‰í•˜ì§€ ë§ ê²ƒ.. ì˜ˆì™¸ ë°œìƒì‹œ í•¸ë“¤ë§ì„ í•  ìˆ˜ ì—†ì–´ì„œ í”„ë¡œê·¸ëž¨ì„ ì£½ì´ëŠ” ìˆ˜ë°–ì— ì—†ìŒ.
 	{
 		GameTerminate();
 	}
@@ -29,8 +29,8 @@ void CMainScene::EventHandle(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
-	/*	¸Þ´º ¹öÆ° ¹üÀ§ ¾È¿¡¼­ Å¬¸¯ÀÌ ¹ß»ýÇÏ¸é ÇØ´ç ÀÎµ¦½º¿¡ ÇØ´çÇÏ´Â ¹öÆ°¿¡ ¿¬°áµÈ SceneNameÀ» ¹ÝÈ¯ÇÏ°í 
-		±×·¸Áö ¾ÊÀº °æ¿ì¿¡´Â ÇöÀç scene À¯Áö */
+	/*	ë©”ë‰´ ë²„íŠ¼ ë²”ìœ„ ì•ˆì—ì„œ í´ë¦­ì´ ë°œìƒí•˜ë©´ í•´ë‹¹ ì¸ë±ìŠ¤ì— í•´ë‹¹í•˜ëŠ” ë²„íŠ¼ì— ì—°ê²°ëœ SceneNameì„ ë°˜í™˜í•˜ê³  
+		ê·¸ë ‡ì§€ ì•Šì€ ê²½ìš°ì—ëŠ” í˜„ìž¬ scene ìœ ì§€ */
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
 	{
 		idx = static_cast<int> ( (mouseCoordinate.m_PosY - m_MainMenu->GetStartPosition().height) / m_MainMenu->GetButtonHeight() );
@@ -47,7 +47,7 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
-	/*	¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ¸Þ´º ¹öÆ° ¿µ¿ª¿¡ µé¾î¿Ã °æ¿ì ±×¶§ÀÇ ¹öÆ° idx¸¦ °è»êÇØ¼­ MainMenu¿¡ ³Ñ°ÜÁÖ°í, ÇØ´çÇÏ´Â ¹öÆ°ÀÌ È­¸é¿¡ Ç¥½ÃµÇ°Ô ÇÔ */
+	/*	ë§ˆìš°ìŠ¤ í¬ì¸í„°ê°€ ë©”ë‰´ ë²„íŠ¼ ì˜ì—­ì— ë“¤ì–´ì˜¬ ê²½ìš° ê·¸ë•Œì˜ ë²„íŠ¼ idxë¥¼ ê³„ì‚°í•´ì„œ MainMenuì— ë„˜ê²¨ì£¼ê³ , í•´ë‹¹í•˜ëŠ” ë²„íŠ¼ì´ í™”ë©´ì— í‘œì‹œë˜ê²Œ í•¨ */
 	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() 
 		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height)
 	{
