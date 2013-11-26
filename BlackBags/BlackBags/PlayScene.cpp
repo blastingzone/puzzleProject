@@ -178,10 +178,10 @@ bool CPlayScene::CreatePlayers()
 	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Donald Kim");
 	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Lucy Kim");
 	
-	for(int playerTurn = 0; playerTurn<m_PlayerNumber;++playerTurn)
+	for (int playerTurn = 0; playerTurn<m_PlayerNumber;++playerTurn)
 	{
 		int tempId;
-		while(true)
+		while (true)
 		{
 			tempId = rand()%m_PlayerNumber;
 			bool flag = false;
