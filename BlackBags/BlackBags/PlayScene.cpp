@@ -16,7 +16,7 @@ CPlayScene::CPlayScene(void)
 	memset(m_Player,0,sizeof(m_Player));
 	GetPlayerNumber();
 	CreatePlayers();
-	SetPlayerTurn();
+/*	SetPlayerTurn();*/
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	if (!m_Map->Init() )
@@ -167,15 +167,38 @@ bool CPlayScene::GetPlayerNumber()
 }
 
 //플레이어 수에 맞춰 CPlayer 생성 후 m_Player에 넣는다. 순서는 입력 순서와 같다.
+//여기서 순서까지 다 정해준다.
 bool CPlayScene::CreatePlayers()
 {
-	for (int i = 0; i<m_PlayerNumber;++i)
+	//조심해!!
+	//세팅메뉴와 연결되는 부분은 수요일에 구현 예정.
+	//일단 직접 집어 넣는 식으로 했음.
+	CGameData::GetInstance()->SetPlayerIdAndName(0,L"Jake Kim");
+	CGameData::GetInstance()->SetPlayerIdAndName(1,L"Cassie Kim");
+	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Donald Kim");
+	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Lucy Kim");
+	
+	for(int playerTurn = 0; playerTurn<m_PlayerNumber;++playerTurn)
 	{
-		m_Player[i] = new CPlayer();
-
-		m_Player[i]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(i));
-		m_Player[i]->SetPlayerTurn(-1);
-		m_Player[i]->SetPlayerId(i);
+		int tempId;
+		while(true)
+		{
+			tempId = rand()%m_PlayerNumber;
+			bool flag = false;
+			for(int j=0;j<playerTurn;++j)
+			{
+				if (tempId == m_Player[j]->GetPlayerId())
+				{
+					flag = true;
+					break;
+				}
+			}
+			if (!flag)
+				break;
+		}
+		m_Player[playerTurn] = new CPlayer;
+		m_Player[playerTurn]->SetPlayerId(tempId);
+		m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId));
 	}
 
 	return true;
@@ -193,39 +216,7 @@ void CPlayScene::DeletePlayers()
 }
 
 //플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
-bool CPlayScene::SetPlayerTurn()
-{
-	//정서경 조심해!!
-	//createplayer랑 합쳐버려도 될 것 같아!!
-	bool flag;
-	int i = 0;
-	CPlayer tempP;
-	while (i < m_PlayerNumber)
-	{
-		int tempTurn = rand()%m_PlayerNumber;
-		flag = true;
-		m_Player[i]->SetPlayerTurn(tempTurn);
 
-		for (int j = 0; j < i ; ++j)
-		{
-			if (m_Player[i]->GetPlayerTurn() == m_Player[j]->GetPlayerTurn())
-			{
-				flag = false;
-			}
-		}
-		if (flag == false)
-			continue;
-		++i;
-
-	}
-	for (int i = 0; i<m_PlayerNumber;++i)
-	{
-		tempP = *m_Player[m_Player[i]->GetPlayerTurn()];
-		*m_Player[m_Player[i]->GetPlayerTurn()] = *m_Player[i];
-		*m_Player[i] = tempP;
-	}
-	return true;
-}
 
 bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 {

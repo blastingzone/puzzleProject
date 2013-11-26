@@ -33,6 +33,7 @@ public:
 	void		IncreasePlayerTrashNumber(int playerId);
 
 	const std::wstring GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
+	void SetPlayerIdAndName(int playerId,std::wstring playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}
