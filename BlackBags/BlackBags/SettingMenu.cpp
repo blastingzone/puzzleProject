@@ -17,9 +17,20 @@ CSettingMenu::CSettingMenu(void)
 
 	// 버튼 초기값들을 설정함
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
+	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
+	m_MapSelect[0].m_GameDataMapSizeWidth = 5;
+
 	m_MapSelect[1].m_ButtonText = L"8 X 7";
+	m_MapSelect[1].m_GameDataMapSizeHeight = 8;
+	m_MapSelect[1].m_GameDataMapSizeWidth = 7;
+
 	m_MapSelect[2].m_ButtonText = L"9 X 8";
+	m_MapSelect[2].m_GameDataMapSizeHeight = 9;
+	m_MapSelect[2].m_GameDataMapSizeWidth = 8;
+
 	m_MapSelect[3].m_ButtonText = L"10 X 9";
+	m_MapSelect[3].m_GameDataMapSizeHeight = 10;
+	m_MapSelect[3].m_GameDataMapSizeWidth = 9;
 
 	m_PlayerSelect[0].m_PlayerId = 0;
 	m_PlayerSelect[1].m_PlayerId = 1;
@@ -63,8 +74,13 @@ void CSettingMenu::SetObjectSize()
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		m_MapSelect[j].m_ButtonWidth = CurrentScale * SC_DEFAULT_SELECT_MAP_BUTTON_WIDTH;
-		m_MapSelect[j].m_ButtonHeight = CurrentScale * SC_DEFAULT_SELECT_MAP_BUTTON_WIDTH;
+		m_MapSelect[j].m_ButtonHeight = CurrentScale * SC_DEFAULT_SELECT_MAP_BUTTON_HEIGHT;
 	}
+
+	m_NextButton.m_ButtonHeight = CurrentScale * SC_DEFAULT_SELECT_MAP_BUTTON_HEIGHT;
+	m_NextButton.m_ButtonWidth = CurrentScale * SC_DEFAULT_SELECT_MAP_BUTTON_WIDTH;
+	m_NextButtonTextSize = CurrentScale * SC_DEFAULT_SELECT_NEXT_TEXT_SIZE;
+	m_NextButtonTextMargin = CurrentScale * SC_DEFAULT_SELECT_NEXT_TEXT_MARGIN;
 }
 
 void CSettingMenu::ResizeClient()
@@ -85,16 +101,28 @@ bool CSettingMenu::CreateResource()
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
 
-		/* 테스트 브러시 */
+		/* Player별 마우스 오버 및 선택시 색상 */
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
+
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
-		/* 테스트 브러시 */
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
+
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
+
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
+		
+		/* Player별 마우스 오버 및 선택시 색상 */
 
 
 		if (SUCCEEDED(hr) )
@@ -133,6 +161,7 @@ void CSettingMenu::RefreshTextSize()
 
 	SafeRelease(m_PlayerSelectTextFormat);
 	SafeRelease(m_MapSelectTextFormat);
+	SafeRelease(m_NextButtonTextFormat);
 
 	// PlayerSelect 창부터 바꿈
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -163,6 +192,21 @@ void CSettingMenu::RefreshTextSize()
 
 	if (SUCCEEDED(hr) )
 		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+	// NextButton TextFormat 생성
+	hr = m_DWriteFactory->CreateTextFormat(
+		_MENU_FONT,
+		NULL,
+		DWRITE_FONT_WEIGHT_THIN,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		m_NextButtonTextSize,
+		L"ko",
+		&m_NextButtonTextFormat
+		);
+
+	if (SUCCEEDED(hr) )
+		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 void CSettingMenu::Render()
@@ -180,7 +224,7 @@ void CSettingMenu::Render()
 		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_PlayerSelect[i].m_ButtonWidth, pos.y + m_PlayerSelect[i].m_ButtonHeight);
 		textPosition =  D2D1::Rect( rectElement.left + m_PlayerSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
 
-		if (m_PlayerSelect[i].m_IsSelected)
+		if (m_PlayerSelect[i].m_IsMouseOver || m_PlayerSelect[i].m_IsSelected)
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_PlayerSelect[i].m_pSelectedBackgroundBrush);
 
@@ -213,10 +257,13 @@ void CSettingMenu::Render()
 		pos.x = m_StartPosition.width + ( (j - 1) * m_MapSelect[j].m_ButtonWidth);
 		pos.y = m_StartPosition.height + m_PlayerSelect[0].m_ButtonHeight * 2;
 
-		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MapSelect[j].m_ButtonWidth, pos.y + m_MapSelect[j].m_ButtonHeight);
+		rectElement = D2D1::Rect( pos.x,
+			pos.y,
+			pos.x + m_MapSelect[j].m_ButtonWidth,
+			pos.y + m_MapSelect[j].m_ButtonHeight);
 		textPosition =  D2D1::Rect( rectElement.left + m_MapSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
 
-		if (m_MapSelect[j].m_IsSelected)
+		if (m_MapSelect[j].m_IsMouseOver || m_MapSelect[j].m_IsSelected)
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_pMapSelectedBackgroundBrush);
 
@@ -238,6 +285,32 @@ void CSettingMenu::Render()
 				m_pUnselectedTextBrush
 				);
 		}
+	}
+
+	//NextButton 조건이 부합하면 렌더
+	if (m_NextButton.m_IsPossible)
+	{
+		D2D1_RECT_F		rectElement, textPosition;
+		D2D1_POINT_2F	pos;
+
+		pos.x = m_StartPosition.width + ( (MAX_MAPSIZE_NUM - 2) * m_MapSelect[0].m_ButtonWidth);
+		pos.y = m_StartPosition.height + m_PlayerSelect[0].m_ButtonHeight * 4;
+
+		rectElement = D2D1::Rect( pos.x,
+			pos.y,
+			pos.x + m_NextButton.m_ButtonWidth,
+			pos.y + m_NextButton.m_ButtonHeight);
+		textPosition =  D2D1::Rect( rectElement.left + m_NextButtonTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+
+		m_pRenderTarget->FillRectangle(rectElement, m_pMapSelectedBackgroundBrush);
+
+		m_pRenderTarget->DrawText(
+			m_NextButton.m_ButtonText.c_str(),
+			m_NextButton.m_ButtonText.length(),
+			m_NextButtonTextFormat,
+			textPosition,
+			m_pSelectedTextBrush
+			);
 	}
 }
 
@@ -261,25 +334,43 @@ D2D1_SIZE_F CSettingMenu:: GetMapSelectButtonSize()
 	return ButtonSize;
 }
 
+D2D1_SIZE_F CSettingMenu::GetNextButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_NextButton.m_ButtonHeight;
+	ButtonSize.width = m_NextButton.m_ButtonWidth;
+
+	return ButtonSize;
+}
+
 void CSettingMenu::SetPlayerMouseOver(int idx)
 {
 	assert(idx < MAX_PLAYER_NUM);
-	m_PlayerSelect[idx].m_IsSelected = true;
+	m_PlayerSelect[idx].m_IsMouseOver = true;
 }
 
 void CSettingMenu::SetMapMouseOver(int idx)
 {
 	assert(idx < MAX_MAPSIZE_NUM);
-	m_MapSelect[idx].m_IsSelected = true;
+	m_MapSelect[idx].m_IsMouseOver = true;
 }
 
 void CSettingMenu::InitMouseOver()
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		m_PlayerSelect[i].m_IsSelected = false;
+		m_PlayerSelect[i].m_IsMouseOver = false;
 	}
 
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_IsMouseOver = false;
+	}
+}
+
+void CSettingMenu::InitMapSelected()
+{
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		m_MapSelect[j].m_IsSelected = false;
