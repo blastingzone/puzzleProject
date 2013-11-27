@@ -384,18 +384,7 @@ void CGameMap::WriteResult()
 		{
 			if ( GetMapType(i, j) == MO_TILE )
 			{
-				CGameData::GetInstance()->IncreasePlayerTileNumber( GetMapOwner(i, j) );
-				switch ( GetItem(IndexedPosition(i, j)) )
-				{
-				case MO_GOLD:
-					CGameData::GetInstance()->IncreasePlayerGoldNumber( GetMapOwner(i, j) );
-					break;
-				case MO_TRASH:
-					CGameData::GetInstance()->IncreasePlayerTrashNumber( GetMapOwner(i, j) );
-					break;
-				case MO_NOTHING:
-					break;
-				}
+				CGameData::GetInstance()->UpdatePlayerResult( GetMapOwner(i, j), GetItem(IndexedPosition(i, j)) );
 			}
 		}
 	}

@@ -14,16 +14,26 @@ CSceneManager::CSceneManager(HWND hWnd)
 {
 	m_CurrentScene = nullptr;
 	m_WindowHandle = NULL;
-
-	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
 	m_WindowHandle = hWnd;
-	m_CurrentScene = new COpeningScene();
+	
 }
-
 
 CSceneManager::~CSceneManager(void)
 {
 	SafeDelete(m_CurrentScene);
+}
+
+bool CSceneManager::Init()
+{
+	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
+	m_CurrentScene = new COpeningScene();
+
+	if (m_CurrentScene != nullptr && CGameData::GetInstance()->GetCurrentScene() == SC_OPENING)
+	{
+		m_CurrentScene->Init();
+		return true;
+	}
+	return false;
 }
 
 void CSceneManager::EventHandle( Coordinate mouseCoordinate )
@@ -75,6 +85,11 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		break;
 	default:
 		break;
+	}
+
+	if (!m_CurrentScene->Init() )
+	{
+		SendMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
 	}
 }
 

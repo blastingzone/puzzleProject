@@ -22,15 +22,11 @@ public:
 	static CGameData* CGameData::GetInstance();
 	static void				ReleaseInstance();
 
+	void		UpdatePlayerResult(int playerId, MO_ITEM item);
 
 	int			GetPlayerTileNumber(int playerId);
-	void		IncreasePlayerTileNumber(MO_OWNER playerId);
-
 	int			GetPlayerGoldNumber(int playerId);
-	void		IncreasePlayerGoldNumber(int playerId);
-
 	int			GetPlayerTrashNumber(int playerId);
-	void		IncreasePlayerTrashNumber(int playerId);
 
 	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: ¿Ã∑∏∞‘..
 	void SetPlayerIdAndName(int playerId,const std::wstring& playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}

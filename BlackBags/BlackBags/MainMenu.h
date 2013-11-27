@@ -22,9 +22,9 @@ public:
 	CMainMenu(void);
 	~CMainMenu(void);
 
-	void Render();
-	void ResizeClient();
-	void SetObjectSize();
+	virtual void Render();
+	virtual void ResizeClient();
+	virtual void SetObjectSize();
 
 	void InitMouseOver();
 	void SetMouseOver(int idx);
@@ -33,7 +33,7 @@ public:
 
 	void CalcStartPosition();
 
-	bool Init();
+	virtual bool Init();
 
 	float		GetButtonWidth() {return m_MenuButtonWidth;}
 	float		GetButtonHeight() {return m_MenuButtonHeight;}

@@ -7,15 +7,8 @@ CMainScene::CMainScene(void)
 {
 	m_MainMenu = nullptr;
 
-	m_MainMenu = new CMainMenu();
-	if (!m_MainMenu->Init() )
-	{
-		GameTerminate();
-	}
-
 	m_SceneStatus = SC_MAIN;
 
-	AddObject(m_MainMenu);
 }
 
 
@@ -23,6 +16,20 @@ CMainScene::~CMainScene(void)
 {
 	RemoveObject();
 	SafeDelete(m_MainMenu);
+}
+
+bool CMainScene::Init()
+{
+	m_MainMenu = new CMainMenu();
+
+	if (!m_MainMenu->Init() || m_MainMenu == nullptr)
+	{
+		return false;
+	}
+	
+	AddObject(m_MainMenu);
+	
+	return true;
 }
 
 void CMainScene::EventHandle(Coordinate mouseCoordinate)

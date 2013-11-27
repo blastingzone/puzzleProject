@@ -460,9 +460,9 @@ void CGameResult::CalculateScore()
 {
 	for (int playerId = 0; playerId < CGameData::GetInstance()->GetplayerNumber(); ++playerId)
 	{
-		int	totalScore = CGameData::GetInstance()->GetPlayerTileNumber(playerId) * 2
-							+ CGameData::GetInstance()->GetPlayerGoldNumber(playerId) * 5
-							- CGameData::GetInstance()->GetPlayerTrashNumber(playerId) * (-10);
+		int	totalScore = CGameData::GetInstance()->GetPlayerTileNumber(playerId) * SC_RT_SCORE_TILE
+							+ CGameData::GetInstance()->GetPlayerGoldNumber(playerId) * SC_RT_SCORE_GOLD
+							+ CGameData::GetInstance()->GetPlayerTrashNumber(playerId) * SC_RT_SCORE_TRASH;
 		
 		m_PlayerScore[playerId] = totalScore;
 	}

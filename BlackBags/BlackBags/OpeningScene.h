@@ -10,13 +10,10 @@ public:
 	COpeningScene(void);
 	~COpeningScene(void);
 
-	void EventHandle(Coordinate mouseCoordinate);
-	void MouseOver(Coordinate mouseCoordinate);
-	void Render();
+	virtual void EventHandle(Coordinate mouseCoordinate);
+	virtual void MouseOver(Coordinate mouseCoordinate);
+	virtual void Render();
 
-	void Init();
-
-private:
-	std::string m_VideoPath;
+	virtual bool Init();
 
 };

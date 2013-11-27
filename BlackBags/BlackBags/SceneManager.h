@@ -10,6 +10,7 @@ public:
 
 	//조심해1!!
 	//Init을 만들어주도록.Scene->Init()도 추가해준다.
+	bool Init();
 
 	void SetNextScene();
 	void CreateScene();

@@ -4,6 +4,9 @@
 
 CPlayer::CPlayer(void)
 {
+	m_Turn = 0;
+	m_Name = L"";
+	m_Id = 0;
 }
 
 
@@ -20,9 +23,6 @@ void CPlayer::SetPlayerTurn( int playerTurn )
 {
 	m_Turn = playerTurn;
 }
-
-
-
 
 void CPlayer::SetPlayerId(int playerId)
 {

@@ -7,12 +7,10 @@ public:
 	CCreditScene(void);
 	~CCreditScene(void);
 
-	void EventHandle(Coordinate mouseCoordinate);
-	void MouseOver(Coordinate mouseCoordinate);
-	void Render();
-	void Init();
+	virtual void EventHandle(Coordinate mouseCoordinate);
+	virtual void MouseOver(Coordinate mouseCoordinate);
+	virtual void Render();
+	virtual bool Init();
 
-private:
-	std::string m_VideoPath;
 };
 

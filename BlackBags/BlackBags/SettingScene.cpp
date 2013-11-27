@@ -5,12 +5,9 @@
 CSettingScene::CSettingScene(void)
 {
 	m_SceneStatus = SC_SETTING;
-	m_SettingMenu = new CSettingMenu();
-
+	
 	m_SelectedPlayerNumber = 0;
 	m_SelectedMapIndex = -1;
-
-	AddObject(m_SettingMenu);
 }
 
 
@@ -18,6 +15,21 @@ CSettingScene::~CSettingScene(void)
 {
 	RemoveObject();
 	SafeDelete(m_SettingMenu);
+}
+
+
+bool CSettingScene::Init()
+{
+	m_SettingMenu = new CSettingMenu();
+
+	if (m_SettingMenu == nullptr || !m_SettingMenu->Init() )
+	{
+		return false;
+	}
+
+	AddObject(m_SettingMenu);
+	
+	return true;
 }
 
 void CSettingScene::EventHandle(Coordinate mouseCoordinate)

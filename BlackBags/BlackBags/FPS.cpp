@@ -15,42 +15,11 @@ CFPS::CFPS(void)
 	, m_TextBrush(nullptr)
 	, m_TextFormat(nullptr)
 {
-	//조심해!!
-	//SM9: 생성자에서 API 호출 하지 말고.. 다른 init 같은거 만들어서 명시적으로 할 것
-
-	DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
-		,__uuidof(m_DWriteFactory)
-		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
-		);
-
-	m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
-		, NULL
-		, DWRITE_FONT_WEIGHT_NORMAL
-		, DWRITE_FONT_STYLE_NORMAL
-		, DWRITE_FONT_STRETCH_NORMAL
-		, 20.0f
-		, L"ko"
-		, &m_TextFormat);
-
-	//m_Result 초기값을 0으로
-	swprintf_s(m_Result, L"FPS : %.2f", m_FPS);
-
-	// Init 될 때 SystemTime을 한 번 받습니다.
-	// 이것 때문에 최초에 한 번 찍히는 FPS는 부정확하지만 크게 중요하지 않습니다. (곧 다음 값이 덮어버리니까요)
-	GetSystemTime(&m_PreviousTime);
 }
 
 
 CFPS::~CFPS(void)
 {
-}
-
-// Brush를 할당하는 함수입니다.
-void CFPS::MakeBrush()
-{
-	CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::DarkSlateGray)
-		, &m_TextBrush);
 }
 
 // 이 Update문은 렌더가 한 번 불려올 때 마다 같이 불려옵니다. (즉 1프레임에 1회 실행)
@@ -71,7 +40,7 @@ void CFPS::Update()
 	{
 		// FPS는 정의대로 Frame / second가 됩니다.
 		m_FPS = ( m_FrameAccumulate * 1000.0f ) / ( m_TimeAccumulate );
-		swprintf_s(m_Result, L"FPS : %.2f", m_FPS);
+		m_Result = L"FPS : " + std::to_wstring(m_FPS);
 		// 다음 FPS 계산을 위해 변수들을 초기화해주고 이전 시간 = 현재 시간으로 만듭니다.
 		m_TimeAccumulate = 0;
 		m_FrameAccumulate = 0;
@@ -86,12 +55,12 @@ void CFPS::Render()
 	CRenderer::GetInstance()->GetHwndRenderTarget()->SetTransform( m_Matrix );
 
 	CRenderer::GetInstance()->GetHwndRenderTarget()->DrawTextW(
-		m_Result
-		,wcslen(m_Result)
+		m_Result.c_str()
+		,m_Result.length()
 		,m_TextFormat
 		,D2D1::RectF(m_PosX, m_PosY
-			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
-			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
+		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
+		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
 		,m_TextBrush);
 }
 
@@ -109,7 +78,7 @@ CFPS* CFPS::GetInstance()
 // Create한 자원들 안 지워줘도 반환된다면서요?
 void CFPS::Release()
 {
-	
+
 }
 
 // 자기 자신을 Release 시키고 삭제합니다.
@@ -118,4 +87,45 @@ void CFPS::ReleaseInstance()
 	m_pInstance->Release();
 	delete m_pInstance;
 	m_pInstance = nullptr ;
+}
+
+bool CFPS::Init()
+{
+	HRESULT hr;
+
+	hr = DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
+		,__uuidof(m_DWriteFactory)
+		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
+		);
+
+	if (SUCCEEDED(hr) )
+	{	
+		hr = m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
+			, NULL
+			, DWRITE_FONT_WEIGHT_NORMAL
+			, DWRITE_FONT_STYLE_NORMAL
+			, DWRITE_FONT_STRETCH_NORMAL
+			, 20.0f
+			, L"ko"
+			, &m_TextFormat);
+	}
+
+	if (SUCCEEDED(hr) )
+	{
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::DarkSlateGray)
+			, &m_TextBrush);
+	}
+
+	if (SUCCEEDED(hr) )
+	{
+		m_Result = L"FPS : " + std::to_wstring(m_FPS);
+		GetSystemTime(&m_PreviousTime);
+
+		return true;
+	}
+
+	// Init 될 때 SystemTime을 한 번 받습니다.
+	// 이것 때문에 최초에 한 번 찍히는 FPS는 부정확하지만 크게 중요하지 않습니다. (곧 다음 값이 덮어버리니까요)
+	return false;
 }

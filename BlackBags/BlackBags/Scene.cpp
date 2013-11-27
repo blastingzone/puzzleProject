@@ -4,7 +4,7 @@
 
 CScene::CScene(void)
 {
-	Init();
+
 }
 
 CScene::~CScene(void)
@@ -47,14 +47,4 @@ void CScene::AddObject( CSceneObject* inputObject )
 void CScene::RemoveObject()
 {
 	m_Object.clear();
-}
-
-void CScene::Init()
-{
-
-}
-
-void CScene::GameTerminate()
-{
-	CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
 }

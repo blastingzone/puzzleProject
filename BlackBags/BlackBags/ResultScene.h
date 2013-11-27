@@ -13,10 +13,11 @@ public:
 	CResultScene(void);
 	~CResultScene(void);
 
-	void Render();
-	void EventHandle(Coordinate mouseCoordinate);
+	virtual bool Init();
+	virtual void Render();
+	virtual void EventHandle(Coordinate mouseCoordinate);
 
-	void MouseOver(Coordinate mouseCoordinate);
+	virtual void MouseOver(Coordinate mouseCoordinate);
 
 private:
 	CGameResult* m_GameResult;

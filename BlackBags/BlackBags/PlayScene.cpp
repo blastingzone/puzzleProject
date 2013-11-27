@@ -5,30 +5,19 @@
 
 CPlayScene::CPlayScene(void)
 {
+#ifdef _DEBUG
 	AllocConsole();
 	FILE* pFile;
 	freopen_s(&pFile, "CONOUT$", "wb", stdout);
+#endif // _DEBUG
 
 	m_PlayerTurn = 0;
 	m_Map = nullptr;
 	m_PlayerNumber = 0;
 
 	memset(m_Player,0,sizeof(m_Player));
-	SetPlayerNumber();
-	CreatePlayers();
-
-	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
-	if (!m_Map->Init() )
-	{
-		GameTerminate();
-	}
-
-	InitRandomMap();
 
 	m_SceneStatus = SC_PLAY;
-	AddObject(m_Map);
-
-	CGameTimer::GetInstance()->SetTimerStart();
 }
 
 
@@ -42,6 +31,25 @@ CPlayScene::~CPlayScene(void)
 	SafeDelete(m_Map);
 }
 
+
+bool CPlayScene::Init()
+{
+	
+	SetPlayerNumber();
+	CreatePlayers();
+	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
+
+	if ( m_Map == nullptr || !m_Map->Init() )
+	{
+		return false;
+	}
+
+	InitRandomMap();
+	AddObject(m_Map);
+	CGameTimer::GetInstance()->SetTimerStart();
+
+	return true;
+}
 
 //지도 관련 정보를 업데이트 해주는 함수
 void CPlayScene::EventHandle(Coordinate mouseCoordinate)
@@ -121,9 +129,6 @@ void CPlayScene::TimeOut()
 		// 랜덤 값으로 뽑은 좌표가 MO_LINE_UNCONNECTED일 경우에
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 		{
-			//조심해!! IsPossible() 중복임
-			//그리고 EventHandle() 리턴값 활용하지 못하고 있음
-			//EventHandle()의 리턴 값을 없애고 timeOut()처럼 flag만 바꾸고 밖에서 flag 확인하고 필요한 작업 수행하는 게 좋지 않을까?
 			if ( IsPossible(RandomTargetPosition) )
 			{
 				EventHandle(RandomTargetPosition);
@@ -156,26 +161,24 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 	return indexedPosition;
 }
 
-bool CPlayScene::SetPlayerNumber()
+void CPlayScene::SetPlayerNumber()
 {
 	//SettingScene에서의 플레이어 수를 받아온다.
 
 	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
-
-	return true;
 }
 
 //플레이어 수에 맞춰 CPlayer 생성 후 m_Player에 넣는다. 순서는 입력 순서와 같다.
 //여기서 순서까지 다 정해준다.
-bool CPlayScene::CreatePlayers()
+void CPlayScene::CreatePlayers()
 {
 	//조심해!!
 	//세팅메뉴와 연결되는 부분은 수요일에 구현 예정.
 	//일단 직접 집어 넣는 식으로 했음.
-	CGameData::GetInstance()->SetPlayerIdAndName(0,L"Jake Kim");
-	CGameData::GetInstance()->SetPlayerIdAndName(1,L"Cassie Kim");
-	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Donald Kim");
-	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Lucy Kim");
+	CGameData::GetInstance()->SetPlayerIdAndName(0,L"Player1");
+	CGameData::GetInstance()->SetPlayerIdAndName(1,L"Player2");
+	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Player3");
+	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Player4");
 	
 	for (int playerTurn = 0; playerTurn<m_PlayerNumber;++playerTurn)
 	{
@@ -199,8 +202,6 @@ bool CPlayScene::CreatePlayers()
 		m_Player[playerTurn]->SetPlayerId(tempId);
 		m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId));
 	}
-
-	return true;
 }
 
 void CPlayScene::DeletePlayers()

@@ -151,15 +151,25 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	else 
 	{
 		g_Manager = new CSceneManager(hWnd);
+		if (!g_Manager->Init() )
+		{
+			SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+		}
 	}
 
 	//update window하기 전에 렌더러와 맵을 생성하지 않으면 null pointer 참조 연산 발생 가능성 있음
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 #ifdef _DEBUG
-	CFPS::GetInstance()->MakeBrush();
+	if (!CFPS::GetInstance()->Init())
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
 #endif
-	CGameTimer::GetInstance();
+	if (!CGameTimer::GetInstance()->Init())
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
 
 	return TRUE;
 }

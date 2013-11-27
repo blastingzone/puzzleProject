@@ -15,24 +15,6 @@ CGameTimer::CGameTimer(void)
 	, m_TextFormat(nullptr)
 	, m_Result(L"")
 {
-
-	//조심해!!
-	//SM9:  API 호출 같은 작업은 생성자에서 절대 하지 말것. 예외 핸들링을 할 수 없고, 프로그램을 강제로 죽이는 수밖에 없다
-	// 자원 할당
-	DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
-		,__uuidof(m_DWriteFactory)
-		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
-		);
-	m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
-		, NULL
-		, DWRITE_FONT_WEIGHT_NORMAL
-		, DWRITE_FONT_STYLE_NORMAL
-		, DWRITE_FONT_STRETCH_NORMAL
-		, 20.0f
-		, L"ko"
-		, &m_TextFormat);
-
-	MakeBrush();
 }
 
 CGameTimer::~CGameTimer(void)
@@ -63,7 +45,7 @@ void CGameTimer::SetTimerStart()
 {
 	m_StartTime = GetTickCount();
 	m_TimeRest = TimeLimit;
-	swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
+	m_Result = L"남은 시간 : " + std::to_wstring(m_TimeRest);
 }
 
 // 주의 : 반드시 SetTimerStart()이 먼저 불려온 다음에 실행해야 함
@@ -76,7 +58,7 @@ void CGameTimer::Update()
 	if (interval > 1000)
 	{
 		--m_TimeRest;
-		swprintf_s(m_Result, L"Time Rest : %d", m_TimeRest);
+		m_Result = L"남은 시간 : " + std::to_wstring(m_TimeRest);
 		m_StartTime = m_CurrentTime;
 	}
 
@@ -88,12 +70,6 @@ void CGameTimer::Update()
 	}
 }
 
-void CGameTimer::MakeBrush()
-{
-	CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Crimson)
-		, &m_TextBrush);
-}
 
 void CGameTimer::Render()
 {
@@ -101,11 +77,50 @@ void CGameTimer::Render()
 	CRenderer::GetInstance()->GetHwndRenderTarget()->SetTransform( m_Matrix );
 
 	CRenderer::GetInstance()->GetHwndRenderTarget()->DrawTextW(
-		m_Result
-		,wcslen(m_Result)
+		m_Result.c_str()
+		,m_Result.length()
 		,m_TextFormat
 		,D2D1::RectF(m_PosX, m_PosY
-			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
-			,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
+		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
+		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
 		,m_TextBrush);
+}
+
+bool CGameTimer::Init()
+{
+	//조심해!!
+	//SM9:  API 호출 같은 작업은 생성자에서 절대 하지 말것. 예외 핸들링을 할 수 없고, 프로그램을 강제로 죽이는 수밖에 없다
+	// 자원 할당
+	HRESULT hr;
+
+	hr = DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
+		,__uuidof(m_DWriteFactory)
+		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
+		);
+
+	if (SUCCEEDED(hr) )
+	{
+		hr = m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
+			, NULL
+			, DWRITE_FONT_WEIGHT_NORMAL
+			, DWRITE_FONT_STYLE_NORMAL
+			, DWRITE_FONT_STRETCH_NORMAL
+			, 20.0f
+			, L"ko"
+			, &m_TextFormat);
+	}
+
+	if (SUCCEEDED(hr) )
+	{
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Crimson)
+			, &m_TextBrush);
+	}
+
+	if (SUCCEEDED(hr) )
+	{
+		return true;
+	}
+
+	return false;
 }

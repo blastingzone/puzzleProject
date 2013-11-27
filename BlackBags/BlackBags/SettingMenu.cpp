@@ -10,11 +10,6 @@ CSettingMenu::CSettingMenu(void)
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
 
-	if (!CreateResource() )
-	{
-		CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
-	}
-
 	// 버튼 초기값들을 설정함
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
@@ -41,6 +36,16 @@ CSettingMenu::CSettingMenu(void)
 
 CSettingMenu::~CSettingMenu(void)
 {
+}
+
+bool CSettingMenu::Init()
+{
+	if (!CreateResource() )
+	{
+		return false;
+	}
+	
+	return true;
 }
 
 // 화면 왼쪽 위에서부터 그리기 위해 시작 지점 설정

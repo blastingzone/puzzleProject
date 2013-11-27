@@ -79,8 +79,9 @@ public:
 	CSettingMenu(void);
 	~CSettingMenu(void);
 
-	void ResizeClient();
-	void Render();
+	virtual bool Init();
+	virtual void ResizeClient();
+	virtual void Render();
 
 	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
 	D2D1_SIZE_F GetPlayerSelectButtonSize();
@@ -111,7 +112,7 @@ private:
 
 	void CalcStartPosition();
 	void RefreshTextSize();
-	void SetObjectSize();
+	virtual void SetObjectSize();
 
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 

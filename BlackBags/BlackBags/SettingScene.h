@@ -8,10 +8,12 @@ class CSettingScene :
 public:
 	CSettingScene(void);
 	~CSettingScene(void);
+	
+	virtual bool Init();
 
-	void EventHandle(Coordinate mouseCoordinate);
-	void MouseOver(Coordinate mouseCoordinate);
-	void Render();
+	virtual void EventHandle(Coordinate mouseCoordinate);
+	virtual void MouseOver(Coordinate mouseCoordinate);
+	virtual void Render();
 	
 	bool CheckGameStartCondition();
 

@@ -11,14 +11,14 @@ public:
 	CGameResult(void);
 	~CGameResult(void);
 
-	void Render();
-	void ResizeClient();
-	void SetObjectSize();
+	virtual void Render();
+	virtual void ResizeClient();
+	virtual void SetObjectSize();
 	void SetMouseOver();
 
 	void CalcStartPosition();
 
-	bool Init();
+	virtual bool Init();
 
 	float		GetButtonWidth() {return m_ButtonWidth;}
 	float		GetButtonHeight() {return m_ButtonHeight;}

@@ -8,6 +8,7 @@ class CGameTimer
 public:
 	CGameTimer(void);
 	~CGameTimer(void);
+	bool		Init();
 
 	static CGameTimer* CGameTimer::GetInstance();
 	void		ReleaseInstance();
@@ -18,8 +19,6 @@ public:
 	void		SetTimerStart();
 
 private:
-	void		MakeBrush();
-
 	static CGameTimer* m_pInstance;
 
 	// 시간 경과를 계산하기 위한 변수들
@@ -40,6 +39,6 @@ private:
 	D2D1::Matrix3x2F		m_Matrix;
 
 	// 렌더할 결과를 담는 변수
-	wchar_t m_Result[TIME_LEFT_TEXT_LENGTH];
+	std::wstring			m_Result;
 };
 

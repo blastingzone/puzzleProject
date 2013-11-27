@@ -7,8 +7,6 @@
 CCreditScene::CCreditScene(void)
 {
 	m_SceneStatus = SC_CREDIT;
-	m_VideoPath="credit.avi";
-	Init();
 }
 
 
@@ -39,9 +37,9 @@ void CCreditScene::Render()
 	}
 }
 
-void CCreditScene::Init()
+bool CCreditScene::Init()
 {
-	if (CVideoRender::GetInstance()->CreateLibrary(m_VideoPath))
+	if (CVideoRender::GetInstance()->CreateLibrary(_CREDIT_MOVIE))
 	{
 		CVideoRender::GetInstance()->StartVideo();
 	}
@@ -50,4 +48,6 @@ void CCreditScene::Init()
 		//비디오를 찾지 못하면 그냥 메인 화면으로 넘겨 버립니다.
 		CGameData::GetInstance()->SetCurrentScene( SC_MAIN );
 	}
+	// 내부에서 예외처리가 되어있습니다.
+	return true;
 }

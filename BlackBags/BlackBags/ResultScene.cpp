@@ -5,18 +5,8 @@
 CResultScene::CResultScene(void)
 {
 	m_GameResult = nullptr;
+	m_SceneStatus = SC_RESULT;
 
-	m_GameResult = new CGameResult();
-
-	if (!m_GameResult->Init() )
-	{
-		GameTerminate();
-	}
-	else
-	{
-		m_SceneStatus = SC_RESULT;
-		AddObject(m_GameResult);
-	}
 }
 
 CResultScene::~CResultScene(void)
@@ -57,4 +47,20 @@ void CResultScene::Render()
 		CFPS::GetInstance()->Render();
 #endif
 	}
+}
+
+bool CResultScene::Init()
+{
+	m_GameResult = new CGameResult();
+
+	if ( m_GameResult == nullptr || !m_GameResult->Init() )
+	{
+		return false;
+	}
+	else
+	{
+		AddObject(m_GameResult);
+	}
+
+	return true;
 }

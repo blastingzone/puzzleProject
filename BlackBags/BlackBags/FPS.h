@@ -10,7 +10,8 @@ public:
 	CFPS(void);
 	~CFPS(void);
 
-	void		MakeBrush();
+	bool		Init();
+
 	void		Update();
 	void        Render();
 	void		ReleaseInstance();
@@ -29,8 +30,8 @@ private:
 
 	// FPS = ( m_FrameAccumulate ) / ( m_TimeAccumulate )
 
-	double		m_FPS;
-	wchar_t		m_Result[16];
+	double			m_FPS;
+	std::wstring	m_Result;
 
 	// FPS 렌더링을 위한 변수들
 	IDWriteFactory*			m_DWriteFactory;
