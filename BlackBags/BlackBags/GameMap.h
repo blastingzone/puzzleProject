@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "d2d1.h"
 #include "SceneObject.h"
+#include <array>
 
 /*	게임 맵의 타일 좌표를 표현하기 위한 구조체 */
 struct IndexedPosition
@@ -105,7 +106,7 @@ private:
 	/*	게임 데이터를 저장하기 위한 배열
 		생성은 최대 크기로 생성하고, 
 		게임 설정에 따라서 필요한 부분만 다른 MapObject로 속성 변경해서 사용 */
-	MapObject m_Map[MAX_MAP_WIDTH][MAX_MAP_HEIGHT];
+	std::array<std::array<MapObject, MAX_MAP_HEIGHT>, MAX_MAP_WIDTH> m_Map;
 
 	/*	실제 게임 설정에 따른 필요한 맵 크기
 		울타리나 점은 고려하지 않은 순수한 타일 수만 의미 */

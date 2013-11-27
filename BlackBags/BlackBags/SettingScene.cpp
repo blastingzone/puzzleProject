@@ -93,8 +93,8 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY > startPosition.height + (4) * nextButton.height)
 		{
 			///////////////////////////////////////////////////////////////////////////
-			// 조심해!! 하드코딩으로 데이터 넣어주도록 했습니다
-			// 테스트 끝나면 바꿔야합니다
+			// 조심해!! 
+			// Player Create와 연동해야 합니다!!
 			///////////////////////////////////////////////////////////////////////////
 			CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
