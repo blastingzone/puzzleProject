@@ -11,7 +11,7 @@ public:
 	~CPlayScene(void);
 
 	void StartGame();
-	bool GetPlayerNumber();
+	bool SetPlayerNumber();
 	bool CreatePlayers();
 	void DeletePlayers();
 

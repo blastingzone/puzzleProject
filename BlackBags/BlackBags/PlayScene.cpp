@@ -14,9 +14,8 @@ CPlayScene::CPlayScene(void)
 	m_PlayerNumber = 0;
 
 	memset(m_Player,0,sizeof(m_Player));
-	GetPlayerNumber();
+	SetPlayerNumber();
 	CreatePlayers();
-/*	SetPlayerTurn();*/
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 	if (!m_Map->Init() )
@@ -157,7 +156,7 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 	return indexedPosition;
 }
 
-bool CPlayScene::GetPlayerNumber()
+bool CPlayScene::SetPlayerNumber()
 {
 	//SettingScene에서의 플레이어 수를 받아온다.
 

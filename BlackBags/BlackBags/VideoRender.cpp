@@ -6,6 +6,7 @@ CVideoRender* CVideoRender::m_pInstance = nullptr;
 
 CVideoRender::CVideoRender(void)
 {
+	//정서경 조심해!! 라이브러리도 초기화해줘야해 + info도.
 	m_VideoDevice=nullptr;
 	m_VideoTexture = nullptr;
 	m_Hwnd=NULL;

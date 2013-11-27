@@ -59,6 +59,9 @@ void CGameMap::CreateMap()
 				// dot - line - dot - line
 				if (targetColumn % 2 == 1)
 				{
+					//조심해 !!!x10000
+					//이거 무서운 코드다 m_MapSize 크기가 어떻게 되든 m_Map은 21x21로 고정 되어 있다.
+					//아무리 하드 코딩하더라도 이렇게 놔두지 않는 습관을 들여야 한다. 
 					m_Map[targetRow][targetColumn].m_Type = MO_DOT;
 				} 
 				else 
@@ -91,6 +94,8 @@ bool CGameMap::Init()
 		return false;
 	}
 
+
+	//최경욱 조심해^^!! SetObjectSize()가 예외상황에서는.... 체크해보자?
 	SetObjectSize();
 	ResizeClient();
 	SetMapSize(m_MapSize);

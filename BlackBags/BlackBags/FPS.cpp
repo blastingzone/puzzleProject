@@ -15,6 +15,9 @@ CFPS::CFPS(void)
 	, m_TextBrush(nullptr)
 	, m_TextFormat(nullptr)
 {
+	//조심해!!
+	//SM9: 생성자에서 API 호출 하지 말고.. 다른 init 같은거 만들어서 명시적으로 할 것
+
 	DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
 		,__uuidof(m_DWriteFactory)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
@@ -114,4 +117,5 @@ void CFPS::ReleaseInstance()
 {
 	m_pInstance->Release();
 	delete m_pInstance;
+	m_pInstance = nullptr ;
 }

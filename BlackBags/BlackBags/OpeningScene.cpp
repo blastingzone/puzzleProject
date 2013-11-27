@@ -7,6 +7,8 @@
 COpeningScene::COpeningScene(void)
 {
 	m_SceneStatus = SC_OPENING;	
+	//조심해!!
+	//config.h에 넣어주고.. Init을 다른데서 해버렷.
 	m_VideoPath = "opening.avi";
 	Init();
 }

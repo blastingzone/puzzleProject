@@ -8,6 +8,9 @@ public:
 	CSceneManager(HWND hWnd);
 	~CSceneManager(void);
 
+	//조심해1!!
+	//Init을 만들어주도록.Scene->Init()도 추가해준다.
+
 	void SetNextScene();
 	void CreateScene();
 	void Render();

@@ -4,6 +4,8 @@
 CGameData* CGameData::m_pInstance = nullptr;
 CGameData::CGameData(void)
 {
+	//조심해!!
+	//이름을 입력받던가 Player#1이렇게 바꿔.
 	m_PlayerData[0].m_Id = 0;
 	m_PlayerData[0].m_PlayerName = L"Jake Kim";
 
@@ -50,6 +52,8 @@ void CGameData::ReleaseInstance()
 	SafeDelete(m_pInstance);
 }
 
+//조심해!!
+//하나로 합쳐야해~ 다른데도 바꿔줘야함
 void CGameData::IncreasePlayerTileNumber( MO_OWNER playerId )
 {
 	assert(MO_NOBODY != playerId);
@@ -76,6 +80,7 @@ void CGameData::SetMapSize(int x, int y)
 	m_MapSize.m_Width = x;
 }
 
+//조심해!! 이 3종도 합치도록한다. int? 앞에꺼랑 맞춰줘라.
 int CGameData::GetPlayerTileNumber( int playerId )
 {
 	assert(MO_NOBODY!=playerId);
