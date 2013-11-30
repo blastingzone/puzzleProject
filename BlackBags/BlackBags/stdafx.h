@@ -20,5 +20,6 @@
 #include "config.h"
 #include "GameData.h"
 #include "MacroSet.h"
+#include "SoundRenderer.h"
 
 // TODO: reference additional headers your program requires here

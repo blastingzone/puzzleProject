@@ -8,7 +8,6 @@ CMainScene::CMainScene(void)
 	m_MainMenu = nullptr;
 
 	m_SceneStatus = SC_MAIN;
-
 }
 
 
@@ -29,6 +28,8 @@ bool CMainScene::Init()
 	
 	AddObject(m_MainMenu);
 	
+	CSoundRenderer::GetInstance()->PlayBGM();
+
 	return true;
 }
 

@@ -46,6 +46,9 @@
     <Filter Include="ThirdParty">
       <UniqueIdentifier>{664a050d-6d90-44a0-94f9-d35bd929da18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SoundRenderer">
+      <UniqueIdentifier>{bd6b01c1-0187-441a-874c-bca29f812d94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -140,6 +143,9 @@
     <ClInclude Include="BandiVideoTexture_DX9.h">
       <Filter>ThirdParty</Filter>
     </ClInclude>
+    <ClInclude Include="SoundRenderer.h">
+      <Filter>SoundRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -210,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="BandiVideoTexture_DX9.cpp">
       <Filter>ThirdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundRenderer.cpp">
+      <Filter>SoundRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,8 +37,8 @@ const UINT TIME_LIMIT = 20 * 1000;
 
 
 /*	게임 맵 크기입니다 */
-const int MAX_MAP_WIDTH = 21;
-const int MAX_MAP_HEIGHT = 21;
+const int MAX_MAP_WIDTH = 23;
+const int MAX_MAP_HEIGHT = 23;
 
 
 /*	지도 초기화 할 때 맵 탐사하는 배열 길이 (함수 구조 변경 후 삭제 예정) */

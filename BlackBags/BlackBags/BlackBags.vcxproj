@@ -110,6 +110,7 @@
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SettingMenu.h" />
     <ClInclude Include="SettingScene.h" />
+    <ClInclude Include="SoundRenderer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="VideoRender.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SettingMenu.cpp" />
     <ClCompile Include="SettingScene.cpp" />
+    <ClCompile Include="SoundRenderer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

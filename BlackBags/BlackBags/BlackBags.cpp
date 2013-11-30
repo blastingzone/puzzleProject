@@ -144,6 +144,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
+
+	if (!CSoundRenderer::GetInstance()->Init())
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
+
 	if (CVideoRender::GetInstance()->Init(hWnd) != S_OK)
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
