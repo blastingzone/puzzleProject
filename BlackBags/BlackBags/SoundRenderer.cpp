@@ -64,11 +64,11 @@ bool CSoundRenderer::Init()
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT       fr = m_System->createSound("Resources/Sound/BGM.mp3", FMOD_HARDWARE, 0, &m_BGM);
+	FMOD_RESULT       fr = m_System->createSound("Resource/Sound/BGM.mp3", FMOD_HARDWARE, 0, &m_BGM);
 
 	if (fr == FMOD_OK)
 	{
-		fr = m_System->createSound("Resources/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_SE);
+		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_SE);
 	}
 
 	return fr;
