@@ -27,6 +27,7 @@ const float SC_DEFAULT_SELECT_NEXT_BUTTON_HEIGHT = 40.0f;
 const float SC_DEFAULT_SELECT_NEXT_TEXT_MARGIN = 15.0f;
 const float SC_DEFAULT_SELECT_NEXT_TEXT_SIZE = 15.0f;
 
+
 /*	게임 맵 오브젝트들의 기본 크기입니다 */
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
@@ -35,6 +36,7 @@ const float DEFAULT_ITEM_RADIUS = 4.0f;
 
 const UINT TIME_LIMIT = 20 * 1000;
 
+const float SC_P_CLICK_BUFFER = 7.0f;
 
 /*	게임 맵 크기입니다 */
 const int MAX_MAP_WIDTH = 23;

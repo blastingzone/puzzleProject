@@ -223,9 +223,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		AdjustWindowRect(&g_ClientRect, WS_OVERLAPPEDWINDOW, FALSE);
 		
 		//윈도우 크기를 바꿔주고 클라이언트 영역을 새로 그려준다.
+		//조심해!!
+		//왜 20px 작게 그려지는지 아직 알 수 없음, WS_OVERLAPPEDWINDOW에서 문제가 생기는걸까...
 		MoveWindow(hWnd, 0, 0,
 			g_ClientRect.right - g_ClientRect.left,
-			g_ClientRect.bottom - g_ClientRect.top,
+			g_ClientRect.bottom - g_ClientRect.top + 20,
 			TRUE); 
 		break;
 	case WM_SIZE:

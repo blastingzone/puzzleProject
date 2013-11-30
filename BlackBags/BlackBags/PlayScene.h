@@ -27,6 +27,7 @@ public:
 	virtual void		EventHandle(IndexedPosition indexedPosition);
 	virtual void		MouseOver(Coordinate mouseCoordinate);
 	virtual void		Render();
+	virtual void		ResizeClient();
 	
 	virtual void PlayBGM();
 	virtual void StopBGM();
@@ -52,11 +53,18 @@ private:
 
 	/*	IsClosed함수에서 탐색 중인 타일이 이미 탐색된 곳인지 체크하는 함수입니다 */
 	bool IsAlreadyChecked(const IndexedPosition& nextTile);
+
+	/*	마우스 클릭 범위 설정 */
+	void SetClickArea();
 	
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[MAX_PLAYER_NUM];
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
+
+	float		m_ClickBuffer;
+	float		m_ClickLineWeight;
+	float		m_ClickTileSize;
 
 	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
 };

@@ -94,9 +94,6 @@ bool CGameMap::Init()
 		return false;
 	}
 
-
-	//최경욱 조심해^^!! SetObjectSize()가 예외상황에서는.... 체크해보자?
-	SetObjectSize();
 	ResizeClient();
 	SetMapSize(m_MapSize);
 	CreateMap();
@@ -318,8 +315,8 @@ void CGameMap::CalcStartPosition()
 
 void CGameMap::ResizeClient()
 {
-	CalcStartPosition();
 	SetObjectSize();
+	CalcStartPosition();
 }
 
 void CGameMap::SetObjectSize()
