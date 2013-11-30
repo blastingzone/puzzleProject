@@ -389,11 +389,6 @@ void CGameResult::RefreshTextSize()
 	}
 }
 
-void CGameResult::SetMouseOver()
-{
-	//버튼 범위 위에 오면 버튼 상태 true로 변경
-}
-
 bool CGameResult::CreateResource()
 {
 	HRESULT hr;
@@ -481,4 +476,26 @@ void CGameResult::DecideWinner()
 	}
 
 	m_Winner = static_cast<MO_OWNER>(winnerId);
+}
+
+void CGameResult::InitMouseOver()
+{
+	m_ButtonMouseOver = false;
+}
+
+void CGameResult::SetMouseOver()
+{
+	m_ButtonMouseOver = true;
+}
+
+RECT CGameResult::GetGetButtonPosition()
+{
+	RECT buttonPosition;
+
+	buttonPosition.left = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth;
+	buttonPosition.right = buttonPosition.left + m_ButtonWidth;
+	buttonPosition.top = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight;
+	buttonPosition.bottom = buttonPosition.top + m_ButtonHeight;
+
+	return buttonPosition;
 }

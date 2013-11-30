@@ -22,6 +22,8 @@ public:
 	static CGameData* CGameData::GetInstance();
 	static void				ReleaseInstance();
 
+	void					Init();
+
 	void		UpdatePlayerResult(int playerId, MO_ITEM item);
 
 	int			GetPlayerTileNumber(int playerId);

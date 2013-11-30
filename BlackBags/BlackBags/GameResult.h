@@ -14,14 +14,15 @@ public:
 	virtual void Render();
 	virtual void ResizeClient();
 	virtual void SetObjectSize();
+	
+	void InitMouseOver();
 	void SetMouseOver();
 
 	void CalcStartPosition();
 
 	virtual bool Init();
 
-	float		GetButtonWidth() {return m_ButtonWidth;}
-	float		GetButtonHeight() {return m_ButtonHeight;}
+	RECT		GetGetButtonPosition();
 
 private:
 	bool CreateResource();

@@ -2,20 +2,9 @@
 #include "GameData.h"
 
 CGameData* CGameData::m_pInstance = nullptr;
+
 CGameData::CGameData(void)
 {
-	m_PlayerData[0].m_Id = 0;
-	m_PlayerData[0].m_PlayerName = L"Player1";
-
-	m_PlayerData[1].m_Id = 1;
-	m_PlayerData[1].m_PlayerName = L"Player2";
-
-	m_PlayerData[2].m_Id = 2;
-	m_PlayerData[2].m_PlayerName = L"Player3";
-
-	m_PlayerData[3].m_Id = 3;
-	m_PlayerData[3].m_PlayerName = L"Player4";
-
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{
 		m_PlayerData[i].m_MyTile = 0;
@@ -48,6 +37,34 @@ CGameData* CGameData::GetInstance()
 void CGameData::ReleaseInstance()
 {
 	SafeDelete(m_pInstance);
+}
+
+void CGameData::Init()
+{
+	//생성자와 중복이 너무 많음
+	//타일, 골드, 라인 수만 초기화 해주는 함수 만드는 것이 좋을까요?
+	m_PlayerData[0].m_Id = 0;
+	m_PlayerData[0].m_PlayerName = L"Player1";
+
+	m_PlayerData[1].m_Id = 1;
+	m_PlayerData[1].m_PlayerName = L"Player2";
+
+	m_PlayerData[2].m_Id = 2;
+	m_PlayerData[2].m_PlayerName = L"Player3";
+
+	m_PlayerData[3].m_Id = 3;
+	m_PlayerData[3].m_PlayerName = L"Player4";
+
+	for (int i = 0;i<MAX_PLAYER_NUM;++i)
+	{
+		m_PlayerData[i].m_MyTile = 0;
+		m_PlayerData[i].m_MyGold = 0;
+		m_PlayerData[i].m_MyTrash = 0;
+	}
+
+	SetMapSize(0, 0);
+	
+	m_PlaySceneTimerFlag = false;
 }
 
 void CGameData::UpdatePlayerResult( int playerId, MO_ITEM item )

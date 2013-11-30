@@ -7,6 +7,10 @@ CResultScene::CResultScene(void)
 	m_GameResult = nullptr;
 	m_SceneStatus = SC_RESULT;
 
+	ButtonPosition.bottom = 0;
+	ButtonPosition.top = 0;
+	ButtonPosition.left = 0;
+	ButtonPosition.right = 0;
 }
 
 CResultScene::~CResultScene(void)
@@ -29,11 +33,14 @@ void CResultScene::EventHandle(Coordinate mouseCoordinate)
 
 void CResultScene::MouseOver(Coordinate mouseCoordinate)
 {
-	//조심해!!
-	//finish button mouse over 기능 구현
-	if (mouseCoordinate.m_PosX > 0)
-	{
+	m_GameResult->InitMouseOver();
 
+	if (mouseCoordinate.m_PosX > ButtonPosition.left
+		&& mouseCoordinate.m_PosX < ButtonPosition.right
+		&& mouseCoordinate.m_PosY > ButtonPosition.top
+		&& mouseCoordinate.m_PosY < ButtonPosition.bottom)
+	{
+		m_GameResult->SetMouseOver();
 	}
 }
 
@@ -60,11 +67,26 @@ bool CResultScene::Init()
 	else
 	{
 		AddObject(m_GameResult);
-
+		SetButtonPosition();
 		PlayBGM();
 	}
 
 	return true;
+}
+
+void CResultScene::ResizeClient()
+{
+	for (auto iter: m_Object)
+	{
+		iter->ResizeClient();
+	}
+
+	SetButtonPosition();
+}
+
+void CResultScene::SetButtonPosition()
+{
+	ButtonPosition = m_GameResult->GetGetButtonPosition();
 }
 
 void CResultScene::PlayBGM()

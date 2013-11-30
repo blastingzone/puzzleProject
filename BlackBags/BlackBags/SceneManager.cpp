@@ -25,7 +25,9 @@ CSceneManager::~CSceneManager(void)
 
 bool CSceneManager::Init()
 {
+	CGameData::GetInstance()->Init();
 	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
+
 	m_CurrentScene = new COpeningScene();
 
 	if (m_CurrentScene != nullptr && CGameData::GetInstance()->GetCurrentScene() == SC_OPENING)
@@ -77,6 +79,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		break;
 	case SC_SETTING:
 		m_CurrentScene = new CSettingScene();
+		CGameData::GetInstance()->Init();
 		break;
 	case SC_CREDIT:
 		m_CurrentScene = new CCreditScene();
