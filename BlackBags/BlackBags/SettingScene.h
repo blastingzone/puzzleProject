@@ -15,6 +15,9 @@ public:
 	virtual void MouseOver(Coordinate mouseCoordinate);
 	virtual void Render();
 	
+	virtual void PlayBGM();
+	virtual void StopBGM();
+	
 	bool CheckGameStartCondition();
 
 private:

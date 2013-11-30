@@ -57,6 +57,7 @@ void CSceneManager::Update()
 void CSceneManager::ChangeScene(const SceneName& newScene)
 {
 	/*	현재 scene을 해제하고 적절한 다음 scene을 생성한다 */
+	m_CurrentScene->StopBGM();
 	SafeDelete( m_CurrentScene );
 	m_CurrentScene = nullptr;
 

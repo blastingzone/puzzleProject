@@ -19,6 +19,7 @@ public:
 	void AllocateChannel();
 
 	void PlayBGM();
+	void StopBGM();
 	void PlaySE();
 
 	FMOD::System* GetSystem() { return m_System; }

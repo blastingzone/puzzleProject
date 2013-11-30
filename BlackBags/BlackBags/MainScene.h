@@ -14,6 +14,8 @@ public:
 
 	virtual void Render();
 	virtual void EventHandle(Coordinate mouseCoordinate);
+	virtual void PlayBGM();
+	virtual void StopBGM();
 
 	/*	메뉴 버튼에 마우스 포인터를 올리면 선택되는 시각적 표현 */
 	virtual void MouseOver(Coordinate mouseCoordinate);

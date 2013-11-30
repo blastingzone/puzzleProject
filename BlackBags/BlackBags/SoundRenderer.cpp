@@ -86,6 +86,11 @@ void CSoundRenderer::PlayBGM()
 	m_System->playSound(m_BGM, m_ChannelGroup, false, &m_BGMChannel);
 }
 
+void CSoundRenderer::StopBGM()
+{
+	m_BGMChannel->stop();
+}
+
 void CSoundRenderer::PlaySE()
 {
 	m_System->playSound(m_SE, m_ChannelGroup, false, &m_SEChannel);

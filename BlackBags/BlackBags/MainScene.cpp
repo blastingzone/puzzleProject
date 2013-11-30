@@ -27,8 +27,8 @@ bool CMainScene::Init()
 	}
 	
 	AddObject(m_MainMenu);
-	
-	CSoundRenderer::GetInstance()->PlayBGM();
+
+	PlayBGM();
 
 	return true;
 }
@@ -86,4 +86,15 @@ void CMainScene::Render()
 		CFPS::GetInstance()->Render();
 #endif
 	}
+}
+
+void CMainScene::PlayBGM()
+{
+	//나중에 재생할 음악 선택하는 인자 넣는 형식으로 수정할 것
+	CSoundRenderer::GetInstance()->PlayBGM();
+}
+
+void CMainScene::StopBGM()
+{
+	CSoundRenderer::GetInstance()->StopBGM();
 }

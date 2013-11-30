@@ -48,6 +48,8 @@ bool CPlayScene::Init()
 	AddObject(m_Map);
 	CGameTimer::GetInstance()->SetTimerStart();
 
+	PlayBGM();
+
 	return true;
 }
 
@@ -536,4 +538,15 @@ void CPlayScene::Render()
 	CFPS::GetInstance()->Update();
 	CFPS::GetInstance()->Render();
 #endif
+}
+
+void CPlayScene::PlayBGM()
+{
+	//나중에 재생할 음악 선택하는 인자 넣는 형식으로 수정할 것
+	CSoundRenderer::GetInstance()->PlayBGM();
+}
+
+void CPlayScene::StopBGM()
+{
+	CSoundRenderer::GetInstance()->StopBGM();
 }

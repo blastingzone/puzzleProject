@@ -27,6 +27,9 @@ public:
 	virtual void		EventHandle(IndexedPosition indexedPosition);
 	virtual void		MouseOver(Coordinate mouseCoordinate);
 	virtual void		Render();
+	
+	virtual void PlayBGM();
+	virtual void StopBGM();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 
