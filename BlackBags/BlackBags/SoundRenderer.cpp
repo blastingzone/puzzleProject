@@ -16,7 +16,6 @@ CSoundRenderer::CSoundRenderer(void) :
 
 CSoundRenderer::~CSoundRenderer(void)
 {
-	SafeDelete(m_pInstance);
 }
 
 CSoundRenderer* CSoundRenderer::GetInstance()

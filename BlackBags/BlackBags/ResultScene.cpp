@@ -22,9 +22,9 @@ void CResultScene::EventHandle(Coordinate mouseCoordinate)
 
 	if (mouseCoordinate.m_PosX > 0)
 	{
-		CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
+		CGameData::GetInstance()->SetCurrentScene(SC_MAIN);
 	}
-	CGameData::GetInstance()->SetCurrentScene(SC_OPENING);
+	CGameData::GetInstance()->SetCurrentScene(SC_MAIN);
 }
 
 void CResultScene::MouseOver(Coordinate mouseCoordinate)

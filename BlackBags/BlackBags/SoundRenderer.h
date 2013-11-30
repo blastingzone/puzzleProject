@@ -1,7 +1,8 @@
 #pragma once
 #include <map>
-#include "Library/FMOD/inc/fmod.hpp"
-#include "Library/FMOD/inc/fmod_errors.h"
+
+#include "Library\FMOD\inc\fmod.hpp"
+#include "Library\FMOD\inc\fmod_errors.h"
 
 class CSoundRenderer
 {

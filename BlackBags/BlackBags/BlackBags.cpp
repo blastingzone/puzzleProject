@@ -81,6 +81,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CVideoRender::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
+	CSoundRenderer::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
 	delete g_Manager;
