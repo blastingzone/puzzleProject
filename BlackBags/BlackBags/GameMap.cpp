@@ -169,7 +169,7 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED )
+			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED ||GetMapType(IndexedPosition(i, j) ) == MO_LINE_HIDDEN)
 			{
 				if (i%2==0)
 				{
@@ -190,6 +190,9 @@ void CGameMap::Render()
 					break;
 				case MO_LINE_CONNECTED:
 					m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					break;
+				case MO_LINE_HIDDEN:
+					m_pRenderTarget->FillRectangle(rectElement, m_pPossibleLineBrush);
 					break;
 				default:
 					break;
@@ -236,6 +239,11 @@ bool CGameMap::CreateResource()
 
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
+		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(115.0f/255, 191.0f/255, 31.0f/255), &m_pUnconnectedLineBrush); //ver 1106
+		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro), &m_pUnconnectedLineBrush);
+
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(115.0f/255, 191.0f/255, 31.0f/255), &m_pUnconnectedLineBrush); //ver 1106
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro), &m_pUnconnectedLineBrush);
 
@@ -385,4 +393,19 @@ void CGameMap::WriteResult()
 			}
 		}
 	}
+}
+
+void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition )
+{
+	//조심해!! 정서경
+	//'범위'로 바꿔줘야할 것 같다. + flag를 쓰는게 나을 듯하다.
+	for (int i= 0;i<MAX_MAP_WIDTH;++i)
+	{
+		for (int j= 0;j<MAX_MAP_HEIGHT;++j)
+		{
+			if (m_Map[i][j].m_Type == MO_LINE_HIDDEN)
+				m_Map[i][j].m_Type = MO_LINE_UNCONNECTED;
+		}
+	}
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_HIDDEN;
 }

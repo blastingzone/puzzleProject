@@ -58,6 +58,9 @@ public:
 	/*	입력된 좌표의 오브젝트를 연결 된 상태로 변경 */
 	void DrawLine(const IndexedPosition& indexedPosition);
 
+	void ShowVirtualLine(const IndexedPosition& indexedPosition);
+
+
 	/*	입력된 좌표의 오브젝트를 연결되지 않은 상태로 변경
 		(게임을 생성하면서 랜덤으로 울타리 배칠 할 때 사용됨) */
 	void DeleteLine(const IndexedPosition& indexedPosition);
