@@ -21,7 +21,8 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pTileP4 = nullptr;
 
 	m_LineAnimationFlag = false;
-	m_TileAnimationFlag = false;
+	m_TileAnimationTurnNumber = 0;
+	m_TileAnimationTurn = 0;
 
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
@@ -147,6 +148,24 @@ void CGameMap::Render()
 					break;
 				}
 
+				if (!m_LineAnimationFlag && m_Map[i][j].m_AnimationTurn >= m_TileAnimationTurn)
+				{
+					//애니메이션을 그린다
+
+					if (/* 애니메이션 끝난 상태라면 */)
+					{
+						//다음 턴 그릴 준비
+						++m_TileAnimationTurn;
+						
+						//애니메이션이 끝난거라면
+						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
+						{
+							m_TileAnimationTurn = 0;
+							m_TileAnimationTurnNumber = 0;
+						}
+					}
+				}
+
 				//item draw
 				if (GetItem(IndexedPosition(i, j) ) != MO_NOTHING)
 				{
@@ -215,6 +234,11 @@ void CGameMap::Render()
 							m_Map[i][j].m_AnimationFlag = false;
 							m_LineAnimationFlag = false;
 							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+
+							if (m_TileAnimationTurnNumber == 0)
+							{
+								CGameTimer::GetInstance()->SetTimerStart();
+							}
 						}
 						else
 						{
@@ -434,4 +458,18 @@ void CGameMap::WriteResult()
 			}
 		}
 	}
+}
+
+void CGameMap::SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction)
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = turn;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = direction;
+}
+
+void CGameMap::InitAnimationState(IndexedPosition indexedPosition)
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = 0;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = false;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = DI_UP;
 }

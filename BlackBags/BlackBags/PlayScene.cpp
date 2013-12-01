@@ -73,7 +73,7 @@ void CPlayScene::EventHandle(Coordinate mouseCoordinate)
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
 		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer
-		&& !m_Map->GetLineAnimationFlag() && !m_Map->GetTileAnimationFlag())
+		&& !m_Map->GetLineAnimationFlag() && m_Map->GetTileAnimationTurnNumber() == 0)
 	{
 		IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 		EventHandle(indexedPosition);
@@ -119,6 +119,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 		//조심해!!
 		//애니메이션 끝나면 타이머 재시작하게 해줘야함
+		//현재는 여기서 초기화 하고 애니메이션이 끝나고 다시 초기화 함(애니메이션이 최대 20초를 넘지 않아야 하는 문제 남아 있음)
 		CGameTimer::GetInstance()->SetTimerStart();
 	}
 }
@@ -165,27 +166,6 @@ void CPlayScene::TimeOut()
 //마우스 좌표값을 index로 바꾸는 함수
 IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 {
-	/*
-	IndexedPosition indexedPosition;
-
-	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
-	mouseCoordinate.m_PosX -= static_cast<int>(m_Map->GetStartPosition().width);
-	mouseCoordinate.m_PosY -= static_cast<int>(m_Map->GetStartPosition().height);
-
-	//조심해!!!
-	//지금은 스케일 값을 반영하기 위해서 반복적으로 작업하는데 나중에 따로 담아두고 쓰도록 할 것
-	float scale = CRenderer::GetInstance()->GetDisplayScale();
-
-	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
-	indexedPosition.m_PosI = 
-		( mouseCoordinate.m_PosY / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
-		+ ( ( mouseCoordinate.m_PosY % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
-	indexedPosition.m_PosJ = 
-		( mouseCoordinate.m_PosX / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
-		+ ( ( mouseCoordinate.m_PosX % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
-
-	return indexedPosition;
-	*/
 	IndexedPosition indexedPosition;
 
 	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
@@ -258,9 +238,6 @@ void CPlayScene::DeletePlayers()
 	}
 }
 
-//플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
-
-
 bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 {
 
@@ -318,18 +295,6 @@ bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 
 bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 {
-	// 	int i = 0;
-	// 
-	// 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
-	// 	{
-	// 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
-	// 		{
-	// 			return true;
-	// 		}
-	// 
-	// 		i++;
-	// 	}
-
 	return m_Map->GetMapFlag(nextTile);
 }
 
@@ -373,8 +338,12 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 		m_ClosedTile[i++] = currentTile;
 		m_Map->SetMapFlag(currentTile, true);
 
+		//타일에 애니메이션 적용하는 순서 나타내기 위한 변수
+		int animationTurn = 0;
 		while (!searchTiles.empty() )
 		{
+			++animationTurn;
+
 			currentTile.m_PosI = searchTiles.front().m_PosI;
 			currentTile.m_PosJ = searchTiles.front().m_PosJ;
 			searchTiles.pop();
@@ -382,35 +351,17 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 			//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				/*
-				int checkIdx = 0;
-				while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
-				{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-				checkIdx++;
-				}
-				*/
 				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
 				{
 					for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
 					{
 						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
+
+						//애니메이션 재생을 위한 데이터도 초기화
+						m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
 					}
 				}
 				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
-
-				/*
-				int checkIdx = 0;
-				while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
-				{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-				}
-				memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
-
-				//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
-				while (!searchTiles.empty())
-				searchTiles.pop();
-				*/
 #ifdef _DEBUG
 				printf("센티넬을 만났어요\n");
 #endif
@@ -429,6 +380,12 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+
+					//애니메이션 재생을 위한 순서와 방향 지정
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_UP);
+
+					//재생할 애니메이션이 없으므로 0으로 설정
+					animationTurn = 0;
 				}				
 			}
 
@@ -442,6 +399,9 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_RIGHT);
 				}				
 			}
 
@@ -455,6 +415,9 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_DOWN);
 				}				
 			}
 
@@ -468,9 +431,14 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_LEFT);
 				}				
 			}
 		}
+		//닫힌 타일이 있으므로 애니메이션 실행하라는 플래그 설정
+		m_Map->SetTileAnimationTurnNumber(animationTurn);
 	}
 }
 
