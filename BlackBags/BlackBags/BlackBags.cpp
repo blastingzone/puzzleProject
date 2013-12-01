@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "VideoRender.h"
+#include "ImageRenderer.h"
 
 
 #define MAX_LOADSTRING 100
@@ -79,6 +80,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
 	CVideoRender::GetInstance()->ReleaseInstance();
+	CImageRenderer::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
 	CSoundRenderer::GetInstance()->ReleaseInstance();
@@ -152,6 +154,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 
 	if (CVideoRender::GetInstance()->Init(hWnd) != S_OK)
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
+
+	if (!CImageRenderer::GetInstance()->Init(hWnd))
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}

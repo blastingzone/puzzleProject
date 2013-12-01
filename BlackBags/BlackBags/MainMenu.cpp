@@ -80,7 +80,6 @@ bool CMainMenu::Init()
 		return false;
 	}
 	ResizeClient();
-
 	return true;
 }
 
