@@ -581,12 +581,12 @@ void CPlayScene::Render()
 void CPlayScene::PlayBGM()
 {
 	//나중에 재생할 음악 선택하는 인자 넣는 형식으로 수정할 것
-	//CSoundRenderer::GetInstance()->PlayBGM();
+	CSoundRenderer::GetInstance()->PlayBGM();
 }
 
 void CPlayScene::StopBGM()
 {
-	//CSoundRenderer::GetInstance()->StopBGM();
+	CSoundRenderer::GetInstance()->StopBGM();
 }
 
 void CPlayScene::ResizeClient()
