@@ -66,5 +66,7 @@ private:
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pMenuButtonBrush;
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
+
+	ID2D1Bitmap *m_pBackgroundImage;
 };
 

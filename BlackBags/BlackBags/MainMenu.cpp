@@ -34,6 +34,8 @@ void CMainMenu::Render()
 	D2D1_RECT_F		rectElement, textPosition;
 	D2D1_POINT_2F	pos;
 
+	m_pRenderTarget->DrawBitmap(m_pBackgroundImage,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
+
 	for (int i = 0; i < BUTTON_NUMBER; ++i)
 	{
 		//pos는 메뉴 버튼의 왼쪽 상단
@@ -80,6 +82,8 @@ bool CMainMenu::Init()
 		return false;
 	}
 	ResizeClient();
+	m_pBackgroundImage = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_menu.jpg",m_pBackgroundImage);
+
 	return true;
 }
 

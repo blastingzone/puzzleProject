@@ -80,7 +80,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 #endif
 	CRenderer::GetInstance()->ReleaseInstance();
 	CVideoRender::GetInstance()->ReleaseInstance();
-	CImageRenderer::GetInstance()->ReleaseInstance();
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
 	CSoundRenderer::GetInstance()->ReleaseInstance();
@@ -158,10 +157,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
 
-	if (!CImageRenderer::GetInstance()->Init(hWnd))
-	{
-		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
-	}
 	else 
 	{
 		g_Manager = new CSceneManager(hWnd);

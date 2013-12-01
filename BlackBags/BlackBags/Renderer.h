@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <d2d1.h>
+#include <wincodec.h>
 
 class CRenderer
 {
@@ -22,6 +23,8 @@ public:
 	void	SetDisplayScale();
 	float	GetDisplayScale() const { return m_DisplayScale; }
 
+	ID2D1Bitmap* CreateImage(std::wstring fileName, ID2D1Bitmap* myBitmap);
+
 private:
 	static CRenderer*		m_pInstance; //singleton instance
 
@@ -31,4 +34,11 @@ private:
 	/*	현재 화면에 표시될 화면의 크기를 저장하는 변수
 		0.0 ~ 1.0의 값을 가지고 DEFAULT 화면 크기에 이 변수의 값을 곱해서 화면에 표시될 크기가 결정된다. */
 	float					m_DisplayScale;
+
+	IWICImagingFactory * m_pImagingFactory;
+	IWICBitmapDecoder *m_pDecoder;
+	IWICBitmapFrameDecode *m_pFrame;	
+	IWICFormatConverter* m_pConvertedSourceBitmap;
+	ID2D1BitmapRenderTarget* m_ipBitampTraget;
+	ID2D1Bitmap *m_pD2DBitmap;
 };

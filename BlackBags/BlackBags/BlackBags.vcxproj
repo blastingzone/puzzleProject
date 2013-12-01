@@ -96,7 +96,6 @@
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameTimer.h" />
-    <ClInclude Include="ImageRenderer.h" />
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainScene.h" />
@@ -126,7 +125,6 @@
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameResult.cpp" />
     <ClCompile Include="GameTimer.cpp" />
-    <ClCompile Include="ImageRenderer.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="OpeningScene.cpp" />

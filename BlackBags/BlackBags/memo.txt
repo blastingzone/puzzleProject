@@ -1,5 +1,15 @@
 ﻿몇 가지 다시 잡아야 할 것들을 정리해봅니다.
 
+13.12.01 ~올해 마지막 달..ㄷㄷ
+1.CImageRender사용법
+	우선 이미지를 사용하는 씬에서 
+	ID2D1Bitmap *m_pImage;
+	팩토리, 렌더타겟은 렌더러에서 하는 방법과 같아서 생략하고..
+	m_pImage = CRenderer::GetInstance()->CreateImage(L"Resource/Image/name.jpg",m_pImage);
+	
+	렌더하는 부분
+	m_pRenderTarget->DrawBitmap(m_pImage,D2D1::RectF(왼쪽좌표,탑좌표,그림가로크기,그림세로크기));
+
 13.11.23
 
 1.	if (IsEnd() )

@@ -52,9 +52,6 @@
     <Filter Include="Scenes\CreditScene">
       <UniqueIdentifier>{5270b13c-1ce4-4fbd-9d4d-4df8cd2b780a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer\ImageRenderer">
-      <UniqueIdentifier>{d1e27664-5961-43f3-a95d-b0e9b19341f9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -152,9 +149,6 @@
     <ClInclude Include="VideoRender.h">
       <Filter>Renderer\VideoRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="ImageRenderer.h">
-      <Filter>Renderer\ImageRenderer</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -228,9 +222,6 @@
     </ClCompile>
     <ClCompile Include="VideoRender.cpp">
       <Filter>Renderer\VideoRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageRenderer.cpp">
-      <Filter>Renderer\ImageRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
