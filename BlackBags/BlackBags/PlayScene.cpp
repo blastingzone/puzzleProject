@@ -68,7 +68,7 @@ void CPlayScene::SetClickArea()
 //지도 관련 정보를 업데이트 해주는 함수
 void CPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
-	//입력된 마우스 포인터 위치가 게임 맵 범위 안이고 애니메이션 재상 중이 아닐 때만 처리
+	//입력된 마우스 포인터 위치가 게임 맵 범위 안이고 애니메이션 재생 중이 아닐 때만 처리
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
@@ -95,7 +95,6 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 		if (IsClosed(indexedPosition))
 		{
 			int i = 0;
-
 			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
 			{
 				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
@@ -104,6 +103,9 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 				m_Map->SubtractVoidCount();
 				i++;
 			}
+
+			//tile animation 시작 설정
+			m_Map->SetTileAnimationTurn(1);
 #ifdef _DEBUG
 			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
@@ -357,8 +359,14 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					{
 						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 
-						//애니메이션 재생을 위한 데이터도 초기화
-						m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
+						if (m_Map->GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
+						{
+							//애니메이션 재생을 위한 데이터도 초기화
+							m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
+						}
+
+						//재생할 애니메이션이 없으므로 0으로 설정
+						animationTurn = 0;
 					}
 				}
 				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
@@ -383,9 +391,6 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 
 					//애니메이션 재생을 위한 순서와 방향 지정
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_UP);
-
-					//재생할 애니메이션이 없으므로 0으로 설정
-					animationTurn = 0;
 				}				
 			}
 

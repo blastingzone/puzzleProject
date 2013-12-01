@@ -147,15 +147,32 @@ void CGameMap::Render()
 				default:
 					break;
 				}
-
-				if (!m_LineAnimationFlag && m_Map[i][j].m_AnimationTurn >= m_TileAnimationTurn)
+				
+				//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
+				if (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn)
 				{
-					//애니메이션을 그린다
+					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+				}
 
-					if (/* 애니메이션 끝난 상태라면 */)
+				//진행중인 라인 애니메이션이 없고 현재 타일에 할당된 애니메이션이 완료되지 않으면 
+				else if (!m_LineAnimationFlag 
+					&& m_Map[i][j].m_AnimationTurn == m_TileAnimationTurn
+					&& m_TileAnimationTurn > 1)
+				{
+					if (m_Map[i][j].m_StartTime == 0)
+					{
+						m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+					}
+					
+					DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+
+					float timeWeight = currentTime - m_Map[i][j].m_StartTime;
+					float tempLine = m_TileSize * ( timeWeight / SC_P_TILE_ANIMATION_TIME);
+
+					if ( tempLine > m_TileSize)
 					{
 						//다음 턴 그릴 준비
-						++m_TileAnimationTurn;
+						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
 						
 						//애니메이션이 끝난거라면
 						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
@@ -163,6 +180,29 @@ void CGameMap::Render()
 							m_TileAnimationTurn = 0;
 							m_TileAnimationTurnNumber = 0;
 						}
+					}
+					else
+					{
+						//애니메이션을 그린다
+						switch (m_Map[i][j].m_Direction)
+						{
+						case DI_UP:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine);
+							break;
+						case DI_RIGHT:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2 + tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							break;
+						case DI_DOWN:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							break;
+						case DI_LEFT:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2 - tempLine, m_pos.y + m_TileSize / 2);
+							break;
+						default:
+							break;
+						}
+
+						m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 					}
 				}
 
