@@ -38,7 +38,6 @@ CPlayScene::~CPlayScene(void)
 
 bool CPlayScene::Init()
 {
-	
 	SetPlayerNumber();
 	CreatePlayers();
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
@@ -69,11 +68,12 @@ void CPlayScene::SetClickArea()
 //지도 관련 정보를 업데이트 해주는 함수
 void CPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
-	//입력된 마우스 포인터 위치가 게임 맵 범위 안일 때만 처리
+	//입력된 마우스 포인터 위치가 게임 맵 범위 안이고 애니메이션 재상 중이 아닐 때만 처리
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
-		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer)
+		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer
+		&& !m_Map->GetLineAnimationFlag() && !m_Map->GetTileAnimationFlag())
 	{
 		IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 		EventHandle(indexedPosition);
@@ -116,6 +116,9 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 		}
 
 		m_PlayerTurn++;
+
+		//조심해!!
+		//애니메이션 끝나면 타이머 재시작하게 해줘야함
 		CGameTimer::GetInstance()->SetTimerStart();
 	}
 }

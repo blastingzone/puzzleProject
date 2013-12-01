@@ -38,6 +38,8 @@ const UINT TIME_LIMIT = 20 * 1000;
 
 const float SC_P_CLICK_BUFFER = 7.0f;
 
+const DWORD SC_P_LINE_ANIMATION_TIME = 500;
+
 /*	게임 맵 크기입니다 */
 const int MAX_MAP_WIDTH = 23;
 const int MAX_MAP_HEIGHT = 23;

@@ -35,13 +35,16 @@ struct IndexedPosition
 
 struct MapObject
 {
-	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false) {}
+	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false), m_AnimationFlag(false), m_StartTime(0) {}
 
 	MO_TYPE		m_Type;
 	MO_OWNER	m_Owner;
 	MO_ITEM		m_Item;
 	
 	bool m_Flag;
+
+	bool	m_AnimationFlag;
+	DWORD	m_StartTime;
 };
 
 class CGameMap : public CSceneObject
@@ -81,6 +84,10 @@ public:
 	/*	맵 오프젝트 크기 반환하는 함수들 */
 	float		GetTileSize(){ return m_TileSize; };
 	float		GetLineWeight() { return m_LineWeight; }
+
+	/*	애니메이션 상태를 반환하는 함수들 */
+	bool		GetLineAnimationFlag(){ return m_LineAnimationFlag; };
+	bool		GetTileAnimationFlag() { return m_TileAnimationFlag; }
 	
 	void SubtractVoidCount() { --m_VoidTileCount; }
 	int	GetVoidTileCount() { return m_VoidTileCount; }
@@ -143,5 +150,8 @@ private:
 	ID2D1SolidColorBrush*	m_pTileP4;
 
 	D2D1_ELLIPSE			m_DotEllipse;
+
+	bool m_LineAnimationFlag;
+	bool m_TileAnimationFlag;
 };
 

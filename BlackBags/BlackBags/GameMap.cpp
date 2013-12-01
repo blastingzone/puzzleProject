@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "GameMap.h"
+#include "GameTimer.h"
 
 CGameMap::CGameMap(MapSize mapSize)
 {
@@ -18,6 +19,9 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pTileP2 = nullptr;
 	m_pTileP3 = nullptr;
 	m_pTileP4 = nullptr;
+
+	m_LineAnimationFlag = false;
+	m_TileAnimationFlag = false;
 
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
@@ -189,11 +193,52 @@ void CGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 					break;
 				case MO_LINE_CONNECTED:
-					m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					//animation
+					//GET - SET function 만들 것
+					if (m_Map[i][j].m_AnimationFlag)
+					{
+						//배경
+						m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
+
+						if (m_Map[i][j].m_StartTime == 0)
+						{
+							m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+						}
+
+						DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+						float timeWeight = currentTime - m_Map[i][j].m_StartTime;
+
+						float tempLine = m_TileSize * ( timeWeight / SC_P_LINE_ANIMATION_TIME);
+
+						if (tempLine > m_TileSize)
+						{
+							m_Map[i][j].m_AnimationFlag = false;
+							m_LineAnimationFlag = false;
+							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+						}
+						else
+						{
+							if (i%2==0)
+							{
+								rectElement = D2D1::Rect( m_pos.x - m_LineWeight / 2, m_pos.y - tempLine / 2, m_pos.x + m_LineWeight / 2, m_pos.y + tempLine / 2);
+							}
+							else
+							{
+								rectElement = D2D1::Rect( m_pos.x - tempLine / 2, m_pos.y - m_LineWeight / 2, m_pos.x + tempLine / 2, m_pos.y + m_LineWeight / 2);
+							}
+							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+						}
+					}
+					else
+					{
+						m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					}
 					break;
 				default:
 					break;
 				}
+
+				
 			}
 		}
 	}
@@ -284,6 +329,10 @@ void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
+	
+	//animaiton start
+	m_LineAnimationFlag = true;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
 }
 
 void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
