@@ -301,12 +301,16 @@ void CGameMap::Render()
 
 					if ( tempLine > m_TileSize)
 					{
-						//다음 턴 그릴 준비
+						//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
 						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
 						m_Map[i][j].m_AnimationTurn = 0;
 						m_Map[i][j].m_AnimationFlag = false;
 						
-						//애니메이션이 끝난거라면
+						//조심해!
+						//애니메이션 재생 중에는 타이머 일시 정지 기능 추가 필요할지도?
+						CGameTimer::GetInstance()->SetTimerStart();
+						
+						//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
 						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
 						{
 							m_TileAnimationTurn = 0;
@@ -315,6 +319,7 @@ void CGameMap::Render()
 					}
 					else
 					{
+						//애니메이션이 재생 중이라면 
 						D2D1_RECT_F animationRect;
 						
 						//애니메이션을 그린다
@@ -392,7 +397,7 @@ void CGameMap::Render()
 					//GET - SET function 만들 것
 					if (m_Map[i][j].m_AnimationFlag)
 					{
-						//배경
+						//UnconnectedLine을 배경에 두고 위에 그려야 하므로 배경을 먼저 그림
 						m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 						if (m_Map[i][j].m_StartTime == 0)
@@ -407,10 +412,12 @@ void CGameMap::Render()
 
 						if (tempLine > m_TileSize)
 						{
+							//line 애니메이션 종료되면 관련 변수 초기화
 							m_Map[i][j].m_AnimationFlag = false;
 							m_LineAnimationFlag = false;
 							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
 
+							//다음에 재생할 타일 애니메이션이 없으면 타이머 초기화해서 다음 턴 진행
 							if (m_TileAnimationTurnNumber == 0)
 							{
 								CGameTimer::GetInstance()->SetTimerStart();
@@ -418,6 +425,7 @@ void CGameMap::Render()
 						}
 						else
 						{
+							//애니메이션 재생
 							if (i%2==0)
 							{
 								rectElement = D2D1::Rect( m_pos.x - m_LineWeight / 2, m_pos.y - tempLine / 2, m_pos.x + m_LineWeight / 2, m_pos.y + tempLine / 2);
@@ -462,8 +470,24 @@ void CGameMap::Render()
 	}
 
 	//타이머 작업 중
-	//m_pos.x = m_StartPosition.width;
-	//m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
+	D2D1_SIZE_F centerPosition;
+	centerPosition = m_pRenderTarget->GetSize();
+
+	centerPosition.width /= 2;
+
+	m_pos.x = centerPosition.width;
+	m_pos.y = m_TimerPositionHeight;
+
+	//배경
+	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x + (m_TimerWidth / 2), m_pos.y + m_TimerHeight);
+	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
+
+	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
+	float currentTimerLength = m_TimerWidth * remainTimeRatio;
+
+	//남은 시간 표시
+	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
+	m_pRenderTarget->FillRectangle(rectElement, m_pTileP3);
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)

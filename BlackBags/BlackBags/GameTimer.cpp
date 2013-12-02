@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameTimer.h"
 #include "Renderer.h"
 
@@ -8,6 +8,7 @@ CGameTimer* CGameTimer::m_pInstance = nullptr;
 
 CGameTimer::CGameTimer(void)
 	: m_TimeRest(0)
+	, m_CheckedTime(0)
 	, m_PosX(20.0f)
 	, m_PosY(40.0f)
 	, m_DWriteFactory(nullptr)
@@ -44,25 +45,26 @@ void CGameTimer::ReleaseInstance()
 void CGameTimer::SetTimerStart()
 {
 	m_StartTime = GetTickCount();
+	m_CheckedTime = m_StartTime;
 	m_TimeRest = TimeLimit;
-	m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
+	m_Result = L"Â³Â²Ã€Âº Â½ÃƒÂ°Â£ : " + std::to_wstring(m_TimeRest);
 }
 
-// ÁÖÀÇ : ¹İµå½Ã SetTimerStart()ÀÌ ¸ÕÀú ºÒ·Á¿Â ´ÙÀ½¿¡ ½ÇÇàÇØ¾ß ÇÔ
+// ÃÃ–Ã€Ã‡ : Â¹ÃÂµÃ¥Â½Ãƒ SetTimerStart()Ã€ÃŒ Â¸Ã•Ã€Ãº ÂºÃ’Â·ÃÂ¿Ã‚ Â´Ã™Ã€Â½Â¿Â¡ Â½Ã‡Ã‡Ã Ã‡Ã˜Â¾ÃŸ Ã‡Ã”
 void CGameTimer::Update()
 {
 	m_CurrentTime = GetTickCount();
 
-	DWORD interval = m_CurrentTime - m_StartTime;
+	DWORD interval = m_CurrentTime - m_CheckedTime;
 
 	if (interval > 1000)
 	{
 		--m_TimeRest;
-		m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
-		m_StartTime = m_CurrentTime;
+		m_Result = L"Â³Â²Ã€Âº Â½ÃƒÂ°Â£ : " + std::to_wstring(m_TimeRest);
+		m_CheckedTime = m_CurrentTime;
 	}
 
-	// Ã³À½ ½Ã°£ - ÇöÀç ½Ã°£ÀÌ TimeLimit(¿©±â¼­´Â 20ÃÊ)¸¦ ³Ñ¾î°¡¸é if¹® ÀÛµ¿
+	// ÃƒÂ³Ã€Â½ Â½ÃƒÂ°Â£ - Ã‡Ã¶Ã€Ã§ Â½ÃƒÂ°Â£Ã€ÃŒ TimeLimit(Â¿Â©Â±Ã¢Â¼Â­Â´Ã‚ 20ÃƒÃŠ)Â¸Â¦ Â³Ã‘Â¾Ã®Â°Â¡Â¸Ã© ifÂ¹Â® Ã€Ã›ÂµÂ¿
 	if (m_TimeRest <= 0)
 	{
 		CGameData::GetInstance()->SetPlaySceneTimerFlag();
@@ -73,6 +75,7 @@ void CGameTimer::Update()
 
 void CGameTimer::Render()
 {
+	/*
 	m_Matrix = D2D1::Matrix3x2F::Translation(0, 0);
 	CRenderer::GetInstance()->GetHwndRenderTarget()->SetTransform( m_Matrix );
 
@@ -84,13 +87,14 @@ void CGameTimer::Render()
 		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width
 		,CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height)
 		,m_TextBrush);
+	*/
 }
 
 bool CGameTimer::Init()
 {
-	//Á¶½ÉÇØ!!
-	//SM9:  API È£Ãâ °°Àº ÀÛ¾÷Àº »ı¼ºÀÚ¿¡¼­ Àı´ë ÇÏÁö ¸»°Í. ¿¹¿Ü ÇÚµé¸µÀ» ÇÒ ¼ö ¾ø°í, ÇÁ·Î±×·¥À» °­Á¦·Î Á×ÀÌ´Â ¼ö¹Û¿¡ ¾ø´Ù
-	// ÀÚ¿ø ÇÒ´ç
+	//ÃÂ¶Â½Ã‰Ã‡Ã˜!!
+	//SM9:  API ÃˆÂ£ÃƒÃ¢ Â°Â°Ã€Âº Ã€Ã›Â¾Ã·Ã€Âº Â»Ã½Â¼ÂºÃ€ÃšÂ¿Â¡Â¼Â­ Ã€Ã½Â´Ã« Ã‡ÃÃÃ¶ Â¸Â»Â°Ã. Â¿Â¹Â¿Ãœ Ã‡ÃšÂµÃ©Â¸ÂµÃ€Â» Ã‡Ã’ Â¼Ã¶ Â¾Ã¸Â°Ã­, Ã‡ÃÂ·ÃÂ±Ã—Â·Â¥Ã€Â» Â°Â­ÃÂ¦Â·Ã ÃÃ—Ã€ÃŒÂ´Ã‚ Â¼Ã¶Â¹Ã›Â¿Â¡ Â¾Ã¸Â´Ã™
+	// Ã€ÃšÂ¿Ã¸ Ã‡Ã’Â´Ã§
 	HRESULT hr;
 
 	hr = DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED
@@ -127,5 +131,23 @@ bool CGameTimer::Init()
 
 DWORD CGameTimer::GetRemainTime()
 {
-	return TIME_LIMIT - (GetTickCount() - m_StartTime);
+	/*
+	DWORD now = GetTickCount();
+	DWORD progressedTime = now - m_StartTime;
+	DWORD remainTime = TIME_LIMIT - progressedTime;
+	*/
+
+	DWORD remainTime = TIME_LIMIT - (GetTickCount() - m_StartTime);
+
+	if (remainTime < 0)
+	{
+		//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì¤‘
+		remainTime = 0;
+	}
+	else if (remainTime > TIME_LIMIT)
+	{
+		remainTime = TIME_LIMIT;
+	}
+	
+	return remainTime;
 }

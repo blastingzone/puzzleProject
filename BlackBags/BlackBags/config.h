@@ -65,7 +65,7 @@ const float SC_P_TIMER_POSITION_HEIGHT = 10.0f;
 const float SC_P_TIMER_WIDTH = 500.0f;
 const float SC_P_TIMER_HEIGHT = 5.0f;
 
-const UINT TIME_LIMIT = 20 * 1000;
+const DWORD TIME_LIMIT = 20 * 1000;
 
 const float SC_P_CLICK_BUFFER = 7.0f;
 

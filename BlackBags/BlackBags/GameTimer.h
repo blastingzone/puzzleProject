@@ -30,6 +30,7 @@ private:
 	//SYSTEMTIME		m_CurrentTime;
 	DWORD			m_StartTime;
 	DWORD			m_CurrentTime;
+	DWORD			m_CheckedTime;
 
 	// Timer 렌더링을 위한 변수들
 	IDWriteFactory*			m_DWriteFactory;
