@@ -60,6 +60,10 @@ public:
 	SceneName GetCurrentScene()								{ return m_CurrentScene; }
 	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
 
+	// Playermask (ex : 0001 = player1, 1001 = Player4, Player1)
+	void SetPlayerMask(int mask)							{ m_PlayerMask = mask; }
+	int GetPlayerMask()										{ return m_PlayerMask; }
+
 private:
 	static CGameData*		m_pInstance; //singleton instance
 	MapSize					m_MapSize;
@@ -67,6 +71,8 @@ private:
 	SceneName				m_CurrentScene;
 
 	bool					m_PlaySceneTimerFlag;
+
+	int						m_PlayerMask;
 
 	int						m_PlayerNumber;
 	PlayerData				m_PlayerData[MAX_PLAYER_NUM];

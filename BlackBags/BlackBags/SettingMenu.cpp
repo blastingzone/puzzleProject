@@ -10,6 +10,8 @@ CSettingMenu::CSettingMenu(void)
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
 
+	m_PlayerMask = 0;
+
 	// 버튼 초기값들을 설정함
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
@@ -478,4 +480,44 @@ void CSettingMenu::InitMapSelected()
 	{
 		m_MapSelect[j].m_IsSelected = false;
 	}
+}
+
+void CSettingMenu::SetPlayerSelected(int idx)
+{
+	m_PlayerSelect[idx].m_IsSelected = true;
+	switch (idx)
+	{
+		case 0:
+			m_PlayerMask += MASK_PLAYER_1;
+			break;
+		case 1:
+			m_PlayerMask += MASK_PLAYER_2;
+			break;
+		case 2:
+			m_PlayerMask += MASK_PLAYER_3;
+			break;
+		case 3:
+			m_PlayerMask += MASK_PLAYER_4;
+			break;
+	}
+}
+
+void CSettingMenu::CancelPlayerSelected(int idx)
+{
+	 m_PlayerSelect[idx].m_IsSelected = false;
+	 switch (idx)
+	 {
+	 case 0:
+		 m_PlayerMask -= MASK_PLAYER_1;
+		 break;
+	 case 1:
+		 m_PlayerMask -= MASK_PLAYER_2;
+		 break;
+	 case 2:
+		 m_PlayerMask -= MASK_PLAYER_3;
+		 break;
+	 case 3:
+		 m_PlayerMask -= MASK_PLAYER_4;
+		 break;
+	 }
 }

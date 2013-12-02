@@ -102,6 +102,7 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
 			CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
 			CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
+			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 		}
 	}
 	//CGameData::GetInstance()->SetCurrentScene( SC_PLAY );

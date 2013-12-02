@@ -49,6 +49,11 @@ const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 3;
 const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 9;
 const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 7;
 
+/*	어떤 플레이어가 선택되었는지 알기 위한 MASK 값들	*/
+const int	MASK_PLAYER_1 = 1;
+const int	MASK_PLAYER_2 = 2;
+const int	MASK_PLAYER_3 = 4;
+const int	MASK_PLAYER_4 = 8;
 
 /*	게임 맵 오브젝트들의 기본 크기입니다 */
 const float DEFAULT_TILE_SIZE = 80.0f;

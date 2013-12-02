@@ -130,9 +130,9 @@ public:
 	void SetMapMouseOver(int idx);
 	void InitMouseOver();
 
-	void SetPlayerSelected(int idx) {m_PlayerSelect[idx].m_IsSelected = true;}
+	void SetPlayerSelected(int idx);
 	bool GetPlayerSelected(int idx) {return m_PlayerSelect[idx].m_IsSelected;}
-	void CancelPlayerSelected(int idx) {m_PlayerSelect[idx].m_IsSelected = false;}
+	void CancelPlayerSelected(int idx);
 	
 	void SetMapSelected(int idx) {m_MapSelect[idx].m_IsSelected = true;}
 	bool GetMapSelected(int idx) {return m_MapSelect[idx].m_IsSelected;}
@@ -144,6 +144,8 @@ public:
 
 	void SetNextButtonPossible() {m_NextButton.m_IsPossible = true;}
 	void SetNextButtonImpossible() {m_NextButton.m_IsPossible = false;}
+
+	int GetPlayerMask() { return m_PlayerMask;}
 
 private:
 	bool CreateResource();
@@ -196,5 +198,7 @@ private:
 	PlayerSelect m_PlayerSelect[MAX_PLAYER_NUM];
 	MapSelect	m_MapSelect[MAX_MAPSIZE_NUM];
 	NextButton  m_NextButton;
+
+	int			m_PlayerMask;
 };
 

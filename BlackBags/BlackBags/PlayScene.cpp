@@ -2,6 +2,7 @@
 #include "PlayScene.h"
 #include "GameTimer.h"
 #include <queue>
+#include <array>
 
 CPlayScene::CPlayScene(void)
 {
@@ -188,12 +189,15 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 
 	float indexUnit = m_ClickLineWeight + m_ClickTileSize;
 	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
+	if (indexUnit > 0)
+	{
 	indexedPosition.m_PosI = 
 		( mouseCoordinate.m_PosY / static_cast<int> (indexUnit) ) * 2 
 		+ ( ( mouseCoordinate.m_PosY % static_cast<int> (indexUnit) > m_ClickLineWeight) ? 2 : 1);
 	indexedPosition.m_PosJ = 
 		( mouseCoordinate.m_PosX / static_cast<int> (indexUnit) ) * 2 
 		+ ( ( mouseCoordinate.m_PosX % static_cast<int> (indexUnit) > m_ClickLineWeight) ? 2 : 1);
+	}
 
 	return indexedPosition;
 }
@@ -217,28 +221,29 @@ void CPlayScene::CreatePlayers()
 	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Player3");
 	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Player4");
 	
-	for (int playerTurn = 0; playerTurn<m_PlayerNumber;++playerTurn)
+	int playerMask = CGameData::GetInstance()->GetPlayerMask();
+
+	std::array<int, MAX_PLAYER_NUM> PlayerIds = {0, 1, 2, 3};
+
+	std::random_shuffle(PlayerIds.begin(), PlayerIds.end());
+
+	for (int playerTurn = 0; playerTurn < MAX_PLAYER_NUM; ++playerTurn)
 	{
 		int tempId;
-		while (true)
+		int currentPlayerId = PlayerIds[playerTurn];
+
+		// Setting Scene에서 선택된 플레이어라면 tempId에 저장
+		if ( currentPlayerId >= 0
+			&& ((playerMask >> currentPlayerId) & 1) )
 		{
-			tempId = rand()%m_PlayerNumber;
-			bool flag = false;
-			for(int j=0;j<playerTurn;++j)
-			{
-				if (tempId == m_Player[j]->GetPlayerId())
-				{
-					flag = true;
-					break;
-				}
-			}
-			if (!flag)
-				break;
-		}
+			tempId = currentPlayerId;
+			PlayerIds[playerTurn] = -1;
+
 		m_Player[playerTurn] = new CPlayer;
 		m_Player[playerTurn]->SetPlayerId(tempId);
-		m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId));
-		CGameData::GetInstance()->SetPlayerTurn(tempId,playerTurn);
+			m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId) );
+			CGameData::GetInstance()->SetPlayerTurn(tempId, playerTurn);
+		}
 	}
 }
 
@@ -373,10 +378,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
 
 						if (m_Map->GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
-						{
+				{
 							//애니메이션 재생을 위한 데이터도 초기화
 							m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
-						}
+				}
 
 						//재생할 애니메이션이 없으므로 0으로 설정
 						animationTurn = 0;

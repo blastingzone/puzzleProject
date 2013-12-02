@@ -5,6 +5,7 @@ CGameData* CGameData::m_pInstance = nullptr;
 
 CGameData::CGameData(void)
 {
+	// 조심해!! 이 부분 Init()에도 있는데 같이 쓰는게 맞는 것일까요?
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{
 		m_PlayerData[i].m_Id = i;
@@ -19,6 +20,8 @@ CGameData::CGameData(void)
 	m_CurrentScene = SC_NOSCENE;
 
 	m_PlaySceneTimerFlag = false;
+
+	m_PlayerMask = 0;
 }
 
 
@@ -71,6 +74,7 @@ void CGameData::Init()
 	SetMapSize(0, 0);
 
 	m_PlaySceneTimerFlag = false;
+
 }
 
 void CGameData::UpdatePlayerResult( int playerId, MO_ITEM item )
