@@ -38,7 +38,6 @@ CPlayScene::~CPlayScene(void)
 
 bool CPlayScene::Init()
 {
-	
 	SetPlayerNumber();
 	CreatePlayers();
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
@@ -69,11 +68,12 @@ void CPlayScene::SetClickArea()
 //지도 관련 정보를 업데이트 해주는 함수
 void CPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
-	//입력된 마우스 포인터 위치가 게임 맵 범위 안일 때만 처리
+	//입력된 마우스 포인터 위치가 게임 맵 범위 안이고 애니메이션 재생 중이 아닐 때만 처리
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
-		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer)
+		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer
+		&& !m_Map->GetLineAnimationFlag() && m_Map->GetTileAnimationTurnNumber() == 0)
 	{
 		IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
 		EventHandle(indexedPosition);
@@ -95,7 +95,6 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 		if (IsClosed(indexedPosition))
 		{
 			int i = 0;
-
 			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
 			{
 				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
@@ -104,6 +103,9 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 				m_Map->SubtractVoidCount();
 				i++;
 			}
+
+			//tile animation 시작 설정
+			m_Map->SetTileAnimationTurn(1);
 #ifdef _DEBUG
 			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
@@ -115,11 +117,14 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
 		}
 
-		
 		//m_PlayerTurn++;
 		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
 		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
 
+
+		//조심해!!
+		//애니메이션 끝나면 타이머 재시작하게 해줘야함
+		//현재는 여기서 초기화 하고 애니메이션이 끝나고 다시 초기화 함(애니메이션이 최대 20초를 넘지 않아야 하는 문제 남아 있음)
 		CGameTimer::GetInstance()->SetTimerStart();
 	}
 }
@@ -248,9 +253,6 @@ void CPlayScene::DeletePlayers()
 	}
 }
 
-//플레이어 순서를 랜덤하게 바꿔 m_Player의 index로 넣어준다.
-
-
 bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 {
 
@@ -283,7 +285,7 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 
 bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 {
-	if (m_Map->GetMapType(indexedPosition) == MO_LINE_UNCONNECTED||m_Map->GetMapType(indexedPosition) == MO_LINE_HIDDEN)
+	if (m_Map->GetMapType(indexedPosition) == MO_LINE_UNCONNECTED || m_Map->GetMapType(indexedPosition) == MO_LINE_HIDDEN)
 	{
 		int tileVoidCount = 0;
 
@@ -308,18 +310,6 @@ bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 
 bool CPlayScene::IsAlreadyChecked(const IndexedPosition& nextTile)
 {
-	// 	int i = 0;
-	// 
-	// 	while (candidateTileList[i].m_PosI != 0 && candidateTileList[i].m_PosJ != 0)
-	// 	{
-	// 		if (candidateTileList[i].m_PosI == nextTile.m_PosI && candidateTileList[i].m_PosJ == nextTile.m_PosJ)
-	// 		{
-	// 			return true;
-	// 		}
-	// 
-	// 		i++;
-	// 	}
-
 	return m_Map->GetMapFlag(nextTile);
 }
 
@@ -356,6 +346,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 	//확인 할 방향의 출발점이 점이면 확인 안 함
 	if (m_Map->GetMapType(currentTile) != MO_DOT)
 	{
+		//타일에 애니메이션 적용하는 순서 나타내기 위한 변수
+		int animationTurn = 1;
+		m_Map->SetAnimationState(currentTile, animationTurn, direction);
+
 		//앞에서 갱신한 탐색 출발 지점을 큐와 배열에 넣는다.
 		int i = 0;
 
@@ -372,35 +366,23 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 			//currentTile이 sentinel이면 지금까지 확인한 방향으로는 도형이 열려있으므로 확인한 타일을 저장하는 배열은 초기화하고 확인 종료
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
-				/*
-				int checkIdx = 0;
-				while (candidateTileList[checkIdx].m_PosI != 0 && candidateTileList[checkIdx].m_PosJ != 0)
-				{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-				checkIdx++;
-				}
-				*/
 				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
 				{
 					for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
 					{
 						m_Map->SetMapFlag(IndexedPosition(tempI, tempJ), false);
+
+						if (m_Map->GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
+						{
+							//애니메이션 재생을 위한 데이터도 초기화
+							m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
+						}
+
+						//재생할 애니메이션이 없으므로 0으로 설정
+						animationTurn = 0;
 					}
 				}
 				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
-
-				/*
-				int checkIdx = 0;
-				while (m_Map->GetMapFlag(candidateTileList[checkIdx]) )
-				{
-				m_Map->SetMapFlag(candidateTileList[checkIdx], false);
-				}
-				memset(candidateTileList, 0, sizeof(IndexedPosition) * checkIdx);
-
-				//각각의 방향에서 큐를 새로 생성하므로 초기화 할 필요 없음
-				while (!searchTiles.empty())
-				searchTiles.pop();
-				*/
 #ifdef _DEBUG
 				printf("센티넬을 만났어요\n");
 #endif
@@ -419,6 +401,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+
+					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_UP);
 				}				
 			}
 
@@ -432,6 +418,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_RIGHT);
 				}				
 			}
 
@@ -445,6 +435,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_DOWN);
 				}				
 			}
 
@@ -458,9 +452,15 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					searchTiles.push(nextTile);
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
+					
+					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
+					m_Map->SetAnimationState(nextTile, animationTurn, DI_LEFT);
 				}				
 			}
 		}
+		//닫힌 타일이 있으므로 애니메이션 실행하라는 플래그 설정
+		m_Map->SetTileAnimationTurnNumber(animationTurn);
 	}
 }
 
@@ -574,12 +574,12 @@ void CPlayScene::Render()
 void CPlayScene::PlayBGM()
 {
 	//나중에 재생할 음악 선택하는 인자 넣는 형식으로 수정할 것
-	//CSoundRenderer::GetInstance()->PlayBGM();
+	CSoundRenderer::GetInstance()->PlayBGM();
 }
 
 void CPlayScene::StopBGM()
 {
-	//CSoundRenderer::GetInstance()->StopBGM();
+	CSoundRenderer::GetInstance()->StopBGM();
 }
 
 void CPlayScene::ResizeClient()

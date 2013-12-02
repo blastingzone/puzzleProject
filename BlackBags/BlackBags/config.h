@@ -49,6 +49,7 @@ const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 3;
 const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 9;
 const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 7;
 
+
 /*	게임 맵 오브젝트들의 기본 크기입니다 */
 const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
@@ -58,6 +59,9 @@ const float DEFAULT_ITEM_RADIUS = 4.0f;
 const UINT TIME_LIMIT = 20 * 1000;
 
 const float SC_P_CLICK_BUFFER = 7.0f;
+
+const DWORD SC_P_LINE_ANIMATION_TIME = 500;
+const DWORD SC_P_TILE_ANIMATION_TIME = 500;
 
 /*	게임 맵 크기입니다 */
 const int MAX_MAP_WIDTH = 23;

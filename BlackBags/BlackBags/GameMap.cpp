@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "GameMap.h"
+#include "GameTimer.h"
 
 CGameMap::CGameMap(MapSize mapSize)
 {
@@ -21,6 +22,10 @@ CGameMap::CGameMap(MapSize mapSize)
 
 	memset(m_pPlayer,0,sizeof(m_pPlayer) );
 	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
+
+	m_LineAnimationFlag = false;
+	m_TileAnimationTurnNumber = 0;
+	m_TileAnimationTurn = 0;
 
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
@@ -179,6 +184,68 @@ void CGameMap::Render()
 				default:
 					break;
 				}
+				
+				//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
+				if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
+					|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
+				{
+					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+				}
+				//진행중인 라인 애니메이션이 없고 
+				//애니메이션 그릴 턴이 되었거나 진행 중인 애니메이션이 있다면
+				else if (!m_LineAnimationFlag 
+					&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
+					&& m_TileAnimationTurn > 0
+					&& m_Map[i][j].m_AnimationTurn > 0)
+				{
+					if (m_Map[i][j].m_StartTime == 0)
+					{
+						m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+					}
+					
+					DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+
+					float timeWeight = currentTime - m_Map[i][j].m_StartTime;
+					float tempLine = m_TileSize * ( timeWeight / SC_P_TILE_ANIMATION_TIME);
+
+					if ( tempLine > m_TileSize)
+					{
+						//다음 턴 그릴 준비
+						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
+						m_Map[i][j].m_AnimationTurn = 0;
+						m_Map[i][j].m_AnimationFlag = false;
+						
+						//애니메이션이 끝난거라면
+						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
+						{
+							m_TileAnimationTurn = 0;
+							m_TileAnimationTurnNumber = 0;
+						}
+					}
+					else
+					{
+						//애니메이션을 그린다
+						switch (m_Map[i][j].m_Direction)
+						{
+						case DI_UP:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine);
+							break;
+						case DI_RIGHT:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2 + tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							break;
+						case DI_DOWN:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							break;
+						case DI_LEFT:
+							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2 - tempLine, m_pos.y + m_TileSize / 2);
+							break;
+						default:
+							break;
+						}
+
+						m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+					}
+				}
 
 				//item draw
 				if (GetItem(IndexedPosition(i, j) ) != MO_NOTHING)
@@ -208,7 +275,7 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED || GetMapType(IndexedPosition(i, j) ) ==MO_LINE_HIDDEN)
+			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_HIDDEN)
 			{
 				if (i%2==0)
 				{
@@ -228,7 +295,51 @@ void CGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 					break;
 				case MO_LINE_CONNECTED:
-					m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					//animation
+					//GET - SET function 만들 것
+					if (m_Map[i][j].m_AnimationFlag)
+					{
+						//배경
+						m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
+
+						if (m_Map[i][j].m_StartTime == 0)
+						{
+							m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+						}
+
+						DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+						float timeWeight = currentTime - m_Map[i][j].m_StartTime;
+
+						float tempLine = m_TileSize * ( timeWeight / SC_P_LINE_ANIMATION_TIME);
+
+						if (tempLine > m_TileSize)
+						{
+							m_Map[i][j].m_AnimationFlag = false;
+							m_LineAnimationFlag = false;
+							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+
+							if (m_TileAnimationTurnNumber == 0)
+							{
+								CGameTimer::GetInstance()->SetTimerStart();
+							}
+						}
+						else
+						{
+							if (i%2==0)
+							{
+								rectElement = D2D1::Rect( m_pos.x - m_LineWeight / 2, m_pos.y - tempLine / 2, m_pos.x + m_LineWeight / 2, m_pos.y + tempLine / 2);
+							}
+							else
+							{
+								rectElement = D2D1::Rect( m_pos.x - tempLine / 2, m_pos.y - m_LineWeight / 2, m_pos.x + tempLine / 2, m_pos.y + m_LineWeight / 2);
+							}
+							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+						}
+					}
+					else
+					{
+						m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
+					}
 					break;
 				default:
 					break;
@@ -344,12 +455,31 @@ void CGameMap::DrawLine(const IndexedPosition& indexedPosition)
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
+	
+	//animaiton start
+	m_LineAnimationFlag = true;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
 }
 
 void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 {
 	// 범위를 벗어난 경우 예외 처리
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
+	//랜덤 라인 긋는 과정에서의 애니메이션 상태 변화 되돌리기
+	for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
+	{
+		for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
+		{
+			SetMapFlag(IndexedPosition(tempI, tempJ), false);
+
+			if (GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
+			{
+				//애니메이션 재생을 위한 데이터도 초기화
+				InitAnimationState(IndexedPosition(tempI, tempJ) );
+			}
+		}
+	}
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
 }
@@ -464,3 +594,21 @@ void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition)
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_MouseOverFlag = true;
 }
 
+void CGameMap::SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction)
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = turn;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = direction;
+}
+
+void CGameMap::InitAnimationState(IndexedPosition indexedPosition)
+{
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = 0;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = false;
+	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = DI_UP;
+}
+
+int	CGameMap::GetTileAnimationTurn(IndexedPosition indexedPosition)
+{
+	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn;
+}

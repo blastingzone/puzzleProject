@@ -36,7 +36,7 @@ struct IndexedPosition
 
 struct MapObject
 {
-	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false),m_MouseOverFlag(false) {}
+	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false), m_AnimationFlag(false), m_StartTime(0), m_AnimationTurn(0), m_Direction(DI_UP) {}
 
 	MO_TYPE		m_Type;
 	MO_OWNER	m_Owner;
@@ -44,6 +44,11 @@ struct MapObject
 	
 	bool m_Flag;
 	bool m_MouseOverFlag;	
+
+	bool		m_AnimationFlag;
+	DWORD		m_StartTime;
+	int			m_AnimationTurn;
+	Direction	m_Direction;
 };
 
 struct Player
@@ -95,6 +100,15 @@ public:
 	/*	맵 오프젝트 크기 반환하는 함수들 */
 	float		GetTileSize(){ return m_TileSize; };
 	float		GetLineWeight() { return m_LineWeight; }
+
+	/*	애니메이션 상태를 지정, 반환하는 함수들 */
+	bool		GetLineAnimationFlag(){ return m_LineAnimationFlag; }
+	int			GetTileAnimationTurnNumber() { return m_TileAnimationTurnNumber; }
+	void		SetTileAnimationTurnNumber(int turnNumber) { m_TileAnimationTurnNumber = turnNumber; }
+	void		SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction);
+	void		InitAnimationState(IndexedPosition indexedPosition);
+	void		SetTileAnimationTurn(int turn) { m_TileAnimationTurn = turn; }
+	int			GetTileAnimationTurn(IndexedPosition indexedPosition);
 	
 	void SubtractVoidCount() { --m_VoidTileCount; }
 	int	GetVoidTileCount() { return m_VoidTileCount; }
@@ -160,6 +174,10 @@ private:
 	ID2D1SolidColorBrush*	m_pTileP4;
 
 	D2D1_ELLIPSE			m_DotEllipse;
+
+	bool	m_LineAnimationFlag;
+	int		m_TileAnimationTurnNumber;
+	int		m_TileAnimationTurn;
 
 	ID2D1Bitmap* m_pPlayer[MAX_PLAYER_NUM];
 

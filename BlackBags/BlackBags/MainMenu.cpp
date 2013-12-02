@@ -33,7 +33,7 @@ void CMainMenu::Render()
 {
 	D2D1_RECT_F		rectElement, textPosition;
 	D2D1_POINT_2F	pos;
-
+	
 	m_pRenderTarget->DrawBitmap(m_pBackgroundImage,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
 	for (int i = 0; i < BUTTON_NUMBER; ++i)

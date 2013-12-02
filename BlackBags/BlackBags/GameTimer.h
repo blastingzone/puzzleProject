@@ -18,6 +18,8 @@ public:
 
 	void		SetTimerStart();
 
+	DWORD		GetTime() { return GetTickCount(); }
+
 private:
 	static CGameTimer* m_pInstance;
 

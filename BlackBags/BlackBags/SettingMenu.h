@@ -155,7 +155,6 @@ private:
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
-
 	IDWriteTextFormat*		m_PlayerSelectTextFormat;
 	IDWriteTextFormat*		m_MapSelectTextFormat;
 	IDWriteTextFormat*		m_NextButtonTextFormat;
@@ -166,7 +165,6 @@ private:
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
-
 	// 각자 사용하는 브러시
 	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;

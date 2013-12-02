@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "VideoRender.h"
-#include "ImageRenderer.h"
 
 
 #define MAX_LOADSTRING 100
@@ -156,7 +155,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
-
 	else 
 	{
 		g_Manager = new CSceneManager(hWnd);
