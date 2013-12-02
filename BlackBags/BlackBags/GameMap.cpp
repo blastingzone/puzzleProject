@@ -301,11 +301,11 @@ bool CGameMap::CreateResource()
 	}
 
 
-	m_pPlayer1 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player0.png",m_pPlayer1);
-	m_pPlayer2 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png",m_pPlayer2);
-	m_pPlayer3 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png",m_pPlayer3);
-	m_pPlayer4 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png",m_pPlayer4);
-	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background0.png",m_backImg);
+	m_pPlayer1 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png",m_pPlayer1);
+	m_pPlayer2 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png",m_pPlayer2);
+	m_pPlayer3 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png",m_pPlayer3);
+	m_pPlayer4 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4.png",m_pPlayer4);
+	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png",m_backImg);
 
 	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png",m_gold);
 	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item2.png",m_trash);
