@@ -47,8 +47,8 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height
-			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height))
+		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
 			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
@@ -68,8 +68,8 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
 	{
-		if (mouseCoordinate.m_PosY > (startPosition.height + 2 * playerButton.height)
-			&& mouseCoordinate.m_PosY < (startPosition.height + 2 * playerButton.height + mapButton.height))
+		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
+			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
 			m_SettingMenu->InitMapSelected();
@@ -91,8 +91,8 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 		&& mouseCoordinate.m_PosX < startPosition.width + (MAX_MAPSIZE_NUM - 1) * nextButton.width
 		&& CheckGameStartCondition())
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height + (3) * nextButton.height
-			&& mouseCoordinate.m_PosY > startPosition.height + (4) * nextButton.height)
+		if (mouseCoordinate.m_PosY > startPosition.height + (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE-1) * nextButton.height
+			&& mouseCoordinate.m_PosY > startPosition.height + SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * nextButton.height)
 		{
 			///////////////////////////////////////////////////////////////////////////
 			// Á¶½ÉÇØ!! 
@@ -118,8 +118,8 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height
-			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height))
+		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
@@ -130,8 +130,8 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
 	{
-		if (mouseCoordinate.m_PosY > (startPosition.height + 2 * playerButton.height)
-			&& mouseCoordinate.m_PosY < (startPosition.height + 2 * playerButton.height + mapButton.height))
+		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
+			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);

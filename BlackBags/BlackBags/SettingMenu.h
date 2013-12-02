@@ -67,6 +67,44 @@ struct NextButton
 	std::wstring m_ButtonText;
 };
 
+struct SettingTitle
+{
+	SettingTitle() : m_LayerWidth(0.f),
+					 m_LayerHeight(0.f),
+					 m_Title(L"Setting")
+					 {};
+
+	float m_LayerWidth;
+	float m_LayerHeight;
+
+	std::wstring m_Title;
+};
+
+struct PlayerTitle
+{
+	PlayerTitle() : m_LayerWidth(0.f),
+					 m_LayerHeight(0.f),
+					 m_Title(L"Player")
+					 {};
+
+	float m_LayerWidth;
+	float m_LayerHeight;
+
+	std::wstring m_Title;
+};
+
+struct MapTitle
+{
+	MapTitle() : m_LayerWidth(0.f),
+				 m_LayerHeight(0.f),
+				 m_Title(L"Map")
+				 {};
+
+	float m_LayerWidth;
+	float m_LayerHeight;
+
+	std::wstring m_Title;
+};
 
 // 껍데기
 struct IDWriteFactory;
@@ -117,14 +155,18 @@ private:
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
+
 	IDWriteTextFormat*		m_PlayerSelectTextFormat;
 	IDWriteTextFormat*		m_MapSelectTextFormat;
 	IDWriteTextFormat*		m_NextButtonTextFormat;
+	IDWriteTextFormat*		m_SubTitleTextFormat;
+	IDWriteTextFormat*		m_MainTitleTextFormat;
 
 	// Player와 Map이 공유하는 브러시
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
+
 	// 각자 사용하는 브러시
 	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
@@ -139,6 +181,19 @@ private:
 
 	float		m_NextButtonTextSize;
 	float		m_NextButtonTextMargin;
+	
+	float		m_PlayerTitleTextSize;
+	float		m_PlayerTitleTextMargin;
+
+	float		m_MapTitleTextSize;
+	float		m_MapTitleTextMargin;
+
+	float		m_SettingTitleTextSize;
+	float		m_SettingTitleTextMargin;
+
+	PlayerTitle  m_PlayerTitle;
+	MapTitle	 m_MapTitle;
+	SettingTitle m_SettingTitle;
 
 	PlayerSelect m_PlayerSelect[MAX_PLAYER_NUM];
 	MapSelect	m_MapSelect[MAX_MAPSIZE_NUM];
