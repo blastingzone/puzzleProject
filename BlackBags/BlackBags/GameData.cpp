@@ -7,9 +7,11 @@ CGameData::CGameData(void)
 {
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{
+		m_PlayerData[i].m_Id = i;
 		m_PlayerData[i].m_MyTile = 0;
 		m_PlayerData[i].m_MyGold = 0;
 		m_PlayerData[i].m_MyTrash = 0;
+		m_PlayerData[i].m_isMyTurn = false;
 	}
 
 	SetMapSize(0, 0);
@@ -43,17 +45,21 @@ void CGameData::Init()
 {
 	//생성자와 중복이 너무 많음
 	//타일, 골드, 라인 수만 초기화 해주는 함수 만드는 것이 좋을까요?
-	m_PlayerData[0].m_Id = 0;
 	m_PlayerData[0].m_PlayerName = L"Player1";
+	m_PlayerData[0].m_PlayerImage = L"Resource/Image/player1.png";
+	m_PlayerData[0].m_PlayerBox = L"Resource/Image/player1Box.png";
 
-	m_PlayerData[1].m_Id = 1;
 	m_PlayerData[1].m_PlayerName = L"Player2";
+	m_PlayerData[1].m_PlayerImage = L"Resource/Image/player2.png";
+	m_PlayerData[1].m_PlayerBox = L"Resource/Image/player2Box.png";
 
-	m_PlayerData[2].m_Id = 2;
 	m_PlayerData[2].m_PlayerName = L"Player3";
+	m_PlayerData[2].m_PlayerImage = L"Resource/Image/player2.png";
+	m_PlayerData[2].m_PlayerBox = L"Resource/Image/player2Box.png";
 
-	m_PlayerData[3].m_Id = 3;
 	m_PlayerData[3].m_PlayerName = L"Player4";
+	m_PlayerData[3].m_PlayerImage = L"Resource/Image/player2.png";
+	m_PlayerData[3].m_PlayerBox = L"Resource/Image/player2Box.png";
 
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{
@@ -63,7 +69,7 @@ void CGameData::Init()
 	}
 
 	SetMapSize(0, 0);
-	
+
 	m_PlaySceneTimerFlag = false;
 }
 

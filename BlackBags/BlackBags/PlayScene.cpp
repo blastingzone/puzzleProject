@@ -115,7 +115,11 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
 		}
 
-		m_PlayerTurn++;
+		
+		//m_PlayerTurn++;
+		CGameData::GetInstance()->setPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
+		CGameData::GetInstance()->setPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
+
 		CGameTimer::GetInstance()->SetTimerStart();
 	}
 }

@@ -157,16 +157,11 @@ private:
 
 	D2D1_ELLIPSE			m_DotEllipse;
 
-	ID2D1Bitmap *m_pPlayer1;
-	ID2D1Bitmap *m_pPlayer2;
-	ID2D1Bitmap *m_pPlayer3;
-	ID2D1Bitmap *m_pPlayer4;
+	ID2D1Bitmap* m_pPlayer[MAX_PLAYER_NUM];
 
-	ID2D1SolidColorBrush* m_pPlayer1Box;
-	ID2D1SolidColorBrush* m_pPlayer2Box;
-	ID2D1SolidColorBrush* m_pPlayer3Box;
-	ID2D1SolidColorBrush* m_pPlayer4Box;
-	ID2D1SolidColorBrush* m_pPlayerBox;
+	ID2D1Bitmap* m_pPlayerBox[MAX_PLAYER_NUM];
+
+	ID2D1Bitmap* m_pPlayerWaitingBox;
 
 
 

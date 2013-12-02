@@ -6,6 +6,10 @@ struct PlayerData
 {
 	int m_Id;
 	std::wstring m_PlayerName;
+	std::wstring m_PlayerImage;
+	std::wstring m_PlayerBox;
+
+	bool m_isMyTurn;
 
 	int m_MyTile;
 	int m_MyGold;
@@ -31,6 +35,12 @@ public:
 	int			GetPlayerTrashNumber(int playerId);
 
 	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: 이렇게..
+	const std::wstring& GetPlayerImage(int playerId)			{return m_PlayerData[playerId].m_PlayerImage;} //SM9: 이렇게..
+	const std::wstring& GetPlayerBox(int playerId)			{return m_PlayerData[playerId].m_PlayerBox;} //SM9: 이렇게..
+
+	bool isPlayerTurn(int playerId) {return m_PlayerData[playerId].m_isMyTurn;}
+	void setPlayerTurn(int playerId, bool isTurn) {m_PlayerData[playerId].m_isMyTurn = isTurn;}
+
 	void SetPlayerIdAndName(int playerId,const std::wstring& playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}
 
 	void		SetMapSize(int x, int y);

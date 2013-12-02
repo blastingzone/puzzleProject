@@ -19,7 +19,9 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pTileP3 = nullptr;
 	m_pTileP4 = nullptr;
 
-	
+	memset(m_pPlayer,0,sizeof(m_pPlayer) );
+	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
+
 	m_ProfileSize = 150.0f;
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
@@ -117,11 +119,16 @@ void CGameMap::Render()
 
 	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
-	m_pRenderTarget->DrawBitmap(m_pPlayer1,D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
-	m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
-	m_pRenderTarget->DrawBitmap(m_pPlayer2,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,50.0f,WINDOW_WIDTH-50.0f,50.0f+m_ProfileSize));
-	m_pRenderTarget->DrawBitmap(m_pPlayer3,D2D1::RectF(50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,50.0f+m_ProfileSize,WINDOW_HEIGHT-50.0f));
-	m_pRenderTarget->DrawBitmap(m_pPlayer4,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,WINDOW_WIDTH-50.0f,WINDOW_HEIGHT-50.0f));
+
+
+// 	m_pRenderTarget->DrawBitmap(m_pPlayer1,D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
+// 	m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
+// 	m_pRenderTarget->DrawBitmap(m_pPlayer2,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,50.0f,WINDOW_WIDTH-50.0f,50.0f+m_ProfileSize));
+// 	m_pRenderTarget->DrawBitmap(m_pPlayer3,D2D1::RectF(50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,50.0f+m_ProfileSize,WINDOW_HEIGHT-50.0f));
+// 	m_pRenderTarget->DrawBitmap(m_pPlayer4,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,WINDOW_WIDTH-50.0f,WINDOW_HEIGHT-50.0f));
+
+	m_pRenderTarget->DrawBitmap(m_pPlayer[0],D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
+
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
@@ -293,18 +300,17 @@ bool CGameMap::CreateResource()
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileP4);
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink), &m_pTileP4);
 
-		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pPlayerBox);
-
 		if (!SUCCEEDED(hr) )
 			return false;
 	}
 
+	for (int i = 0; i<CGameData::GetInstance()->GetplayerNumber();++i)
+	{
+		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(i),m_pPlayer[i]);
+		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(i),m_pPlayerBox[i]);
 
-	m_pPlayer1 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png",m_pPlayer1);
-	m_pPlayer2 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png",m_pPlayer2);
-	m_pPlayer3 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png",m_pPlayer3);
-	m_pPlayer4 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4.png",m_pPlayer4);
+	}
+
 	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png",m_backImg);
 
 	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png",m_gold);

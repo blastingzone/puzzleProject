@@ -28,7 +28,7 @@ public:
 	virtual void		MouseOver(Coordinate mouseCoordinate);
 	virtual void		Render();
 	virtual void		ResizeClient();
-	
+
 	virtual void PlayBGM();
 	virtual void StopBGM();
 
@@ -56,7 +56,7 @@ private:
 
 	/*	마우스 클릭 범위 설정 */
 	void SetClickArea();
-	
+
 	int			m_PlayerNumber;
 	CPlayer*	m_Player[MAX_PLAYER_NUM];
 	CGameMap*	m_Map;
