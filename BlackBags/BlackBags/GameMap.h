@@ -158,6 +158,10 @@ private:
 	float m_ProfileMargin;
 	float m_ProfileBoxSize;
 
+	float m_TimerPositionHeight;
+	float m_TimerWidth;
+	float m_TimerHeight;
+
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
 	ID2D1SolidColorBrush*	m_pConnectedLineBrush;

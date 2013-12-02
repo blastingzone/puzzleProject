@@ -124,3 +124,8 @@ bool CGameTimer::Init()
 
 	return false;
 }
+
+DWORD CGameTimer::GetRemainTime()
+{
+	return TIME_LIMIT - (GetTickCount() - m_StartTime);
+}

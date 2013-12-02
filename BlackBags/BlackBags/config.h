@@ -56,6 +56,10 @@ const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
 const float DEFAULT_ITEM_RADIUS = 4.0f;
 
+const float SC_P_TIMER_POSITION_HEIGHT = 10.0f;
+const float SC_P_TIMER_WIDTH = 500.0f;
+const float SC_P_TIMER_HEIGHT = 5.0f;
+
 const UINT TIME_LIMIT = 20 * 1000;
 
 const float SC_P_CLICK_BUFFER = 7.0f;
@@ -129,6 +133,14 @@ enum SceneName	//Scene 이름들
 	SC_CREDIT,
 	SC_NOSCENE,
 	SC_EXIT
+};
+
+enum SOUND_BGMList
+{
+	BGM_MAIN,
+	BGM_SETTING,
+	BGM_PLAY,
+	BGM_RESULT
 };
 
 enum MO_TYPE	//게임 맵 기본 자료형

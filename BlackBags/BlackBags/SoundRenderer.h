@@ -18,7 +18,7 @@ public:
 	FMOD_RESULT CreateSound();
 	void AllocateChannel();
 
-	void PlayBGM();
+	void PlayBGM(SOUND_BGMList BGMName);
 	void StopBGM();
 	void PlaySE();
 
@@ -36,5 +36,8 @@ private:
 	FMOD::Channel*			m_SEChannel;
 
 	FMOD::Sound*			m_SE;
-	FMOD::Sound*			m_BGM;
+	FMOD::Sound*			m_Main;
+	FMOD::Sound*			m_Setting;
+	FMOD::Sound*			m_Play;
+	FMOD::Sound*			m_Result;
 };

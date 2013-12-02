@@ -27,12 +27,26 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_TileAnimationTurnNumber = 0;
 	m_TileAnimationTurn = 0;
 
+	m_TileSize = 0;
+	m_LineWeight = 0;
+	m_DotRadius = 0;
+	m_ItemRadius = 0;
+	m_ProfileSize = 0;
+	m_ProfileMargin = 0;
+	m_ProfileBoxSize = 0;
+
+	m_TimerPositionHeight = 0;
+	m_TimerWidth = 0;
+	m_TimerHeight = 0;
+
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
 	m_MapSize.m_Height = mapSize.m_Height;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
 
+	//조심해!!
+	//초기화해서 화면 스케일에 맞춰서 적용할 것
 	m_ProfileSize = 150.0f;
 	m_ProfileMargin = 50.0f;
 	m_ProfileBoxSize = 30.0f;
@@ -117,23 +131,93 @@ bool CGameMap::Init()
 
 void CGameMap::DrawPlayerUI( int playerNumber )
 {
-	if (playerNumber>=2)
+	if (playerNumber >= 2)
 	{
-		m_pRenderTarget->DrawBitmap(m_pPlayer[0],D2D1::RectF(m_ProfileMargin,m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize));
-		m_pRenderTarget->DrawBitmap(m_pPlayerBox[0],D2D1::RectF(m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize+m_ProfileBoxSize));
-		m_pRenderTarget->DrawBitmap(m_pPlayer[1],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,m_ProfileMargin+m_ProfileSize));
-		m_pRenderTarget->DrawBitmap(m_pPlayerBox[1],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_WIDTH-m_ProfileMargin,m_ProfileMargin+m_ProfileSize+m_ProfileBoxSize));
-	}
-	if (playerNumber>=3)
-	{
-		m_pRenderTarget->DrawBitmap(m_pPlayer[2],D2D1::RectF(m_ProfileMargin,WINDOW_HEIGHT-m_ProfileSize-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_HEIGHT-m_ProfileMargin));
-		m_pRenderTarget->DrawBitmap(m_pPlayerBox[2],D2D1::RectF(m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_HEIGHT-m_ProfileMargin+m_ProfileBoxSize));
-	}
-	if (playerNumber==4)
-	{
-		m_pRenderTarget->DrawBitmap(m_pPlayer[3],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileSize-m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin));
-		m_pRenderTarget->DrawBitmap(m_pPlayerBox[3],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin+m_ProfileBoxSize));
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayer[0], 
+			D2D1::RectF(
+				m_ProfileMargin, 
+				m_ProfileMargin, 
+				m_ProfileMargin + m_ProfileSize,
+				m_ProfileMargin + m_ProfileSize
+				) 
+			);
+		
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayerBox[0],
+			D2D1::RectF(
+				m_ProfileMargin, 
+				m_ProfileMargin + m_ProfileSize, 
+				m_ProfileMargin + m_ProfileSize, 
+				m_ProfileMargin + m_ProfileSize + m_ProfileBoxSize
+				)
+			);
 
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayer[1],
+			D2D1::RectF(
+				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin, 
+				m_ProfileMargin, 
+				WINDOW_WIDTH - m_ProfileMargin,
+				m_ProfileMargin + m_ProfileSize
+				)
+			);
+
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayerBox[1],
+			D2D1::RectF(
+				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin, 
+				m_ProfileMargin + m_ProfileSize, 
+				WINDOW_WIDTH - m_ProfileMargin, 
+				m_ProfileMargin + m_ProfileSize + m_ProfileBoxSize
+				)
+			);
+	}
+
+	if (playerNumber >= 3)
+	{
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayer[2],
+			D2D1::RectF(
+				m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileSize - m_ProfileMargin,
+				m_ProfileMargin + m_ProfileSize,
+				WINDOW_HEIGHT - m_ProfileMargin
+				)
+			);
+
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayerBox[2],
+			D2D1::RectF(
+				m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileMargin,
+				m_ProfileMargin + m_ProfileSize,
+				WINDOW_HEIGHT - m_ProfileMargin + m_ProfileBoxSize
+				)
+			);
+	}
+
+	if (playerNumber == 4)
+	{
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayer[3],
+			D2D1::RectF(
+				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileSize - m_ProfileMargin,
+				WINDOW_WIDTH - m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileMargin
+				)
+			);
+
+		m_pRenderTarget->DrawBitmap(
+			m_pPlayerBox[3],
+			D2D1::RectF(
+				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileMargin,
+				WINDOW_WIDTH - m_ProfileMargin,
+				WINDOW_HEIGHT - m_ProfileMargin + m_ProfileBoxSize
+				)
+			);
 	}
 	//m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
 }
@@ -144,6 +228,13 @@ void CGameMap::Render()
 	D2D1_ELLIPSE	m_DotEllipse;
 	D2D1_RECT_F		rectElement;
 	D2D1_POINT_2F	m_pos;
+
+	/*	애니메이션 추가
+		기본적으로 애니메이션 flag는 line과 tile 두 가지가 있음
+		이 중에서 하나라도 진행 중(flag가 true)이면 마우스 입력은 받지 않고 애니메이션이 완료 되어야 게임 진행
+		애니메이션 순서는 line >> tile
+		타일 애니메이션에는 재생되는 순서가 지정되어 있음
+		(순서대로 애니메이션이 지정된 타일들의 재생이 완료되어야 전체 타일 애니메이션 종료) */
 
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
 		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
@@ -192,7 +283,7 @@ void CGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 				}
 				//진행중인 라인 애니메이션이 없고 
-				//애니메이션 그릴 턴이 되었거나 진행 중인 애니메이션이 있다면
+				//애니메이션 그릴 턴이 되었거나 진행 중이라면
 				else if (!m_LineAnimationFlag 
 					&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
 					&& m_TileAnimationTurn > 0
@@ -369,6 +460,10 @@ void CGameMap::Render()
 			}
 		}
 	}
+
+	//타이머 작업 중
+	//m_pos.x = m_StartPosition.width;
+	//m_pos.y = m_StartPosition.height + ( (m_LineWeight + m_TileSize) / 2 ) * (i - 1) + m_LineWeight / 2;
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)
@@ -521,6 +616,10 @@ void CGameMap::SetObjectSize()
 	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT;
 	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS;
 	m_ItemRadius = tempScale * DEFAULT_ITEM_RADIUS;
+
+	m_TimerPositionHeight = tempScale * SC_P_TIMER_POSITION_HEIGHT;
+	m_TimerWidth = tempScale * SC_P_TIMER_WIDTH;
+	m_TimerHeight = tempScale * SC_P_TIMER_HEIGHT;
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)

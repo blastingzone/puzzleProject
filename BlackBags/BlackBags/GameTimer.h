@@ -19,6 +19,7 @@ public:
 	void		SetTimerStart();
 
 	DWORD		GetTime() { return GetTickCount(); }
+	DWORD		GetRemainTime();
 
 private:
 	static CGameTimer* m_pInstance;
