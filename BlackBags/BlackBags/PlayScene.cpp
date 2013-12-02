@@ -117,8 +117,8 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 		
 		//m_PlayerTurn++;
-		CGameData::GetInstance()->setPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
-		CGameData::GetInstance()->setPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
+		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
+		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
 
 		CGameTimer::GetInstance()->SetTimerStart();
 	}
@@ -253,6 +253,7 @@ void CPlayScene::CreatePlayers()
 		m_Player[playerTurn] = new CPlayer;
 		m_Player[playerTurn]->SetPlayerId(tempId);
 		m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId));
+		CGameData::GetInstance()->SetPlayerTurn(tempId,playerTurn);
 	}
 }
 

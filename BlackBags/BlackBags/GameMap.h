@@ -65,6 +65,7 @@ public:
 	void Render();
 
 	void SetMapSize(MapSize mapsize);
+	void DrawPlayerUI(int playerNumber);
 
 	/*	입력된 좌표의 오브젝트를 연결 된 상태로 변경 */
 	void DrawLine(const IndexedPosition& indexedPosition);
@@ -139,6 +140,8 @@ private:
 	float m_DotRadius;
 	float m_ItemRadius;
 	float m_ProfileSize;
+	float m_ProfileMargin;
+	float m_ProfileBoxSize;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
@@ -162,8 +165,6 @@ private:
 	ID2D1Bitmap* m_pPlayerBox[MAX_PLAYER_NUM];
 
 	ID2D1Bitmap* m_pPlayerWaitingBox;
-
-
 
 	ID2D1Bitmap* m_backImg;
 

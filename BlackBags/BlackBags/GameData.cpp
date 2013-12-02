@@ -54,12 +54,12 @@ void CGameData::Init()
 	m_PlayerData[1].m_PlayerBox = L"Resource/Image/player2Box.png";
 
 	m_PlayerData[2].m_PlayerName = L"Player3";
-	m_PlayerData[2].m_PlayerImage = L"Resource/Image/player2.png";
-	m_PlayerData[2].m_PlayerBox = L"Resource/Image/player2Box.png";
+	m_PlayerData[2].m_PlayerImage = L"Resource/Image/player3.png";
+	m_PlayerData[2].m_PlayerBox = L"Resource/Image/player3Box.png";
 
 	m_PlayerData[3].m_PlayerName = L"Player4";
-	m_PlayerData[3].m_PlayerImage = L"Resource/Image/player2.png";
-	m_PlayerData[3].m_PlayerBox = L"Resource/Image/player2Box.png";
+	m_PlayerData[3].m_PlayerImage = L"Resource/Image/player4.png";
+	m_PlayerData[3].m_PlayerBox = L"Resource/Image/player4Box.png";
 
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{

@@ -22,12 +22,15 @@ CGameMap::CGameMap(MapSize mapSize)
 	memset(m_pPlayer,0,sizeof(m_pPlayer) );
 	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
 
-	m_ProfileSize = 150.0f;
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
 	m_MapSize.m_Height = mapSize.m_Height;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
+
+	m_ProfileSize = 150.0f;
+	m_ProfileMargin = 50.0f;
+	m_ProfileBoxSize = 30.0f;
 
 	m_isMouseOn = false;
 }
@@ -107,6 +110,30 @@ bool CGameMap::Init()
 	return true;
 }
 
+void CGameMap::DrawPlayerUI( int playerNumber )
+{
+	if (playerNumber>=2)
+	{
+		m_pRenderTarget->DrawBitmap(m_pPlayer[0],D2D1::RectF(m_ProfileMargin,m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize));
+		m_pRenderTarget->DrawBitmap(m_pPlayerBox[0],D2D1::RectF(m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize+m_ProfileBoxSize));
+		m_pRenderTarget->DrawBitmap(m_pPlayer[1],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,m_ProfileMargin+m_ProfileSize));
+		m_pRenderTarget->DrawBitmap(m_pPlayerBox[1],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_WIDTH-m_ProfileMargin,m_ProfileMargin+m_ProfileSize+m_ProfileBoxSize));
+	}
+	if (playerNumber>=3)
+	{
+		m_pRenderTarget->DrawBitmap(m_pPlayer[2],D2D1::RectF(m_ProfileMargin,WINDOW_HEIGHT-m_ProfileSize-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_HEIGHT-m_ProfileMargin));
+		m_pRenderTarget->DrawBitmap(m_pPlayerBox[2],D2D1::RectF(m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin,m_ProfileMargin+m_ProfileSize,WINDOW_HEIGHT-m_ProfileMargin+m_ProfileBoxSize));
+	}
+	if (playerNumber==4)
+	{
+		m_pRenderTarget->DrawBitmap(m_pPlayer[3],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileSize-m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin));
+		m_pRenderTarget->DrawBitmap(m_pPlayerBox[3],D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin,WINDOW_WIDTH-m_ProfileMargin,WINDOW_HEIGHT-m_ProfileMargin+m_ProfileBoxSize));
+
+	}
+	//m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
+}
+
+
 void CGameMap::Render()
 {
 	D2D1_ELLIPSE	m_DotEllipse;
@@ -119,15 +146,7 @@ void CGameMap::Render()
 
 	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
-
-
-// 	m_pRenderTarget->DrawBitmap(m_pPlayer1,D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
-// 	m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
-// 	m_pRenderTarget->DrawBitmap(m_pPlayer2,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,50.0f,WINDOW_WIDTH-50.0f,50.0f+m_ProfileSize));
-// 	m_pRenderTarget->DrawBitmap(m_pPlayer3,D2D1::RectF(50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,50.0f+m_ProfileSize,WINDOW_HEIGHT-50.0f));
-// 	m_pRenderTarget->DrawBitmap(m_pPlayer4,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,WINDOW_WIDTH-50.0f,WINDOW_HEIGHT-50.0f));
-
-	m_pRenderTarget->DrawBitmap(m_pPlayer[0],D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
+	DrawPlayerUI(CGameData::GetInstance()->GetplayerNumber());
 
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
@@ -306,8 +325,8 @@ bool CGameMap::CreateResource()
 
 	for (int i = 0; i<CGameData::GetInstance()->GetplayerNumber();++i)
 	{
-		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(i),m_pPlayer[i]);
-		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(i),m_pPlayerBox[i]);
+		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(CGameData::GetInstance()->GetPlayerTurn(i)),m_pPlayer[i]);
+		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(CGameData::GetInstance()->GetPlayerTurn(i)),m_pPlayerBox[i]);
 
 	}
 
@@ -443,3 +462,4 @@ void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition ,bool isM
 	if(isMousOn)
 		m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_MouseOverFlag = true;
 }
+
