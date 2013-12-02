@@ -224,26 +224,28 @@ void CGameMap::Render()
 					}
 					else
 					{
+						D2D1_RECT_F animationRect;
+						
 						//애니메이션을 그린다
 						switch (m_Map[i][j].m_Direction)
 						{
 						case DI_UP:
-							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine);
+							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine);
 							break;
 						case DI_RIGHT:
-							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2 + tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2 + tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
 							break;
 						case DI_DOWN:
-							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
 							break;
 						case DI_LEFT:
-							rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2 - tempLine, m_pos.y + m_TileSize / 2);
+							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2 - tempLine, m_pos.y + m_TileSize / 2);
 							break;
 						default:
 							break;
 						}
 
-						m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+						m_pRenderTarget->FillRectangle(animationRect, m_pVoidTileBrush);
 					}
 				}
 
