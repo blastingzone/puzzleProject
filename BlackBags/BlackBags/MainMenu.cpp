@@ -82,7 +82,7 @@ bool CMainMenu::Init()
 		return false;
 	}
 	ResizeClient();
-	m_pBackgroundImage = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_menu.jpg",m_pBackgroundImage);
+	m_pBackgroundImage = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background1.png",m_pBackgroundImage);
 
 	return true;
 }

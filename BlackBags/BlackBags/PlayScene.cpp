@@ -122,11 +122,19 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 void CPlayScene::MouseOver(Coordinate mouseCoordinate)
 {
-	//조심해!!
-	//마우스 오버가 빠졌을 때..어떻게 할까?
 	if (IsPossible(CalculateIndex(mouseCoordinate)) )
 	{
-		m_Map->ShowVirtualLine(CalculateIndex(mouseCoordinate));
+#ifdef _DEBUG
+		printf("가능하다능!");
+#endif
+		//IsPossible 체크 후에 gameMap 호출해서 반영
+		m_Map->ShowVirtualLine(CalculateIndex(mouseCoordinate),true);
+	}
+	else 
+	{
+		//그냥리셋
+		m_Map->ShowVirtualLine(CalculateIndex(mouseCoordinate),false);
+
 	}
 }
 

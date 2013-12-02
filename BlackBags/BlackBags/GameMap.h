@@ -58,7 +58,8 @@ public:
 	/*	입력된 좌표의 오브젝트를 연결 된 상태로 변경 */
 	void DrawLine(const IndexedPosition& indexedPosition);
 
-	void ShowVirtualLine(const IndexedPosition& indexedPosition);
+	void ShowVirtualLine(const IndexedPosition& indexedPosition, bool isMouseOn);
+
 
 
 	/*	입력된 좌표의 오브젝트를 연결되지 않은 상태로 변경
@@ -144,6 +145,16 @@ private:
 	ID2D1SolidColorBrush*	m_pTileP2;
 	ID2D1SolidColorBrush*	m_pTileP3;
 	ID2D1SolidColorBrush*	m_pTileP4;
+
+	ID2D1Bitmap *m_pPlayer1;
+	ID2D1Bitmap *m_pPlayer2;
+	ID2D1Bitmap *m_pPlayer3;
+	ID2D1Bitmap *m_pPlayer4;
+
+	ID2D1Bitmap* m_backImg;
+
+	ID2D1Bitmap* m_gold;
+	ID2D1Bitmap* m_trash;
 
 	D2D1_ELLIPSE			m_DotEllipse;
 };

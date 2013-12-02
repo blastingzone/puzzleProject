@@ -110,6 +110,7 @@ void CGameMap::Render()
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
 		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
 		추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
+	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
@@ -150,10 +151,10 @@ void CGameMap::Render()
 					switch (GetItem(IndexedPosition(i, j) ) )
 					{
 					case MO_GOLD:
-						m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pGoldBrush);
+						m_pRenderTarget->DrawBitmap(m_gold,rectElement);
 						break;
 					case MO_TRASH:
-						m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pTrashBrush);
+						m_pRenderTarget->DrawBitmap(m_trash,rectElement);
 						break;
 					default:
 						break;
@@ -283,6 +284,15 @@ bool CGameMap::CreateResource()
 			return false;
 	}
 
+	m_pPlayer1 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player0.png",m_pPlayer1);
+	m_pPlayer2 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png",m_pPlayer2);
+	m_pPlayer3 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png",m_pPlayer3);
+	m_pPlayer4 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png",m_pPlayer4);
+	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background0.png",m_backImg);
+
+	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png",m_gold);
+	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item2.png",m_trash);
+
 	return true;
 }
 
@@ -395,7 +405,7 @@ void CGameMap::WriteResult()
 	}
 }
 
-void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition )
+void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition ,bool isMousOn)
 {
 	//조심해!! 정서경
 	//'범위'로 바꿔줘야할 것 같다. + flag를 쓰는게 나을 듯하다.
@@ -407,5 +417,6 @@ void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition )
 				m_Map[i][j].m_Type = MO_LINE_UNCONNECTED;
 		}
 	}
-	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_HIDDEN;
+	if(isMousOn)
+		m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_HIDDEN;
 }
