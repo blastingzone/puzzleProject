@@ -126,19 +126,20 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 void CPlayScene::MouseOver(Coordinate mouseCoordinate)
 {
-	if (IsPossible(CalculateIndex(mouseCoordinate)) )
-	{
-#ifdef _DEBUG
-		printf("가능하다능!");
-#endif
-		//IsPossible 체크 후에 gameMap 호출해서 반영
-		m_Map->ShowVirtualLine(CalculateIndex(mouseCoordinate),true);
-	}
-	else 
-	{
-		//그냥리셋
-		m_Map->ShowVirtualLine(CalculateIndex(mouseCoordinate),false);
+	m_Map->InitVirtualLineState();
 
+	//입력된 마우스 포인터 위치가 게임 맵 범위 안일 때만 처리
+	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
+		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
+		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
+		&& mouseCoordinate.m_PosY < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_Map->GetStartPosition().height + m_ClickBuffer)
+	{
+		IndexedPosition indexedPosition(CalculateIndex(mouseCoordinate) );
+
+		if (IsPossible(indexedPosition) )
+		{
+			m_Map->ShowVirtualLine(indexedPosition);
+		}
 	}
 }
 
@@ -174,27 +175,6 @@ void CPlayScene::TimeOut()
 //마우스 좌표값을 index로 바꾸는 함수
 IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 {
-	/*
-	IndexedPosition indexedPosition;
-
-	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
-	mouseCoordinate.m_PosX -= static_cast<int>(m_Map->GetStartPosition().width);
-	mouseCoordinate.m_PosY -= static_cast<int>(m_Map->GetStartPosition().height);
-
-	//조심해!!!
-	//지금은 스케일 값을 반영하기 위해서 반복적으로 작업하는데 나중에 따로 담아두고 쓰도록 할 것
-	float scale = CRenderer::GetInstance()->GetDisplayScale();
-
-	//타일 하나와 라인 하나를 묶어서 모듈러 연산으로 인덱스 값 계산
-	indexedPosition.m_PosI = 
-		( mouseCoordinate.m_PosY / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
-		+ ( ( mouseCoordinate.m_PosY % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
-	indexedPosition.m_PosJ = 
-		( mouseCoordinate.m_PosX / static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) ) * 2 
-		+ ( ( mouseCoordinate.m_PosX % static_cast<int> ( (DEFAULT_TILE_SIZE + DEFAULT_LINE_WEIGHT) * scale) > (DEFAULT_LINE_WEIGHT * scale) ) ? 2 : 1);
-
-	return indexedPosition;
-	*/
 	IndexedPosition indexedPosition;
 
 	//마우스의 위치를 맵이 그려지는 기준점 좌표계를 기준으로 변환
