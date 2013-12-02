@@ -2,6 +2,7 @@
 #include "d2d1.h"
 #include "SceneObject.h"
 #include <array>
+#include <dwrite.h>
 
 /*	게임 맵의 타일 좌표를 표현하기 위한 구조체 */
 struct IndexedPosition
@@ -35,13 +36,23 @@ struct IndexedPosition
 
 struct MapObject
 {
-	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false) {}
+	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false),m_MouseOverFlag(false) {}
 
 	MO_TYPE		m_Type;
 	MO_OWNER	m_Owner;
 	MO_ITEM		m_Item;
 	
 	bool m_Flag;
+	bool m_MouseOverFlag;	
+};
+
+struct Player
+{
+	Player() : m_PlayerTurn(false), m_PlayerName(L"") {}
+	
+	bool m_PlayerTurn;
+	std::wstring m_PlayerName;
+	D2D1_SIZE_F m_ProfileSize;
 };
 
 class CGameMap : public CSceneObject
@@ -57,10 +68,7 @@ public:
 
 	/*	입력된 좌표의 오브젝트를 연결 된 상태로 변경 */
 	void DrawLine(const IndexedPosition& indexedPosition);
-
 	void ShowVirtualLine(const IndexedPosition& indexedPosition, bool isMouseOn);
-
-
 
 	/*	입력된 좌표의 오브젝트를 연결되지 않은 상태로 변경
 		(게임을 생성하면서 랜덤으로 울타리 배칠 할 때 사용됨) */
@@ -130,6 +138,7 @@ private:
 	float m_LineWeight;
 	float m_DotRadius;
 	float m_ItemRadius;
+	float m_ProfileSize;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
@@ -146,16 +155,28 @@ private:
 	ID2D1SolidColorBrush*	m_pTileP3;
 	ID2D1SolidColorBrush*	m_pTileP4;
 
+	D2D1_ELLIPSE			m_DotEllipse;
+
 	ID2D1Bitmap *m_pPlayer1;
 	ID2D1Bitmap *m_pPlayer2;
 	ID2D1Bitmap *m_pPlayer3;
 	ID2D1Bitmap *m_pPlayer4;
+
+	ID2D1SolidColorBrush* m_pPlayer1Box;
+	ID2D1SolidColorBrush* m_pPlayer2Box;
+	ID2D1SolidColorBrush* m_pPlayer3Box;
+	ID2D1SolidColorBrush* m_pPlayer4Box;
+	ID2D1SolidColorBrush* m_pPlayerBox;
+
+
 
 	ID2D1Bitmap* m_backImg;
 
 	ID2D1Bitmap* m_gold;
 	ID2D1Bitmap* m_trash;
 
-	D2D1_ELLIPSE			m_DotEllipse;
+	IDWriteFactory*			m_DWriteFactory;
+	IDWriteTextFormat*		m_TextFormat;
+	bool m_isMouseOn;
 };
 

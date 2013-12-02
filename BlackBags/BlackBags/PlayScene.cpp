@@ -298,7 +298,7 @@ bool CPlayScene::IsClosed( IndexedPosition indexedPosition)
 
 bool CPlayScene::IsPossible(IndexedPosition indexedPosition)
 {
-	if (m_Map->GetMapType(indexedPosition) == MO_LINE_UNCONNECTED)
+	if (m_Map->GetMapType(indexedPosition) == MO_LINE_UNCONNECTED||m_Map->GetMapType(indexedPosition) == MO_LINE_HIDDEN)
 	{
 		int tileVoidCount = 0;
 

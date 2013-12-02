@@ -19,11 +19,15 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pTileP3 = nullptr;
 	m_pTileP4 = nullptr;
 
+	
+	m_ProfileSize = 150.0f;
 	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
 	m_MapSize.m_Height = mapSize.m_Height;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
+
+	m_isMouseOn = false;
 }
 
 CGameMap::~CGameMap(void)
@@ -110,8 +114,14 @@ void CGameMap::Render()
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
 		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
 		추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
+
 	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
+	m_pRenderTarget->DrawBitmap(m_pPlayer1,D2D1::RectF(50.0f,50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize));
+	m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
+	m_pRenderTarget->DrawBitmap(m_pPlayer2,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,50.0f,WINDOW_WIDTH-50.0f,50.0f+m_ProfileSize));
+	m_pRenderTarget->DrawBitmap(m_pPlayer3,D2D1::RectF(50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,50.0f+m_ProfileSize,WINDOW_HEIGHT-50.0f));
+	m_pRenderTarget->DrawBitmap(m_pPlayer4,D2D1::RectF(WINDOW_WIDTH-m_ProfileSize-50.0f,WINDOW_HEIGHT-m_ProfileSize-50.0f,WINDOW_WIDTH-50.0f,WINDOW_HEIGHT-50.0f));
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
@@ -151,9 +161,11 @@ void CGameMap::Render()
 					switch (GetItem(IndexedPosition(i, j) ) )
 					{
 					case MO_GOLD:
+						//m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pGoldBrush);
 						m_pRenderTarget->DrawBitmap(m_gold,rectElement);
 						break;
 					case MO_TRASH:
+						//m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pTrashBrush);
 						m_pRenderTarget->DrawBitmap(m_trash,rectElement);
 						break;
 					default:
@@ -170,7 +182,7 @@ void CGameMap::Render()
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
 		{
-			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED ||GetMapType(IndexedPosition(i, j) ) == MO_LINE_HIDDEN)
+			if ( GetMapType(IndexedPosition(i, j) ) == MO_LINE_UNCONNECTED || GetMapType(IndexedPosition(i, j) ) == MO_LINE_CONNECTED || GetMapType(IndexedPosition(i, j) ) ==MO_LINE_HIDDEN)
 			{
 				if (i%2==0)
 				{
@@ -192,11 +204,12 @@ void CGameMap::Render()
 				case MO_LINE_CONNECTED:
 					m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
 					break;
-				case MO_LINE_HIDDEN:
-					m_pRenderTarget->FillRectangle(rectElement, m_pPossibleLineBrush);
-					break;
 				default:
 					break;
+				}
+				if (m_Map[i][j].m_MouseOverFlag == true)
+				{
+					m_pRenderTarget->FillRectangle(rectElement, m_pPossibleLineBrush);
 				}
 			}
 		}
@@ -280,9 +293,13 @@ bool CGameMap::CreateResource()
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileP4);
 		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink), &m_pTileP4);
 
+		if (SUCCEEDED(hr) )
+			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pPlayerBox);
+
 		if (!SUCCEEDED(hr) )
 			return false;
 	}
+
 
 	m_pPlayer1 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player0.png",m_pPlayer1);
 	m_pPlayer2 = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png",m_pPlayer2);
@@ -413,10 +430,10 @@ void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition ,bool isM
 	{
 		for (int j= 0;j<MAX_MAP_HEIGHT;++j)
 		{
-			if (m_Map[i][j].m_Type == MO_LINE_HIDDEN)
-				m_Map[i][j].m_Type = MO_LINE_UNCONNECTED;
+			if (m_Map[i][j].m_MouseOverFlag == true)
+				m_Map[i][j].m_MouseOverFlag = false;
 		}
 	}
 	if(isMousOn)
-		m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_HIDDEN;
+		m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_MouseOverFlag = true;
 }
