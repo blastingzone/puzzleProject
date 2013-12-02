@@ -149,15 +149,17 @@ void CGameMap::Render()
 				}
 				
 				//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
-				if (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn)
+				if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
+					|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
 				{
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 				}
-
-				//진행중인 라인 애니메이션이 없고 현재 타일에 할당된 애니메이션이 완료되지 않으면 
+				//진행중인 라인 애니메이션이 없고 
+				//애니메이션 그릴 턴이 되었거나 진행 중인 애니메이션이 있다면
 				else if (!m_LineAnimationFlag 
-					&& m_Map[i][j].m_AnimationTurn == m_TileAnimationTurn
-					&& m_TileAnimationTurn > 1)
+					&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
+					&& m_TileAnimationTurn > 0
+					&& m_Map[i][j].m_AnimationTurn > 0)
 				{
 					if (m_Map[i][j].m_StartTime == 0)
 					{
@@ -173,6 +175,8 @@ void CGameMap::Render()
 					{
 						//다음 턴 그릴 준비
 						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
+						m_Map[i][j].m_AnimationTurn = 0;
+						m_Map[i][j].m_AnimationFlag = false;
 						
 						//애니메이션이 끝난거라면
 						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
@@ -404,6 +408,21 @@ void CGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 	// 범위를 벗어난 경우 예외 처리
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
+	//랜덤 라인 긋는 과정에서의 애니메이션 상태 변화 되돌리기
+	for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
+	{
+		for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
+		{
+			SetMapFlag(IndexedPosition(tempI, tempJ), false);
+
+			if (GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
+			{
+				//애니메이션 재생을 위한 데이터도 초기화
+				InitAnimationState(IndexedPosition(tempI, tempJ) );
+			}
+		}
+	}
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_UNCONNECTED;
 }
 
@@ -512,4 +531,9 @@ void CGameMap::InitAnimationState(IndexedPosition indexedPosition)
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = 0;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = false;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = DI_UP;
+}
+
+int	CGameMap::GetTileAnimationTurn(IndexedPosition indexedPosition)
+{
+	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn;
 }

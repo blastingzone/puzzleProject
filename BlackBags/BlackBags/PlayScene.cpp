@@ -333,6 +333,10 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 	//확인 할 방향의 출발점이 점이면 확인 안 함
 	if (m_Map->GetMapType(currentTile) != MO_DOT)
 	{
+		//타일에 애니메이션 적용하는 순서 나타내기 위한 변수
+		int animationTurn = 1;
+		m_Map->SetAnimationState(currentTile, animationTurn, direction);
+
 		//앞에서 갱신한 탐색 출발 지점을 큐와 배열에 넣는다.
 		int i = 0;
 
@@ -340,12 +344,8 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 		m_ClosedTile[i++] = currentTile;
 		m_Map->SetMapFlag(currentTile, true);
 
-		//타일에 애니메이션 적용하는 순서 나타내기 위한 변수
-		int animationTurn = 0;
 		while (!searchTiles.empty() )
 		{
-			++animationTurn;
-
 			currentTile.m_PosI = searchTiles.front().m_PosI;
 			currentTile.m_PosJ = searchTiles.front().m_PosJ;
 			searchTiles.pop();
@@ -390,6 +390,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					m_Map->SetMapFlag(nextTile, true);
 
 					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_UP);
 				}				
 			}
@@ -406,6 +407,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					m_Map->SetMapFlag(nextTile, true);
 					
 					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_RIGHT);
 				}				
 			}
@@ -422,6 +424,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					m_Map->SetMapFlag(nextTile, true);
 					
 					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_DOWN);
 				}				
 			}
@@ -438,6 +441,7 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 					m_Map->SetMapFlag(nextTile, true);
 					
 					//애니메이션 재생을 위한 순서와 방향 지정
+					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_LEFT);
 				}				
 			}
