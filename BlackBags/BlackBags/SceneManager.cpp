@@ -86,7 +86,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		break;
 	case SC_EXIT:
 		SendMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
-		break;
+		return;
 	default:
 		break;
 	}

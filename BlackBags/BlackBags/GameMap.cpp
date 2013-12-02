@@ -2,6 +2,9 @@
 #include "GameMap.h"
 #include "GameTimer.h"
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 CGameMap::CGameMap(MapSize mapSize)
 {
 	m_pRenderTarget = nullptr;
@@ -296,10 +299,20 @@ void CGameMap::Render()
 					
 					DWORD currentTime = CGameTimer::GetInstance()->GetTime();
 
-					float timeWeight = currentTime - m_Map[i][j].m_StartTime;
-					float tempLine = m_TileSize * ( timeWeight / SC_P_TILE_ANIMATION_TIME);
+					float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
+					
+					//만약 애니메이션 재생 시간을 초과하면 최대 크기로 할당
+					float tempLine = 0;
+					if (progressedTimeRatio >= 1)
+					{
+						tempLine = m_TileSize;
+					}
+					else
+					{
+						tempLine = m_TileSize * sin(progressedTimeRatio * 3.14f / 2);
+					}
 
-					if ( tempLine > m_TileSize)
+					if ( tempLine >= m_TileSize)
 					{
 						//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
 						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
