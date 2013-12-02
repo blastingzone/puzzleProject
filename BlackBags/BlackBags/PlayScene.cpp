@@ -226,23 +226,23 @@ void CPlayScene::CreatePlayers()
 	std::array<int, MAX_PLAYER_NUM> PlayerIds = {0, 1, 2, 3};
 
 	std::random_shuffle(PlayerIds.begin(), PlayerIds.end());
+	int index = 0;
 
 	for (int playerTurn = 0; playerTurn < MAX_PLAYER_NUM; ++playerTurn)
 	{
-		int tempId;
 		int currentPlayerId = PlayerIds[playerTurn];
 
 		// Setting Scene에서 선택된 플레이어라면 tempId에 저장
 		if ( currentPlayerId >= 0
 			&& ((playerMask >> currentPlayerId) & 1) )
 		{
-			tempId = currentPlayerId;
 			PlayerIds[playerTurn] = -1;
 
-		m_Player[playerTurn] = new CPlayer;
-		m_Player[playerTurn]->SetPlayerId(tempId);
-			m_Player[playerTurn]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(tempId) );
-			CGameData::GetInstance()->SetPlayerTurn(tempId, playerTurn);
+			m_Player[index] = new CPlayer;
+			m_Player[index]->SetPlayerId(currentPlayerId);
+			m_Player[index]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(currentPlayerId) );
+			CGameData::GetInstance()->SetPlayerTurn(currentPlayerId, index);
+			++index;
 		}
 	}
 }
