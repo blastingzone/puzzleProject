@@ -10,6 +10,8 @@ CVideoRender::CVideoRender(void)
 	m_VideoDevice=nullptr;
 	m_VideoTexture = nullptr;
 	m_Hwnd=NULL;
+
+	//sm9: 라이브러 초기화는 생성자에서 하지 말고 Init() 같은거 안에서 명시적으로 할 것
 }
 
 
@@ -68,6 +70,7 @@ void CVideoRender::StartVideo()
 
 	if (m_Status == BVL_STATUS_READY)
 	{
+		//sm9: 아래 라이브러리 콜에 대해서도 에러 핸들링 해줘라
 		m_VideoLibrary.GetVideoInfo( m_VideoInfo );
 		m_VideoLibrary.Play();
 	}

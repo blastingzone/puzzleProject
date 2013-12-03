@@ -35,7 +35,7 @@ public:
 	int			GetPlayerGoldNumber(int playerId);
 	int			GetPlayerTrashNumber(int playerId);
 
-	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: 이렇게..
+	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: 코드 정리좀 하삼...
 	const std::wstring& GetPlayerImage(int playerId)			{return m_PlayerData[playerId].m_PlayerImage;} //SM9: 이렇게..
 	const std::wstring& GetPlayerBox(int playerId)			{return m_PlayerData[playerId].m_PlayerBox;} //SM9: 이렇게..
 

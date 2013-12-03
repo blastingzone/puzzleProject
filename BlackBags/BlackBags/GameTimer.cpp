@@ -50,6 +50,8 @@ void CGameTimer::SetTimerStart()
 	m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
 }
 
+//sm9: 주석 인코딩 깨졌네... 
+
 // ÁÖÀÇ : ¹Ýµå½Ã SetTimerStart()ÀÌ ¸ÕÀú ºÒ·Á¿Â ´ÙÀ½¿¡ ½ÇÇàÇØ¾ß ÇÔ
 void CGameTimer::Update()
 {
@@ -63,6 +65,7 @@ void CGameTimer::Update()
 		m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
 		m_CheckedTime = m_CurrentTime;
 	}
+
 
 	// Ã³À½ ½Ã°£ - ÇöÀç ½Ã°£ÀÌ TimeLimit(¿©±â¼­´Â 20ÃÊ)¸¦ ³Ñ¾î°¡¸é if¹® ÀÛµ¿
 	if (m_TimeRest <= 0)

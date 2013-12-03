@@ -9,6 +9,8 @@ CRenderer::CRenderer(void)
 	m_DisplayScale = 1.0f;
 	m_ipD2DFactory = nullptr;
 	m_ipRenderTarget = nullptr;
+
+	//sm9: 멤버 변수들 많은데 전부 초기화 안해주네? 클래스의 멤버 변수들은 반드시 초기화 하는 습관을 들이도록..
 }
 
 

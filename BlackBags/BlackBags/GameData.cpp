@@ -6,6 +6,9 @@ CGameData* CGameData::m_pInstance = nullptr;
 CGameData::CGameData(void)
 {
 	// 조심해!! 이 부분 Init()에도 있는데 같이 쓰는게 맞는 것일까요?
+	
+	//SM9: 생성자에서는 멤버 변수들 무조건 초기화 하는게 맞음.
+
 	for (int i = 0;i<MAX_PLAYER_NUM;++i)
 	{
 		m_PlayerData[i].m_Id = i;
@@ -48,6 +51,8 @@ void CGameData::Init()
 {
 	//생성자와 중복이 너무 많음
 	//타일, 골드, 라인 수만 초기화 해주는 함수 만드는 것이 좋을까요?
+
+	//sm9: 중복이 많다고 생각되면 공통인 부분만 Init에 넣고 생성자에서 Init을 호출. 단, Init함수는 가상함수가 되면 안되고 최대한 간결해야 함
 	m_PlayerData[0].m_PlayerName = L"Player1";
 	m_PlayerData[0].m_PlayerImage = L"Resource/Image/player1.png";
 	m_PlayerData[0].m_PlayerBox = L"Resource/Image/player1Box.png";
@@ -103,6 +108,10 @@ void CGameData::SetMapSize(int x, int y)
 
 // 이 3종도 합치도록한다. int? 앞에꺼랑 맞춰줘라.
 // 이거...... 각각의 함수들이 사용되는 경우가 따로따로라서 합치기가 어렵습니다
+
+//sm9: 고래? 
+// 이런 방법도 있다: GetPlayerNumber(int playerId, ResourceType rt) { switch( rt ) ... }
+
 int CGameData::GetPlayerTileNumber( int playerId )
 {
 	assert(MO_NOBODY!=playerId);

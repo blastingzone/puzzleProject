@@ -66,6 +66,7 @@ private:
 	float		m_ClickLineWeight;
 	float		m_ClickTileSize;
 
-	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
+	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH]; //sm9: 항상 배열 넘어가는 경우가 안생기도록 방어적으로 코딩할 것. 
+	// 제일 좋은 방법은 std::array 같은거 써서 배열 범위 넘어가더라도 바로 알 수 있게 만드는 것.
 };
 

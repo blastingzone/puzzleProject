@@ -408,6 +408,8 @@ bool CGameResult::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
 		
+		//sm9: API 호출 뒤에는 반드시 그 결과값 HRESULT 확인하고 에러 핸들링 할 것.
+		// 아래 코드 부터는 succeeded(hr)의미가 없음
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
 		
@@ -459,6 +461,9 @@ void CGameResult::CalculateScore()
 							+ CGameData::GetInstance()->GetPlayerGoldNumber(playerId) * SC_RT_SCORE_GOLD
 							+ CGameData::GetInstance()->GetPlayerTrashNumber(playerId) * SC_RT_SCORE_TRASH;
 		
+		//sm9: GetplayerNumber()가 4가 넘을 가능성은 없을까? 
+		// 지금은 MAX_PLAYER로 selected player 입력시에 체크는 하고 있는데, 만일 실수로 기능 추가하다가 입력시 체크를 빼먹을 수 있다.
+		// 그래서, 방어적으로 프로그래밍 하는게 좋다. 배열 인자에 대해 assert를 사용하거나 std::array를 사용하거나..
 		m_PlayerScore[playerId] = totalScore;
 	}
 }
@@ -469,6 +474,7 @@ void CGameResult::DecideWinner()
 
 	for (int i = 1; i < CGameData::GetInstance()->GetplayerNumber(); ++i)
 	{
+		//sm9: 이것도 마찬가지다. m_PlayerScore의 크기는 차라리 GetplayerNumber() 크기 만큼 동적으로 생성해주는게 좋다.
 		if (m_PlayerScore[i] > m_PlayerScore[winnerId])
 		{
 			winnerId = i;

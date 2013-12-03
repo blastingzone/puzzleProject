@@ -134,6 +134,7 @@ bool CGameMap::Init()
 
 void CGameMap::DrawPlayerUI( int playerNumber )
 {
+	//sm9: 아래 코드도 플레이어 UI 위치 계산 잘~ 한 다음에 for루프로 일반화 할 수 있을것 같은데...
 	if (playerNumber >= 2)
 	{
 		m_pRenderTarget->DrawBitmap(

@@ -68,6 +68,7 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 {
 	FMOD_RESULT fr = m_System->createSound("Resource/Sound/ME/main.mp3", FMOD_HARDWARE, 0, &m_Main);
 
+	//sm9: 에러처리 이런식으로 FMOD_OK하나로 하면 안되고, 어떤 파일이 없는지 정확하게 표현해줘야 한다.
 	if (fr == FMOD_OK)
 	{
 		fr = m_System->createSound("Resource/Sound/ME/setting.mp3", FMOD_HARDWARE, 0, &m_Setting);
@@ -93,12 +94,14 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 
 void CSoundRenderer::AllocateChannel()
 {
+	//sm9 : 아래 api가 실패하는 경우 핸들링도 해줘야 한다.
 	m_SEChannel->setChannelGroup(m_ChannelGroup);
 	m_BGMChannel->setChannelGroup(m_ChannelGroup);
 }
 
 // 조심해!!
 // 얘네 둘이 fr에 받아놓기만 하고 void로 리턴해주는데 fr값 활용하도록 바꿔야 합니다
+//sm9: 그렇지! FMOD_RESULT 반드시 활용... 실패할 경우 에러 핸들링...
 void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 {
 	switch (BGMName)
