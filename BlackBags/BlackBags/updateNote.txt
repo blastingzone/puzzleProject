@@ -40,9 +40,15 @@
 	  Library/FMOD/lib/fmod.dll
 	  Library/bandi/bdvid64.dll
 	  Library/bandi/bdvid32.dll
-	  위 파일을 
-	  trunk/BlackBags/Debug/
+	  위 파일과
+	  Resource/
+	  폴더를
+
+	  trunk/BlackBags/Debug/ 
+	  또는
+	  trunk/BlackBags/Release
 	  에 복사 해주세요.
+
 
 	* 주의 *
 	  플레이서 선택에서 4명을 골라주세요(4명 안 고르면 진행 안 되는 버그 발생) *

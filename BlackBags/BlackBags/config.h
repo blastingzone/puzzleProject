@@ -113,8 +113,8 @@ const int	SC_RT_SCORE_GOLD = 5;
 const int	SC_RT_SCORE_TRASH = -10;
 
 /*	크레딧 신에서 불러올 동영상들입니다	*/
-#define _CREDIT_MOVIE "credit.avi"
-#define _OPENING_MOVIE "opening.avi"
+#define _CREDIT_MOVIE "Resource/video/credit.avi"
+#define _OPENING_MOVIE "Resource/video/opening.avi"
 
 /*	폰트들입니다	*/
 /*	조심해! if / def로 폰트 있는지 없는지 검사해서 없을 경우의 대책도 마련할 것! */
