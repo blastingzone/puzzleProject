@@ -2,7 +2,7 @@
 
 ////////////////// 이 과정을 생략하면 실행이 안 될 수 있습니다 //////////////////
 
-1. BlackBags/Dep 폴더에 있는 bdvid32.dll, bdvid64.dll 파일 두 개를 Debug 폴더(실행파일이 있는 폴더)로 옮깁니다.
+1. BlackBags/Dep 폴더에 있는 bdvid32.dll, bdvid64.dll, fmod 파일 세 개를 Debug 폴더(실행파일이 있는 폴더)로 옮깁니다.
 
 2. 실행합니다.
 
