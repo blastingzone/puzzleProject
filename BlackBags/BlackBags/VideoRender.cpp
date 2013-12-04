@@ -6,7 +6,6 @@ CVideoRender* CVideoRender::m_pInstance = nullptr;
 
 CVideoRender::CVideoRender(void)
 {
-	//정서경 조심해!! 라이브러리도 초기화해줘야해 + info도.
 	m_VideoDevice=nullptr;
 	m_VideoTexture = nullptr;
 	m_Hwnd=NULL;
@@ -36,7 +35,7 @@ void CVideoRender::ReleaseInstance()
 HRESULT CVideoRender::Init(HWND hwnd)
 {
 	m_Hwnd = hwnd;
-
+	
 	if(m_Hwnd != nullptr)
 		return S_OK;
 }
@@ -68,6 +67,7 @@ void CVideoRender::StartVideo()
 
 	if (m_Status == BVL_STATUS_READY)
 	{
+		//조심해!! 에러 핸들링 해줘야해!
 		m_VideoLibrary.GetVideoInfo( m_VideoInfo );
 		m_VideoLibrary.Play();
 	}

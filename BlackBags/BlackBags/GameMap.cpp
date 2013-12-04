@@ -134,6 +134,8 @@ bool CGameMap::Init()
 
 void CGameMap::DrawPlayerUI( int playerNumber )
 {
+	//조심해!!
+	//일반화해서 포문으로 돌릴 수 있을 것 같아!!
 	if (playerNumber >= 2)
 	{
 		m_pRenderTarget->DrawBitmap(

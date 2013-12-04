@@ -139,7 +139,7 @@ void CGameResult::Render()
 			);
 
 		//tile part
-		for (int tileCount = 0; tileCount < CGameData::GetInstance()->GetPlayerTileNumber(i); ++tileCount)
+		for (int tileCount = 0; tileCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_NOTHING); ++tileCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -158,7 +158,7 @@ void CGameResult::Render()
 		}
 
 		//gold part
-		for (int goldCount = 0; goldCount < CGameData::GetInstance()->GetPlayerGoldNumber(i); ++goldCount)
+		for (int goldCount = 0; goldCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_GOLD); ++goldCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -177,7 +177,7 @@ void CGameResult::Render()
 		}
 
 		//trash part
-		for (int trachCount = 0; trachCount < CGameData::GetInstance()->GetPlayerTrashNumber(i); ++trachCount)
+		for (int trachCount = 0; trachCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_TRASH); ++trachCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -409,22 +409,22 @@ bool CGameResult::CreateResource()
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
 		
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
 		
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_TileBrush[0]);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_TileBrush[0]);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_TileBrush[1]);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_TileBrush[1]);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_TileBrush[2]);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_TileBrush[2]);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_TileBrush[3]);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_TileBrush[3]);
 
 		if (SUCCEEDED(hr) )
 			hr = DWriteCreateFactory(
@@ -455,9 +455,9 @@ void CGameResult::CalculateScore()
 {
 	for (int playerId = 0; playerId < CGameData::GetInstance()->GetplayerNumber(); ++playerId)
 	{
-		int	totalScore = CGameData::GetInstance()->GetPlayerTileNumber(playerId) * SC_RT_SCORE_TILE
-							+ CGameData::GetInstance()->GetPlayerGoldNumber(playerId) * SC_RT_SCORE_GOLD
-							+ CGameData::GetInstance()->GetPlayerTrashNumber(playerId) * SC_RT_SCORE_TRASH;
+		int	totalScore = CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_NOTHING) * SC_RT_SCORE_TILE
+							+ CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_GOLD) * SC_RT_SCORE_GOLD
+							+ CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_TRASH) * SC_RT_SCORE_TRASH;
 		
 		m_PlayerScore[playerId] = totalScore;
 	}

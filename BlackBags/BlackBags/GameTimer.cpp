@@ -47,10 +47,10 @@ void CGameTimer::SetTimerStart()
 	m_StartTime = GetTickCount();
 	m_CheckedTime = m_StartTime;
 	m_TimeRest = TimeLimit;
-	m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
+	m_Result = L"Time Left : " + std::to_wstring(m_TimeRest);
 }
 
-// ÁÖÀÇ : ¹Ýµå½Ã SetTimerStart()ÀÌ ¸ÕÀú ºÒ·Á¿Â ´ÙÀ½¿¡ ½ÇÇàÇØ¾ß ÇÔ
+//조심해!! 어떤 주석인지 찾아내야해!!
 void CGameTimer::Update()
 {
 	m_CurrentTime = GetTickCount();
@@ -92,9 +92,6 @@ void CGameTimer::Render()
 
 bool CGameTimer::Init()
 {
-	//Á¶½ÉÇØ!!
-	//SM9:  API È£Ãâ °°Àº ÀÛ¾÷Àº »ý¼ºÀÚ¿¡¼­ Àý´ë ÇÏÁö ¸»°Í. ¿¹¿Ü ÇÚµé¸µÀ» ÇÒ ¼ö ¾ø°í, ÇÁ·Î±×·¥À» °­Á¦·Î Á×ÀÌ´Â ¼ö¹Û¿¡ ¾ø´Ù
-	// ÀÚ¿ø ÇÒ´ç
 	HRESULT hr;
 
 	hr = DWriteCreateFactory( DWRITE_FACTORY_TYPE_SHARED

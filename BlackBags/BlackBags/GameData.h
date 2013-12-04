@@ -31,13 +31,11 @@ public:
 
 	void		UpdatePlayerResult(int playerId, MO_ITEM item);
 
-	int			GetPlayerTileNumber(int playerId);
-	int			GetPlayerGoldNumber(int playerId);
-	int			GetPlayerTrashNumber(int playerId);
+	int CGameData::GetPlayerItemNumber(int playerId, MO_ITEM itemType);
 
-	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;} //SM9: 이렇게..
-	const std::wstring& GetPlayerImage(int playerId)			{return m_PlayerData[playerId].m_PlayerImage;} //SM9: 이렇게..
-	const std::wstring& GetPlayerBox(int playerId)			{return m_PlayerData[playerId].m_PlayerBox;} //SM9: 이렇게..
+	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
+	const std::wstring& GetPlayerImage(int playerId)			{return m_PlayerData[playerId].m_PlayerImage;}
+	const std::wstring& GetPlayerBox(int playerId)			{return m_PlayerData[playerId].m_PlayerBox;} 
 
 	bool isPlayerTurn(int playerId) {return m_PlayerData[playerId].m_isMyTurn;}
 	void isPlayerTurn(int playerId, bool isTurn) {m_PlayerData[playerId].m_isMyTurn = isTurn;}

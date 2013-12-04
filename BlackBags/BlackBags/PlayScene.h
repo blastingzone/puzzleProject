@@ -66,6 +66,7 @@ private:
 	float		m_ClickLineWeight;
 	float		m_ClickTileSize;
 
-	IndexedPosition m_ClosedTile[CHECKLIST_LENGTH];
+	std::array<IndexedPosition, CHECKLIST_LENGTH> m_ClosedTile;
+
 };
 

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "sceneobject.h"
+#include <array>
 
 struct IDWriteFactory;
 struct IDWriteTextFormat;
@@ -33,7 +34,7 @@ private:
 	void CalculateScore();
 	void DecideWinner();
 
-	int m_PlayerScore[MAX_PLAYER_NUM];
+	std::array<int, MAX_PLAYER_NUM> m_PlayerScore;
 	MO_OWNER m_Winner;
 
 	bool m_ButtonMouseOver;

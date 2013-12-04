@@ -5,21 +5,9 @@ CGameData* CGameData::m_pInstance = nullptr;
 
 CGameData::CGameData(void)
 {
-	// 조심해!! 이 부분 Init()에도 있는데 같이 쓰는게 맞는 것일까요?
-	for (int i = 0;i<MAX_PLAYER_NUM;++i)
-	{
-		m_PlayerData[i].m_Id = i;
-		m_PlayerData[i].m_MyTile = 0;
-		m_PlayerData[i].m_MyGold = 0;
-		m_PlayerData[i].m_MyTrash = 0;
-		m_PlayerData[i].m_isMyTurn = false;
-	}
-
-	SetMapSize(0, 0);
-
 	m_CurrentScene = SC_NOSCENE;
 
-	m_PlaySceneTimerFlag = false;
+	Init();
 
 	m_PlayerMask = 0;
 }
@@ -101,21 +89,22 @@ void CGameData::SetMapSize(int x, int y)
 	m_MapSize.m_Width = x;
 }
 
-// 이 3종도 합치도록한다. int? 앞에꺼랑 맞춰줘라.
-// 이거...... 각각의 함수들이 사용되는 경우가 따로따로라서 합치기가 어렵습니다
-int CGameData::GetPlayerTileNumber( int playerId )
+int CGameData::GetPlayerItemNumber(int playerId, MO_ITEM itemType)
 {
 	assert(MO_NOBODY!=playerId);
-	return m_PlayerData[playerId].m_MyTile;
-}
 
-int CGameData::GetPlayerGoldNumber( int playerId )
-{
-	assert(MO_NOBODY!=playerId);
-	return m_PlayerData[playerId].m_MyGold;
-}
-int CGameData::GetPlayerTrashNumber( int playerId )
-{
-	assert(MO_NOBODY!=playerId);
-	return m_PlayerData[playerId].m_MyTrash;
+	switch(itemType)
+	{
+	case MO_NOTHING:
+		return m_PlayerData[playerId].m_MyTile;
+		break;
+	case MO_GOLD:
+		return m_PlayerData[playerId].m_MyGold;
+		break;
+	case MO_TRASH:
+		return m_PlayerData[playerId].m_MyTrash;
+		break;
+	default:
+		break;
+	}
 }

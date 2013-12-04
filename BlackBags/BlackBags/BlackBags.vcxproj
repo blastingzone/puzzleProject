@@ -76,6 +76,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d2d1.lib;dwrite.lib;d3d9.lib;Library/FMOD/lib/fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -96,6 +97,8 @@
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameResult.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="Library\FMOD\inc\fmod.hpp" />
+    <ClInclude Include="Library\FMOD\inc\fmod_errors.h" />
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainScene.h" />

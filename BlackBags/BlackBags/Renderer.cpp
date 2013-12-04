@@ -9,6 +9,13 @@ CRenderer::CRenderer(void)
 	m_DisplayScale = 1.0f;
 	m_ipD2DFactory = nullptr;
 	m_ipRenderTarget = nullptr;
+
+	m_pImagingFactory = nullptr;
+	m_pDecoder = nullptr;
+	m_pFrame = nullptr;	
+	m_pConvertedSourceBitmap = nullptr;
+	m_ipBitampTraget = nullptr;
+	m_pD2DBitmap = nullptr;
 }
 
 
