@@ -40,9 +40,9 @@ public:
 	SceneName GetCurrentScene()								{ return m_CurrentScene; }
 	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
 
-	// Playermask (ex : 0001 = player1, 1001 = Player4, Player1)
-	//void SetPlayerMask(int mask)							{ m_PlayerMask = mask; }
-	//int GetPlayerMask()										{ return m_PlayerMask; }
+	//Playermask (ex : 0001 = player1, 1001 = Player4, Player1)
+	void	SetPlayerMask(int mask);
+	bool	GetPlayerCreatedFlag(int idx);
 
 private:
 	void createPlayer();
@@ -54,7 +54,7 @@ private:
 
 	bool				m_PlaySceneTimerFlag;
 
-	//int					m_PlayerMask;
+	int					m_PlayerMask;
 
 	int					m_PlayerNumber;
 	CPlayer*			m_PlayerData[MAX_PLAYER_NUM];

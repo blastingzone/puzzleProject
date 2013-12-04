@@ -142,7 +142,7 @@ public:
 	void SetNextButtonPossible() {m_NextButton.m_IsPossible = true;}
 	void SetNextButtonImpossible() {m_NextButton.m_IsPossible = false;}
 
-	int GetPlayerMask() { return m_PlayerMask;}
+	int GetPlayerMask()		{ return m_PlayerMask; }
 
 private:
 	bool CreateResource();

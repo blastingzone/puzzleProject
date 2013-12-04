@@ -22,6 +22,7 @@ CPlayer::~CPlayer(void)
 void CPlayer::Init()
 {
 	//m_isMyTurn = 0;
+	m_isMyTurn = false;
 	m_Turn = 0;
 
 	m_MyTile = 0;

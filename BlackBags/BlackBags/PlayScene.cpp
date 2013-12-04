@@ -42,6 +42,7 @@ bool CPlayScene::Init()
 {
 	SetPlayerNumber();
 	LinkPlayers();
+
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 
 	if ( m_Map == nullptr || !m_Map->Init() )
@@ -223,13 +224,22 @@ void CPlayScene::LinkPlayers()
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 	
 	//player turn 설정
+	int turnIdx = 0;
+	int playerIdx = 0;
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		CGameData::GetInstance()->SetPlayerTurn(i, PlayerTurn[i] );
-
-		if (PlayerTurn[i] < m_PlayerNumber)
+		if (CGameData::GetInstance()->GetPlayerCreatedFlag(i) )
 		{
-			m_Player[PlayerTurn[i]] = CGameData::GetInstance()->GetPlayerPtr(i);
+			while(PlayerTurn[turnIdx] >= m_PlayerNumber)
+			{
+				++turnIdx;
+			}
+			CGameData::GetInstance()->SetPlayerTurn(i, PlayerTurn[turnIdx++]);
+			m_Player[playerIdx++] = CGameData::GetInstance()->GetPlayerPtr(i);
+		}
+		else
+		{
+			CGameData::GetInstance()->SetPlayerTurn(i, -1);
 		}
 	}
 }

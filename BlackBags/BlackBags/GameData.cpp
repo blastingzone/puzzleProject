@@ -79,6 +79,7 @@ void CGameData::Init()
 	}
 
 	m_PlayerNumber = 0;
+	m_PlayerMask = 0;
 
 	SetMapSize(0, 0);
 
@@ -144,7 +145,17 @@ int CGameData::GetPlayerItemNumber(int id, MO_ITEM item)
 	return m_PlayerData[id]->GetPlayerItemNumber(item);
 }
 
-/*
+void CGameData::SetPlayerMask(int mask)
+{
+	m_PlayerMask = mask;
+	createPlayer();
+}
+
+bool CGameData::GetPlayerCreatedFlag(int idx)
+{
+	return m_PlayerData[idx]->GetPlayerCreatedFlag();
+}
+
 void CGameData::createPlayer()
 {
 	if ( (m_PlayerMask & 0x01) == 0x1)
@@ -167,4 +178,3 @@ void CGameData::createPlayer()
 		m_PlayerData[3]->SetPlayerCreatedFlag();
 	}
 }
-*/

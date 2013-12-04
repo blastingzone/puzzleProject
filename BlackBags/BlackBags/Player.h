@@ -31,6 +31,9 @@ public:
 
 	void	UpdatePlayerResult(MO_ITEM item);
 
+	void	SetPlayerCreatedFlag()	{ m_isMyTurn = true; }
+	bool	GetPlayerCreatedFlag()	{ return m_isMyTurn; }
+
 private:
 	int m_Id;
 
@@ -38,7 +41,7 @@ private:
 	std::wstring m_PlayerImage;
 	std::wstring m_PlayerBox;
 
-	//bool m_isMyTurn;
+	bool m_isMyTurn;
 	bool m_Created;
 	int m_Turn;
 
