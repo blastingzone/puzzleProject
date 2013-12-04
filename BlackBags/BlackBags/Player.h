@@ -29,9 +29,6 @@ public:
 	void	SetPlayerTurn(int playerId, int turn)	{ m_Turn = turn; }
 	int		GetPlayerTurn(int palyerId)				{ return m_Turn; }
 
-	void	SetPlayerCreatedFlag()					{ m_Created = true; }
-	int		GetPlayerCreatedFlag()					{ return m_Created; }
-
 	void	UpdatePlayerResult(MO_ITEM item);
 
 private:

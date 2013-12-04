@@ -15,7 +15,7 @@ CGameData::CGameData(void)
 
 	Init();
 
-	m_PlayerMask = 0;
+	//m_PlayerMask = 0;
 }
 
 
@@ -98,11 +98,11 @@ const std::wstring& CGameData::GetPlayerName(int idx)
 
 //아래의 두 함수는 리턴값이 위험하다! 
 //구조를 좀 더 수정할 것
-const std::wstring& CGameData::GetPlayerImage(int idx)
+const std::wstring& CGameData::GetPlayerImage(int turn)
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		if (m_PlayerData[i]->GetPlayerTurn() == idx)
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
 		{
 			return m_PlayerData[i]->GetPlayerImage();
 		}
@@ -111,11 +111,11 @@ const std::wstring& CGameData::GetPlayerImage(int idx)
 	return L"";
 }
 
-const std::wstring& CGameData::GetPlayerBox(int idx)
+const std::wstring& CGameData::GetPlayerBox(int turn)
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		if (m_PlayerData[i]->GetPlayerTurn() == idx)
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
 		{
 			return m_PlayerData[i]->GetPlayerBox();
 		}
@@ -124,9 +124,9 @@ const std::wstring& CGameData::GetPlayerBox(int idx)
 	return L"";
 }
 
-void CGameData::SetPlayerTurn(int idx, int playerNumber)	
+void CGameData::SetPlayerTurn(int idx, int playerTurn)	
 { 
-	m_PlayerData[idx]->SetPlayerTurn(playerNumber); 
+	m_PlayerData[idx]->SetPlayerTurn(playerTurn); 
 }
 
 int CGameData::GetPlayerTurn(int idx)
@@ -144,6 +144,7 @@ int CGameData::GetPlayerItemNumber(int id, MO_ITEM item)
 	return m_PlayerData[id]->GetPlayerItemNumber(item);
 }
 
+/*
 void CGameData::createPlayer()
 {
 	if ( (m_PlayerMask & 0x01) == 0x1)
@@ -166,3 +167,4 @@ void CGameData::createPlayer()
 		m_PlayerData[3]->SetPlayerCreatedFlag();
 	}
 }
+*/

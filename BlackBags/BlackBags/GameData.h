@@ -24,10 +24,10 @@ public:
 	CPlayer*	GetPlayerPtr(int idx)						{ return m_PlayerData[idx]; }
 
 	const std::wstring&		GetPlayerName(int idx);
-	const std::wstring&		GetPlayerImage(int idx);
-	const std::wstring&		GetPlayerBox(int idx);
+	const std::wstring&		GetPlayerImage(int turn);
+	const std::wstring&		GetPlayerBox(int turn);
 
-	void		SetPlayerTurn(int idx, int playerNumber);
+	void		SetPlayerTurn(int idx, int playerTurn);
 	int			GetPlayerTurn(int idx);
 
 	void		UpdatePlayerResult(int id, MO_ITEM item);
@@ -41,8 +41,8 @@ public:
 	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
 
 	// Playermask (ex : 0001 = player1, 1001 = Player4, Player1)
-	void SetPlayerMask(int mask)							{ m_PlayerMask = mask; }
-	int GetPlayerMask()										{ return m_PlayerMask; }
+	//void SetPlayerMask(int mask)							{ m_PlayerMask = mask; }
+	//int GetPlayerMask()										{ return m_PlayerMask; }
 
 private:
 	void createPlayer();
@@ -54,7 +54,7 @@ private:
 
 	bool				m_PlaySceneTimerFlag;
 
-	int					m_PlayerMask;
+	//int					m_PlayerMask;
 
 	int					m_PlayerNumber;
 	CPlayer*			m_PlayerData[MAX_PLAYER_NUM];

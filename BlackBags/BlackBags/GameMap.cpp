@@ -570,17 +570,24 @@ bool CGameMap::CreateResource()
 			return false;
 	}
 
-	for (int i = 0; i<CGameData::GetInstance()->GetplayerNumber();++i)
+	for (int turn = 0; turn < CGameData::GetInstance()->GetplayerNumber(); ++turn)
 	{
-		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(CGameData::GetInstance()->GetPlayerTurn(i)), m_pPlayer[i]);
-		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(CGameData::GetInstance()->GetPlayerTurn(i)), m_pPlayerBox[i]);
+		m_pPlayer[turn] = CRenderer::GetInstance()->CreateImage(
+			CGameData::GetInstance()->GetPlayerImage(turn), 
+			m_pPlayer[turn]
+		);
+
+		m_pPlayerBox[turn] = CRenderer::GetInstance()->CreateImage(
+			CGameData::GetInstance()->GetPlayerBox(turn), 
+			m_pPlayerBox[turn]
+		);
 
 	}
 
-	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png",m_backImg);
+	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png", m_backImg);
 
-	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png",m_gold);
-	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item2.png",m_trash);
+	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png", m_gold);
+	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item2.png", m_trash);
 
 	return true;
 }

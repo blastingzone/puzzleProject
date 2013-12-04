@@ -212,31 +212,24 @@ IndexedPosition CPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 void CPlayScene::SetPlayerNumber()
 {
 	//SettingScene에서의 플레이어 수를 받아온다.
-
 	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
 }
 
-//플레이어 수에 맞춰 CPlayer 생성 후 m_Player에 넣는다. 순서는 입력 순서와 같다.
-//여기서 순서까지 다 정해준다.
 void CPlayScene::LinkPlayers()
 {
-	//조심해!!
-	//세팅메뉴와 연결되는 부분은 수요일에 구현 예정.
-	//일단 직접 집어 넣는 식으로 했음.
+	std::array<int, MAX_PLAYER_NUM> PlayerTurn = {0, 1, 2, 3};
 
-	int playerMask = CGameData::GetInstance()->GetPlayerMask();
-
-	std::array<int, MAX_PLAYER_NUM> PlayerIds = {0, 1, 2, 3};
-
-	std::random_shuffle(PlayerIds.begin(), PlayerIds.end());
+	srand( static_cast<unsigned int>(time(NULL)) );
+	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 	
 	//player turn 설정
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		CGameData::GetInstance()->SetPlayerTurn(i, PlayerIds[i] );
-		if (PlayerIds[i] < m_PlayerNumber)
+		CGameData::GetInstance()->SetPlayerTurn(i, PlayerTurn[i] );
+
+		if (PlayerTurn[i] < m_PlayerNumber)
 		{
-			m_Player[PlayerIds[i]] = CGameData::GetInstance()->GetPlayerPtr(i);
+			m_Player[PlayerTurn[i]] = CGameData::GetInstance()->GetPlayerPtr(i);
 		}
 	}
 }
@@ -468,8 +461,6 @@ void CPlayScene::InitRandomMap()
 
 	// IsClosed에서 사용할 변수들입니다.
 	IndexedPosition RandomTargetPosition;
-
-	srand( static_cast<unsigned int>(time(NULL)) );
 
 	// 고정적인 시드값이 필요할 경우 아래 시드를 써보시기 바랍니다.
 	//srand(1383706550);
