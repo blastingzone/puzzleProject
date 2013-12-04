@@ -91,7 +91,13 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 #endif
 		//IsPossible 체크 후에 gameMap 호출해서 반영
 		m_Map->DrawLine(indexedPosition);
-		memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+		//memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+		
+		for (int i = 0; i < m_ClosedTile.size(); ++i)
+		{
+			m_ClosedTile[i].m_PosI = 0;
+			m_ClosedTile[i].m_PosJ = 0;
+		}
 
 		if (IsClosed(indexedPosition))
 		{
@@ -118,9 +124,9 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
 		}
 
-		//m_PlayerTurn++;
-		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
-		CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
+		++m_PlayerTurn;
+		//CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId(),false);
+		//CGameData::GetInstance()->isPlayerTurn(m_Player[m_PlayerTurn++%m_PlayerNumber]->GetPlayerId(),true);
 
 
 		//조심해!!
@@ -387,7 +393,13 @@ void CPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direction di
 						animationTurn = 0;
 					}
 				}
-				memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+				//memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+
+				for (int i = 0; i < m_ClosedTile.size(); ++i)
+				{
+					m_ClosedTile[i].m_PosI = 0;
+					m_ClosedTile[i].m_PosJ = 0;
+				}
 #ifdef _DEBUG
 				printf("센티넬을 만났어요\n");
 #endif

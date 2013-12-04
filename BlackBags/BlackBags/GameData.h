@@ -33,15 +33,14 @@ public:
 
 	int CGameData::GetPlayerItemNumber(int playerId, MO_ITEM itemType);
 
-	const std::wstring& GetPlayerName(int playerId)			{return m_PlayerData[playerId].m_PlayerName;}
-	const std::wstring& GetPlayerImage(int playerId)			{return m_PlayerData[playerId].m_PlayerImage;}
-	const std::wstring& GetPlayerBox(int playerId)			{return m_PlayerData[playerId].m_PlayerBox;} 
+	const std::wstring& GetPlayerName(int playerId)			{ return m_PlayerData[playerId].m_PlayerName; }
+	const std::wstring& GetPlayerImage(int playerId)		{ return m_PlayerData[playerId].m_PlayerImage; }
+	const std::wstring& GetPlayerBox(int playerId)			{ return m_PlayerData[playerId].m_PlayerBox; } 
 
-	bool isPlayerTurn(int playerId) {return m_PlayerData[playerId].m_isMyTurn;}
-	void isPlayerTurn(int playerId, bool isTurn) {m_PlayerData[playerId].m_isMyTurn = isTurn;}
+	void isPlayerTurn(int playerId, bool isTurn)			{ m_PlayerData[playerId].m_isMyTurn = isTurn; }
 
-	void SetPlayerTurn(int playerId, int turn) {m_PlayerData[playerId].m_Turn = turn;}
-	int GetPlayerTurn(int palyerId) {return m_PlayerData[palyerId].m_Turn;}
+	void SetPlayerTurn(int playerId, int turn)				{ m_PlayerData[playerId].m_Turn = turn; }
+	int GetPlayerTurn(int palyerId)							{ return m_PlayerData[palyerId].m_Turn; }
 
 	void SetPlayerIdAndName(int playerId,const std::wstring& playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}
 

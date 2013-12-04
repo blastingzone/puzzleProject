@@ -78,6 +78,7 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 		}
 	}
 
+	// GameStartButton Å¬¸¯½Ã
 	if (CheckGameStartCondition())
 	{
 		m_SettingMenu->SetNextButtonPossible();
