@@ -8,6 +8,7 @@ CPlayer::CPlayer(void)
 	m_PlayerName = L"";
 	m_PlayerImage = L"";
 	m_PlayerBox = L"";
+	m_BrushColor = D2D1::ColorF(0);
 
 	//m_isMyTurn = 0;
 

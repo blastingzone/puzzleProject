@@ -522,22 +522,15 @@ bool CGameMap::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
-		//hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkMagenta), &m_pDotBrush);
 
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(115.0f/255, 191.0f/255, 31.0f/255), &m_pUnconnectedLineBrush); //ver 1106
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro), &m_pUnconnectedLineBrush);
 
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(115.0f/255, 191.0f/255, 31.0f/255), &m_pUnconnectedLineBrush); //ver 1106
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gainsboro), &m_pUnconnectedLineBrush);
 
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(30.0f/255, 153.0f/255, 197.0f/255), &m_pConnectedLineBrush); //ver 1106
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Tomato), &m_pConnectedLineBrush);
 
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
@@ -549,22 +542,19 @@ bool CGameMap::CreateResource()
 			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileP1);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 232.0f/255, 36.0f/255), &m_pTileP1); //ver 1106
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 183.0f/255, 153.0f/255),&m_pTileP1);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow), &m_pTileP1);
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_pTileP1);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileP2);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Green), &m_pTileP2);
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_pTileP2);
 
-		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileP3);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::CadetBlue), &m_pTileP3);
+		//조심해!!
+		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
+		//수정할 것
+		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_pTileP3);
 
-		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileP4);
-		//m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink), &m_pTileP4);
+		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() == 4)
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_pTileP4);
 
 		if (!SUCCEEDED(hr) )
 			return false;

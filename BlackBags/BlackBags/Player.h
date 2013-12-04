@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <d2d1.h>
 
 class CPlayer
 {
@@ -18,6 +19,9 @@ public:
 	void					SetPlayerBox(const std::wstring& playeBox)		{ m_PlayerBox = playeBox; }
 	const std::wstring&		GetPlayerBox()									{ return m_PlayerBox; } 
 	
+	void			SetBrushColor(D2D1_COLOR_F color)	{ m_BrushColor = color; }
+	D2D1_COLOR_F	GetBrushColor()						{ return m_BrushColor; }
+
 	void	SetPlayerTurn(int playerTurn)			{ m_Turn = playerTurn; }
 	int		GetPlayerTurn()							{ return m_Turn; }
 
@@ -48,5 +52,7 @@ private:
 	int m_MyTile;
 	int m_MyGold;
 	int m_MyTrash;
+
+	D2D1_COLOR_F m_BrushColor;
 };
 

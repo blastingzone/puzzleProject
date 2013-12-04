@@ -414,17 +414,21 @@ bool CGameResult::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
 
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_TileBrush[0]);
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_TileBrush[1]);
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_TileBrush[0]);
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_TileBrush[2]);
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_TileBrush[1]);
 
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_TileBrush[3]);
+		//조심해!!
+		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
+		//수정할 것
+		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_TileBrush[2]);
+
+		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() == 4)
+			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_TileBrush[3]);
 
 		if (SUCCEEDED(hr) )
 			hr = DWriteCreateFactory(

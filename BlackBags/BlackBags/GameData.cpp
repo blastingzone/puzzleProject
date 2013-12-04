@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GameData.h"
 #include "Player.h"
 
@@ -12,8 +12,6 @@ CGameData::CGameData(void)
 	}
 
 	m_CurrentScene = SC_NOSCENE;
-
-	Init();
 
 	//m_PlayerMask = 0;
 }
@@ -35,7 +33,16 @@ CGameData* CGameData::GetInstance()
 
 void CGameData::ReleaseInstance()
 {
+	m_pInstance->Release();
 	SafeDelete(m_pInstance);
+}
+
+void CGameData::Release()
+{
+	for (int i = 0; i < m_PlayerData.size(); ++i)
+	{
+		SafeDelete(m_PlayerData[i]);
+	}
 }
 
 void CGameData::Init()
@@ -51,24 +58,28 @@ void CGameData::Init()
 				m_PlayerData[i]->SetPlayerName(L"Player1");
 				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player1.png");
 				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player1Box.png");
+				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_1_) );
 				break;
 			case 1:
 				m_PlayerData[i] = new CPlayer();
 				m_PlayerData[i]->SetPlayerName(L"Player2");
 				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player2.png");
 				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player2Box.png");
+				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_2_) );
 				break;
 			case 2:
 				m_PlayerData[i] = new CPlayer();
 				m_PlayerData[i]->SetPlayerName(L"Player3");
 				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player3.png");
 				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player3Box.png");
+				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_3_) );
 				break;
 			case 3:
 				m_PlayerData[i] = new CPlayer();
 				m_PlayerData[i]->SetPlayerName(L"Player4");
 				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player4.png");
 				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player4Box.png");
+				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_4_) );
 			default:
 				break;
 			}
@@ -97,8 +108,8 @@ const std::wstring& CGameData::GetPlayerName(int idx)
 	return m_PlayerData[idx]->GetPlayerName(); 
 }
 
-//¾Æ·¡ÀÇ µÎ ÇÔ¼ö´Â ¸®ÅÏ°ªÀÌ À§ÇèÇÏ´Ù! 
-//±¸Á¶¸¦ Á» ´õ ¼öÁ¤ÇÒ °Í
+//ì•„ë˜ í•¨ìˆ˜ë“¤ì˜ ë¦¬í„´ê°’ì´ ìœ„í—˜í•˜ë‹¤
+//ìˆ˜ì •í•  ê²ƒ
 const std::wstring& CGameData::GetPlayerImage(int turn)
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
@@ -125,6 +136,43 @@ const std::wstring& CGameData::GetPlayerBox(int turn)
 	return L"";
 }
 
+D2D1_COLOR_F CGameData::GetPlayerBrushColor(int turn)
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
+		{
+			return m_PlayerData[i]->GetBrushColor();
+		}
+	}
+
+	return D2D1::ColorF(0);
+}
+
+void CGameData::UpdatePlayerResult(int turn, MO_ITEM item)
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
+		{
+			return m_PlayerData[i]->UpdatePlayerResult(item);
+		}
+	}
+}
+
+int CGameData::GetPlayerItemNumber(int turn, MO_ITEM item)
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
+		{
+			return m_PlayerData[i]->GetPlayerItemNumber(item);
+		}
+	}
+
+	return 0;
+}
+
 void CGameData::SetPlayerTurn(int idx, int playerTurn)	
 { 
 	m_PlayerData[idx]->SetPlayerTurn(playerTurn); 
@@ -133,16 +181,6 @@ void CGameData::SetPlayerTurn(int idx, int playerTurn)
 int CGameData::GetPlayerTurn(int idx)
 { 
 	return m_PlayerData[idx]->GetPlayerTurn(); 
-}
-
-void CGameData::UpdatePlayerResult(int id, MO_ITEM item)
-{
-	m_PlayerData[id]->UpdatePlayerResult(item); 
-}
-
-int CGameData::GetPlayerItemNumber(int id, MO_ITEM item)
-{
-	return m_PlayerData[id]->GetPlayerItemNumber(item);
 }
 
 void CGameData::SetPlayerMask(int mask)

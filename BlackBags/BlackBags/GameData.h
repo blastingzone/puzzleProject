@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <d2d1.h>
+#include <array>
 
 class CPlayer;
 
@@ -14,6 +16,7 @@ public:
 	static void				ReleaseInstance();
 
 	void Init();
+	void Release();
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}
@@ -30,12 +33,14 @@ public:
 	void		SetPlayerTurn(int idx, int playerTurn);
 	int			GetPlayerTurn(int idx);
 
-	void		UpdatePlayerResult(int id, MO_ITEM item);
-	int			GetPlayerItemNumber(int id, MO_ITEM item);		
+	void		UpdatePlayerResult(int turn, MO_ITEM item);
+	int			GetPlayerItemNumber(int turn, MO_ITEM item);		
 
-	void InitPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = false; }
-	void SetPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = true; }
-	bool GetPlaySceneTimerFlag()							{ return m_PlaySceneTimerFlag; }
+	D2D1_COLOR_F	GetPlayerBrushColor(int turn);
+
+	void InitPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = false; }
+	void SetPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = true; }
+	bool GetPlaySceneTimerFlag()	{ return m_PlaySceneTimerFlag; }
 
 	SceneName GetCurrentScene()								{ return m_CurrentScene; }
 	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
@@ -57,5 +62,6 @@ private:
 	int					m_PlayerMask;
 
 	int					m_PlayerNumber;
-	CPlayer*			m_PlayerData[MAX_PLAYER_NUM];
+
+	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerData;
 };
