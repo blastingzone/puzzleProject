@@ -20,7 +20,10 @@ CPlayScene::CPlayScene(void)
 	m_ClickLineWeight = 0;
 	m_ClickTileSize = 0;
 
-	memset(m_Player,0,sizeof(m_Player) );
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_Player[i] = nullptr;
+	}
 
 	m_SceneStatus = SC_PLAY;
 }
@@ -31,8 +34,6 @@ CPlayScene::~CPlayScene(void)
 	FreeConsole();
 	RemoveObject();
 
-	DeletePlayers();
-
 	SafeDelete(m_Map);
 }
 
@@ -40,7 +41,7 @@ CPlayScene::~CPlayScene(void)
 bool CPlayScene::Init()
 {
 	SetPlayerNumber();
-	CreatePlayers();
+	LinkPlayers();
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 
 	if ( m_Map == nullptr || !m_Map->Init() )
@@ -106,7 +107,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 			{
 				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
 				//m_Map->SetMapOwner(tempArray[i],  m_Player[m_PlayerTurn%m_PlayerNumber] ) //지금 플레이어가 누군가
-				m_Map->SetMapOwner(m_ClosedTile[i],  (MO_OWNER)m_Player[m_PlayerTurn%m_PlayerNumber]->GetPlayerId());
+				m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)m_Player[m_PlayerTurn % m_PlayerNumber]->GetPlayerId() );
 				m_Map->SubtractVoidCount();
 				i++;
 			}
@@ -217,49 +218,25 @@ void CPlayScene::SetPlayerNumber()
 
 //플레이어 수에 맞춰 CPlayer 생성 후 m_Player에 넣는다. 순서는 입력 순서와 같다.
 //여기서 순서까지 다 정해준다.
-void CPlayScene::CreatePlayers()
+void CPlayScene::LinkPlayers()
 {
 	//조심해!!
 	//세팅메뉴와 연결되는 부분은 수요일에 구현 예정.
 	//일단 직접 집어 넣는 식으로 했음.
-	CGameData::GetInstance()->SetPlayerIdAndName(0,L"Player1");
-	CGameData::GetInstance()->SetPlayerIdAndName(1,L"Player2");
-	CGameData::GetInstance()->SetPlayerIdAndName(2,L"Player3");
-	CGameData::GetInstance()->SetPlayerIdAndName(3,L"Player4");
-	
+
 	int playerMask = CGameData::GetInstance()->GetPlayerMask();
 
 	std::array<int, MAX_PLAYER_NUM> PlayerIds = {0, 1, 2, 3};
 
 	std::random_shuffle(PlayerIds.begin(), PlayerIds.end());
-	int index = 0;
-
-	for (int playerTurn = 0; playerTurn < MAX_PLAYER_NUM; ++playerTurn)
+	
+	//player turn 설정
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		int currentPlayerId = PlayerIds[playerTurn];
-
-		// Setting Scene에서 선택된 플레이어라면 tempId에 저장
-		if ( currentPlayerId >= 0
-			&& ((playerMask >> currentPlayerId) & 1) )
+		CGameData::GetInstance()->SetPlayerTurn(i, PlayerIds[i] );
+		if (PlayerIds[i] < m_PlayerNumber)
 		{
-			PlayerIds[playerTurn] = -1;
-
-			m_Player[index] = new CPlayer;
-			m_Player[index]->SetPlayerId(currentPlayerId);
-			m_Player[index]->SetPlayerName(CGameData::GetInstance()->GetPlayerName(currentPlayerId) );
-			CGameData::GetInstance()->SetPlayerTurn(currentPlayerId, index);
-			++index;
-		}
-	}
-}
-
-void CPlayScene::DeletePlayers()
-{
-	for ( int i = 0; i< MAX_PLAYER_NUM ; ++i)
-	{
-		if (m_Player[i])
-		{
-			SafeDelete(m_Player[i]);
+			m_Player[PlayerIds[i]] = CGameData::GetInstance()->GetPlayerPtr(i);
 		}
 	}
 }

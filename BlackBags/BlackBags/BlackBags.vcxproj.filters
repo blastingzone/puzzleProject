@@ -89,9 +89,6 @@
     <ClInclude Include="SceneObject.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Scenes\PlayScene</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Scenes\PlayScene</Filter>
     </ClInclude>
@@ -155,6 +152,9 @@
     <ClInclude Include="Library\FMOD\inc\fmod_errors.h">
       <Filter>ThirdParty</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -174,9 +174,6 @@
     </ClCompile>
     <ClCompile Include="SceneObject.cpp">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Scenes\PlayScene</Filter>
     </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Scenes\PlayScene</Filter>
@@ -228,6 +225,9 @@
     </ClCompile>
     <ClCompile Include="VideoRender.cpp">
       <Filter>Renderer\VideoRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

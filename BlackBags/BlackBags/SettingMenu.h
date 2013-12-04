@@ -9,7 +9,6 @@ struct PlayerSelect
 						m_ButtonWidth(0.0f),
 						m_ButtonHeight(0.0f),
 						m_ButtonText(L""),
-						m_PlayerId(0),
 						m_pBackgroundBrush(nullptr),
 						m_pSelectedBackgroundBrush(nullptr)
 						{};
@@ -21,8 +20,6 @@ struct PlayerSelect
 	float		m_ButtonHeight;
 
 	std::wstring m_ButtonText;
-
-	int			m_PlayerId;
 
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;

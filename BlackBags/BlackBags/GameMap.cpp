@@ -572,8 +572,8 @@ bool CGameMap::CreateResource()
 
 	for (int i = 0; i<CGameData::GetInstance()->GetplayerNumber();++i)
 	{
-		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(CGameData::GetInstance()->GetPlayerTurn(i)),m_pPlayer[i]);
-		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(CGameData::GetInstance()->GetPlayerTurn(i)),m_pPlayerBox[i]);
+		m_pPlayer[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerImage(CGameData::GetInstance()->GetPlayerTurn(i)), m_pPlayer[i]);
+		m_pPlayerBox[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetPlayerBox(CGameData::GetInstance()->GetPlayerTurn(i)), m_pPlayerBox[i]);
 
 	}
 

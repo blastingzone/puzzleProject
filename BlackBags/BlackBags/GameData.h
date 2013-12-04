@@ -2,21 +2,7 @@
 
 #include <string>
 
-struct PlayerData
-{
-	int m_Id;
-	std::wstring m_PlayerName;
-	std::wstring m_PlayerImage;
-	std::wstring m_PlayerBox;
-
-	bool m_isMyTurn;
-	int m_Turn;
-
-	int m_MyTile;
-	int m_MyGold;
-	int m_MyTrash;
-
-};
+class CPlayer;
 
 class CGameData
 {
@@ -27,28 +13,25 @@ public:
 	static CGameData* CGameData::GetInstance();
 	static void				ReleaseInstance();
 
-	void					Init();
-
-	void		UpdatePlayerResult(int playerId, MO_ITEM item);
-
-	int CGameData::GetPlayerItemNumber(int playerId, MO_ITEM itemType);
-
-	const std::wstring& GetPlayerName(int playerId)			{ return m_PlayerData[playerId].m_PlayerName; }
-	const std::wstring& GetPlayerImage(int playerId)		{ return m_PlayerData[playerId].m_PlayerImage; }
-	const std::wstring& GetPlayerBox(int playerId)			{ return m_PlayerData[playerId].m_PlayerBox; } 
-
-	void isPlayerTurn(int playerId, bool isTurn)			{ m_PlayerData[playerId].m_isMyTurn = isTurn; }
-
-	void SetPlayerTurn(int playerId, int turn)				{ m_PlayerData[playerId].m_Turn = turn; }
-	int GetPlayerTurn(int palyerId)							{ return m_PlayerData[palyerId].m_Turn; }
-
-	void SetPlayerIdAndName(int playerId,const std::wstring& playerName) {m_PlayerData[playerId].m_PlayerName = playerName;}
+	void Init();
 
 	void		SetMapSize(int x, int y);
 	MapSize		GetMapSize() {return m_MapSize;}
 
-	void		SetPlayerNumber(int playerNumber)			{m_PlayerNumber = playerNumber;}
-	int			GetplayerNumber()							{return m_PlayerNumber; }
+	void		SetPlayerNumber(int playerNumber)			{ m_PlayerNumber = playerNumber; }
+	int			GetplayerNumber()							{ return m_PlayerNumber; }
+
+	CPlayer*	GetPlayerPtr(int idx)						{ return m_PlayerData[idx]; }
+
+	const std::wstring&		GetPlayerName(int idx);
+	const std::wstring&		GetPlayerImage(int idx);
+	const std::wstring&		GetPlayerBox(int idx);
+
+	void		SetPlayerTurn(int idx, int playerNumber);
+	int			GetPlayerTurn(int idx);
+
+	void		UpdatePlayerResult(int id, MO_ITEM item);
+	int			GetPlayerItemNumber(int id, MO_ITEM item);		
 
 	void InitPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = false; }
 	void SetPlaySceneTimerFlag()							{ m_PlaySceneTimerFlag = true; }
@@ -62,15 +45,17 @@ public:
 	int GetPlayerMask()										{ return m_PlayerMask; }
 
 private:
-	static CGameData*		m_pInstance; //singleton instance
-	MapSize					m_MapSize;
+	void createPlayer();
 
-	SceneName				m_CurrentScene;
+	static CGameData*	m_pInstance; //singleton instance
+	MapSize				m_MapSize;
 
-	bool					m_PlaySceneTimerFlag;
+	SceneName			m_CurrentScene;
 
-	int						m_PlayerMask;
+	bool				m_PlaySceneTimerFlag;
 
-	int						m_PlayerNumber;
-	PlayerData				m_PlayerData[MAX_PLAYER_NUM];
+	int					m_PlayerMask;
+
+	int					m_PlayerNumber;
+	CPlayer*			m_PlayerData[MAX_PLAYER_NUM];
 };

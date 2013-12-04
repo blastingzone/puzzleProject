@@ -14,8 +14,7 @@ public:
 
 	void StartGame();
 	void SetPlayerNumber();
-	void CreatePlayers();
-	void DeletePlayers();
+	void LinkPlayers();
 
 	//맵 초기화 할 때 유저 수에 맞게 울타리랑 아이템 랜덤 배치하는 메소드
 	void InitRandomMap();

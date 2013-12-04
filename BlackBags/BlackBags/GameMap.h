@@ -51,15 +51,6 @@ struct MapObject
 	Direction	m_Direction;
 };
 
-struct Player
-{
-	Player() : m_PlayerTurn(false), m_PlayerName(L"") {}
-	
-	bool m_PlayerTurn;
-	std::wstring m_PlayerName;
-	D2D1_SIZE_F m_ProfileSize;
-};
-
 class CGameMap : public CSceneObject
 {
 public:
@@ -196,6 +187,7 @@ private:
 
 	IDWriteFactory*			m_DWriteFactory;
 	IDWriteTextFormat*		m_TextFormat;
+
 	bool m_isMouseOn;
 };
 
