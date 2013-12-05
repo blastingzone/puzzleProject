@@ -500,9 +500,9 @@ void CGameMap::Render()
 	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
 	float currentTimerLength = m_TimerWidth * remainTimeRatio;
 
-	//남은 시간 표시
+	//남은 시간 표시 (브러시 새로 만들어 쓸 것)
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
-	m_pRenderTarget->FillRectangle(rectElement, m_pTileP3);
+	m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)
