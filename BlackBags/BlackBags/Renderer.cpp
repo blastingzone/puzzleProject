@@ -71,17 +71,17 @@ ID2D1Bitmap* CRenderer::CreateImage( std::wstring fileName , ID2D1Bitmap* myBitm
 		IID_PPV_ARGS(&m_pImagingFactory)
 		);
 
-	hr = m_pImagingFactory->CreateDecoderFromFilename(
-		myFile,                      // Image to be decoded
-		NULL,                            // Do not prefer a particular vendor
-		GENERIC_READ,                    // Desired read access to the file
-		WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-		&m_pDecoder                        // Pointer to the decoder
-		);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_pImagingFactory->CreateDecoderFromFilename(
+			myFile,                      // Image to be decoded
+			NULL,                            // Do not prefer a particular vendor
+			GENERIC_READ,                    // Desired read access to the file
+			WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+			&m_pDecoder                        // Pointer to the decoder
+			);
+	}
 
-	// Retrieve the first frame of the image from the decoder
-	// gif 이미지의 경우 프래임 수를 바꿔 주면 다음 프레임을 불러 올 수 있다.
-	// 스프라이트는 이거랑 다름->잘라서 쓰는거?
 	if (SUCCEEDED(hr))
 	{
 		hr = m_pDecoder->GetFrame(0, &m_pFrame);
@@ -96,12 +96,12 @@ ID2D1Bitmap* CRenderer::CreateImage( std::wstring fileName , ID2D1Bitmap* myBitm
 	if (SUCCEEDED(hr))
 	{
 		hr = m_pConvertedSourceBitmap->Initialize(
-			m_pFrame,                          // Input bitmap to convert
-			GUID_WICPixelFormat32bppPBGRA,   // Destination pixel format
-			WICBitmapDitherTypeNone,         // Specified dither pattern
-			NULL,                            // Specify a particular palette 
-			0.f,                             // Alpha threshold
-			WICBitmapPaletteTypeCustom       // Palette translation type
+			m_pFrame,                       
+			GUID_WICPixelFormat32bppPBGRA, 
+			WICBitmapDitherTypeNone,     
+			NULL,                          
+			0.f,                             
+			WICBitmapPaletteTypeCustom
 			);
 	}
 
@@ -114,6 +114,8 @@ ID2D1Bitmap* CRenderer::CreateImage( std::wstring fileName , ID2D1Bitmap* myBitm
 
 	SafeRelease(m_pDecoder);
 	SafeRelease(m_pFrame);
+
+	assert( hr == S_OK );
 
 	return myBitmap;
 }
