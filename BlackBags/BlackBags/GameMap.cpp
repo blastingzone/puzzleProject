@@ -15,8 +15,7 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pPossibleLineBrush = nullptr;
 	m_pTileBrush = nullptr;
 	m_pVoidTileBrush = nullptr;
-	m_pGoldBrush = nullptr;
-	m_pTrashBrush = nullptr;
+	m_pTimer = nullptr;
 
 	memset(m_pPlayer,0,sizeof(m_pPlayer) );
 	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
@@ -62,13 +61,13 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pPossibleLineBrush);
 	SafeRelease(m_pTileBrush);
 	SafeRelease(m_pVoidTileBrush);
-	SafeRelease(m_pGoldBrush);
-	SafeRelease(m_pTrashBrush);
 
 	SafeRelease(m_pTileP[0]);
 	SafeRelease(m_pTileP[1]);
 	SafeRelease(m_pTileP[2]);
 	SafeRelease(m_pTileP[3]);
+
+	SafeRelease(m_pTimer);
 }
 
 
@@ -364,11 +363,9 @@ void CGameMap::Render()
 					switch (GetItem(IndexedPosition(i, j) ) )
 					{
 					case MO_GOLD:
-						//m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pGoldBrush);
 						m_pRenderTarget->DrawBitmap(m_gold,rectElement);
 						break;
 					case MO_TRASH:
-						//m_pRenderTarget->FillEllipse(&m_DotEllipse, m_pTrashBrush);
 						m_pRenderTarget->DrawBitmap(m_trash,rectElement);
 						break;
 					default:
@@ -499,7 +496,7 @@ void CGameMap::Render()
 
 	//남은 시간 표시
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
-	m_pRenderTarget->FillRectangle(rectElement, m_pTileP[1]);
+	m_pRenderTarget->FillRectangle(rectElement, m_pTimer);
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)
@@ -534,10 +531,7 @@ bool CGameMap::CreateResource()
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
 
 		//플레이어별 타일색상및 캐릭터 생성
 		for (int idx = 0 ; idx<CGameData::GetInstance()->GetplayerNumber();++idx)

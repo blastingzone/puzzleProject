@@ -169,8 +169,7 @@ private:
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
-	ID2D1SolidColorBrush*	m_pGoldBrush;
-	ID2D1SolidColorBrush*	m_pTrashBrush;
+	ID2D1SolidColorBrush*	m_pTimer;
 
 	ID2D1SolidColorBrush* m_pTileP[MAX_PLAYER_NUM];
 
