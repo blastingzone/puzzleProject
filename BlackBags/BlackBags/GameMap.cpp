@@ -23,6 +23,8 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pTileP3 = nullptr;
 	m_pTileP4 = nullptr;
 
+	m_pTimer = nullptr;
+
 	memset(m_pPlayer,0,sizeof(m_pPlayer) );
 	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
 
@@ -502,7 +504,7 @@ void CGameMap::Render()
 
 	//남은 시간 표시 (브러시 새로 만들어 쓸 것)
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
-	m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+	m_pRenderTarget->FillRectangle(rectElement, m_pTimer);
 }
 
 void CGameMap::SetMapSize(MapSize mapsize)
@@ -524,37 +526,40 @@ bool CGameMap::CreateResource()
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_pTileP1);
+			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_pTileP1);
 
 		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_pTileP2);
+			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_pTileP2);
 
 		//조심해!!
 		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
 		//수정할 것
 		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_pTileP3);
+			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_pTileP3);
 
 		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() == 4)
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_pTileP4);
+			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_pTileP4);
+
+		if (SUCCEEDED(hr) )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
 
 		if (!SUCCEEDED(hr) )
 			return false;

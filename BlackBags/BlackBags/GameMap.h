@@ -168,6 +168,8 @@ private:
 	ID2D1SolidColorBrush*	m_pTileP3;
 	ID2D1SolidColorBrush*	m_pTileP4;
 
+	ID2D1SolidColorBrush*	m_pTimer;
+
 	D2D1_ELLIPSE			m_DotEllipse;
 
 	bool	m_LineAnimationFlag;
