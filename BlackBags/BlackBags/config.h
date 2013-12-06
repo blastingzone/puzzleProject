@@ -60,6 +60,11 @@ const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
 const float DEFAULT_ITEM_RADIUS = 4.0f;
+const float DEFAULT_CHARACTER_SIZE = 150.0f;
+const float DEFAULT_CHARACTER_BOX_WIDTH = 150.0f;
+const float DEFAULT_CHARACTER_BOX_HEIGHT = 30.0f;
+const float DEFALT_CHARACTER_MARGIN = 50.0f;
+
 
 const float SC_P_TIMER_POSITION_HEIGHT = 10.0f;
 const float SC_P_TIMER_WIDTH = 500.0f;

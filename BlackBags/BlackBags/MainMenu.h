@@ -61,6 +61,9 @@ private:
 	float m_MenuButtonHeight;
 	float m_MenuTextMagin;
 	float m_MenuTextSize;
+	float m_BackgroundWidth;
+	float m_BackgroundHeight;
+
 
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
