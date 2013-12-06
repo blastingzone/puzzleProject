@@ -34,7 +34,7 @@ void CMainMenu::Render()
 	D2D1_RECT_F		rectElement, textPosition;
 	D2D1_POINT_2F	pos;
 	
-	m_pRenderTarget->DrawBitmap(m_pBackgroundImage,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
+	m_pRenderTarget->DrawBitmap(m_pBackgroundImage,D2D1::RectF(0,0,m_BackgroundWidth,m_BackgroundHeight));
 
 	for (int i = 0; i < BUTTON_NUMBER; ++i)
 	{
@@ -117,6 +117,8 @@ void CMainMenu::SetObjectSize()
 	m_MenuButtonHeight = tempScale * SC_M_DEFAULT_MENU_BUTTON_HEIGHT;
 	m_MenuTextMagin = tempScale * SC_M_DEFAULT_TEXT_MARGIN;
 	m_MenuTextSize = tempScale * SC_M_DEFAULT_TEXT_SIZE;
+	m_BackgroundWidth = tempScale * WINDOW_WIDTH;
+	m_BackgroundHeight = tempScale * WINDOW_HEIGHT;
 }
 
 void CMainMenu::RefreshTextSize()

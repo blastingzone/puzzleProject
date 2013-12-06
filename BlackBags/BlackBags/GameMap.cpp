@@ -27,6 +27,9 @@ CGameMap::CGameMap(MapSize mapSize)
 
 	memset(m_pPlayer,0,sizeof(m_pPlayer) );
 	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
+	memset(m_ProfilePosition,0,sizeof(m_ProfilePosition));
+	memset(m_ProfileBoxPosition,0,sizeof(m_ProfileBoxPosition));
+
 
 	m_LineAnimationFlag = false;
 	m_TileAnimationTurnNumber = 0;
@@ -38,7 +41,6 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_ItemRadius = 0;
 	m_ProfileSize = 0;
 	m_ProfileMargin = 0;
-	m_ProfileBoxSize = 0;
 
 	m_TimerPositionHeight = 0;
 	m_TimerWidth = 0;
@@ -49,12 +51,6 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_MapSize.m_Height = mapSize.m_Height;
 
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
-
-	//조심해!!
-	//초기화해서 화면 스케일에 맞춰서 적용할 것
-	m_ProfileSize = 150.0f;
-	m_ProfileMargin = 50.0f;
-	m_ProfileBoxSize = 30.0f;
 
 	m_isMouseOn = false;
 }
@@ -74,6 +70,8 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pTileP2);
 	SafeRelease(m_pTileP3);
 	SafeRelease(m_pTileP4);
+
+	SafeRelease(m_pTimer);
 }
 
 
@@ -136,97 +134,13 @@ bool CGameMap::Init()
 
 void CGameMap::DrawPlayerUI( int playerNumber )
 {
-	//조심해!!
-	//일반화해서 포문으로 돌릴 수 있을 것 같아!!
-	if (playerNumber >= 2)
+	GetPlayerUIPosition();
+
+	for(int i = 0 ; i <playerNumber; ++i)
 	{
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayer[0], 
-			D2D1::RectF(
-				m_ProfileMargin, 
-				m_ProfileMargin, 
-				m_ProfileMargin + m_ProfileSize,
-				m_ProfileMargin + m_ProfileSize
-				) 
-			);
-		
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayerBox[0],
-			D2D1::RectF(
-				m_ProfileMargin, 
-				m_ProfileMargin + m_ProfileSize, 
-				m_ProfileMargin + m_ProfileSize, 
-				m_ProfileMargin + m_ProfileSize + m_ProfileBoxSize
-				)
-			);
-
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayer[1],
-			D2D1::RectF(
-				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin, 
-				m_ProfileMargin, 
-				WINDOW_WIDTH - m_ProfileMargin,
-				m_ProfileMargin + m_ProfileSize
-				)
-			);
-
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayerBox[1],
-			D2D1::RectF(
-				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin, 
-				m_ProfileMargin + m_ProfileSize, 
-				WINDOW_WIDTH - m_ProfileMargin, 
-				m_ProfileMargin + m_ProfileSize + m_ProfileBoxSize
-				)
-			);
+		m_pRenderTarget -> DrawBitmap(m_pPlayer[i],m_ProfilePosition[i]);
+		m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i],m_ProfileBoxPosition[i]);
 	}
-
-	if (playerNumber >= 3)
-	{
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayer[2],
-			D2D1::RectF(
-				m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileSize - m_ProfileMargin,
-				m_ProfileMargin + m_ProfileSize,
-				WINDOW_HEIGHT - m_ProfileMargin
-				)
-			);
-
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayerBox[2],
-			D2D1::RectF(
-				m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileMargin,
-				m_ProfileMargin + m_ProfileSize,
-				WINDOW_HEIGHT - m_ProfileMargin + m_ProfileBoxSize
-				)
-			);
-	}
-
-	if (playerNumber == 4)
-	{
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayer[3],
-			D2D1::RectF(
-				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileSize - m_ProfileMargin,
-				WINDOW_WIDTH - m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileMargin
-				)
-			);
-
-		m_pRenderTarget->DrawBitmap(
-			m_pPlayerBox[3],
-			D2D1::RectF(
-				WINDOW_WIDTH - m_ProfileSize - m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileMargin,
-				WINDOW_WIDTH - m_ProfileMargin,
-				WINDOW_HEIGHT - m_ProfileMargin + m_ProfileBoxSize
-				)
-			);
-	}
-	//m_pRenderTarget->FillRectangle(D2D1::RectF(50.0f,50.0f+m_ProfileSize,50.0f+m_ProfileSize,80.0f+m_ProfileSize), m_pPlayerBox);
 }
 
 
@@ -661,6 +575,28 @@ void CGameMap::SetObjectSize()
 	m_TimerPositionHeight = tempScale * SC_P_TIMER_POSITION_HEIGHT;
 	m_TimerWidth = tempScale * SC_P_TIMER_WIDTH;
 	m_TimerHeight = tempScale * SC_P_TIMER_HEIGHT;
+
+	m_ProfileSize = tempScale * DEFAULT_CHARACTER_SIZE;
+	m_ProfileBoxHeight = tempScale * DEFAULT_CHARACTER_BOX_HEIGHT;
+	m_ProfileBoxWidth = tempScale * DEFAULT_CHARACTER_BOX_WIDTH;
+	m_ProfileMargin = tempScale * DEFALT_CHARACTER_MARGIN;
+	m_ProfileRightPosition = tempScale * WINDOW_WIDTH;
+	m_ProfileBottomPosition = tempScale * WINDOW_HEIGHT;
+}
+
+void CGameMap::GetPlayerUIPosition()
+{
+	m_ProfilePosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize);
+	m_ProfileBoxPosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin + m_ProfileSize ,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize+m_ProfileBoxHeight);
+
+	m_ProfilePosition[1] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin, m_ProfileMargin+m_ProfileSize);
+	m_ProfileBoxPosition[1] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,m_ProfileRightPosition - m_ProfileMargin,m_ProfileMargin+m_ProfileSize+m_ProfileBoxHeight);
+
+	m_ProfilePosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin);
+	m_ProfileBoxPosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin+m_ProfileBoxHeight);
+
+	m_ProfilePosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileRightPosition - m_ProfileMargin);
+	m_ProfileBoxPosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileRightPosition - m_ProfileMargin+m_ProfileBoxHeight);
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
