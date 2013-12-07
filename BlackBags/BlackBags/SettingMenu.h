@@ -6,6 +6,7 @@
 struct PlayerSelect
 {
 	PlayerSelect() :	m_IsSelected(0),
+						m_IsMouseOver(0),
 						m_ButtonWidth(0.0f),
 						m_ButtonHeight(0.0f),
 						m_ButtonText(L""),
@@ -28,6 +29,7 @@ struct PlayerSelect
 struct MapSelect
 {
 	MapSelect() :	m_IsSelected(0),
+					m_IsMouseOver(0),
 					m_ButtonWidth(0.0f),
 					m_ButtonHeight(0.0f),
 					m_ButtonText(L""),
@@ -81,7 +83,7 @@ struct PlayerTitle
 {
 	PlayerTitle() : m_LayerWidth(0.f),
 					 m_LayerHeight(0.f),
-					 m_Title(L"Player")
+					 m_Title(L"Character")
 					 {};
 
 	float m_LayerWidth;

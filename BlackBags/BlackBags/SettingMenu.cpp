@@ -13,6 +13,16 @@ CSettingMenu::CSettingMenu(void)
 	m_PlayerMask = 0;
 
 	// 버튼 초기값들을 설정함
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
+	}
+
+	m_PlayerSelect[0].m_ButtonText = L"Character 1";
+	m_PlayerSelect[1].m_ButtonText = L"Character 2";
+	m_PlayerSelect[2].m_ButtonText = L"Character 3";
+	m_PlayerSelect[3].m_ButtonText = L"Character 4";
+
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
 	m_MapSelect[0].m_GameDataMapSizeWidth = 5;
@@ -316,8 +326,8 @@ void CSettingMenu::Render()
 			m_pRenderTarget->FillRectangle(rectElement, m_PlayerSelect[i].m_pSelectedBackgroundBrush);
 
 			m_pRenderTarget->DrawText(
-				CGameData::GetInstance()->GetPlayerName(i).c_str(),
-				CGameData::GetInstance()->GetPlayerName(i).length(),
+				m_PlayerSelect[i].m_ButtonText.c_str(),
+				m_PlayerSelect[i].m_ButtonText.length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pSelectedTextBrush
@@ -326,8 +336,8 @@ void CSettingMenu::Render()
 		else // 아니면 글자만 나옴
 		{
 			m_pRenderTarget->DrawText(
-				CGameData::GetInstance()->GetPlayerName(i).c_str(),
-				CGameData::GetInstance()->GetPlayerName(i).length(),
+				m_PlayerSelect[i].m_ButtonText.c_str(),
+				m_PlayerSelect[i].m_ButtonText.length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pUnselectedTextBrush
