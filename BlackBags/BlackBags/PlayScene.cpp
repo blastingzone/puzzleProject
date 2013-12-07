@@ -41,7 +41,6 @@ CPlayScene::~CPlayScene(void)
 bool CPlayScene::Init()
 {
 	SetPlayerNumber();
-	LinkPlayers();
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 
@@ -49,6 +48,8 @@ bool CPlayScene::Init()
 	{
 		return false;
 	}
+
+	LinkPlayers();
 
 	InitRandomMap();
 	AddObject(m_Map);
@@ -222,22 +223,31 @@ void CPlayScene::LinkPlayers()
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 	
 	//player turn 설정
-	int turnIdx = 0;
-	int playerIdx = 0;
+	int joinPlayerIdx = 0;
+	int notJoinPlayerIdx = m_PlayerNumber;
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		if (CGameData::GetInstance()->GetPlayerCreatedFlag(i) )
+		//만약 게임에 참가하는 플레이어(캐릭터)라면 플레이어 턴을 관리하는 테이블 앞쪽에 추가
+		//m_map과 중복 데이터
+		if (CGameData::GetInstance()->GetPlayerCreatedFlag(PlayerTurn[i]) )
 		{
-			while(PlayerTurn[turnIdx] >= m_PlayerNumber)
-			{
-				++turnIdx;
-			}
-			CGameData::GetInstance()->SetPlayerTurn(i, PlayerTurn[turnIdx++]);
-			m_Player[playerIdx++] = CGameData::GetInstance()->GetPlayerPtr(i);
+			assert(joinPlayerIdx >= 0 && joinPlayerIdx < MAX_PLAYER_NUM);
+
+			m_Player[joinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
+			m_Map->SetPlayerTurnTable(joinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
+
+			//gamedata에 player turn 지정
+			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], joinPlayerIdx++);
 		}
 		else
 		{
-			CGameData::GetInstance()->SetPlayerTurn(i, -1);
+			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx < MAX_PLAYER_NUM);
+
+			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
+			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
+
+			//gamedata에 player turn 지정
+			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], notJoinPlayerIdx++);
 		}
 	}
 }

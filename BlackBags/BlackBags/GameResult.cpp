@@ -2,6 +2,7 @@
 #include "GameResult.h"
 #include <string.h>
 #include "dwrite.h"
+#include "Player.h"
 
 CGameResult::CGameResult(void)
 {
@@ -62,6 +63,7 @@ void CGameResult::Render()
 {
 	D2D1_RECT_F		rectElement, textPosition;
 	D2D1_POINT_2F	pos;
+	CPlayer* tempPlayer = nullptr;
 
 	//winner background part
 	pos.x = SC_RT_HORIZONTAL_MARGIN;
@@ -109,6 +111,8 @@ void CGameResult::Render()
 	//player part
 	for (int i = 0; i < CGameData::GetInstance()->GetplayerNumber(); ++i)
 	{
+		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
+
 		pos.x = SC_RT_HORIZONTAL_MARGIN;
 		pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
 		
@@ -131,15 +135,15 @@ void CGameResult::Render()
 			pos.y + m_PlayerNameTextHeight);
 
 		m_pRenderTarget->DrawText(
-			CGameData::GetInstance()->GetPlayerName(i).c_str(),
-			CGameData::GetInstance()->GetPlayerName(i).length(),
+			tempPlayer->GetPlayerName().c_str(),
+			tempPlayer->GetPlayerName().length(),
 			m_PlayerNameTextFormat,
 			textPosition,
 			m_pTextBrush
 			);
 
 		//tile part
-		for (int tileCount = 0; tileCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_NOTHING); ++tileCount)
+		for (int tileCount = 0; tileCount < tempPlayer->GetPlayerItemNumber(MO_NOTHING); ++tileCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -154,11 +158,14 @@ void CGameResult::Render()
 				pos.x + m_PlayerTileSize, 
 				pos.y + m_PlayerTileSize);
 
-			m_pRenderTarget->FillRectangle(rectElement, m_TileBrush[i]);
+			m_pRenderTarget->FillRectangle(
+				rectElement, 
+				CGameData::GetInstance()->GetPlayerPtrByTurn(i)->GetPlayerBrush()
+			);
 		}
 
 		//gold part
-		for (int goldCount = 0; goldCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_GOLD); ++goldCount)
+		for (int goldCount = 0; goldCount < tempPlayer->GetPlayerItemNumber(MO_GOLD); ++goldCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -177,7 +184,7 @@ void CGameResult::Render()
 		}
 
 		//trash part
-		for (int trachCount = 0; trachCount < CGameData::GetInstance()->GetPlayerItemNumber(i, MO_TRASH); ++trachCount)
+		for (int trachCount = 0; trachCount < tempPlayer->GetPlayerItemNumber(MO_TRASH); ++trachCount)
 		{
 			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
@@ -325,9 +332,10 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_TitleTextFormat
 		);
-
-	if (SUCCEEDED(hr) )
-		hr = m_TitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	assert(SUCCEEDED(hr) );
+	
+	hr = m_TitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	assert(SUCCEEDED(hr) );
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -339,9 +347,10 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_PlayerNameTextFormat
 		);
-
-	if (SUCCEEDED(hr) )
-		hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	assert(SUCCEEDED(hr) );
+	
+	hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	assert(SUCCEEDED(hr) );
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -353,9 +362,10 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_PlayerScoreTextFormat
 		);
-
-	if (SUCCEEDED(hr) )
-		hr = m_PlayerScoreTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
+	
+	hr = m_PlayerScoreTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -367,9 +377,10 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_WinnerTextFormat
 		);
-
-	if (SUCCEEDED(hr) )
-		hr = m_WinnerTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
+	
+	hr = m_WinnerTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -381,12 +392,13 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_ButtonTextFormat
 		);
+	assert(SUCCEEDED(hr) );
 
-	if (SUCCEEDED(hr) )
-	{
-		hr = m_ButtonTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-		hr = m_ButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
+	hr = m_ButtonTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
+
+	hr = m_ButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr) );
 }
 
 bool CGameResult::CreateResource()
@@ -398,57 +410,36 @@ bool CGameResult::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pTextBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pWinnerTextBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
+		assert(SUCCEEDED(hr) );
 		
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pTextBrush);
+		assert(SUCCEEDED(hr) );
 		
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pWinnerTextBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
+		assert(SUCCEEDED(hr) );
 
-
-		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_TileBrush[0]);
-
-		if (SUCCEEDED(hr) )
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_TileBrush[1]);
-
-		//최경욱 조심해!!
-		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
-		//수정할 것
-		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_TileBrush[2]);
-
-		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() == 4)
-			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_TileBrush[3]);
-
-		if (SUCCEEDED(hr) )
-			hr = DWriteCreateFactory(
+		hr = DWriteCreateFactory(
             DWRITE_FACTORY_TYPE_SHARED,
             __uuidof(IDWriteFactory),
             reinterpret_cast<IUnknown**>(&m_DWriteFactory)
             );
+		assert(SUCCEEDED(hr) );
 
 		SetObjectSize();
 		RefreshTextSize();
 
-		if (SUCCEEDED(hr) )
-		{
-			m_Title = L"RESULT";
-			m_WinnerText = L"WINNER";
-			m_ButtonText = L"FINISH";
-		}
-		
-		if (!SUCCEEDED(hr) )
-			return false;
+		m_Title = L"RESULT";
+		m_WinnerText = L"WINNER";
+		m_ButtonText = L"FINISH";
 	}
 
 	return true;
@@ -457,13 +448,17 @@ bool CGameResult::CreateResource()
 
 void CGameResult::CalculateScore()
 {
-	for (int playerId = 0; playerId < CGameData::GetInstance()->GetplayerNumber(); ++playerId)
+	CPlayer* tempPlayer = nullptr;
+
+	for (int turn = 0; turn < CGameData::GetInstance()->GetplayerNumber(); ++turn)
 	{
-		int	totalScore = CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_NOTHING) * SC_RT_SCORE_TILE
-							+ CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_GOLD) * SC_RT_SCORE_GOLD
-							+ CGameData::GetInstance()->GetPlayerItemNumber(playerId, MO_TRASH) * SC_RT_SCORE_TRASH;
+		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(turn);
+
+		int	totalScore = tempPlayer->GetPlayerItemNumber(MO_NOTHING) * SC_RT_SCORE_TILE
+							+ tempPlayer->GetPlayerItemNumber(MO_GOLD) * SC_RT_SCORE_GOLD
+							+ tempPlayer->GetPlayerItemNumber(MO_TRASH) * SC_RT_SCORE_TRASH;
 		
-		m_PlayerScore[playerId] = totalScore;
+		m_PlayerScore[turn] = totalScore;
 	}
 }
 

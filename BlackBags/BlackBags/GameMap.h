@@ -113,6 +113,9 @@ public:
 	// 게임 결과를 GameData 클래스에 기록하는 메소드
 	void WriteResult();
 
+	/*	player turn table 구성 함수 */
+	void SetPlayerTurnTable(int idx, CPlayer* playerPtr);
+
 private: 
 	bool CreateResource();
 
@@ -170,10 +173,12 @@ private:
 	ID2D1SolidColorBrush*	m_pGoldBrush;
 	ID2D1SolidColorBrush*	m_pTrashBrush;
 
+	/*
 	ID2D1SolidColorBrush*	m_pTileP1;
 	ID2D1SolidColorBrush*	m_pTileP2;
 	ID2D1SolidColorBrush*	m_pTileP3;
 	ID2D1SolidColorBrush*	m_pTileP4;
+	*/
 
 	ID2D1SolidColorBrush*	m_pTimer;
 
@@ -183,11 +188,11 @@ private:
 	int		m_TileAnimationTurnNumber;
 	int		m_TileAnimationTurn;
 
-	ID2D1Bitmap* m_pPlayer[MAX_PLAYER_NUM];
+	//ID2D1Bitmap* m_pPlayer[MAX_PLAYER_NUM];
 
-	ID2D1Bitmap* m_pPlayerBox[MAX_PLAYER_NUM];
+	//ID2D1Bitmap* m_pPlayerBox[MAX_PLAYER_NUM];
 
-	ID2D1Bitmap* m_pPlayerWaitingBox;
+	//ID2D1Bitmap* m_pPlayerWaitingBox;
 
 	ID2D1Bitmap* m_backImg;
 
@@ -198,5 +203,8 @@ private:
 	IDWriteTextFormat*		m_TextFormat;
 
 	bool m_isMouseOn;
+
+	//playScene과 중복되는 데이터
+	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
 };
 

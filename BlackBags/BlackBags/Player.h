@@ -8,19 +8,25 @@ public:
 	CPlayer(void);
 	~CPlayer(void);
 
-	void Init();
+	bool Init(MO_OWNER playerIdx);
+	void ResetValues();
 
 	void					SetPlayerName(const std::wstring& playerName)	{ m_PlayerName = playerName; }
 	const std::wstring&		GetPlayerName()									{ return m_PlayerName; }
 
-	void					SetPlayerImage(const std::wstring& playerImage)	{ m_PlayerImage = playerImage; }
-	const std::wstring&		GetPlayerImage()								{ return m_PlayerImage; }
+	//void					SetPlayerImage(const std::wstring& playerImage)	{ m_PlayerImage = playerImage; }
+	//const std::wstring&		GetPlayerImage()								{ return m_PlayerImage; }
 	
-	void					SetPlayerBox(const std::wstring& playeBox)		{ m_PlayerBox = playeBox; }
-	const std::wstring&		GetPlayerBox()									{ return m_PlayerBox; } 
+	//void					SetPlayerBox(const std::wstring& playeBox)		{ m_PlayerBox = playeBox; }
+	//const std::wstring&		GetPlayerBox()									{ return m_PlayerBox; } 
 	
-	void			SetBrushColor(D2D1_COLOR_F color)	{ m_BrushColor = color; }
-	D2D1_COLOR_F	GetBrushColor()						{ return m_BrushColor; }
+	ID2D1SolidColorBrush*	GetPlayerBrush()		{ return m_pTileColorBrush; }
+	ID2D1Bitmap*			GetPlayerFace()			{ return m_pPlayerFace; }
+	ID2D1Bitmap*			GetPlayerBox()			{ return m_pPlayerBox; }
+	ID2D1Bitmap*			GetPlayerWaitingBox()	{ return m_pPlayerWaitingBox; }
+
+	//void			SetBrushColor(D2D1_COLOR_F color)	{ m_BrushColor = color; }
+	//D2D1_COLOR_F	GetBrushColor()						{ return m_BrushColor; }
 
 	void	SetPlayerTurn(int playerTurn)			{ m_Turn = playerTurn; }
 	int		GetPlayerTurn()							{ return m_Turn; }
@@ -35,8 +41,8 @@ public:
 
 	void	UpdatePlayerResult(MO_ITEM item);
 
-	void	SetPlayerCreatedFlag()	{ m_isMyTurn = true; }
-	bool	GetPlayerCreatedFlag()	{ return m_isMyTurn; }
+	void	SetPlayerCreatedFlag()	{ m_isJoinGame = true; }
+	bool	GetPlayerCreatedFlag()	{ return m_isJoinGame; }
 
 private:
 	int m_Id;
@@ -45,7 +51,7 @@ private:
 	std::wstring m_PlayerImage;
 	std::wstring m_PlayerBox;
 
-	bool m_isMyTurn;
+	bool m_isJoinGame;
 	bool m_Created;
 	int m_Turn;
 
@@ -53,6 +59,10 @@ private:
 	int m_MyGold;
 	int m_MyTrash;
 
-	D2D1_COLOR_F m_BrushColor;
+	//D2D1_COLOR_F m_BrushColor;
+	ID2D1SolidColorBrush*	m_pTileColorBrush;
+	ID2D1Bitmap*			m_pPlayerFace;
+	ID2D1Bitmap*			m_pPlayerBox;
+	ID2D1Bitmap*			m_pPlayerWaitingBox;
 };
 

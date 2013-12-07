@@ -27,20 +27,26 @@ public:
 	CPlayer*	GetPlayerPtr(int idx)						{ return m_PlayerData[idx]; }
 
 	const std::wstring&		GetPlayerName(int idx);
-	const std::wstring&		GetPlayerImage(int turn);
-	const std::wstring&		GetPlayerBox(int turn);
+	//const std::wstring&		GetPlayerImage(int turn);
+	//const std::wstring&		GetPlayerBox(int turn);
+	//D2D1_COLOR_F	GetPlayerBrushColor(int turn);
+
+	//ID2D1SolidColorBrush*	GetPlayerBrush(int turn);
+	//ID2D1Bitmap*			GetPlayerFace(int turn);
+	//ID2D1Bitmap*			GetPlayerBox(int turn);
+	//ID2D1Bitmap*			GetPlayerWaitingBox(int turn);
 
 	void		SetPlayerTurn(int idx, int playerTurn);
 	int			GetPlayerTurn(int idx);
 
-	void		UpdatePlayerResult(int turn, MO_ITEM item);
-	int			GetPlayerItemNumber(int turn, MO_ITEM item);		
-
-	D2D1_COLOR_F	GetPlayerBrushColor(int turn);
+	//void		UpdatePlayerResult(int turn, MO_ITEM item);
+	//int			GetPlayerItemNumber(int turn, MO_ITEM item);		
 
 	void InitPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = false; }
 	void SetPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = true; }
 	bool GetPlaySceneTimerFlag()	{ return m_PlaySceneTimerFlag; }
+
+	CPlayer*	GetPlayerPtrByTurn(int turn);
 
 	SceneName GetCurrentScene()								{ return m_CurrentScene; }
 	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }

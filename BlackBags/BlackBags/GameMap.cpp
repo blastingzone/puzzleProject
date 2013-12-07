@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "GameMap.h"
 #include "GameTimer.h"
+#include "Player.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -18,15 +19,17 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pGoldBrush = nullptr;
 	m_pTrashBrush = nullptr;
 
+	/*
 	m_pTileP1 = nullptr;
 	m_pTileP2 = nullptr;
 	m_pTileP3 = nullptr;
 	m_pTileP4 = nullptr;
+	*/
 
 	m_pTimer = nullptr;
 
-	memset(m_pPlayer,0,sizeof(m_pPlayer) );
-	memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
+	//memset(m_pPlayer,0,sizeof(m_pPlayer) );
+	//memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
 	memset(m_ProfilePosition,0,sizeof(m_ProfilePosition));
 	memset(m_ProfileBoxPosition,0,sizeof(m_ProfileBoxPosition));
 
@@ -52,6 +55,11 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_VoidTileCount = m_MapSize.m_Width * m_MapSize.m_Height;
 
 	m_isMouseOn = false;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerTurnTable[i] = nullptr;
+	}
 }
 
 CGameMap::~CGameMap(void)
@@ -65,10 +73,12 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pGoldBrush);
 	SafeRelease(m_pTrashBrush);
 
+	/*
 	SafeRelease(m_pTileP1);
 	SafeRelease(m_pTileP2);
 	SafeRelease(m_pTileP3);
 	SafeRelease(m_pTileP4);
+	*/
 
 	SafeRelease(m_pTimer);
 }
@@ -134,8 +144,10 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 
 	for(int i = 0 ; i <playerNumber; ++i)
 	{
-		m_pRenderTarget -> DrawBitmap(m_pPlayer[i],m_ProfilePosition[i]);
-		m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i],m_ProfileBoxPosition[i]);
+		//m_pRenderTarget -> DrawBitmap(m_pPlayer[i], m_ProfilePosition[i]);
+		//m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i], m_ProfileBoxPosition[i]);
+		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
+		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerBox(), m_ProfileBoxPosition[i]);
 	}
 }
 
@@ -178,16 +190,16 @@ void CGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 					break;
 				case MO_PLAYER1:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP1);
+					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[0]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER2:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP2);
+					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[1]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER3:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP3);
+					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[2]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER4:
-					m_pRenderTarget->FillRectangle(rectElement, m_pTileP4);
+					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[3]->GetPlayerBrush() );
 					break;
 				default:
 					break;
@@ -432,59 +444,35 @@ bool CGameMap::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
+		assert(SUCCEEDED(hr) );
+		
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
+		assert(SUCCEEDED(hr) );
 
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(0), &m_pTileP1);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_pTileP2);
-
-		//최경욱 조심해!!
-		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
-		//수정할 것
-		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
-			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(2), &m_pTileP3);
-
-		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() == 4)
-			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(3), &m_pTileP4);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
-
-		if (!SUCCEEDED(hr) )
-			return false;
-	}
-
-	for (int turn = 0; turn < CGameData::GetInstance()->GetplayerNumber(); ++turn)
-	{
-		m_pPlayer[turn] = CRenderer::GetInstance()->CreateImage(
-			CGameData::GetInstance()->GetPlayerImage(turn), 
-			m_pPlayer[turn]
-		);
-
-		m_pPlayerBox[turn] = CRenderer::GetInstance()->CreateImage(
-			CGameData::GetInstance()->GetPlayerBox(turn), 
-			m_pPlayerBox[turn]
-		);
-
+		/*
+		m_pTileP1 = m_PlayerTurnTable[0]->GetPlayerBrush;
+		m_pTileP2 = m_PlayerTurnTable[1]->GetPlayerBrush;
+		m_pTileP3 = m_PlayerTurnTable[2]->GetPlayerBrush;
+		m_pTileP4 = m_PlayerTurnTable[3]->GetPlayerBrush;
+		*/
 	}
 
 	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png", m_backImg);
@@ -614,6 +602,8 @@ MO_TYPE CGameMap::GetMapType(const int& i, const int& j)
 
 MO_OWNER CGameMap::GetMapOwner( IndexedPosition indexedPosition )
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Owner;
 }
 
@@ -624,16 +614,22 @@ MO_OWNER CGameMap::GetMapOwner( const int& i , const int& j )
 
 void CGameMap::SetMapOwner( IndexedPosition indexedPosition, MO_OWNER owner )
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Owner = owner;
 }
 
 void CGameMap::SetItem( IndexedPosition indexedPosition, MO_ITEM item )
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item = item;
 }
 
 void CGameMap::SetMapFlag( IndexedPosition indexedPosition, bool flag )
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag = flag;
 }
 
@@ -645,7 +641,8 @@ void CGameMap::WriteResult()
 		{
 			if ( GetMapType(i, j) == MO_TILE )
 			{
-				CGameData::GetInstance()->UpdatePlayerResult( GetMapOwner(i, j), GetItem(IndexedPosition(i, j)) );
+				//CGameData::GetInstance()->UpdatePlayerResult( static_cast<int>(GetMapOwner(i, j) ), GetItem(IndexedPosition(i, j)) );
+				m_PlayerTurnTable[static_cast<int>(GetMapOwner(i, j) )]->UpdatePlayerResult( GetItem( IndexedPosition(i, j) ) );
 			}
 		}
 	}
@@ -665,11 +662,15 @@ void CGameMap::InitVirtualLineState()
 
 void CGameMap::ShowVirtualLine( const IndexedPosition& indexedPosition)
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_MouseOverFlag = true;
 }
 
 void CGameMap::SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction)
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = turn;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = direction;
@@ -677,6 +678,8 @@ void CGameMap::SetAnimationState(IndexedPosition indexedPosition, int turn, Dire
 
 void CGameMap::InitAnimationState(IndexedPosition indexedPosition)
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn = 0;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = false;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Direction = DI_UP;
@@ -684,5 +687,13 @@ void CGameMap::InitAnimationState(IndexedPosition indexedPosition)
 
 int	CGameMap::GetTileAnimationTurn(IndexedPosition indexedPosition)
 {
+	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
+
 	return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationTurn;
+}
+
+void CGameMap::SetPlayerTurnTable(int idx, CPlayer* playerPtr)
+{
+	assert(idx >= 0 && idx < MAX_PLAYER_NUM);
+	m_PlayerTurnTable[idx] = playerPtr;
 }

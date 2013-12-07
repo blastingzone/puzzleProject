@@ -47,46 +47,19 @@ void CGameData::Release()
 
 void CGameData::Init()
 {
+	/*	플레이어에 대한 포인터들을 확인하면서 할당되어 있지 않으면 생성하고
+		이미 존재하면 초기화가 필요한 내부 변수만 초기화 */
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		if (m_PlayerData[i] == nullptr)
 		{
-			switch (i)
-			{
-			case 0:
-				m_PlayerData[i] = new CPlayer();
-				m_PlayerData[i]->SetPlayerName(L"Player1");
-				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player1.png");
-				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player1Box.png");
-				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_1_) );
-				break;
-			case 1:
-				m_PlayerData[i] = new CPlayer();
-				m_PlayerData[i]->SetPlayerName(L"Player2");
-				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player2.png");
-				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player2Box.png");
-				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_2_) );
-				break;
-			case 2:
-				m_PlayerData[i] = new CPlayer();
-				m_PlayerData[i]->SetPlayerName(L"Player3");
-				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player3.png");
-				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player3Box.png");
-				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_3_) );
-				break;
-			case 3:
-				m_PlayerData[i] = new CPlayer();
-				m_PlayerData[i]->SetPlayerName(L"Player4");
-				m_PlayerData[i]->SetPlayerImage(L"Resource/Image/player4.png");
-				m_PlayerData[i]->SetPlayerBox(L"Resource/Image/player4Box.png");
-				m_PlayerData[i]->SetBrushColor(D2D1::ColorF(_COLOR_PLAYER_4_) );
-			default:
-				break;
-			}
-			m_PlayerData[i]->SetPlayerId(i);
+			m_PlayerData[i] = new CPlayer();
+			m_PlayerData[i]->Init(MO_OWNER(i) );
 		}
-
-		m_PlayerData[i]->Init();
+		else
+		{
+			m_PlayerData[i]->ResetValues();
+		}
 	}
 
 	m_PlayerNumber = 0;
@@ -108,6 +81,36 @@ const std::wstring& CGameData::GetPlayerName(int idx)
 	return m_PlayerData[idx]->GetPlayerName(); 
 }
 
+/*
+ID2D1SolidColorBrush* CGameData::GetPlayerBrush(int turn)
+{
+	assert(turn >= 0 && turn < m_PlayerNumber);
+
+	return m_PlayerData[turn]->GetPlayerBrush;
+}
+
+ID2D1Bitmap* CGameData::GetPlayerFace(int turn)
+{
+	assert(turn >= 0 && turn < m_PlayerNumber);
+
+	return m_PlayerData[turn]->GetPlayerFace;
+}
+
+ID2D1Bitmap* CGameData::GetPlayerBox(int turn)
+{
+	assert(turn >= 0 && turn < m_PlayerNumber);
+
+	return m_PlayerData[turn]->GetPlayerBox;
+}
+
+ID2D1Bitmap* CGameData::GetPlayerWaitingBox(int turn)
+{
+	assert(turn >= 0 && turn < m_PlayerNumber);
+
+	return m_PlayerData[turn]->GetPlayerWaitingBox;
+}
+
+//최경욱 조심해!
 //아래 함수들의 리턴값이 위험하다
 //수정할 것
 const std::wstring& CGameData::GetPlayerImage(int turn)
@@ -149,6 +152,7 @@ D2D1_COLOR_F CGameData::GetPlayerBrushColor(int turn)
 	return D2D1::ColorF(0);
 }
 
+
 void CGameData::UpdatePlayerResult(int turn, MO_ITEM item)
 {
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
@@ -172,14 +176,34 @@ int CGameData::GetPlayerItemNumber(int turn, MO_ITEM item)
 
 	return 0;
 }
+*/
+
+CPlayer* CGameData::GetPlayerPtrByTurn(int turn)
+{
+	assert(turn >= 0 && turn < MAX_PLAYER_NUM);
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		if (m_PlayerData[i]->GetPlayerTurn() == turn)
+		{
+			return m_PlayerData[i];
+		}
+	}
+
+	assert(false);
+}
 
 void CGameData::SetPlayerTurn(int idx, int playerTurn)	
 { 
+	assert(idx >= 0 && idx < MAX_PLAYER_NUM);
+
 	m_PlayerData[idx]->SetPlayerTurn(playerTurn); 
 }
 
 int CGameData::GetPlayerTurn(int idx)
 { 
+	assert(idx >= 0 && idx < MAX_PLAYER_NUM);
+
 	return m_PlayerData[idx]->GetPlayerTurn(); 
 }
 
@@ -191,6 +215,8 @@ void CGameData::SetPlayerMask(int mask)
 
 bool CGameData::GetPlayerCreatedFlag(int idx)
 {
+	assert(idx >= 0 && idx < MAX_PLAYER_NUM);
+
 	return m_PlayerData[idx]->GetPlayerCreatedFlag();
 }
 

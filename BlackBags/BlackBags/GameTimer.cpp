@@ -63,7 +63,6 @@ void CGameTimer::Update()
 		m_CheckedTime = m_CurrentTime;
 	}
 
-	// Ã³À½ ½Ã°£ - ÇöÀç ½Ã°£ÀÌ TimeLimit(¿©±â¼­´Â 20ÃÊ)¸¦ ³Ñ¾î°¡¸é if¹® ÀÛµ¿
 	if (m_TimeRest <= 0)
 	{
 		CGameData::GetInstance()->SetPlaySceneTimerFlag();
@@ -75,6 +74,7 @@ void CGameTimer::Update()
 void CGameTimer::Render()
 {
 	/*
+	// bar 형태로 대체함
 	m_Matrix = D2D1::Matrix3x2F::Translation(0, 0);
 	CRenderer::GetInstance()->GetHwndRenderTarget()->SetTransform( m_Matrix );
 
@@ -97,32 +97,24 @@ bool CGameTimer::Init()
 		,__uuidof(m_DWriteFactory)
 		, reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 		);
+	assert(SUCCEEDED(hr) );
 
-	if (SUCCEEDED(hr) )
-	{
-		hr = m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
-			, NULL
-			, DWRITE_FONT_WEIGHT_NORMAL
-			, DWRITE_FONT_STYLE_NORMAL
-			, DWRITE_FONT_STRETCH_NORMAL
-			, 20.0f
-			, L"ko"
-			, &m_TextFormat);
-	}
+	hr = m_DWriteFactory->CreateTextFormat(_DEBUG_FONT
+		, NULL
+		, DWRITE_FONT_WEIGHT_NORMAL
+		, DWRITE_FONT_STYLE_NORMAL
+		, DWRITE_FONT_STRETCH_NORMAL
+		, 20.0f
+		, L"ko"
+		, &m_TextFormat);
+	assert(SUCCEEDED(hr) );
 
-	if (SUCCEEDED(hr) )
-	{
-		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
-			D2D1::ColorF(D2D1::ColorF::Crimson)
-			, &m_TextBrush);
-	}
+	hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Crimson)
+		, &m_TextBrush);
+	assert(SUCCEEDED(hr) );
 
-	if (SUCCEEDED(hr) )
-	{
-		return true;
-	}
-
-	return false;
+	return true;
 }
 
 DWORD CGameTimer::GetRemainTime()

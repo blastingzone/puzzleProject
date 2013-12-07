@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-
+#include "Renderer.h"
 
 CPlayer::CPlayer(void)
 {
@@ -8,22 +8,73 @@ CPlayer::CPlayer(void)
 	m_PlayerName = L"";
 	m_PlayerImage = L"";
 	m_PlayerBox = L"";
-	m_BrushColor = D2D1::ColorF(0);
 
-	//m_isMyTurn = 0;
+	m_pTileColorBrush = nullptr;
+	m_pPlayerFace = nullptr;
+	m_pPlayerBox = nullptr;
+	m_pPlayerWaitingBox = nullptr;
 
-	Init();
+	ResetValues();
+	
+	//m_BrushColor = D2D1::ColorF(0);
 }
 
 
 CPlayer::~CPlayer(void)
 {
+	SafeRelease(m_pTileColorBrush);
 }
 
-void CPlayer::Init()
+bool CPlayer::Init(MO_OWNER playerIdx)
 {
-	//m_isMyTurn = 0;
-	m_isMyTurn = false;
+	HRESULT hr;
+	
+	switch (playerIdx)
+	{
+	case MO_PLAYER1:
+		SetPlayerName(L"Character1");
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png", m_pPlayerFace);
+		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1Box.png", m_pPlayerBox);
+		
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileColorBrush);
+		assert(SUCCEEDED(hr) );
+		break;
+	case MO_PLAYER2:
+		SetPlayerName(L"Character2");
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png", m_pPlayerFace);
+		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2Box.png", m_pPlayerBox);
+		
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileColorBrush);
+		assert(SUCCEEDED(hr) );
+		break;
+	case MO_PLAYER3:
+		SetPlayerName(L"Character3");
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png", m_pPlayerFace);
+		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3Box.png", m_pPlayerBox);
+		
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileColorBrush);
+		assert(SUCCEEDED(hr) );
+		break;
+	case MO_PLAYER4:
+		SetPlayerName(L"Character4");
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4.png", m_pPlayerFace);
+		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4Box.png", m_pPlayerBox);
+		
+		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileColorBrush);
+		assert(SUCCEEDED(hr) );
+		break;
+	default:
+		return false;
+	}
+	m_pPlayerWaitingBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/playerBox.png", m_pPlayerWaitingBox);
+
+	return true;
+}
+
+void CPlayer::ResetValues()
+{
+	m_isJoinGame = false;
+	
 	m_Turn = 0;
 
 	m_MyTile = 0;
