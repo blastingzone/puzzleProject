@@ -46,7 +46,6 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_TimerWidth = 0;
 	m_TimerHeight = 0;
 
-	//조심해!! GetMapSize를 아예 바꿔줄거야.
 	m_MapSize.m_Width = mapSize.m_Width;
 	m_MapSize.m_Height = mapSize.m_Height;
 
@@ -90,9 +89,6 @@ void CGameMap::CreateMap()
 				// dot - line - dot - line
 				if (targetColumn % 2 == 1)
 				{
-					//조심해 !!!x10000
-					//이거 무서운 코드다 m_MapSize 크기가 어떻게 되든 m_Map은 21x21로 고정 되어 있다.
-					//아무리 하드 코딩하더라도 이렇게 놔두지 않는 습관을 들여야 한다. 
 					m_Map[targetRow][targetColumn].m_Type = MO_DOT;
 				} 
 				else 
@@ -237,7 +233,7 @@ void CGameMap::Render()
 						m_Map[i][j].m_AnimationTurn = 0;
 						m_Map[i][j].m_AnimationFlag = false;
 						
-						//조심해!
+						//최경욱 조심해!
 						//애니메이션 재생 중에는 타이머 일시 정지 기능 추가 필요할지도?
 						CGameTimer::GetInstance()->SetTimerStart();
 						
@@ -429,8 +425,6 @@ void CGameMap::SetMapSize(MapSize mapsize)
 
 bool CGameMap::CreateResource()
 {
-	// 조심해!
-	// 현재 주석 처리된 색들 나중에 정리해서 define으로 따로 저장하고 쓸 것
 	HRESULT hr;
 
 	if (m_pRenderTarget == nullptr)
@@ -463,7 +457,7 @@ bool CGameMap::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_pTileP2);
 
-		//조심해!!
+		//최경욱 조심해!!
 		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
 		//수정할 것
 		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)
@@ -586,6 +580,8 @@ void CGameMap::SetObjectSize()
 
 void CGameMap::GetPlayerUIPosition()
 {
+	//정서경 조심해!!
+	//중점을 기준으로 고쳐줘야해!
 	m_ProfilePosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize);
 	m_ProfileBoxPosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin + m_ProfileSize ,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize+m_ProfileBoxHeight);
 

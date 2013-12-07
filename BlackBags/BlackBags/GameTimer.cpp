@@ -50,7 +50,6 @@ void CGameTimer::SetTimerStart()
 	m_Result = L"Time Left : " + std::to_wstring(m_TimeRest);
 }
 
-//조심해!! 어떤 주석인지 찾아내야해!!
 void CGameTimer::Update()
 {
 	m_CurrentTime = GetTickCount();

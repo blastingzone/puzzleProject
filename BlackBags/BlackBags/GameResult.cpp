@@ -421,7 +421,7 @@ bool CGameResult::CreateResource()
 		if (SUCCEEDED(hr) )
 			m_pRenderTarget->CreateSolidColorBrush(CGameData::GetInstance()->GetPlayerBrushColor(1), &m_TileBrush[1]);
 
-		//조심해!!
+		//최경욱 조심해!!
 		//아래에서 할당되지 않은 브러시가 나중에 참조될 가능성이 있음
 		//수정할 것
 		if (SUCCEEDED(hr) && CGameData::GetInstance()->GetplayerNumber() >= 3)

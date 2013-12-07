@@ -66,23 +66,22 @@ bool CSoundRenderer::Init()
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT fr = m_System->createSound("Resource/Sound/ME/main.mp3", FMOD_HARDWARE, 0, &m_Main);
+	FMOD_RESULT fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Main);
 
-	//조심해!!
-	//어떤 노래가 없는지 확인해. 전체적으로 다 해.
+	//문진상 조심해!!
 	if (fr == FMOD_OK)
 	{
-		fr = m_System->createSound("Resource/Sound/ME/setting.mp3", FMOD_HARDWARE, 0, &m_Setting);
+		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
 	}
 
 	if (fr == FMOD_OK)
 	{
-		fr = m_System->createSound("Resource/Sound/ME/play.mp3", FMOD_HARDWARE, 0, &m_Play);
+		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Play);
 	}
 
 	if (fr == FMOD_OK)
 	{
-		fr = m_System->createSound("Resource/Sound/ME/result.mp3", FMOD_HARDWARE, 0, &m_Result);
+		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Result);
 	}
 
 	if (fr == FMOD_OK)
@@ -95,12 +94,12 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 
 void CSoundRenderer::AllocateChannel()
 {
-	//조심해 애러챜
+	//문진상 조심해 애러챜
 	m_SEChannel->setChannelGroup(m_ChannelGroup);
 	m_BGMChannel->setChannelGroup(m_ChannelGroup);
 }
 
-// 조심해!!
+// 문진상 조심해!!
 // 얘네 둘이 fr에 받아놓기만 하고 void로 리턴해주는데 fr값 활용하도록 바꿔야 합니다 FMOD_RESULT
 void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 {

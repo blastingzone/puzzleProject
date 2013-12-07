@@ -95,10 +95,6 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 		if (mouseCoordinate.m_PosY > startPosition.height + (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE-1) * nextButton.height
 			&& mouseCoordinate.m_PosY > startPosition.height + SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * nextButton.height)
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// 조심해!! 
-			// Player Create와 연동해야 합니다!!
-			///////////////////////////////////////////////////////////////////////////
 			CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
 			CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
@@ -106,7 +102,6 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 		}
 	}
-	//CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
 }
 
 void CSettingScene::MouseOver(Coordinate mouseCoordinate)

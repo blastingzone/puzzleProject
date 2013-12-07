@@ -112,6 +112,8 @@ ID2D1Bitmap* CRenderer::CreateImage( std::wstring fileName , ID2D1Bitmap* myBitm
 		hr = m_ipRenderTarget->CreateBitmapFromWicBitmap(m_pConvertedSourceBitmap, NULL, &myBitmap);
 	}
 
+	assert(hr == S_OK);
+
 	SafeRelease(m_pDecoder);
 	SafeRelease(m_pFrame);
 

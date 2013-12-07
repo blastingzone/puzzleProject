@@ -121,7 +121,6 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _OPENING_MOVIE "opening.avi"
 
 /*	폰트들입니다	*/
-/*	조심해! if / def로 폰트 있는지 없는지 검사해서 없을 경우의 대책도 마련할 것! */
 #define _DEBUG_FONT L"Consolas"
 #define _MENU_FONT L"Segoe UI"
 

@@ -67,7 +67,7 @@ void CVideoRender::StartVideo()
 
 	if (m_Status == BVL_STATUS_READY)
 	{
-		//조심해!! 에러 핸들링 해줘야해!
+		//정서경 조심해!! 에러 핸들링 해줘야해!
 		m_VideoLibrary.GetVideoInfo( m_VideoInfo );
 		m_VideoLibrary.Play();
 	}

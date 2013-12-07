@@ -85,8 +85,6 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		m_CurrentScene = new CCreditScene();
 		break;
 	case SC_EXIT:
-		//조심해!!
-		//SendMessage 알고 쓴 것인지? Update루프 안에서라면 보통 PostMessage를 쓴다... 그 차이는 뭘까? 조사해보길~!
 		PostMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
 		return;
 	default:
