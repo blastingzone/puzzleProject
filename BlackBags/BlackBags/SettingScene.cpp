@@ -51,6 +51,12 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_PLAYER_NUM)
+			{
+				return;
+			}
+
 			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
 			{
 				++m_SelectedPlayerNumber;
@@ -72,6 +78,11 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_MAPSIZE_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->InitMapSelected();
 			m_SettingMenu->SetMapSelected(idx);
 			m_SelectedMapIndex = idx;
@@ -120,6 +131,11 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_PLAYER_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->SetPlayerMouseOver(idx);
 		}
 	}
@@ -132,6 +148,11 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_MAPSIZE_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->SetMapMouseOver(idx);
 		}
 	}
