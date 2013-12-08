@@ -166,9 +166,14 @@ private:
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
+
 	// 각자 사용하는 브러시
 	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
+
+	// 캐릭터 얼굴 브러시
+	// PlayScene 에서도 쓰는데 우선은 따로 만든다.
+	ID2D1Bitmap*			m_pCharacterFace[MAX_PLAYER_NUM];
 
 	D2D1_SIZE_F	m_StartPosition;
 
@@ -189,6 +194,9 @@ private:
 
 	float		m_SettingTitleTextSize;
 	float		m_SettingTitleTextMargin;
+
+	float		m_PortraitHeight;
+	float		m_PortraitWidth;
 
 	PlayerTitle  m_PlayerTitle;
 	MapTitle	 m_MapTitle;

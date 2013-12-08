@@ -44,10 +44,14 @@ const float SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT = 40.f;
 const float SC_S_DEFAULT_MAINTITLE_TEXT_SIZE = 60.0f;
 const float SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN = 20.0f;
 
-//판정을 위해서 얘네들의 y 포지션을 받아둡니다
-const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 4;
-const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 9;
-const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 7;
+/*	settingScene 초상화 크기	*/
+const float SC_S_DEFAULT_PORTRAIT_WIDTH = 200.f;
+const float SC_S_DEFAULT_PORTRAIT_HEIGHT = 200.f;
+
+/*	판정을 위해서 얘네들의 y 포지션을 받아둡니다 */
+const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 5;
+const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 10;
+const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 8;
 
 /*	어떤 플레이어가 선택되었는지 알기 위한 MASK 값들	*/
 const int	MASK_PLAYER_1 = 1;

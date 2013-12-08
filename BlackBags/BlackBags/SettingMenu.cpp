@@ -2,6 +2,8 @@
 #include "SettingMenu.h"
 #include "dwrite.h"
 
+
+
 CSettingMenu::CSettingMenu(void)
 {
 	m_pUnselectedTextBrush = nullptr;
@@ -9,6 +11,11 @@ CSettingMenu::CSettingMenu(void)
 	m_pButtonBrush = nullptr;
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_pCharacterFace[i] = nullptr;
+	}
 
 	m_PlayerMask = 0;
 
@@ -112,6 +119,9 @@ void CSettingMenu::SetObjectSize()
 
 	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
 	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
+
+	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
+	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
 }
 
 void CSettingMenu::ResizeClient()
@@ -153,7 +163,7 @@ bool CSettingMenu::CreateResource()
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
 
-		/* Player별 마우스 오버 및 선택시 색상 */
+		/* Player, 맵 버튼에서 마우스 오버 및 선택시 색상 */
 
 
 		if (SUCCEEDED(hr) )
@@ -167,6 +177,21 @@ bool CSettingMenu::CreateResource()
 
 		if (SUCCEEDED(hr) )
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapSelectedBackgroundBrush);
+
+		if (SUCCEEDED(hr) )
+		{
+			int i = 0;
+			
+			// 캐릭터 초상화 생성
+
+			for (i; i < MAX_PLAYER_NUM; ++i)
+			{
+				int currentPlayerNum = i + 1;
+				std::wstring filepath = L"Resource/Image/player" + std::to_wstring(currentPlayerNum);
+				filepath.append(L".png");
+				m_pCharacterFace[i] = CRenderer::GetInstance()->CreateImage(filepath, m_pCharacterFace[i]);
+			}
+		}
 
 		if (SUCCEEDED(hr) )
 			hr = DWriteCreateFactory(
@@ -276,7 +301,7 @@ void CSettingMenu::RefreshTextSize()
 void CSettingMenu::Render()
 {
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
-	D2D1_RECT_F		rectElement, textPosition;
+	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
 	D2D1_POINT_2F	pos;
 
 	//Setting Title을 렌더
@@ -317,8 +342,21 @@ void CSettingMenu::Render()
 	{
 		pos.x = m_StartPosition.width + ( (i - 1) * m_PlayerSelect[i].m_ButtonWidth);
 
-		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_PlayerSelect[i].m_ButtonWidth, pos.y + m_PlayerSelect[i].m_ButtonHeight);
-		textPosition =  D2D1::Rect( rectElement.left + m_PlayerSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+		rectElement = D2D1::Rect( pos.x,
+			pos.y,
+			pos.x + m_PlayerSelect[i].m_ButtonWidth,
+			pos.y + m_PlayerSelect[i].m_ButtonHeight);
+
+		textPosition =  D2D1::Rect( rectElement.left + m_PlayerSelectTextMargin,
+			rectElement.top,
+			rectElement.right,
+			rectElement.bottom);
+		// 캐릭터 초상화 부분
+		// MouseOver 구현시 아래의 if else 문에 넣어서 조절해준다
+		CharacterPortraitPosition = D2D1::Rect ( rectElement.left,
+			rectElement.top - SC_S_DEFAULT_PORTRAIT_HEIGHT,
+			rectElement.left + SC_S_DEFAULT_PORTRAIT_WIDTH,
+			rectElement.top);
 
 		// 마우스가 올라가거나 선택된 상태면 자신이 가진 브러쉬로 자신을 칠함
 		if (m_PlayerSelect[i].m_IsMouseOver || m_PlayerSelect[i].m_IsSelected)
@@ -343,14 +381,21 @@ void CSettingMenu::Render()
 				m_pUnselectedTextBrush
 				);
 		}
+		// 캐릭터 초상화 포지션은 Character 선택창의 중심으로부터
+		// 캐릭터 초상화 렌더
+		m_pRenderTarget->DrawBitmap(m_pCharacterFace[i], CharacterPortraitPosition);
 	}
 
 	// 맵 선택창을 알리는 타이틀을 렌더
 	pos.x = m_StartPosition.width + (-1) * m_MapSelect[0].m_ButtonWidth;
 	pos.y = m_StartPosition.height + m_PlayerTitle.m_LayerHeight * (SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE - 2);
 
-	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MapTitle.m_LayerWidth, pos.y + m_MapTitle.m_LayerHeight);
-	textPosition =  D2D1::Rect( rectElement.left + m_MapTitleTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MapTitle.m_LayerWidth,
+		pos.y + m_MapTitle.m_LayerHeight);
+	textPosition =  D2D1::Rect( rectElement.left + m_MapTitleTextMargin,
+		rectElement.top,
+		rectElement.right,
+		rectElement.bottom);
 
 	m_pRenderTarget->DrawText(
 		m_MapTitle.m_Title.c_str(),
@@ -372,7 +417,10 @@ void CSettingMenu::Render()
 			pos.y,
 			pos.x + m_MapSelect[j].m_ButtonWidth,
 			pos.y + m_MapSelect[j].m_ButtonHeight);
-		textPosition =  D2D1::Rect( rectElement.left + m_MapSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+		textPosition =  D2D1::Rect( rectElement.left + m_MapSelectTextMargin,
+			rectElement.top,
+			rectElement.right,
+			rectElement.bottom);
 
 		// 맵도 마찬가지로 선택되거나 마우스가 올라가 있으면 색이 변함
 		if (m_MapSelect[j].m_IsMouseOver || m_MapSelect[j].m_IsSelected)
