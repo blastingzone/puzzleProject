@@ -43,7 +43,6 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_DotRadius = 0;
 	m_ItemRadius = 0;
 	m_ProfileSize = 0;
-	m_ProfileMargin = 0;
 
 	m_TimerPositionHeight = 0;
 	m_TimerWidth = 0;
@@ -529,18 +528,16 @@ void CGameMap::CalcStartPosition()
 {
 	/*	현재 화면의 중심점을 기준으로 생성된 맵의 크기의 반만큼
 		왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
-	D2D1_SIZE_F centerPosition;
-	centerPosition = m_pRenderTarget->GetSize();
-
-	centerPosition.height /= 2;
-	centerPosition.width /= 2;
+	m_CenterPosition = m_pRenderTarget->GetSize();
+	m_CenterPosition.height /= 2;
+	m_CenterPosition.width /= 2;
 
 	m_StartPosition.height = 
-		centerPosition.height 
+		m_CenterPosition.height 
 		- (m_MapSize.m_Height * (m_LineWeight + m_TileSize) + m_LineWeight) / 2;
 
 	m_StartPosition.width = 
-		centerPosition.width 
+		m_CenterPosition.width 
 		- (m_MapSize.m_Width * (m_LineWeight + m_TileSize) + m_LineWeight) / 2;
 }
 
@@ -568,26 +565,24 @@ void CGameMap::SetObjectSize()
 	m_ProfileSize = tempScale * DEFAULT_CHARACTER_SIZE;
 	m_ProfileBoxHeight = tempScale * DEFAULT_CHARACTER_BOX_HEIGHT;
 	m_ProfileBoxWidth = tempScale * DEFAULT_CHARACTER_BOX_WIDTH;
-	m_ProfileMargin = tempScale * DEFALT_CHARACTER_MARGIN;
-	m_ProfileRightPosition = tempScale * WINDOW_WIDTH;
-	m_ProfileBottomPosition = tempScale * WINDOW_HEIGHT;
+
+	m_ProfileHorizontalMargin = tempScale * DEFALT_CHARACTER_MARGIN_H;
+	m_ProfileVerticalMargin = tempScale * DEFALT_CHARACTER_MARGIN_V;
 }
 
 void CGameMap::GetPlayerUIPosition()
 {
-	//정서경 조심해!!
-	//중점을 기준으로 고쳐줘야해!
-	m_ProfilePosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize);
-	m_ProfileBoxPosition[0] = D2D1::RectF(m_ProfileMargin, m_ProfileMargin + m_ProfileSize ,m_ProfileMargin+m_ProfileSize,m_ProfileMargin+m_ProfileSize+m_ProfileBoxHeight);
+	m_ProfilePosition[0] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height-m_ProfileVerticalMargin,m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize);
+	m_ProfileBoxPosition[0] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height-m_ProfileVerticalMargin + m_ProfileSize ,m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize + m_ProfileBoxHeight);
 
-	m_ProfilePosition[1] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin, m_ProfileMargin+m_ProfileSize);
-	m_ProfileBoxPosition[1] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,m_ProfileRightPosition - m_ProfileMargin,m_ProfileMargin+m_ProfileSize+m_ProfileBoxHeight);
+	m_ProfilePosition[1] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height-m_ProfileVerticalMargin,m_CenterPosition.width + m_ProfileHorizontalMargin,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize);
+	m_ProfileBoxPosition[1] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height-m_ProfileVerticalMargin + m_ProfileSize,m_CenterPosition.width + m_ProfileHorizontalMargin,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize + m_ProfileBoxHeight);
 
-	m_ProfilePosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin);
-	m_ProfileBoxPosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin+m_ProfileBoxHeight);
+	m_ProfilePosition[2] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileSize, m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin);
+	m_ProfileBoxPosition[2] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin, m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin + m_ProfileBoxHeight);
 
-	m_ProfilePosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileBottomPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileBottomPosition - m_ProfileMargin);
-	m_ProfileBoxPosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileBottomPosition - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileBottomPosition - m_ProfileMargin+m_ProfileBoxHeight);
+	m_ProfilePosition[3] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileSize, m_CenterPosition.width + m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin);
+	m_ProfileBoxPosition[3] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin, m_CenterPosition.width + m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin + m_ProfileBoxHeight);
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)

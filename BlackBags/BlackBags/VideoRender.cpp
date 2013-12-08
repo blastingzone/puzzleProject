@@ -36,7 +36,7 @@ HRESULT CVideoRender::Init(HWND hwnd)
 {
 	m_Hwnd = hwnd;
 	
-	if(m_Hwnd != nullptr)
+	if (m_Hwnd != nullptr)
 		return S_OK;
 }
 
@@ -62,15 +62,17 @@ void CVideoRender::CleanUp()
 
 void CVideoRender::StartVideo()
 {
+	HRESULT hr;
 	//BVL_STATUS status;
-	m_VideoLibrary.GetStatus(m_Status);
+	hr = m_VideoLibrary.GetStatus(m_Status);
 
-	if (m_Status == BVL_STATUS_READY)
-	{
-		//정서경 조심해!! 에러 핸들링 해줘야해!
+	if (hr == S_OK)
 		m_VideoLibrary.GetVideoInfo( m_VideoInfo );
-		m_VideoLibrary.Play();
-	}
+	
+	if (hr == S_OK)
+			m_VideoLibrary.Play();
+
+	assert(hr == S_OK);
 }
 
 

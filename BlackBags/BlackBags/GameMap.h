@@ -147,17 +147,17 @@ private:
 	/*	게임 맵을 그리기위한 화면 기준 점
 		게임 맵의 가장 왼쪽 상단 위치 */
 	D2D1_SIZE_F	m_StartPosition;
+	D2D1_SIZE_F  m_CenterPosition;
 
 	float m_TileSize;
 	float m_LineWeight;
 	float m_DotRadius;
 	float m_ItemRadius;
 	float m_ProfileSize;
-	float m_ProfileMargin;
 	float m_ProfileBoxHeight;
 	float m_ProfileBoxWidth;
-	float m_ProfileRightPosition;
-	float m_ProfileBottomPosition;
+	float m_ProfileHorizontalMargin;
+	float m_ProfileVerticalMargin;
 
 	float m_TimerPositionHeight;
 	float m_TimerWidth;
@@ -211,5 +211,6 @@ private:
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
 
 	int m_CurrentTurn;
+	
 };
 
