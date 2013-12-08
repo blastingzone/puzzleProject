@@ -130,6 +130,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 		++m_PlayerTurn;
 
+		m_Map->SetCurrentTurn(m_PlayerTurn%m_PlayerNumber);
 		//최경욱 조심해!!
 		//애니메이션 끝나면 타이머 재시작하게 해줘야함
 		//현재는 여기서 초기화 하고 애니메이션이 끝나고 다시 초기화 함(애니메이션이 최대 20초를 넘지 않아야 하는 문제 남아 있음)

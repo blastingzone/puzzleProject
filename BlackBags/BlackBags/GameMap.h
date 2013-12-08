@@ -116,6 +116,9 @@ public:
 	/*	player turn table 구성 함수 */
 	void SetPlayerTurnTable(int idx, CPlayer* playerPtr);
 
+	/* 게임 맵에서 현재 턴을 얻기 위한 함수 */
+	void SetCurrentTurn(int turn) { m_CurrentTurn = turn; }
+
 private: 
 	bool CreateResource();
 
@@ -206,5 +209,7 @@ private:
 
 	//playScene과 중복되는 데이터
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
+
+	int m_CurrentTurn;
 };
 

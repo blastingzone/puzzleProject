@@ -56,6 +56,8 @@ CGameMap::CGameMap(MapSize mapSize)
 
 	m_isMouseOn = false;
 
+	m_CurrentTurn = 0;
+
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_PlayerTurnTable[i] = nullptr;
@@ -146,8 +148,13 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 	{
 		//m_pRenderTarget -> DrawBitmap(m_pPlayer[i], m_ProfilePosition[i]);
 		//m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i], m_ProfileBoxPosition[i]);
+		
 		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
-		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerBox(), m_ProfileBoxPosition[i]);
+
+		if (m_CurrentTurn == i)
+			m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerBox(), m_ProfileBoxPosition[i]);
+		else
+			m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[i]);
 	}
 }
 
@@ -579,8 +586,8 @@ void CGameMap::GetPlayerUIPosition()
 	m_ProfilePosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileSize - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin);
 	m_ProfileBoxPosition[2] = D2D1::RectF(m_ProfileMargin, m_ProfileBottomPosition - m_ProfileMargin, m_ProfileMargin + m_ProfileSize,	m_ProfileBottomPosition - m_ProfileMargin+m_ProfileBoxHeight);
 
-	m_ProfilePosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileRightPosition - m_ProfileMargin);
-	m_ProfileBoxPosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileRightPosition - m_ProfileMargin+m_ProfileBoxHeight);
+	m_ProfilePosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileBottomPosition - m_ProfileSize - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileBottomPosition - m_ProfileMargin);
+	m_ProfileBoxPosition[3] = D2D1::RectF(m_ProfileRightPosition - m_ProfileSize - m_ProfileMargin, m_ProfileBottomPosition - m_ProfileMargin, m_ProfileRightPosition - m_ProfileMargin,	m_ProfileBottomPosition - m_ProfileMargin+m_ProfileBoxHeight);
 }
 
 MO_TYPE CGameMap::GetMapType(IndexedPosition indexedPosition)
