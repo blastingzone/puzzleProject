@@ -19,20 +19,10 @@ CGameMap::CGameMap(MapSize mapSize)
 	m_pGoldBrush = nullptr;
 	m_pTrashBrush = nullptr;
 
-	/*
-	m_pTileP1 = nullptr;
-	m_pTileP2 = nullptr;
-	m_pTileP3 = nullptr;
-	m_pTileP4 = nullptr;
-	*/
-
 	m_pTimer = nullptr;
 
-	//memset(m_pPlayer,0,sizeof(m_pPlayer) );
-	//memset(m_pPlayerBox,0,sizeof(m_pPlayerBox) );
 	memset(m_ProfilePosition,0,sizeof(m_ProfilePosition));
 	memset(m_ProfileBoxPosition,0,sizeof(m_ProfileBoxPosition));
-
 
 	m_LineAnimationFlag = false;
 	m_TileAnimationTurnNumber = 0;
@@ -73,13 +63,6 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pVoidTileBrush);
 	SafeRelease(m_pGoldBrush);
 	SafeRelease(m_pTrashBrush);
-
-	/*
-	SafeRelease(m_pTileP1);
-	SafeRelease(m_pTileP2);
-	SafeRelease(m_pTileP3);
-	SafeRelease(m_pTileP4);
-	*/
 
 	SafeRelease(m_pTimer);
 }
@@ -145,9 +128,6 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 
 	for(int i = 0 ; i <playerNumber; ++i)
 	{
-		//m_pRenderTarget -> DrawBitmap(m_pPlayer[i], m_ProfilePosition[i]);
-		//m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i], m_ProfileBoxPosition[i]);
-		
 		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
 
 		if (m_CurrentTurn == i)
@@ -169,7 +149,7 @@ void CGameMap::Render()
 		이 중에서 하나라도 진행 중(flag가 true)이면 마우스 입력은 받지 않고 애니메이션이 완료 되어야 게임 진행
 		애니메이션 순서는 line >> tile
 		타일 애니메이션에는 재생되는 순서가 지정되어 있음
-		(순서대로 애니메이션이 지정된 타일들의 재생이 완료되어야 전체 타일 애니메이션 종료) */
+		(애니메이션이 지정된 타일들의 재생이 모두 완료되어야 전체 타일 애니메이션 종료) */
 
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
 		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
@@ -251,8 +231,7 @@ void CGameMap::Render()
 						m_Map[i][j].m_AnimationTurn = 0;
 						m_Map[i][j].m_AnimationFlag = false;
 						
-						//최경욱 조심해!
-						//애니메이션 재생 중에는 타이머 일시 정지 기능 추가 필요할지도?
+						//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
 						CGameTimer::GetInstance()->SetTimerStart();
 						
 						//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
@@ -414,7 +393,6 @@ void CGameMap::Render()
 		}
 	}
 
-	//타이머 작업 중
 	D2D1_SIZE_F centerPosition;
 	centerPosition = m_pRenderTarget->GetSize();
 
@@ -428,6 +406,13 @@ void CGameMap::Render()
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
+	
+	//animation 재생 중에는 타이머 안 줄어드는 것처럼 보이게 함
+	if (m_LineAnimationFlag || m_TileAnimationTurn != 0)
+	{
+		remainTimeRatio = 1.0f;
+	}
+
 	float currentTimerLength = m_TimerWidth * remainTimeRatio;
 
 	//남은 시간 표시 (브러시 새로 만들어 쓸 것)
@@ -472,13 +457,6 @@ bool CGameMap::CreateResource()
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
 		assert(SUCCEEDED(hr) );
-
-		/*
-		m_pTileP1 = m_PlayerTurnTable[0]->GetPlayerBrush;
-		m_pTileP2 = m_PlayerTurnTable[1]->GetPlayerBrush;
-		m_pTileP3 = m_PlayerTurnTable[2]->GetPlayerBrush;
-		m_pTileP4 = m_PlayerTurnTable[3]->GetPlayerBrush;
-		*/
 	}
 
 	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png", m_backImg);
@@ -643,7 +621,6 @@ void CGameMap::WriteResult()
 		{
 			if ( GetMapType(i, j) == MO_TILE )
 			{
-				//CGameData::GetInstance()->UpdatePlayerResult( static_cast<int>(GetMapOwner(i, j) ), GetItem(IndexedPosition(i, j)) );
 				m_PlayerTurnTable[static_cast<int>(GetMapOwner(i, j) )]->UpdatePlayerResult( GetItem( IndexedPosition(i, j) ) );
 			}
 		}

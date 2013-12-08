@@ -15,8 +15,6 @@ CPlayer::CPlayer(void)
 	m_pPlayerWaitingBox = nullptr;
 
 	ResetValues();
-	
-	//m_BrushColor = D2D1::ColorF(0);
 }
 
 

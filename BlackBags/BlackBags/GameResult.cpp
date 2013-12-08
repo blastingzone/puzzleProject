@@ -66,19 +66,19 @@ void CGameResult::Render()
 	CPlayer* tempPlayer = nullptr;
 
 	//winner background part
-	pos.x = SC_RT_HORIZONTAL_MARGIN;
-	pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * static_cast<int> (m_Winner) );
+	pos.x = m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN;
+	pos.y = m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * static_cast<int> (m_Winner) );
 
 	rectElement = D2D1::Rect(
 		pos.x, 
 		pos.y, 
-		CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin, 
+		CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_StartPosition.width - m_HorizontalMargin, 
 		pos.y + m_PlayerBoxHeight);
 
 	m_pRenderTarget->FillRectangle(rectElement, m_pWinnerBoxBrush);
 
 	//winner text part
-	pos.x = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_WinnerTextWidth;
+	pos.x = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width -  m_StartPosition.width - m_HorizontalMargin - m_WinnerTextWidth;
 
 	textPosition = D2D1::Rect(
 		pos.x, 
@@ -95,8 +95,8 @@ void CGameResult::Render()
 		);
 
 	//title part
-	pos.x = SC_RT_HORIZONTAL_MARGIN;
-	pos.y = SC_RT_VERTICAL_MARGIN;
+	pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN;
+	pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN;
 
 	textPosition = D2D1::Rect(pos.x, pos.y, pos.x + m_SceneTitleWidth, pos.y + m_SceneTitleHeight);
 
@@ -113,8 +113,8 @@ void CGameResult::Render()
 	{
 		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
 
-		pos.x = SC_RT_HORIZONTAL_MARGIN;
-		pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
+		pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN;
+		pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
 		
 		/*
 		//player name back ground
@@ -145,10 +145,10 @@ void CGameResult::Render()
 		//tile part
 		for (int tileCount = 0; tileCount < tempPlayer->GetPlayerItemNumber(MO_NOTHING); ++tileCount)
 		{
-			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+			pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * (tileCount / 2) );
-			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+			pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin 
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * (tileCount % 2) );
 
@@ -167,10 +167,10 @@ void CGameResult::Render()
 		//gold part
 		for (int goldCount = 0; goldCount < tempPlayer->GetPlayerItemNumber(MO_GOLD); ++goldCount)
 		{
-			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+			pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * goldCount);
-			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+			pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * 2 );
 
@@ -186,10 +186,10 @@ void CGameResult::Render()
 		//trash part
 		for (int trachCount = 0; trachCount < tempPlayer->GetPlayerItemNumber(MO_TRASH); ++trachCount)
 		{
-			pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
+			pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN + m_PlayerNameTextWidth
 				+ m_PlayerTileMargin //필요하면 추가 margin 포함시킬 것
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * trachCount);
-			pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
+			pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i) 
 				+ m_PlayerTileMargin
 				+ ( (m_PlayerTileSize + m_PlayerTileMargin) * 3 );
 
@@ -205,8 +205,8 @@ void CGameResult::Render()
 		//player score
 		std::wstring playerScore = std::to_wstring(m_PlayerScore[i]);
 
-		pos.x = SC_RT_HORIZONTAL_MARGIN + m_PlayerScorePosition;
-		pos.y = SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
+		pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN + m_PlayerScorePosition;
+		pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
 
 		textPosition = D2D1::Rect(
 			pos.x, 
@@ -224,8 +224,8 @@ void CGameResult::Render()
 	}
 	
 	//button part
-	pos.x = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth;
-	pos.y = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight;
+	pos.x = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_StartPosition.width - m_HorizontalMargin - m_ButtonWidth;
+	pos.y = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_StartPosition.height - m_VerticalMargin - m_ButtonHeight;
 	
 	if (m_ButtonMouseOver)
 	{
@@ -271,8 +271,23 @@ bool CGameResult::Init()
 void CGameResult::ResizeClient()
 {
 	//화면 크기 조절
+	CalcStartPosition();
 	SetObjectSize();
 	RefreshTextSize();
+}
+
+void CGameResult::CalcStartPosition()
+{
+	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
+
+	/*	현재 화면의 왼쪽 상단을 기준점으로 사용 */
+	D2D1_SIZE_F centerPosition = m_pRenderTarget->GetSize();
+	
+	centerPosition.width /= 2;
+	centerPosition.height /= 2;
+
+	m_StartPosition.width = centerPosition.width - (WINDOW_WIDTH * tempScale) / 2;
+	m_StartPosition.height = centerPosition.height - (WINDOW_HEIGHT * tempScale) / 2;
 }
 
 void CGameResult::SetObjectSize()

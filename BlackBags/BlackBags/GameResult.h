@@ -19,8 +19,6 @@ public:
 	void InitMouseOver();
 	void SetMouseOver();
 
-	void CalcStartPosition();
-
 	virtual bool Init();
 
 	RECT		GetGetButtonPosition();
@@ -30,6 +28,7 @@ private:
 
 	/*	현재 화면 스케일에 맞춰서 m_TextFormat 갱신  */
 	void RefreshTextSize();
+	void CalcStartPosition();
 
 	void CalculateScore();
 	void DecideWinner();
@@ -38,6 +37,10 @@ private:
 	MO_OWNER m_Winner;
 
 	bool m_ButtonMouseOver;
+
+	/*	게임 맵을 그리기위한 화면 기준 점
+		게임 맵의 가장 왼쪽 상단 위치 */
+	D2D1_SIZE_F	m_StartPosition;
 
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 

@@ -176,13 +176,6 @@ private:
 	ID2D1SolidColorBrush*	m_pGoldBrush;
 	ID2D1SolidColorBrush*	m_pTrashBrush;
 
-	/*
-	ID2D1SolidColorBrush*	m_pTileP1;
-	ID2D1SolidColorBrush*	m_pTileP2;
-	ID2D1SolidColorBrush*	m_pTileP3;
-	ID2D1SolidColorBrush*	m_pTileP4;
-	*/
-
 	ID2D1SolidColorBrush*	m_pTimer;
 
 	D2D1_ELLIPSE			m_DotEllipse;
@@ -190,12 +183,6 @@ private:
 	bool	m_LineAnimationFlag;
 	int		m_TileAnimationTurnNumber;
 	int		m_TileAnimationTurn;
-
-	//ID2D1Bitmap* m_pPlayer[MAX_PLAYER_NUM];
-
-	//ID2D1Bitmap* m_pPlayerBox[MAX_PLAYER_NUM];
-
-	//ID2D1Bitmap* m_pPlayerWaitingBox;
 
 	ID2D1Bitmap* m_backImg;
 

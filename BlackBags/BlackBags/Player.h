@@ -13,20 +13,11 @@ public:
 
 	void					SetPlayerName(const std::wstring& playerName)	{ m_PlayerName = playerName; }
 	const std::wstring&		GetPlayerName()									{ return m_PlayerName; }
-
-	//void					SetPlayerImage(const std::wstring& playerImage)	{ m_PlayerImage = playerImage; }
-	//const std::wstring&		GetPlayerImage()								{ return m_PlayerImage; }
-	
-	//void					SetPlayerBox(const std::wstring& playeBox)		{ m_PlayerBox = playeBox; }
-	//const std::wstring&		GetPlayerBox()									{ return m_PlayerBox; } 
 	
 	ID2D1SolidColorBrush*	GetPlayerBrush()		{ return m_pTileColorBrush; }
 	ID2D1Bitmap*			GetPlayerFace()			{ return m_pPlayerFace; }
 	ID2D1Bitmap*			GetPlayerBox()			{ return m_pPlayerBox; }
 	ID2D1Bitmap*			GetPlayerWaitingBox()	{ return m_pPlayerWaitingBox; }
-
-	//void			SetBrushColor(D2D1_COLOR_F color)	{ m_BrushColor = color; }
-	//D2D1_COLOR_F	GetBrushColor()						{ return m_BrushColor; }
 
 	void	SetPlayerTurn(int playerTurn)			{ m_Turn = playerTurn; }
 	int		GetPlayerTurn()							{ return m_Turn; }
@@ -59,7 +50,6 @@ private:
 	int m_MyGold;
 	int m_MyTrash;
 
-	//D2D1_COLOR_F m_BrushColor;
 	ID2D1SolidColorBrush*	m_pTileColorBrush;
 	ID2D1Bitmap*			m_pPlayerFace;
 	ID2D1Bitmap*			m_pPlayerBox;
