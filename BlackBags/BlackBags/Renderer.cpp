@@ -71,14 +71,16 @@ ID2D1Bitmap* CRenderer::CreateImage( std::wstring fileName , ID2D1Bitmap* myBitm
 		IID_PPV_ARGS(&m_pImagingFactory)
 		);
 
-	hr = m_pImagingFactory->CreateDecoderFromFilename(
-		myFile,                      // Image to be decoded
-		NULL,                            // Do not prefer a particular vendor
-		GENERIC_READ,                    // Desired read access to the file
-		WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-		&m_pDecoder                        // Pointer to the decoder
-		);
-
+	if ( SUCCEEDED(hr))
+	{
+		hr = m_pImagingFactory->CreateDecoderFromFilename(
+			myFile,                      // Image to be decoded
+			NULL,                            // Do not prefer a particular vendor
+			GENERIC_READ,                    // Desired read access to the file
+			WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+			&m_pDecoder                        // Pointer to the decoder
+			);
+	}
 	// Retrieve the first frame of the image from the decoder
 	// gif 이미지의 경우 프래임 수를 바꿔 주면 다음 프레임을 불러 올 수 있다.
 	// 스프라이트는 이거랑 다름->잘라서 쓰는거?

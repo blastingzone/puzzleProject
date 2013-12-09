@@ -126,7 +126,7 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 {
 	GetPlayerUIPosition();
 
-	for(int i = 0 ; i <playerNumber; ++i)
+	for (int i = 0 ; i <playerNumber; ++i)
 	{
 		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
 
