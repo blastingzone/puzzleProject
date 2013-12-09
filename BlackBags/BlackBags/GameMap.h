@@ -36,7 +36,16 @@ struct IndexedPosition
 
 struct MapObject
 {
-	MapObject () : m_Type(MO_SENTINEL), m_Owner(MO_NOBODY), m_Item(MO_NOTHING), m_Flag(false), m_AnimationFlag(false), m_StartTime(0), m_AnimationTurn(0), m_Direction(DI_UP) {}
+	MapObject () :
+		m_Type(MO_SENTINEL),
+		m_Owner(MO_NOBODY),
+		m_Item(MO_NOTHING),
+		m_Flag(false),
+		m_AnimationFlag(false),
+		m_StartTime(0),
+		m_AnimationTurn(0),
+		m_Direction(DI_UP)
+		{}
 
 	MO_TYPE		m_Type;
 	MO_OWNER	m_Owner;
@@ -73,7 +82,7 @@ public:
 		(게임을 생성하면서 랜덤으로 울타리 배칠 할 때 사용됨) */
 	void DeleteLine(const IndexedPosition& indexedPosition);
 
-	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
+	D2D1_SIZE_F GetStartPosition()							{ return m_StartPosition; }
 
 	MO_TYPE		GetMapType(IndexedPosition indexedPosition);
 	MO_TYPE		GetMapType(const int& i, const int& j);
@@ -83,27 +92,27 @@ public:
 	MO_OWNER	GetMapOwner( const int& i , const int& j );
 
 	void		SetItem(IndexedPosition indexedPosition, MO_ITEM item);
-	MO_ITEM		GetItem(IndexedPosition indexedPosition) {return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item;}
+	MO_ITEM		GetItem(IndexedPosition indexedPosition)	{ return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item; }
 
 	/*	타일 탐색 시 탐색 여부를 확인하는 flag 지정 및 확인 */
 	void		SetMapFlag(IndexedPosition indexedPosition,bool flag);
-	bool		GetMapFlag(IndexedPosition indexedPosition) {return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag;}
+	bool		GetMapFlag(IndexedPosition indexedPosition) { return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag; }
 
 	/*	맵 오프젝트 크기 반환하는 함수들 */
-	float		GetTileSize(){ return m_TileSize; };
-	float		GetLineWeight() { return m_LineWeight; }
+	float		GetTileSize()								{ return m_TileSize; };
+	float		GetLineWeight()								{ return m_LineWeight; }
 
 	/*	애니메이션 상태를 지정, 반환하는 함수들 */
-	bool		GetLineAnimationFlag(){ return m_LineAnimationFlag; }
-	int			GetTileAnimationTurnNumber() { return m_TileAnimationTurnNumber; }
-	void		SetTileAnimationTurnNumber(int turnNumber) { m_TileAnimationTurnNumber = turnNumber; }
+	bool		GetLineAnimationFlag()						{ return m_LineAnimationFlag; }
+	int			GetTileAnimationTurnNumber()				{ return m_TileAnimationTurnNumber; }
+	void		SetTileAnimationTurnNumber(int turnNumber)	{ m_TileAnimationTurnNumber = turnNumber; }
 	void		SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction);
 	void		InitAnimationState(IndexedPosition indexedPosition);
-	void		SetTileAnimationTurn(int turn) { m_TileAnimationTurn = turn; }
+	void		SetTileAnimationTurn(int turn)				{ m_TileAnimationTurn = turn; }
 	int			GetTileAnimationTurn(IndexedPosition indexedPosition);
 	
-	void SubtractVoidCount() { --m_VoidTileCount; }
-	int	GetVoidTileCount() { return m_VoidTileCount; }
+	void SubtractVoidCount()								{ --m_VoidTileCount; }
+	int	GetVoidTileCount()									{ return m_VoidTileCount; }
 
 	void ResizeClient();
 
@@ -117,7 +126,7 @@ public:
 	void SetPlayerTurnTable(int idx, CPlayer* playerPtr);
 
 	/* 게임 맵에서 현재 턴을 얻기 위한 함수 */
-	void SetCurrentTurn(int turn) { m_CurrentTurn = turn; }
+	void SetCurrentTurn(int turn)							{ m_CurrentTurn = turn; }
 
 private: 
 	bool CreateResource();
@@ -198,6 +207,5 @@ private:
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
 
 	int m_CurrentTurn;
-	
 };
 

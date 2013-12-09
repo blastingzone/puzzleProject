@@ -109,21 +109,24 @@ void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 	{
 	case BGM_MAIN:
 		fr = m_System->playSound(m_Main, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_SETTING:
 		fr = m_System->playSound(m_Setting, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_PLAY:
 		fr = m_System->playSound(m_Play, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_RESULT:
 		fr = m_System->playSound(m_Result, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	default:
 		break;
 	}
 
-	assert(fr == FMOD_OK);
 }
 
 void CSoundRenderer::StopBGM()

@@ -27,8 +27,6 @@ public:
 
 	int		GetPlayerItemNumber(MO_ITEM itemType);
 
-	void	SetPlayerTurn(int playerId, int turn)	{ m_Turn = turn; }
-	int		GetPlayerTurn(int palyerId)				{ return m_Turn; }
 
 	void	UpdatePlayerResult(MO_ITEM item);
 

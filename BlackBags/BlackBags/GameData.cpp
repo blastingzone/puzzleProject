@@ -37,7 +37,7 @@ void CGameData::ReleaseInstance()
 
 void CGameData::Release()
 {
-	for (int i = 0; i < m_PlayerData.size(); ++i)
+	for (unsigned int i = 0; i < m_PlayerData.size(); ++i)
 	{
 		SafeDelete(m_PlayerData[i]);
 	}

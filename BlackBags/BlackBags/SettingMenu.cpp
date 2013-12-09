@@ -314,8 +314,6 @@ void CSettingMenu::RefreshTextSize()
 
 void CSettingMenu::Render()
 {
-	HRESULT hr;
-
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
 	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
 	D2D1_POINT_2F	pos;
