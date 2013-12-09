@@ -120,7 +120,7 @@ public:
 	virtual void ResizeClient();
 	virtual void Render();
 
-	D2D1_SIZE_F GetStartPosition() {return m_StartPosition;}
+	D2D1_SIZE_F GetStartPosition()					{ return m_StartPosition; }
 	D2D1_SIZE_F GetPlayerSelectButtonSize();
 	D2D1_SIZE_F GetMapSelectButtonSize();
 	D2D1_SIZE_F GetNextButtonSize();
@@ -130,21 +130,21 @@ public:
 	void InitMouseOver();
 
 	void SetPlayerSelected(int idx);
-	bool GetPlayerSelected(int idx) {return m_PlayerSelect[idx].m_IsSelected;}
+	bool GetPlayerSelected(int idx)					{ return m_PlayerSelect[idx].m_IsSelected; }
 	void CancelPlayerSelected(int idx);
 	
-	void SetMapSelected(int idx) {m_MapSelect[idx].m_IsSelected = true;}
-	bool GetMapSelected(int idx) {return m_MapSelect[idx].m_IsSelected;}
+	void SetMapSelected(int idx)					{ m_MapSelect[idx].m_IsSelected = true; }
+	bool GetMapSelected(int idx)					{ return m_MapSelect[idx].m_IsSelected; }
 
-	int GetMapSizeHeight(int idx) {return m_MapSelect[idx].m_GameDataMapSizeHeight;}
-	int GetMapSizeWidth(int idx) {return m_MapSelect[idx].m_GameDataMapSizeWidth;}
+	int GetMapSizeHeight(int idx)					{ return m_MapSelect[idx].m_GameDataMapSizeHeight; }
+	int GetMapSizeWidth(int idx)					{ return m_MapSelect[idx].m_GameDataMapSizeWidth; }
 
 	void InitMapSelected();
 
-	void SetNextButtonPossible() {m_NextButton.m_IsPossible = true;}
-	void SetNextButtonImpossible() {m_NextButton.m_IsPossible = false;}
+	void SetNextButtonPossible()					{ m_NextButton.m_IsPossible = true; }
+	void SetNextButtonImpossible()					{ m_NextButton.m_IsPossible = false; }
 
-	int GetPlayerMask()		{ return m_PlayerMask; }
+	int GetPlayerMask()								{ return m_PlayerMask; }
 
 private:
 	bool CreateResource();
@@ -175,37 +175,38 @@ private:
 	// PlayScene 에서도 쓰는데 우선은 따로 만든다.
 	ID2D1Bitmap*			m_pCharacterFace[MAX_PLAYER_NUM];
 
-	D2D1_SIZE_F	m_StartPosition;
+	D2D1_SIZE_F				m_StartPosition;
 
-	float		m_PlayerSelectTextSize;
-	float		m_PlayerSelectTextMargin;
+	// Character 선택창의 이름 부분
+	float					m_PlayerSelectTextSize;
+	float					m_PlayerSelectTextMargin;
+	// Map 선택창
+	float					m_MapSelectTextSize;
+	float					m_MapSelectTextMargin;
+	// GameStart 버튼
+	float					m_NextButtonTextSize;
+	float					m_NextButtonTextMargin;
+	// PLAYER 타이틀
+	float					m_PlayerTitleTextSize;
+	float					m_PlayerTitleTextMargin;
+	// MAP 타이틀
+	float					m_MapTitleTextSize;
+	float					m_MapTitleTextMargin;
+	// SettingScene 타이틀
+	float					m_SettingTitleTextSize;
+	float					m_SettingTitleTextMargin;
+	// 캐릭터 초상화 관련
+	float					m_PortraitHeight;
+	float					m_PortraitWidth;
 
-	float		m_MapSelectTextSize;
-	float		m_MapSelectTextMargin;
+	PlayerTitle				m_PlayerTitle;
+	MapTitle				m_MapTitle;
+	SettingTitle			m_SettingTitle;
 
-	float		m_NextButtonTextSize;
-	float		m_NextButtonTextMargin;
-	
-	float		m_PlayerTitleTextSize;
-	float		m_PlayerTitleTextMargin;
+	PlayerSelect			m_PlayerSelect[MAX_PLAYER_NUM];
+	MapSelect				m_MapSelect[MAX_MAPSIZE_NUM];
+	NextButton				m_NextButton;
 
-	float		m_MapTitleTextSize;
-	float		m_MapTitleTextMargin;
-
-	float		m_SettingTitleTextSize;
-	float		m_SettingTitleTextMargin;
-
-	float		m_PortraitHeight;
-	float		m_PortraitWidth;
-
-	PlayerTitle  m_PlayerTitle;
-	MapTitle	 m_MapTitle;
-	SettingTitle m_SettingTitle;
-
-	PlayerSelect m_PlayerSelect[MAX_PLAYER_NUM];
-	MapSelect	m_MapSelect[MAX_MAPSIZE_NUM];
-	NextButton  m_NextButton;
-
-	int			m_PlayerMask;
+	int						m_PlayerMask;
 };
 

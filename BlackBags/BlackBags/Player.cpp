@@ -82,7 +82,7 @@ void CPlayer::ResetValues()
 
 int CPlayer::GetPlayerItemNumber(MO_ITEM itemType)
 {
-	switch(itemType)
+	switch (itemType)
 	{
 	case MO_NOTHING:
 		return m_MyTile;

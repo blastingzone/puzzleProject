@@ -544,6 +544,7 @@ void CSettingMenu::InitMouseOver()
 	}
 }
 
+// 맵을 선택했을 때, 혹은 선택한 맵을 다시 클릭했을 때 발생
 void CSettingMenu::InitMapSelected()
 {
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
@@ -552,6 +553,7 @@ void CSettingMenu::InitMapSelected()
 	}
 }
 
+// Mask 값을 할당하여 어떤 플레이어가 선택되었는지 4비트로 알 수 있게
 void CSettingMenu::SetPlayerSelected(int idx)
 {
 	m_PlayerSelect[idx].m_IsSelected = true;

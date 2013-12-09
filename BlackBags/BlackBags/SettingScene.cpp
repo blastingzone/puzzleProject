@@ -38,10 +38,10 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
-	D2D1_SIZE_F startPosition = m_SettingMenu->GetStartPosition();
-	D2D1_SIZE_F playerButton = m_SettingMenu->GetPlayerSelectButtonSize();
-	D2D1_SIZE_F mapButton = m_SettingMenu->GetMapSelectButtonSize();
-	D2D1_SIZE_F nextButton = m_SettingMenu->GetNextButtonSize();
+	D2D1_SIZE_F startPosition	= m_SettingMenu->GetStartPosition();
+	D2D1_SIZE_F playerButton	= m_SettingMenu->GetPlayerSelectButtonSize();
+	D2D1_SIZE_F mapButton		= m_SettingMenu->GetMapSelectButtonSize();
+	D2D1_SIZE_F nextButton		= m_SettingMenu->GetNextButtonSize();
 
 	// Player Select && Cancel Selection
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)

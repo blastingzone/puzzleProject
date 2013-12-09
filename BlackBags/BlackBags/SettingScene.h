@@ -18,10 +18,10 @@ public:
 	virtual void PlayBGM();
 	virtual void StopBGM();
 	
-	bool CheckGameStartCondition();
+	bool		 CheckGameStartCondition();
 
 private:
-	CSettingMenu* m_SettingMenu;
-	int m_SelectedPlayerNumber;
-	int m_SelectedMapIndex;
+	CSettingMenu*		m_SettingMenu;
+	int					m_SelectedPlayerNumber;
+	int					m_SelectedMapIndex;
 };
