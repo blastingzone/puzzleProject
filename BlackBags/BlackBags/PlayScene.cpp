@@ -125,6 +125,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 		}
 
 		++m_PlayerTurn;
+		m_Map->SetCurrentTurn(m_PlayerTurn%m_PlayerNumber);
 
 
 		//조심해!!

@@ -122,6 +122,9 @@ public:
 	// 게임 결과를 GameData 클래스에 기록하는 메소드
 	void WriteResult();
 
+	/* 게임 맵에서 현재 턴을 얻기 위한 함수 */
+	void SetCurrentTurn(int turn)							{ m_CurrentTurn = turn; }
+
 private: 
 	bool CreateResource();
 
@@ -150,18 +153,18 @@ private:
 	/*	게임 맵을 그리기위한 화면 기준 점
 		게임 맵의 가장 왼쪽 상단 위치 */
 	D2D1_SIZE_F	m_StartPosition;
+	D2D1_SIZE_F  m_CenterPosition;
 
 	float m_TileSize;
 	float m_LineWeight;
 	float m_DotRadius;
 	float m_ItemRadius;
 	float m_ProfileSize;
-	float m_ProfileMargin;
 	float m_ProfileBoxHeight;
 	float m_ProfileBoxWidth;
-	float m_ProfileRightPosition;
-	float m_ProfileBottomPosition;
-	
+	float m_ProfileHorizontalMargin;
+	float m_ProfileVerticalMargin;	
+
 	float m_TimerPositionHeight;
 	float m_TimerWidth;
 	float m_TimerHeight;
@@ -200,5 +203,7 @@ private:
 
 	D2D1_RECT_F		m_ProfilePosition[MAX_PLAYER_NUM];
 	D2D1_RECT_F		m_ProfileBoxPosition[MAX_PLAYER_NUM];
+
+	int m_CurrentTurn;
 };
 
