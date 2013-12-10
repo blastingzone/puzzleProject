@@ -181,10 +181,10 @@ bool CSettingMenu::CreateResource()
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::RosyBrown), &m_pMapBackgroundBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapBackgroundBrush);
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapSelectedBackgroundBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(245.0f/255,93.0f/255,111.0f/255), &m_pMapSelectedBackgroundBrush);
 		assert(SUCCEEDED(hr));
 
 		if (SUCCEEDED(hr) )
@@ -369,8 +369,8 @@ void CSettingMenu::Render()
 		// 캐릭터 초상화 부분
 		// MouseOver 구현시 아래의 if else 문에 넣어서 조절해준다
 		CharacterPortraitPosition = D2D1::Rect ( rectElement.left,
-			rectElement.top - SC_S_DEFAULT_PORTRAIT_HEIGHT,
-			rectElement.left + SC_S_DEFAULT_PORTRAIT_WIDTH,
+			rectElement.top - m_PortraitHeight,
+			rectElement.left + m_PortraitWidth,
 			rectElement.top);
 
 		// 마우스가 올라가거나 선택된 상태면 자신이 가진 브러쉬로 자신을 칠함
@@ -438,7 +438,19 @@ void CSettingMenu::Render()
 			rectElement.bottom);
 
 		// 맵도 마찬가지로 선택되거나 마우스가 올라가 있으면 색이 변함
-		if (m_MapSelect[j].m_IsMouseOver || m_MapSelect[j].m_IsSelected)
+		if (m_MapSelect[j].m_IsMouseOver && !m_MapSelect[j].m_IsSelected)
+		{
+			m_pRenderTarget->FillRectangle(rectElement, m_pMapBackgroundBrush);
+
+			m_pRenderTarget->DrawText(
+				m_MapSelect[j].m_ButtonText.c_str(),
+				m_MapSelect[j].m_ButtonText.length(),
+				m_MapSelectTextFormat,
+				textPosition,
+				m_pSelectedTextBrush
+				);
+		}
+		if ( m_MapSelect[j].m_IsSelected )
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_pMapSelectedBackgroundBrush);
 
