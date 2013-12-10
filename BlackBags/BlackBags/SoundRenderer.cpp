@@ -40,95 +40,109 @@ bool CSoundRenderer::Init()
 {
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
-	}
+	assert(fr == FMOD_OK);
 
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
-	}
+	fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
 
-	if (fr == FMOD_OK)
-	{
-		fr = CreateSound();
-	}
+	assert(fr == FMOD_OK);
 
-	if (fr == FMOD_OK)
-	{
-		AllocateChannel();
-		return true;
-	}
+	fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
 
-	return false;
+	assert(fr == FMOD_OK);
+
+	fr = CreateSound();
+
+	assert(fr == FMOD_OK);
+
+	// 없어도 되는 함수;;
+	// AllocateChannel();
+
+	return true;
 }
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Main);
+	FMOD_RESULT fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Main);
 
-	//조심해!!
-	//어떤 노래가 없는지 확인해. 전체적으로 다 해.
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
-	}
+	// assert 추가로 경로에 없는 파일이 있으면 해당 위치에서 프로그램 죽음
+	assert(fr == FMOD_OK);
 
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Play);
-	}
-	
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Result);
-	}
+	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
 
-	if (fr == FMOD_OK)
-	{
-		fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_SE);
-	}
+	assert(fr == FMOD_OK);
+
+	fr = m_System->createSound("Resource/Sound/playscene.mp3", FMOD_HARDWARE, 0, &m_Play);
+
+	assert(fr == FMOD_OK);
+
+	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Result);
+
+	assert(fr == FMOD_OK);
+
+	fr = m_System->createSound("Resource/Sound/SE2.mp3", FMOD_HARDWARE, 0, &m_SE);
+
+	assert(fr == FMOD_OK);
 
 	return fr;
 }
 
+// 없어도 되는 함수
+// 예제를 보니 얘네들을 따로 초기화해서 쓰는게 아니라 PlaySound 이후에 선언해야 한다
 void CSoundRenderer::AllocateChannel()
 {
-	//조심해 애러챜
-	m_SEChannel->setChannelGroup(m_ChannelGroup);
-	m_BGMChannel->setChannelGroup(m_ChannelGroup);
+	//FMOD_RESULT fr;
+
+	//fr = m_SEChannel->setChannelGroup(m_ChannelGroup);
+
+	//assert(fr == FMOD_OK);
+
+	//fr = m_BGMChannel->setChannelGroup(m_ChannelGroup);
+
+	//assert(fr == FMOD_OK);
 }
 
-// 조심해!!
-// 얘네 둘이 fr에 받아놓기만 하고 void로 리턴해주는데 fr값 활용하도록 바꿔야 합니다 FMOD_RESULT
 void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 {
+	FMOD_RESULT fr;
+
 	switch (BGMName)
 	{
 	case BGM_MAIN:
-		m_System->playSound(m_Main, m_ChannelGroup, false, &m_BGMChannel);
+		fr = m_System->playSound(m_Main, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_SETTING:
-		m_System->playSound(m_Setting, m_ChannelGroup, false, &m_BGMChannel);
+		fr = m_System->playSound(m_Setting, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_PLAY:
-		m_System->playSound(m_Play, m_ChannelGroup, false, &m_BGMChannel);
+		fr = m_System->playSound(m_Play, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	case BGM_RESULT:
-		m_System->playSound(m_Result, m_ChannelGroup, false, &m_BGMChannel);
+		fr = m_System->playSound(m_Result, m_ChannelGroup, false, &m_BGMChannel);
+		assert(fr == FMOD_OK);
 		break;
 	default:
 		break;
 	}
+
 }
 
 void CSoundRenderer::StopBGM()
 {
-	m_BGMChannel->stop();
+	FMOD_RESULT fr;
+
+	fr = m_BGMChannel->stop();
+
+	assert(fr == FMOD_OK);
 }
 
 void CSoundRenderer::PlaySE()
 {
-	m_System->playSound(m_SE, m_ChannelGroup, false, &m_SEChannel);
+	FMOD_RESULT fr;
+
+	fr = m_System->playSound(m_SE, m_ChannelGroup, false, &m_SEChannel);
+
+	assert(fr == FMOD_OK);
 }

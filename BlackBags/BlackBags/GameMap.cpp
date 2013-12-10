@@ -135,7 +135,10 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 	for(int i = 0 ; i <playerNumber; ++i)
 	{
 		m_pRenderTarget -> DrawBitmap(m_pPlayer[i],m_ProfilePosition[i]);
-		m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i],m_ProfileBoxPosition[i]);
+		if (m_CurrentTurn == i)
+			m_pRenderTarget -> DrawBitmap(m_pPlayerBox[i],m_ProfileBoxPosition[i]);
+		else
+			m_pRenderTarget -> DrawBitmap(m_pPlayerWaitingBox,m_ProfileBoxPosition[i]);
 	}
 	
 }

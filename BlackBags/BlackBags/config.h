@@ -44,10 +44,14 @@ const float SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT = 40.f;
 const float SC_S_DEFAULT_MAINTITLE_TEXT_SIZE = 60.0f;
 const float SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN = 20.0f;
 
+/*	settingScene 초상화 크기	*/
+const float SC_S_DEFAULT_PORTRAIT_WIDTH = 200.f;
+const float SC_S_DEFAULT_PORTRAIT_HEIGHT = 200.f;
+
 //판정을 위해서 얘네들의 y 포지션을 받아둡니다
-const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 3;
-const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 9;
-const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 7;
+const int	SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE = 5;
+const int   SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE = 10;
+const int   SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE = 8;
 
 /*	어떤 플레이어가 선택되었는지 알기 위한 MASK 값들	*/
 const int	MASK_PLAYER_1 = 1;
@@ -128,10 +132,10 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _MENU_FONT L"Segoe UI"
 
 /*	플레이어 색상입니다	*/
-#define _COLOR_CHARACTER_1_ 78.0f/255, 213.0f/255, 199.0f/255
-#define _COLOR_CHARACTER_2_ 247.0f/255, 166.0f/255, 123.0f/255
-#define _COLOR_CHARACTER_3_ 212.0f/255, 72.0f/255, 101.0f/255
-#define _COLOR_CHARACTER_4_ 184.0f/255, 218.0f/255, 141.0f/255
+#define _COLOR_CHARACTER_1_ 0.0f/255, 101.0f/255, 184.0f/255
+#define _COLOR_CHARACTER_2_ 247.0f/255, 176.0f/255, 179.0f/255
+#define _COLOR_CHARACTER_3_ 255.0f/255, 96.0f/255, 23.0f/255
+#define _COLOR_CHARACTER_4_ 176.0f/255, 199.0f/255, 64.0f/255
 
 /*	enum 타입들입니다. */
 enum SceneName	//Scene 이름들

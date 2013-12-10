@@ -2,6 +2,8 @@
 #include "SettingMenu.h"
 #include "dwrite.h"
 
+
+
 CSettingMenu::CSettingMenu(void)
 {
 	m_pUnselectedTextBrush = nullptr;
@@ -10,9 +12,24 @@ CSettingMenu::CSettingMenu(void)
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
 
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_pCharacterFace[i] = nullptr;
+	}
+
 	m_PlayerMask = 0;
 
 	// 버튼 초기값들을 설정함
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
+	}
+
+	m_PlayerSelect[0].m_ButtonText = L"Character 1";
+	m_PlayerSelect[1].m_ButtonText = L"Character 2";
+	m_PlayerSelect[2].m_ButtonText = L"Character 3";
+	m_PlayerSelect[3].m_ButtonText = L"Character 4";
+
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
 	m_MapSelect[0].m_GameDataMapSizeWidth = 5;
@@ -28,11 +45,6 @@ CSettingMenu::CSettingMenu(void)
 	m_MapSelect[3].m_ButtonText = L"10 X 9";
 	m_MapSelect[3].m_GameDataMapSizeHeight = 10;
 	m_MapSelect[3].m_GameDataMapSizeWidth = 9;
-
-	m_PlayerSelect[0].m_PlayerId = 0;
-	m_PlayerSelect[1].m_PlayerId = 1;
-	m_PlayerSelect[2].m_PlayerId = 2;
-	m_PlayerSelect[3].m_PlayerId = 3;
 }
 
 
@@ -107,6 +119,9 @@ void CSettingMenu::SetObjectSize()
 
 	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
 	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
+
+	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
+	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
 }
 
 void CSettingMenu::ResizeClient()
@@ -126,49 +141,66 @@ bool CSettingMenu::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
-
-		/* Player별 마우스 오버 및 선택시 색상 */
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
+		assert(SUCCEEDED(hr));
 
 		/* Player별 마우스 오버 및 선택시 색상 */
 
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
+
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
+
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_CHARACTER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		/* Player, 맵 버튼에서 마우스 오버 및 선택시 색상 */
+
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapBackgroundBrush);
+		assert(SUCCEEDED(hr));
+
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(245.0f/255,93.0f/255,111.0f/255), &m_pMapSelectedBackgroundBrush);
+		assert(SUCCEEDED(hr));
 
 		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
+		{
+			for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+			{
+				m_pCharacterFace[i] = CRenderer::GetInstance()->CreateImage(CGameData::GetInstance()->GetCharacterPortrait(i), m_pCharacterFace[i]);
+			}
+		}
 
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::RosyBrown), &m_pMapBackgroundBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapSelectedBackgroundBrush);
-
-		if (SUCCEEDED(hr) )
-			hr = DWriteCreateFactory(
+		hr = DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
 			__uuidof(IDWriteFactory),
 			reinterpret_cast<IUnknown**>(&m_DWriteFactory)
 			);
+		assert(SUCCEEDED(hr));
 
 		if (!SUCCEEDED(hr) )
 			return false;
@@ -202,9 +234,10 @@ void CSettingMenu::RefreshTextSize()
 		L"ko",
 		&m_PlayerSelectTextFormat
 		);
+	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr) )
-		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr));
 
 	// MapSelect 창의 TextFormat도 바꿈
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -217,9 +250,10 @@ void CSettingMenu::RefreshTextSize()
 		L"ko",
 		&m_MapSelectTextFormat
 		);
+	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr) )
-		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr));
 
 	// NextButton TextFormat 생성
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -232,9 +266,10 @@ void CSettingMenu::RefreshTextSize()
 		L"ko",
 		&m_NextButtonTextFormat
 		);
+	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr) )
-		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr));
 
 	// Subtitle TextFormat 생성
 	// PlayerTitle 기준으로 통일
@@ -248,9 +283,10 @@ void CSettingMenu::RefreshTextSize()
 		L"ko",
 		&m_SubTitleTextFormat
 		);
+	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr) )
-		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr));
 
 	// Maintitle TextFormat 생성
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -263,15 +299,16 @@ void CSettingMenu::RefreshTextSize()
 		L"ko",
 		&m_MainTitleTextFormat
 		);
+	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr) )
-		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	assert(SUCCEEDED(hr));
 }
 
 void CSettingMenu::Render()
 {
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
-	D2D1_RECT_F		rectElement, textPosition;
+	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
 	D2D1_POINT_2F	pos;
 
 	//Setting Title을 렌더
@@ -288,6 +325,7 @@ void CSettingMenu::Render()
 		textPosition,
 		m_pUnselectedTextBrush
 		);
+
 	// 캐릭터 선택창을 알리는 타이틀을 렌더
 	// 위치선정
 	pos.x = m_StartPosition.width + (-1) * m_PlayerSelect[0].m_ButtonWidth;
@@ -312,8 +350,21 @@ void CSettingMenu::Render()
 	{
 		pos.x = m_StartPosition.width + ( (i - 1) * m_PlayerSelect[i].m_ButtonWidth);
 
-		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_PlayerSelect[i].m_ButtonWidth, pos.y + m_PlayerSelect[i].m_ButtonHeight);
-		textPosition =  D2D1::Rect( rectElement.left + m_PlayerSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+		rectElement = D2D1::Rect( pos.x,
+			pos.y,
+			pos.x + m_PlayerSelect[i].m_ButtonWidth,
+			pos.y + m_PlayerSelect[i].m_ButtonHeight);
+
+		textPosition =  D2D1::Rect( rectElement.left + m_PlayerSelectTextMargin,
+			rectElement.top,
+			rectElement.right,
+			rectElement.bottom);
+		// 캐릭터 초상화 부분
+		// MouseOver 구현시 아래의 if else 문에 넣어서 조절해준다
+		CharacterPortraitPosition = D2D1::Rect ( rectElement.left,
+			rectElement.top - m_PortraitHeight,
+			rectElement.left + m_PortraitWidth,
+			rectElement.top);
 
 		// 마우스가 올라가거나 선택된 상태면 자신이 가진 브러쉬로 자신을 칠함
 		if (m_PlayerSelect[i].m_IsMouseOver || m_PlayerSelect[i].m_IsSelected)
@@ -321,8 +372,8 @@ void CSettingMenu::Render()
 			m_pRenderTarget->FillRectangle(rectElement, m_PlayerSelect[i].m_pSelectedBackgroundBrush);
 
 			m_pRenderTarget->DrawText(
-				CGameData::GetInstance()->GetPlayerName(m_PlayerSelect[i].m_PlayerId).c_str(),
-				CGameData::GetInstance()->GetPlayerName(m_PlayerSelect[i].m_PlayerId).length(),
+				m_PlayerSelect[i].m_ButtonText.c_str(),
+				m_PlayerSelect[i].m_ButtonText.length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pSelectedTextBrush
@@ -331,21 +382,28 @@ void CSettingMenu::Render()
 		else // 아니면 글자만 나옴
 		{
 			m_pRenderTarget->DrawText(
-				CGameData::GetInstance()->GetPlayerName(m_PlayerSelect[i].m_PlayerId).c_str(),
-				CGameData::GetInstance()->GetPlayerName(m_PlayerSelect[i].m_PlayerId).length(),
+				m_PlayerSelect[i].m_ButtonText.c_str(),
+				m_PlayerSelect[i].m_ButtonText.length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pUnselectedTextBrush
 				);
 		}
+		// 캐릭터 초상화 포지션은 Character 선택창의 중심으로부터
+		// 캐릭터 초상화 렌더
+		m_pRenderTarget->DrawBitmap(m_pCharacterFace[i], CharacterPortraitPosition);
 	}
 
 	// 맵 선택창을 알리는 타이틀을 렌더
 	pos.x = m_StartPosition.width + (-1) * m_MapSelect[0].m_ButtonWidth;
 	pos.y = m_StartPosition.height + m_PlayerTitle.m_LayerHeight * (SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE - 2);
 
-	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MapTitle.m_LayerWidth, pos.y + m_MapTitle.m_LayerHeight);
-	textPosition =  D2D1::Rect( rectElement.left + m_MapTitleTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MapTitle.m_LayerWidth,
+		pos.y + m_MapTitle.m_LayerHeight);
+	textPosition =  D2D1::Rect( rectElement.left + m_MapTitleTextMargin,
+		rectElement.top,
+		rectElement.right,
+		rectElement.bottom);
 
 	m_pRenderTarget->DrawText(
 		m_MapTitle.m_Title.c_str(),
@@ -367,10 +425,26 @@ void CSettingMenu::Render()
 			pos.y,
 			pos.x + m_MapSelect[j].m_ButtonWidth,
 			pos.y + m_MapSelect[j].m_ButtonHeight);
-		textPosition =  D2D1::Rect( rectElement.left + m_MapSelectTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
+		textPosition =  D2D1::Rect( rectElement.left + m_MapSelectTextMargin,
+			rectElement.top,
+			rectElement.right,
+			rectElement.bottom);
 
 		// 맵도 마찬가지로 선택되거나 마우스가 올라가 있으면 색이 변함
-		if (m_MapSelect[j].m_IsMouseOver || m_MapSelect[j].m_IsSelected)
+		// 맵도 마찬가지로 선택되거나 마우스가 올라가 있으면 색이 변함
+		if (m_MapSelect[j].m_IsMouseOver && !m_MapSelect[j].m_IsSelected)
+		{
+			m_pRenderTarget->FillRectangle(rectElement, m_pMapBackgroundBrush);
+
+			m_pRenderTarget->DrawText(
+				m_MapSelect[j].m_ButtonText.c_str(),
+				m_MapSelect[j].m_ButtonText.length(),
+				m_MapSelectTextFormat,
+				textPosition,
+				m_pSelectedTextBrush
+				);
+		}
+		if ( m_MapSelect[j].m_IsSelected )
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_pMapSelectedBackgroundBrush);
 
@@ -474,6 +548,7 @@ void CSettingMenu::InitMouseOver()
 	}
 }
 
+// 맵을 선택했을 때, 혹은 선택한 맵을 다시 클릭했을 때 발생
 void CSettingMenu::InitMapSelected()
 {
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
@@ -482,42 +557,43 @@ void CSettingMenu::InitMapSelected()
 	}
 }
 
+// Mask 값을 할당하여 어떤 플레이어가 선택되었는지 4비트로 알 수 있게
 void CSettingMenu::SetPlayerSelected(int idx)
 {
 	m_PlayerSelect[idx].m_IsSelected = true;
 	switch (idx)
 	{
-		case 0:
-			m_PlayerMask += MASK_PLAYER_1;
-			break;
-		case 1:
-			m_PlayerMask += MASK_PLAYER_2;
-			break;
-		case 2:
-			m_PlayerMask += MASK_PLAYER_3;
-			break;
-		case 3:
-			m_PlayerMask += MASK_PLAYER_4;
-			break;
+	case 0:
+		m_PlayerMask += MASK_PLAYER_1;
+		break;
+	case 1:
+		m_PlayerMask += MASK_PLAYER_2;
+		break;
+	case 2:
+		m_PlayerMask += MASK_PLAYER_3;
+		break;
+	case 3:
+		m_PlayerMask += MASK_PLAYER_4;
+		break;
 	}
 }
 
 void CSettingMenu::CancelPlayerSelected(int idx)
 {
-	 m_PlayerSelect[idx].m_IsSelected = false;
-	 switch (idx)
-	 {
-	 case 0:
-		 m_PlayerMask -= MASK_PLAYER_1;
-		 break;
-	 case 1:
-		 m_PlayerMask -= MASK_PLAYER_2;
-		 break;
-	 case 2:
-		 m_PlayerMask -= MASK_PLAYER_3;
-		 break;
-	 case 3:
-		 m_PlayerMask -= MASK_PLAYER_4;
-		 break;
-	 }
+	m_PlayerSelect[idx].m_IsSelected = false;
+	switch (idx)
+	{
+	case 0:
+		m_PlayerMask -= MASK_PLAYER_1;
+		break;
+	case 1:
+		m_PlayerMask -= MASK_PLAYER_2;
+		break;
+	case 2:
+		m_PlayerMask -= MASK_PLAYER_3;
+		break;
+	case 3:
+		m_PlayerMask -= MASK_PLAYER_4;
+		break;
+	}
 }

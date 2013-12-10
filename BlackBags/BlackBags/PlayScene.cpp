@@ -85,6 +85,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 {
 	if (IsPossible(indexedPosition) )
 	{
+		CSoundRenderer::GetInstance()->PlaySE();
 #ifdef _DEBUG
 		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 		printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
@@ -120,6 +121,7 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 		if (IsEnd() )
 		{
+			//바로 종료되지 않게 처리
 			m_Map->WriteResult();
 			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
 		}

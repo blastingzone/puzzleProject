@@ -5,7 +5,7 @@
 CSettingScene::CSettingScene(void)
 {
 	m_SceneStatus = SC_SETTING;
-	
+
 	m_SelectedPlayerNumber = 0;
 	m_SelectedMapIndex = -1;
 }
@@ -28,7 +28,7 @@ bool CSettingScene::Init()
 	}
 
 	AddObject(m_SettingMenu);
-	
+
 	PlayBGM();
 
 	return true;
@@ -38,10 +38,10 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 {
 	int idx = 0;
 
-	D2D1_SIZE_F startPosition = m_SettingMenu->GetStartPosition();
-	D2D1_SIZE_F playerButton = m_SettingMenu->GetPlayerSelectButtonSize();
-	D2D1_SIZE_F mapButton = m_SettingMenu->GetMapSelectButtonSize();
-	D2D1_SIZE_F nextButton = m_SettingMenu->GetNextButtonSize();
+	D2D1_SIZE_F startPosition	= m_SettingMenu->GetStartPosition();
+	D2D1_SIZE_F playerButton	= m_SettingMenu->GetPlayerSelectButtonSize();
+	D2D1_SIZE_F mapButton		= m_SettingMenu->GetMapSelectButtonSize();
+	D2D1_SIZE_F nextButton		= m_SettingMenu->GetNextButtonSize();
 
 	// Player Select && Cancel Selection
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
@@ -51,6 +51,12 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_PLAYER_NUM)
+			{
+				return;
+			}
+
 			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
 			{
 				++m_SelectedPlayerNumber;
@@ -72,6 +78,11 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_MAPSIZE_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->InitMapSelected();
 			m_SettingMenu->SetMapSelected(idx);
 			m_SelectedMapIndex = idx;
@@ -95,10 +106,6 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 		if (mouseCoordinate.m_PosY > startPosition.height + (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE-1) * nextButton.height
 			&& mouseCoordinate.m_PosY > startPosition.height + SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * nextButton.height)
 		{
-			///////////////////////////////////////////////////////////////////////////
-			// 조심해!! 
-			// Player Create와 연동해야 합니다!!
-			///////////////////////////////////////////////////////////////////////////
 			CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
 			CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
@@ -106,7 +113,6 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 		}
 	}
-	//CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
 }
 
 void CSettingScene::MouseOver(Coordinate mouseCoordinate)
@@ -125,6 +131,11 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_PLAYER_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->SetPlayerMouseOver(idx);
 		}
 	}
@@ -137,6 +148,11 @@ void CSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_MAPSIZE_NUM)
+			{
+				return;
+			}
 			m_SettingMenu->SetMapMouseOver(idx);
 		}
 	}

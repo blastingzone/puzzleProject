@@ -49,6 +49,7 @@ public:
 	const std::wstring& GetPlayerName(int playerId)			{ return m_PlayerData[playerId].m_PlayerName; }
 	const std::wstring& GetPlayerImage(int playerId)		{ return m_Character[m_PlayerData[playerId].m_CharacterId].m_PortraitPath; }
 	const std::wstring& GetPlayerBox(int playerId)			{ return m_Character[m_PlayerData[playerId].m_CharacterId].m_BoxPath; } 
+	const std::wstring& GetCharacterPortrait(int characterId) { return m_Character[characterId].m_PortraitPath; }
 	const D2D1_COLOR_F& GetPlayerColor(int playerId) { return m_Character[m_PlayerData[playerId].m_CharacterId].m_BrushColor; }
 
 	void SetPlayerTurn(int playerId, int turn)				{ m_PlayerData[playerId].m_PlayTurn = turn; }
