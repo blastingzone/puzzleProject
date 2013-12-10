@@ -59,6 +59,8 @@ void CGameTimer::Update()
 	if (interval > 1000)
 	{
 		--m_TimeRest;
+		//sm9: 상수 문자열을 코드상에 직접 박아 놓는것은 좋지 않다. 누누히 강조하지만 이런거는 따로 뺄 것... 
+
 		m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
 		m_CheckedTime = m_CurrentTime;
 	}
@@ -107,7 +109,7 @@ bool CGameTimer::Init()
 		, 20.0f
 		, L"ko"
 		, &m_TextFormat);
-	assert(SUCCEEDED(hr) );
+	assert(SUCCEEDED(hr) ); //sm9: 안알랴줌
 
 	hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF::Crimson)

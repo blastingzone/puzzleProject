@@ -92,6 +92,8 @@ CPlayer* CGameData::GetPlayerPtrByTurn(int turn)
 	}
 
 	assert(false);
+	//sm9: 리턴 구문 없다. 반드시 넣을 것. assert는 release 모드에서는 동작하지 않는다.
+
 }
 
 void CGameData::SetPlayerTurn(int idx, int playerTurn)	
@@ -123,6 +125,18 @@ bool CGameData::GetPlayerCreatedFlag(int idx)
 
 void CGameData::createPlayer()
 {
+	//sm9: 사실 아래 if 문은 for 문으로 shift하면서 루프 하나로 처리할 수 있다.
+	/* 대략 이런식...
+	for (int i=0, j=0x01 ; i<4 ; ++i, j <<= 1 )
+	{
+
+		if ( m_PlayerMask & j == j )
+		{
+			m_PlayerData[i]->SetPlayerCreatedFlag() ;
+		}
+	}
+	*/
+
 	if ( (m_PlayerMask & 0x01) == 0x1)
 	{
 		m_PlayerData[0]->SetPlayerCreatedFlag();

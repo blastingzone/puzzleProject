@@ -38,6 +38,9 @@ HRESULT CVideoRender::Init(HWND hwnd)
 	
 	if (m_Hwnd != nullptr)
 		return S_OK;
+
+	//sm9: 리턴 구문 넣을 것.
+
 }
 
 void CVideoRender::CleanUp()

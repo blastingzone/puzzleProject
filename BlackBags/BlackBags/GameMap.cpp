@@ -435,6 +435,9 @@ bool CGameMap::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
+		
+		//sm9: 이런거는 assert가 아니라.. 직접 에러 핸들링..
+		
 		assert(SUCCEEDED(hr) );
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);

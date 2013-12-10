@@ -96,6 +96,8 @@ int CPlayer::GetPlayerItemNumber(MO_ITEM itemType)
 	default:
 		break;
 	}
+
+	//sm9: 리턴 구문 넣을 것
 }
 
 void CPlayer::UpdatePlayerResult(MO_ITEM item)

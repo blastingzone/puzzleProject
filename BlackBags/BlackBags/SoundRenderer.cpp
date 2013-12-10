@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "SoundRenderer.h"
 
 CSoundRenderer* CSoundRenderer::m_pInstance = nullptr;
@@ -40,6 +40,8 @@ bool CSoundRenderer::Init()
 {
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
+	//sm9: ì´ëŸ°ê±°ëŠ” assertë¡œ ì²˜ë¦¬í•˜ë©´ ì•ˆë˜ê³  ì‹¤ì œë¡œ ì—ëŸ¬ì²˜ë¦¬ í•´ì¤˜ì•¼ í•œë‹¤. ë©”ì‹œì§€ ì¶œë ¥í•˜ê³  í”„ë¡œê·¸ë¨ ì¢…ë£Œí•˜ëŠ” ì‹ìœ¼ë¡œ..
+	//ì™œëƒí•˜ë©´, assertëŠ” releaseì—ì„œëŠ” ë¬´ì‹œë˜ê¸° ë•Œë¬¸.
 	assert(fr == FMOD_OK);
 
 	fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
@@ -54,7 +56,7 @@ bool CSoundRenderer::Init()
 
 	assert(fr == FMOD_OK);
 
-	// ¾ø¾îµµ µÇ´Â ÇÔ¼ö;;
+	// ì—†ì–´ë„ ë˜ëŠ” í•¨ìˆ˜;;
 	// AllocateChannel();
 
 	return true;
@@ -64,7 +66,7 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 {
 	FMOD_RESULT fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Main);
 
-	// assert Ãß°¡·Î °æ·Î¿¡ ¾ø´Â ÆÄÀÏÀÌ ÀÖÀ¸¸é ÇØ´ç À§Ä¡¿¡¼­ ÇÁ·Î±×·¥ Á×À½
+	// assert ì¶”ê°€ë¡œ ê²½ë¡œì— ì—†ëŠ” íŒŒì¼ì´ ìˆìœ¼ë©´ í•´ë‹¹ ìœ„ì¹˜ì—ì„œ í”„ë¡œê·¸ë¨ ì£½ìŒ
 	assert(fr == FMOD_OK);
 
 	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
@@ -86,8 +88,8 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 	return fr;
 }
 
-// ¾ø¾îµµ µÇ´Â ÇÔ¼ö
-// ¿¹Á¦¸¦ º¸´Ï ¾ê³×µéÀ» µû·Î ÃÊ±âÈ­ÇØ¼­ ¾²´Â°Ô ¾Æ´Ï¶ó PlaySound ÀÌÈÄ¿¡ ¼±¾ğÇØ¾ß ÇÑ´Ù
+// ì—†ì–´ë„ ë˜ëŠ” í•¨ìˆ˜
+// ì˜ˆì œë¥¼ ë³´ë‹ˆ ì–˜ë„¤ë“¤ì„ ë”°ë¡œ ì´ˆê¸°í™”í•´ì„œ ì“°ëŠ”ê²Œ ì•„ë‹ˆë¼ PlaySound ì´í›„ì— ì„ ì–¸í•´ì•¼ í•œë‹¤
 void CSoundRenderer::AllocateChannel()
 {
 	//FMOD_RESULT fr;

@@ -20,7 +20,7 @@ class CMainMenu :
 {
 public:
 	CMainMenu(void);
-	~CMainMenu(void);
+	~CMainMenu(void); //sm9: 마찬가지로 virtual
 
 	virtual void Render();
 	virtual void ResizeClient();

@@ -20,6 +20,7 @@ CMainMenu::CMainMenu(void)
 
 CMainMenu::~CMainMenu(void)
 {
+	//sm9: 이 내용이 호출 안될 수 있다는 말씀.
 	SafeRelease(m_DWriteFactory);
 	SafeRelease(m_TextFormat);
 
@@ -192,6 +193,8 @@ bool CMainMenu::CreateResource()
             __uuidof(IDWriteFactory),
             reinterpret_cast<IUnknown**>(&m_DWriteFactory)
             );
+
+		//sm9: 라이브러리 호출에 대한 것은 assert보다 직접 에러 처리 할 것. release에서도 에러 핸들링 해야지?
 		assert(SUCCEEDED(hr) );
 
 		SetObjectSize();

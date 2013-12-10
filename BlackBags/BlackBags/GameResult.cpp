@@ -506,7 +506,7 @@ RECT CGameResult::GetGetButtonPosition()
 {
 	RECT buttonPosition;
 
-	buttonPosition.left = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth;
+	buttonPosition.left = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth; //sm9: 형변환 확실히 표시해줄 것
 	buttonPosition.right = buttonPosition.left + m_ButtonWidth;
 	buttonPosition.top = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight;
 	buttonPosition.bottom = buttonPosition.top + m_ButtonHeight;
