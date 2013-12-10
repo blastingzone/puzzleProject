@@ -67,8 +67,8 @@ const float DEFAULT_ITEM_RADIUS = 4.0f;
 const float DEFAULT_CHARACTER_SIZE = 150.0f;
 const float DEFAULT_CHARACTER_BOX_WIDTH = 150.0f;
 const float DEFAULT_CHARACTER_BOX_HEIGHT = 30.0f;
-const float DEFALT_CHARACTER_MARGIN_H =600.0f;
-const float DEFALT_CHARACTER_MARGIN_V = 300.0f;
+const float DEFAULT_CHARACTER_MARGIN_H =600.0f;
+const float DEFAULT_CHARACTER_MARGIN_V = 300.0f;
 
 const float SC_P_TIMER_POSITION_HEIGHT = 10.0f;
 const float SC_P_TIMER_WIDTH = 500.0f;
@@ -122,8 +122,8 @@ const int	SC_RT_SCORE_GOLD = 5;
 const int	SC_RT_SCORE_TRASH = -10;
 
 /*	크레딧 신에서 불러올 동영상들입니다	*/
-#define _CREDIT_MOVIE "credit.avi"
-#define _OPENING_MOVIE "opening.avi"
+#define _CREDIT_MOVIE "Resource/Video/credit.avi"
+#define _OPENING_MOVIE "Resource/Video/opening.avi"
 
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"

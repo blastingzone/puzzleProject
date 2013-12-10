@@ -544,8 +544,8 @@ void CGameMap::SetObjectSize()
 	m_ProfileBoxHeight = tempScale * DEFAULT_CHARACTER_BOX_HEIGHT;
 	m_ProfileBoxWidth = tempScale * DEFAULT_CHARACTER_BOX_WIDTH;
 
-	m_ProfileHorizontalMargin = tempScale * DEFALT_CHARACTER_MARGIN_H;
-	m_ProfileVerticalMargin = tempScale * DEFALT_CHARACTER_MARGIN_V;
+	m_ProfileHorizontalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_H;
+	m_ProfileVerticalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_V;
 }
 
 void CGameMap::GetPlayerUIPosition()
