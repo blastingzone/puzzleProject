@@ -96,6 +96,8 @@ int CPlayer::GetPlayerItemNumber(MO_ITEM itemType)
 	default:
 		break;
 	}
+	// 조심해!!
+	// Return 넣을 것!
 }
 
 void CPlayer::UpdatePlayerResult(MO_ITEM item)

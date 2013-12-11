@@ -505,7 +505,7 @@ void CGameResult::SetMouseOver()
 RECT CGameResult::GetGetButtonPosition()
 {
 	RECT buttonPosition;
-
+	//조심해!! 형변환 확실히 표시해줄 것
 	buttonPosition.left = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth;
 	buttonPosition.right = buttonPosition.left + m_ButtonWidth;
 	buttonPosition.top = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight;

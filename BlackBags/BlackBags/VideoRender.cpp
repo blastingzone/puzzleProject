@@ -38,6 +38,8 @@ HRESULT CVideoRender::Init(HWND hwnd)
 	
 	if (m_Hwnd != nullptr)
 		return S_OK;
+	else
+		return S_FALSE;
 }
 
 void CVideoRender::CleanUp()

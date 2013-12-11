@@ -91,6 +91,10 @@ CPlayer* CGameData::GetPlayerPtrByTurn(int turn)
 		}
 	}
 
+	// 조심해!!
+	// assert는 Debug에서만 동작해!
+	// 리턴값을 넣어줘!
+
 	assert(false);
 }
 
@@ -123,23 +127,13 @@ bool CGameData::GetPlayerCreatedFlag(int idx)
 
 void CGameData::createPlayer()
 {
-	if ( (m_PlayerMask & 0x01) == 0x1)
+	for (int i = 0, j = 0x01 ; i < MAX_PLAYER_NUM ; ++i, j <<= 1 )
 	{
-		m_PlayerData[0]->SetPlayerCreatedFlag();
+
+		if ( (m_PlayerMask & j) == j )
+		{
+			m_PlayerData[i]->SetPlayerCreatedFlag() ;
+		}
 	}
 
-	if ( (m_PlayerMask & 0x02) == 0x2)
-	{
-		m_PlayerData[1]->SetPlayerCreatedFlag();
-	}
-
-	if ( (m_PlayerMask & 0x04) == 0x4)
-	{
-		m_PlayerData[2]->SetPlayerCreatedFlag();
-	}
-
-	if ( (m_PlayerMask & 0x08) == 0x8)
-	{
-		m_PlayerData[3]->SetPlayerCreatedFlag();
-	}
 }

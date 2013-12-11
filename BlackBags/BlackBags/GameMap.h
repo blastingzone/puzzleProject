@@ -147,6 +147,21 @@ private:
 		게임 설정에 따라서 필요한 부분만 다른 MapObject로 속성 변경해서 사용 */
 	std::array<std::array<MapObject, MAX_MAP_HEIGHT>, MAX_MAP_WIDTH> m_Map;
 
+	// 참고해!! 이런식으로 그냥 2차원 배열 형태로 쓰면 편하겠지? 
+	//@{
+	/* 여기 잘 보시오
+	template <typename IType, int ROW, int COL>
+	struct array2d_
+	{
+		typedef std::array< std::array<IType, COL>, ROW> type ;
+	} ;
+
+	typedef array2d_<MapObject, MAX_MAP_WIDTH, MAX_MAP_HEIGHT>::type MapObjMap ;
+	MapObjMap m_Mapzzzz ;
+	*/
+	//@}
+
+
 	/*	실제 게임 설정에 따른 필요한 맵 크기
 		울타리나 점은 고려하지 않은 순수한 타일 수만 의미 */
 	MapSize	m_MapSize;

@@ -57,7 +57,7 @@ private:
 	void SetClickArea();
 	
 	int			m_PlayerNumber;
-	CPlayer*	m_Player[MAX_PLAYER_NUM];
+	CPlayer*	m_Player[MAX_PLAYER_NUM]; //조심해!!!! std::array를 쓰기로 했으면 대동단결
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
 

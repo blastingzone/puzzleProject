@@ -38,6 +38,9 @@ void CSoundRenderer::ReleaseInstance()
 
 bool CSoundRenderer::Init()
 {
+	// 조심해!!
+	// assert 다 고쳐야해!!
+
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
 	assert(fr == FMOD_OK);
