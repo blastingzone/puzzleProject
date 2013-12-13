@@ -142,49 +142,127 @@ bool CSettingMenu::CreateResource()
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
 		assert(SUCCEEDED(hr));
-
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		/* Player별 마우스 오버 및 선택시 색상 */
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
 
 		assert(SUCCEEDED(hr));
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 
 		assert(SUCCEEDED(hr));
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
 		/* Player, 맵 버튼에서 마우스 오버 및 선택시 색상 */
 
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
+		assert(SUCCEEDED(hr));
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapBackgroundBrush);
-		assert(SUCCEEDED(hr));
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(245.0f/255,93.0f/255,111.0f/255), &m_pMapSelectedBackgroundBrush);
+		if (SUCCEEDED(hr))
+		{
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(245.0f/255,93.0f/255,111.0f/255), &m_pMapSelectedBackgroundBrush);
+		}
+		else
+		{
+			ErrorHandling();
+		}
 		assert(SUCCEEDED(hr));
 
 		if (SUCCEEDED(hr) )
@@ -200,6 +278,10 @@ bool CSettingMenu::CreateResource()
 				filepath.append(L".png");
 				m_pCharacterFace[i] = CRenderer::GetInstance()->CreateImage(filepath, m_pCharacterFace[i]);
 			}
+		}
+		else
+		{
+			ErrorHandling();
 		}
 
 		hr = DWriteCreateFactory(
@@ -243,72 +325,136 @@ void CSettingMenu::RefreshTextSize()
 		);
 	assert(SUCCEEDED(hr));
 
-	hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
 	// MapSelect 창의 TextFormat도 바꿈
-	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
-		NULL,
-		DWRITE_FONT_WEIGHT_THIN,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_PlayerSelectTextSize,
-		L"ko",
-		&m_MapSelectTextFormat
-		);
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerSelectTextSize,
+			L"ko",
+			&m_MapSelectTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+
 	assert(SUCCEEDED(hr));
 
-	hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
 	// NextButton TextFormat 생성
-	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
-		NULL,
-		DWRITE_FONT_WEIGHT_THIN,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_NextButtonTextSize,
-		L"ko",
-		&m_NextButtonTextFormat
-		);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_NextButtonTextSize,
+			L"ko",
+			&m_NextButtonTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
-	hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
 	// Subtitle TextFormat 생성
 	// PlayerTitle 기준으로 통일
-	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
-		NULL,
-		DWRITE_FONT_WEIGHT_THIN,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_PlayerTitleTextSize,
-		L"ko",
-		&m_SubTitleTextFormat
-		);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerTitleTextSize,
+			L"ko",
+			&m_SubTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	
+	assert(SUCCEEDED(hr));
+	if (SUCCEEDED(hr))
+	{
+		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
-	hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	if (SUCCEEDED(hr))
+	{
+		// Maintitle TextFormat 생성
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_SettingTitleTextSize,
+			L"ko",
+			&m_MainTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 
-	// Maintitle TextFormat 생성
-	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
-		NULL,
-		DWRITE_FONT_WEIGHT_THIN,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_SettingTitleTextSize,
-		L"ko",
-		&m_MainTitleTextFormat
-		);
-	assert(SUCCEEDED(hr));
-
-	hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
 	assert(SUCCEEDED(hr));
 }
 
@@ -602,4 +748,15 @@ void CSettingMenu::CancelPlayerSelected(int idx)
 		m_PlayerMask -= MASK_PLAYER_4;
 		break;
 	}
+}
+
+void CSettingMenu::ErrorHandling()
+{
+	//왜 MessageBox 함수가 작동하지 않는지??
+	//해결 : MB_DEFAULT_DESKTOP_ONLY를 추가해준다!
+	std::wstring errorText = L"Error Code : ";
+	errorText.append( std::to_wstring( GetLastError() ) );
+	MessageBox(NULL, errorText.c_str(), L"Error!", MB_ICONERROR|MB_DEFAULT_DESKTOP_ONLY);
+	// 비정상 종료
+	PostQuitMessage(-1);
 }

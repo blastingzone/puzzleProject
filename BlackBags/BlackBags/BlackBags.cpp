@@ -140,6 +140,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		return FALSE;
 	}
+	CGameData::GetInstance()->SetWindowsHwnd(hWnd);
 	
 	if (!CRenderer::GetInstance()->Init(hWnd) )
 	{

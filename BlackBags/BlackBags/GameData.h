@@ -31,21 +31,24 @@ public:
 	void		SetPlayerTurn(int idx, int playerTurn);
 	int			GetPlayerTurn(int idx);	
 
-	void InitPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = false; }
-	void SetPlaySceneTimerFlag()	{ m_PlaySceneTimerFlag = true; }
-	bool GetPlaySceneTimerFlag()	{ return m_PlaySceneTimerFlag; }
+	void		InitPlaySceneTimerFlag()					{ m_PlaySceneTimerFlag = false; }
+	void		SetPlaySceneTimerFlag()						{ m_PlaySceneTimerFlag = true; }
+	bool		GetPlaySceneTimerFlag()						{ return m_PlaySceneTimerFlag; }
 
 	CPlayer*	GetPlayerPtrByTurn(int turn);
 
-	SceneName GetCurrentScene()								{ return m_CurrentScene; }
-	void SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
+	SceneName	GetCurrentScene()									{ return m_CurrentScene; }
+	void		SetCurrentScene(const SceneName& currentScene)		{ m_CurrentScene = currentScene; }
 
 	//Playermask (ex : 0001 = player1, 1001 = Player4, Player1)
-	void	SetPlayerMask(int mask);
-	bool	GetPlayerCreatedFlag(int idx);
+	void		SetPlayerMask(int mask);
+	bool		GetPlayerCreatedFlag(int idx);
+
+	void		SetWindowsHwnd(HWND hWnd)						{ m_hWnd = hWnd; }
+	HWND		GetWindowsHwnd()								{ if (nullptr != m_hWnd) return m_hWnd; }
 
 private:
-	void createPlayer();
+	void		createPlayer();
 
 	static CGameData*	m_pInstance; //singleton instance
 	MapSize				m_MapSize;
@@ -59,4 +62,8 @@ private:
 	int					m_PlayerNumber;
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerData;
+
+	// 에러 헨들링을 위한 HWND
+	// 아 이거 힘들게 만들었는데 안써도 되네요;; 메시지 박스 옵션이 알아서 함 ㅎㅎ
+	HWND				m_hWnd;
 };

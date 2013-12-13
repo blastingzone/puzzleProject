@@ -66,6 +66,8 @@ void CGameData::Init()
 	SetMapSize(0, 0);
 
 	m_PlaySceneTimerFlag = false;
+
+	m_hWnd = nullptr;
 }
 
 void CGameData::SetMapSize(int x, int y)

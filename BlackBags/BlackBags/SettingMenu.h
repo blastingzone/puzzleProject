@@ -153,6 +153,8 @@ private:
 	void RefreshTextSize();
 	virtual void SetObjectSize();
 
+	void ErrorHandling();
+
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
