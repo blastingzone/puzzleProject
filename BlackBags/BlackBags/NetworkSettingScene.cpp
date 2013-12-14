@@ -6,6 +6,9 @@
 CNetworkSettingScene::CNetworkSettingScene(void)
 {
 	m_SceneStatus = SC_NETWORK_SETTING;
+
+	m_SelectedPlayerNumber = 0;
+	m_SelectedMapIndex = -1;
 }
 
 
@@ -128,4 +131,67 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 		}
 	}
+}
+
+
+void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
+{
+	int idx = 0;
+
+	D2D1_SIZE_F startPosition = m_SettingMenu->GetStartPosition();
+	D2D1_SIZE_F playerButton = m_SettingMenu->GetPlayerSelectButtonSize();
+	D2D1_SIZE_F mapButton = m_SettingMenu->GetMapSelectButtonSize();
+
+	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
+	{
+		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
+		{
+			m_SettingMenu->InitMouseOver();
+			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_PLAYER_NUM)
+			{
+				return;
+			}
+			m_SettingMenu->SetPlayerMouseOver(idx);
+		}
+	}
+
+	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
+	{
+		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
+			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
+		{
+			m_SettingMenu->InitMouseOver();
+			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			// 인덱스가 넘어가지 않게 함
+			if (idx >= MAX_MAPSIZE_NUM)
+			{
+				return;
+			}
+			m_SettingMenu->SetMapMouseOver(idx);
+		}
+	}
+}
+
+bool CNetworkSettingScene::CheckGameStartCondition()
+{
+	if (m_SelectedPlayerNumber > 1 && (m_SelectedMapIndex != -1) )
+	{
+		return true;
+	}
+	return false;
+}
+
+void CNetworkSettingScene::PlayBGM()
+{
+	CSoundRenderer::GetInstance()->PlayBGM(BGM_SETTING);
+}
+
+void CNetworkSettingScene::StopBGM()
+{
+	CSoundRenderer::GetInstance()->StopBGM();
 }

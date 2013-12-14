@@ -18,7 +18,7 @@ public:
 	virtual void PlayBGM();
 	virtual void StopBGM();
 	
-	bool		 CheckGameStartCondition();
+	virtual bool CheckGameStartCondition();
 
 protected:
 	CSettingMenu*		m_SettingMenu;

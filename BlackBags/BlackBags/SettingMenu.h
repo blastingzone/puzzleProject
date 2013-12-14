@@ -121,13 +121,13 @@ public:
 	virtual void Render();
 
 	virtual D2D1_SIZE_F GetStartPosition()					{ return m_StartPosition; }
-	D2D1_SIZE_F GetPlayerSelectButtonSize();
-	D2D1_SIZE_F GetMapSelectButtonSize();
-	D2D1_SIZE_F GetNextButtonSize();
+	virtual D2D1_SIZE_F GetPlayerSelectButtonSize();
+	virtual D2D1_SIZE_F GetMapSelectButtonSize();
+	virtual D2D1_SIZE_F GetNextButtonSize();
 
-	void SetPlayerMouseOver(int idx);
-	void SetMapMouseOver(int idx);
-	void InitMouseOver();
+	virtual void SetPlayerMouseOver(int idx);
+	virtual void SetMapMouseOver(int idx);
+	virtual void InitMouseOver();
 
 	void SetPlayerSelected(int idx);
 	bool GetPlayerSelected(int idx)					{ return m_PlayerSelect[idx].m_IsSelected; }
@@ -139,7 +139,7 @@ public:
 	int GetMapSizeHeight(int idx)					{ return m_MapSelect[idx].m_GameDataMapSizeHeight; }
 	int GetMapSizeWidth(int idx)					{ return m_MapSelect[idx].m_GameDataMapSizeWidth; }
 
-	void InitMapSelected();
+	virtual void InitMapSelected();
 
 	void SetNextButtonPossible()					{ m_NextButton.m_IsPossible = true; }
 	void SetNextButtonImpossible()					{ m_NextButton.m_IsPossible = false; }
@@ -148,9 +148,8 @@ public:
 
 protected:
 	virtual bool CreateResource();
-
-	void CalcStartPosition();
-	void RefreshTextSize();
+	virtual void CalcStartPosition();
+	virtual void RefreshTextSize();
 	virtual void SetObjectSize();
 
 	void ErrorHandling();

@@ -8,6 +8,46 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 {
 	m_StartPosition.height = 0;
 	m_StartPosition.width = 0;
+
+	m_pUnselectedTextBrush = nullptr;
+	m_pSelectedTextBrush = nullptr;
+	m_pButtonBrush = nullptr;
+	m_pMapBackgroundBrush = nullptr;
+	m_pMapSelectedBackgroundBrush = nullptr;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_pCharacterFace[i] = nullptr;
+	}
+
+	m_PlayerMask = 0;
+
+	// 버튼 초기값들을 설정함
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
+	}
+
+	m_PlayerSelect[0].m_ButtonText = L"Character 1";
+	m_PlayerSelect[1].m_ButtonText = L"Character 2";
+	m_PlayerSelect[2].m_ButtonText = L"Character 3";
+	m_PlayerSelect[3].m_ButtonText = L"Character 4";
+
+	m_MapSelect[0].m_ButtonText = L"5 X 5";
+	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
+	m_MapSelect[0].m_GameDataMapSizeWidth = 5;
+
+	m_MapSelect[1].m_ButtonText = L"8 X 7";
+	m_MapSelect[1].m_GameDataMapSizeHeight = 8;
+	m_MapSelect[1].m_GameDataMapSizeWidth = 7;
+
+	m_MapSelect[2].m_ButtonText = L"9 X 8";
+	m_MapSelect[2].m_GameDataMapSizeHeight = 9;
+	m_MapSelect[2].m_GameDataMapSizeWidth = 8;
+
+	m_MapSelect[3].m_ButtonText = L"10 X 9";
+	m_MapSelect[3].m_GameDataMapSizeHeight = 10;
+	m_MapSelect[3].m_GameDataMapSizeWidth = 9;
 }
 
 
@@ -418,5 +458,295 @@ void CNetworkSettingMenu::PollingCharacterData()
 				m_PlayerSelect[CharacterId].m_IsMine = true;
 			}
 		}
+	}
+}
+
+void CNetworkSettingMenu::CalcStartPosition()
+{
+	D2D1_SIZE_F Position = m_pRenderTarget->GetSize();
+
+	Position.height /= 4;
+	Position.width /= 4;
+
+	m_StartPosition = Position;
+}
+
+// SettingMenu에서 렌더하는 객체들의 크기를 조정한다 (텍스트 포맷은 따로)
+void CNetworkSettingMenu::SetObjectSize()
+{
+	float CurrentScale = CRenderer::GetInstance()->GetDisplayScale();
+
+	m_PlayerSelectTextSize = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_SIZE;
+	m_PlayerSelectTextMargin = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_MARGIN;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_WIDTH;
+		m_PlayerSelect[i].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_HEIGHT;
+	}
+
+	m_MapSelectTextSize = CurrentScale * SC_S_DEFAULT_MAP_TEXT_SIZE;
+	m_MapSelectTextMargin = CurrentScale * SC_S_DEFAULT_MAP_TEXT_MARGIN;
+
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
+		m_MapSelect[j].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
+	}
+
+	m_NextButton.m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
+	m_NextButton.m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
+
+	m_NextButtonTextSize = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_SIZE;
+	m_NextButtonTextMargin = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_MARGIN;
+
+	m_MapTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
+	m_MapTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
+
+	m_PlayerTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
+	m_PlayerTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
+
+	m_PlayerTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
+	m_PlayerTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
+
+	m_MapTitle.m_LayerHeight  = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
+	m_MapTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
+
+	m_SettingTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT;
+	m_SettingTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_WIDTH;
+
+	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
+	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
+
+	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
+	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
+}
+
+void CNetworkSettingMenu::RefreshTextSize()
+{
+	HRESULT hr;
+
+	SafeRelease(m_PlayerSelectTextFormat);
+	SafeRelease(m_MapSelectTextFormat);
+	SafeRelease(m_NextButtonTextFormat);
+	SafeRelease(m_SubTitleTextFormat);
+	SafeRelease(m_MainTitleTextFormat);
+
+	// PlayerSelect 창부터 바꿈
+	hr = m_DWriteFactory->CreateTextFormat(
+		_MENU_FONT,
+		NULL,
+		DWRITE_FONT_WEIGHT_THIN,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		m_PlayerSelectTextSize,
+		L"ko",
+		&m_PlayerSelectTextFormat
+		);
+	assert(SUCCEEDED(hr));
+
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// MapSelect 창의 TextFormat도 바꿈
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerSelectTextSize,
+			L"ko",
+			&m_MapSelectTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// NextButton TextFormat 생성
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_NextButtonTextSize,
+			L"ko",
+			&m_NextButtonTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// Subtitle TextFormat 생성
+	// PlayerTitle 기준으로 통일
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerTitleTextSize,
+			L"ko",
+			&m_SubTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+
+	assert(SUCCEEDED(hr));
+	if (SUCCEEDED(hr))
+	{
+		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		// Maintitle TextFormat 생성
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_SettingTitleTextSize,
+			L"ko",
+			&m_MainTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+}
+
+void CNetworkSettingMenu::ResizeClient()
+{
+	//화면 크기 조절
+	CalcStartPosition();
+	SetObjectSize();
+	RefreshTextSize();
+}
+
+
+D2D1_SIZE_F CNetworkSettingMenu::GetPlayerSelectButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_PlayerSelect[0].m_ButtonHeight;
+	ButtonSize.width = m_PlayerSelect[0].m_ButtonWidth;
+
+	return ButtonSize;
+}
+
+D2D1_SIZE_F CNetworkSettingMenu:: GetMapSelectButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_MapSelect[0].m_ButtonHeight;
+	ButtonSize.width = m_MapSelect[0].m_ButtonWidth;
+
+	return ButtonSize;
+}
+
+D2D1_SIZE_F CNetworkSettingMenu::GetNextButtonSize()
+{
+	D2D1_SIZE_F ButtonSize;
+
+	ButtonSize.height = m_NextButton.m_ButtonHeight;
+	ButtonSize.width = m_NextButton.m_ButtonWidth;
+
+	return ButtonSize;
+}
+
+void CNetworkSettingMenu::SetPlayerMouseOver(int idx)
+{
+	assert(idx < MAX_PLAYER_NUM);
+	m_PlayerSelect[idx].m_IsMouseOver = true;
+}
+
+void CNetworkSettingMenu::SetMapMouseOver(int idx)
+{
+	assert(idx < MAX_MAPSIZE_NUM);
+	m_MapSelect[idx].m_IsMouseOver = true;
+}
+
+void CNetworkSettingMenu::InitMouseOver()
+{
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_IsMouseOver = false;
+	}
+
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_IsMouseOver = false;
+	}
+}
+
+// 맵을 선택했을 때, 혹은 선택한 맵을 다시 클릭했을 때 발생
+void CNetworkSettingMenu::InitMapSelected()
+{
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_IsSelected = false;
 	}
 }
