@@ -14,7 +14,11 @@ CNetworkSettingScene::~CNetworkSettingScene(void)
 
 bool CNetworkSettingScene::Init()
 {
-	CNetworkManager::GetInstance()->Connect();
+	if (!CNetworkManager::GetInstance()->Connect()
+		&&!CNetworkManager::GetInstance()->IsLoginComplete())
+		return false;
+
+	CNetworkManager::GetInstance()->GetClientId();
 
 	m_SettingMenu = new CSettingMenu();
 

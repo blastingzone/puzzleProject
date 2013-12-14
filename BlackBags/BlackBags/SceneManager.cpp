@@ -85,15 +85,13 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 	case SC_CREDIT:
 		m_CurrentScene = new CCreditScene();
 		break;
-	case SC_NETWORK_SETTING:
-		m_CurrentScene = new CNetworkSettingScene();
-		break;
-	case SC_NETWORK_PLAY:
-		//m_CurrentScene = new CNetworkSettingScene();
-		break;
 	case SC_EXIT:
 		PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 		return;
+	case SC_NETWORK_SETTING:
+		m_CurrentScene = new CNetworkSettingScene();
+		CGameData::GetInstance()->Init();
+		break;
 	default:
 		break;
 	}

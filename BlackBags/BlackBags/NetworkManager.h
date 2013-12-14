@@ -15,6 +15,7 @@ public:
 	bool	Init(HWND hwnd);
 
 	bool Connect();
+	bool IsLoginComplete()  { return m_LoginComplete; }
 	void ProcessPacket();
 
 	void GetClientId();
