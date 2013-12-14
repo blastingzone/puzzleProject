@@ -110,14 +110,6 @@ void CNetworkManager::ProcessPacket()
 					m_ClientId = recvData.mPlayerId;
 					m_LoginComplete = true ;
 				
-					char buff[128] = {0, } ;
-					//sprintf_s(buff, "LOGIN SUCCESS ClientId[%d] Name[%s] POS(%.4f, %.4f, %.4f) \n", m_ClientId, recvData.mName, recvData.mPosX, recvData.mPosY, recvData.mPosZ) ;
-
-					static int ypos = 33 ;
-					HDC hdc = GetDC(m_Hwnd) ;
-					TextOutA(hdc, 10, 33, buff, strlen(buff)) ;
-					ReleaseDC(m_Hwnd, hdc) ;
-				
 				}
 				else
 				{

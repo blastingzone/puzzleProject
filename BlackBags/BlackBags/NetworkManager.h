@@ -36,5 +36,7 @@ private:
 	SOCKET						m_Socket;
 	CircularBuffer				m_SendBuffer;
 	CircularBuffer				m_RecvBuffer;
+
+
 };
 

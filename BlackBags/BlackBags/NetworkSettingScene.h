@@ -8,5 +8,7 @@ public:
 	virtual ~CNetworkSettingScene(void);
 
 	virtual bool Init();
+	virtual void EventHandle(Coordinate mouseCoordinate);
+
 };
 
