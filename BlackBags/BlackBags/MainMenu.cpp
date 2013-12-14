@@ -203,7 +203,7 @@ bool CMainMenu::CreateResource()
 		//조심해!
 		//나중에 네트워크 추가되면 씬도 추가해서 수정 할 것
 		m_ButtonList[1].m_ButtonText = L"NETWORK";
-		m_ButtonList[1].m_LinkedScene = SC_NOSCENE;
+		m_ButtonList[1].m_LinkedScene = SC_NETWORK_SETTING;
 
 		m_ButtonList[2].m_ButtonText = L"CREDITS";
 		m_ButtonList[2].m_LinkedScene = SC_CREDIT;

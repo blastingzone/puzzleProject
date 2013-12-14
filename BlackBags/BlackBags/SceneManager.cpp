@@ -8,13 +8,14 @@
 #include "ResultScene.h"
 #include "CreditScene.h"
 #include "GameData.h"
+#include "NetworkSettingScene.h"
 
 
 CSceneManager::CSceneManager(HWND hWnd)
 {
 	m_CurrentScene = nullptr;
-	m_WindowHandle = NULL;
-	m_WindowHandle = hWnd;
+	m_Hwnd = NULL;
+	m_Hwnd = hWnd;
 	
 }
 
@@ -84,8 +85,14 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 	case SC_CREDIT:
 		m_CurrentScene = new CCreditScene();
 		break;
+	case SC_NETWORK_SETTING:
+		m_CurrentScene = new CNetworkSettingScene();
+		break;
+	case SC_NETWORK_PLAY:
+		//m_CurrentScene = new CNetworkSettingScene();
+		break;
 	case SC_EXIT:
-		PostMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
+		PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 		return;
 	default:
 		break;
@@ -93,7 +100,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 
 	if (!m_CurrentScene->Init() )
 	{
-		PostMessage(m_WindowHandle, WM_DESTROY, NULL, NULL);
+		PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 	}
 }
 

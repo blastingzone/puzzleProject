@@ -20,7 +20,7 @@ public:
 	
 	bool		 CheckGameStartCondition();
 
-private:
+protected:
 	CSettingMenu*		m_SettingMenu;
 	int					m_SelectedPlayerNumber;
 	int					m_SelectedMapIndex;

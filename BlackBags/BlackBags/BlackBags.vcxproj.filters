@@ -48,6 +48,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{c71a4991-76c1-42d2-99e3-6599bafa5d00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\NetworkSettingScene">
+      <UniqueIdentifier>{e24faa2c-8a92-4f9f-bae0-71bf8cf852bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -151,6 +157,18 @@
     <ClInclude Include="BlackBags.h">
       <Filter>BlackBags</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularBuffer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketType.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkSettingScene.h">
+      <Filter>BlackBags</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -225,6 +243,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>BlackBags</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularBuffer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSettingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="BlackBags.ico">

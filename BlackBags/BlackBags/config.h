@@ -146,7 +146,9 @@ enum SceneName	//Scene 이름들
 	SC_RESULT,
 	SC_CREDIT,
 	SC_NOSCENE,
-	SC_EXIT
+	SC_EXIT,
+	SC_NETWORK_SETTING,
+	SC_NETWORK_PLAY
 };
 
 enum SOUND_BGMList
