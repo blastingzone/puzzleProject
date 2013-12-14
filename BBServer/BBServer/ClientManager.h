@@ -13,6 +13,7 @@ public:
 	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0)
 	{
 		memset(mClientIdList,false,sizeof(mClientIdList));
+		memset(mCharacterSelectStatus,-1,sizeof(mCharacterSelectStatus));
 	}
 
 	ClientSession* CreateClient(SOCKET sock) ;

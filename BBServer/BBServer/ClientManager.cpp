@@ -80,12 +80,12 @@ void ClientManager::CollectGarbageSessions()
 	
 
 	///FYI: C언어 스타일의 루프
-	for (size_t i=0 ; i<disconnectedSessions.size() ; ++i)
-	{
-		ClientSession* client = disconnectedSessions[i] ;
-		mClientList.erase(client->mSocket) ;
-		delete client ;
-	}
+// 	for (size_t i=0 ; i<disconnectedSessions.size() ; ++i)
+// 	{
+// 		ClientSession* client = disconnectedSessions[i] ;
+// 		mClientList.erase(client->mSocket) ;
+// 		delete client ;
+// 	}
 
 }
 
