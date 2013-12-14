@@ -1,23 +1,28 @@
 #pragma once
-#include "settingscene.h"
+#include "scene.h"
 #include "NetworkSettingMenu.h"
 
 class CNetworkSettingScene :
-	public CSettingScene
+	public CScene
 {
 public:
 	CNetworkSettingScene(void);
 	virtual ~CNetworkSettingScene(void);
 
 	virtual bool Init();
+
 	virtual void MouseOver(Coordinate mouseCoordinate);
 	virtual void EventHandle(Coordinate mouseCoordinate);
+	virtual void Render();
 
 	virtual void PlayBGM();
 	virtual void StopBGM();
 
-	virtual bool CheckGameStartCondition();
+	bool CheckGameStartCondition();
 
-	CNetworkSettingMenu* m_SettingMenu;
+private:
+	CNetworkSettingMenu*	m_SettingMenu;
+	int						m_SelectedPlayerNumber;
+	int						m_SelectedMapIndex;
 };
 

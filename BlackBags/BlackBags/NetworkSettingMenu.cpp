@@ -55,6 +55,84 @@ CNetworkSettingMenu::~CNetworkSettingMenu(void)
 {
 }
 
+bool CNetworkSettingMenu::Init()
+{
+	if (!CreateResource() )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void CNetworkSettingMenu::CalcStartPosition()
+{
+	D2D1_SIZE_F Position = m_pRenderTarget->GetSize();
+
+	Position.height /= 4;
+	Position.width /= 4;
+
+	m_StartPosition = Position;
+}
+
+// SettingMenu에서 렌더하는 객체들의 크기를 조정한다 (텍스트 포맷은 따로)
+void CNetworkSettingMenu::SetObjectSize()
+{
+	float CurrentScale = CRenderer::GetInstance()->GetDisplayScale();
+
+	m_PlayerSelectTextSize = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_SIZE;
+	m_PlayerSelectTextMargin = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_MARGIN;
+
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_WIDTH;
+		m_PlayerSelect[i].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_HEIGHT;
+	}
+
+	m_MapSelectTextSize = CurrentScale * SC_S_DEFAULT_MAP_TEXT_SIZE;
+	m_MapSelectTextMargin = CurrentScale * SC_S_DEFAULT_MAP_TEXT_MARGIN;
+
+	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
+	{
+		m_MapSelect[j].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
+		m_MapSelect[j].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
+	}
+
+	m_NextButton.m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
+	m_NextButton.m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
+
+	m_NextButtonTextSize = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_SIZE;
+	m_NextButtonTextMargin = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_MARGIN;
+
+	m_MapTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
+	m_MapTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
+
+	m_PlayerTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
+	m_PlayerTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
+
+	m_PlayerTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
+	m_PlayerTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
+
+	m_MapTitle.m_LayerHeight  = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
+	m_MapTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
+
+	m_SettingTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT;
+	m_SettingTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_WIDTH;
+
+	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
+	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
+
+	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
+	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
+}
+
+void CNetworkSettingMenu::ResizeClient()
+{
+	//화면 크기 조절
+	CalcStartPosition();
+	SetObjectSize();
+	RefreshTextSize();
+}
 
 bool CNetworkSettingMenu::CreateResource()
 {
@@ -238,9 +316,166 @@ bool CNetworkSettingMenu::CreateResource()
 	return true;
 }
 
+void CNetworkSettingMenu::RefreshTextSize()
+{
+	HRESULT hr;
+
+	SafeRelease(m_PlayerSelectTextFormat);
+	SafeRelease(m_MapSelectTextFormat);
+	SafeRelease(m_NextButtonTextFormat);
+	SafeRelease(m_SubTitleTextFormat);
+	SafeRelease(m_MainTitleTextFormat);
+
+	// PlayerSelect 창부터 바꿈
+	hr = m_DWriteFactory->CreateTextFormat(
+		_MENU_FONT,
+		NULL,
+		DWRITE_FONT_WEIGHT_THIN,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		m_PlayerSelectTextSize,
+		L"ko",
+		&m_PlayerSelectTextFormat
+		);
+	assert(SUCCEEDED(hr));
+
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// MapSelect 창의 TextFormat도 바꿈
+	if ( SUCCEEDED(hr) )
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerSelectTextSize,
+			L"ko",
+			&m_MapSelectTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// NextButton TextFormat 생성
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_NextButtonTextSize,
+			L"ko",
+			&m_NextButtonTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	// Subtitle TextFormat 생성
+	// PlayerTitle 기준으로 통일
+	if (SUCCEEDED(hr))
+	{
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_PlayerTitleTextSize,
+			L"ko",
+			&m_SubTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+
+	assert(SUCCEEDED(hr));
+	if (SUCCEEDED(hr))
+	{
+		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		// Maintitle TextFormat 생성
+		hr = m_DWriteFactory->CreateTextFormat(
+			_MENU_FONT,
+			NULL,
+			DWRITE_FONT_WEIGHT_THIN,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_SettingTitleTextSize,
+			L"ko",
+			&m_MainTitleTextFormat
+			);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+
+	if (SUCCEEDED(hr))
+	{
+		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		ErrorHandling();
+	}
+	assert(SUCCEEDED(hr));
+}
 
 void CNetworkSettingMenu::Render()
 {
+	//조심해!
+	//고칠 것!
 	PollingCharacterData();
 
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
@@ -435,259 +670,6 @@ void CNetworkSettingMenu::Render()
 	}
 }
 
-void CNetworkSettingMenu::InitMineFlag()
-{
-	for (int i = 0 ; i < MAX_PLAYER_NUM; ++i)
-	{
-		m_PlayerSelect[i].m_IsMine = false;
-	}
-}
-
-void CNetworkSettingMenu::PollingCharacterData()
-{
-	for (int PlayerId = 0; PlayerId < MAX_PLAYER_NUM ; ++PlayerId)
-	{
-		int CharacterId = CNetworkManager::GetInstance()->GetCharacterId(PlayerId);
-		
-		m_PlayerSelect[CharacterId].m_IsSelected = false;
-		m_PlayerSelect[CharacterId].m_IsMine = false;
-
-		if ( 0 <= CharacterId )
-		{
-			m_PlayerSelect[CharacterId].m_IsSelected = true;
-			if ( PlayerId == CNetworkManager::GetInstance()->GetClientId() )
-			{
-				m_PlayerSelect[CharacterId].m_IsMine = true;
-			}
-		}
-	}
-}
-
-void CNetworkSettingMenu::CalcStartPosition()
-{
-	D2D1_SIZE_F Position = m_pRenderTarget->GetSize();
-
-	Position.height /= 4;
-	Position.width /= 4;
-
-	m_StartPosition = Position;
-}
-
-// SettingMenu에서 렌더하는 객체들의 크기를 조정한다 (텍스트 포맷은 따로)
-void CNetworkSettingMenu::SetObjectSize()
-{
-	float CurrentScale = CRenderer::GetInstance()->GetDisplayScale();
-
-	m_PlayerSelectTextSize = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_SIZE;
-	m_PlayerSelectTextMargin = CurrentScale * SC_S_DEFAULT_PLAYER_TEXT_MARGIN;
-
-	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
-	{
-		m_PlayerSelect[i].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_WIDTH;
-		m_PlayerSelect[i].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_HEIGHT;
-	}
-
-	m_MapSelectTextSize = CurrentScale * SC_S_DEFAULT_MAP_TEXT_SIZE;
-	m_MapSelectTextMargin = CurrentScale * SC_S_DEFAULT_MAP_TEXT_MARGIN;
-
-	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
-	{
-		m_MapSelect[j].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
-		m_MapSelect[j].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
-	}
-
-	m_NextButton.m_ButtonHeight = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_HEIGHT;
-	m_NextButton.m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
-
-	m_NextButtonTextSize = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_SIZE;
-	m_NextButtonTextMargin = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_MARGIN;
-
-	m_MapTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
-	m_MapTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
-
-	m_PlayerTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
-	m_PlayerTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
-
-	m_PlayerTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
-	m_PlayerTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
-
-	m_MapTitle.m_LayerHeight  = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
-	m_MapTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
-
-	m_SettingTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT;
-	m_SettingTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_WIDTH;
-
-	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
-	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
-
-	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
-	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
-}
-
-void CNetworkSettingMenu::RefreshTextSize()
-{
-	HRESULT hr;
-
-	SafeRelease(m_PlayerSelectTextFormat);
-	SafeRelease(m_MapSelectTextFormat);
-	SafeRelease(m_NextButtonTextFormat);
-	SafeRelease(m_SubTitleTextFormat);
-	SafeRelease(m_MainTitleTextFormat);
-
-	// PlayerSelect 창부터 바꿈
-	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
-		NULL,
-		DWRITE_FONT_WEIGHT_THIN,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_PlayerSelectTextSize,
-		L"ko",
-		&m_PlayerSelectTextFormat
-		);
-	assert(SUCCEEDED(hr));
-
-	if ( SUCCEEDED(hr) )
-	{
-		hr = m_PlayerSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	// MapSelect 창의 TextFormat도 바꿈
-	if ( SUCCEEDED(hr) )
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_PlayerSelectTextSize,
-			L"ko",
-			&m_MapSelectTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	// NextButton TextFormat 생성
-	if (SUCCEEDED(hr))
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_NextButtonTextSize,
-			L"ko",
-			&m_NextButtonTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	// Subtitle TextFormat 생성
-	// PlayerTitle 기준으로 통일
-	if (SUCCEEDED(hr))
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_PlayerTitleTextSize,
-			L"ko",
-			&m_SubTitleTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-
-	assert(SUCCEEDED(hr));
-	if (SUCCEEDED(hr))
-	{
-		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		// Maintitle TextFormat 생성
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_SettingTitleTextSize,
-			L"ko",
-			&m_MainTitleTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-}
-
-void CNetworkSettingMenu::ResizeClient()
-{
-	//화면 크기 조절
-	CalcStartPosition();
-	SetObjectSize();
-	RefreshTextSize();
-}
-
 
 D2D1_SIZE_F CNetworkSettingMenu::GetPlayerSelectButtonSize()
 {
@@ -750,5 +732,85 @@ void CNetworkSettingMenu::InitMapSelected()
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		m_MapSelect[j].m_IsSelected = false;
+	}
+}
+
+// Mask 값을 할당하여 어떤 플레이어가 선택되었는지 4비트로 알 수 있게
+void CNetworkSettingMenu::SetPlayerSelected(int idx)
+{
+	m_PlayerSelect[idx].m_IsSelected = true;
+	switch (idx)
+	{
+	case 0:
+		m_PlayerMask += MASK_PLAYER_1;
+		break;
+	case 1:
+		m_PlayerMask += MASK_PLAYER_2;
+		break;
+	case 2:
+		m_PlayerMask += MASK_PLAYER_3;
+		break;
+	case 3:
+		m_PlayerMask += MASK_PLAYER_4;
+		break;
+	}
+}
+
+void CNetworkSettingMenu::CancelPlayerSelected(int idx)
+{
+	m_PlayerSelect[idx].m_IsSelected = false;
+	switch (idx)
+	{
+	case 0:
+		m_PlayerMask -= MASK_PLAYER_1;
+		break;
+	case 1:
+		m_PlayerMask -= MASK_PLAYER_2;
+		break;
+	case 2:
+		m_PlayerMask -= MASK_PLAYER_3;
+		break;
+	case 3:
+		m_PlayerMask -= MASK_PLAYER_4;
+		break;
+	}
+}
+
+void CNetworkSettingMenu::ErrorHandling()
+{
+	//왜 MessageBox 함수가 작동하지 않는지??
+	//해결 : MB_DEFAULT_DESKTOP_ONLY를 추가해준다!
+	std::wstring errorText = L"Error Code : ";
+	errorText.append( std::to_wstring( GetLastError() ) );
+	MessageBox(NULL, errorText.c_str(), L"Error!", MB_ICONERROR|MB_DEFAULT_DESKTOP_ONLY);
+	// 비정상 종료
+	PostQuitMessage(-1);
+}
+
+void CNetworkSettingMenu::InitMineFlag()
+{
+	for (int i = 0 ; i < MAX_PLAYER_NUM; ++i)
+	{
+		m_PlayerSelect[i].m_IsMine = false;
+	}
+}
+
+void CNetworkSettingMenu::PollingCharacterData()
+{
+	for (int PlayerId = 0; PlayerId < MAX_PLAYER_NUM ; ++PlayerId)
+	{
+		int CharacterId = CNetworkManager::GetInstance()->GetCharacterId(PlayerId);
+		
+		m_PlayerSelect[CharacterId].m_IsSelected = false;
+		m_PlayerSelect[CharacterId].m_IsMine = false;
+
+		if ( 0 <= CharacterId )
+		{
+			m_PlayerSelect[CharacterId].m_IsSelected = true;
+			if ( PlayerId == CNetworkManager::GetInstance()->GetClientId() )
+			{
+				m_PlayerSelect[CharacterId].m_IsMine = true;
+			}
+		}
 	}
 }

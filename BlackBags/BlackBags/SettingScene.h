@@ -18,9 +18,9 @@ public:
 	virtual void PlayBGM();
 	virtual void StopBGM();
 	
-	virtual bool CheckGameStartCondition();
+	bool		 CheckGameStartCondition();
 
-protected:
+private:
 	CSettingMenu*		m_SettingMenu;
 	int					m_SelectedPlayerNumber;
 	int					m_SelectedMapIndex;

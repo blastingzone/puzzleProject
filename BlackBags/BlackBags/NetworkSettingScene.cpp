@@ -14,6 +14,8 @@ CNetworkSettingScene::CNetworkSettingScene(void)
 
 CNetworkSettingScene::~CNetworkSettingScene(void)
 {
+	RemoveObject();
+	SafeDelete(m_SettingMenu);
 }
 
 bool CNetworkSettingScene::Init()
@@ -180,6 +182,18 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 			}
 			m_SettingMenu->SetMapMouseOver(idx);
 		}
+	}
+}
+
+void CNetworkSettingScene::Render()
+{
+	for (auto iter: m_Object)
+	{
+		iter->Render();
+#ifdef _DEBUG		
+		CFPS::GetInstance()->Update();
+		CFPS::GetInstance()->Render();
+#endif
 	}
 }
 
