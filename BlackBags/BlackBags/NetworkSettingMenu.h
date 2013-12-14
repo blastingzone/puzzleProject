@@ -32,6 +32,7 @@ public:
 	bool	GetIsMineFlag(int idx)					{ return m_PlayerSelect[idx].m_IsMine; }
 	void	SetIsMineFlag(int idx, bool flag)		{ m_PlayerSelect[idx].m_IsMine = flag; }
 	void	InitMineFlag();
+	void	PollingCharacterData();
 
 protected:
 	virtual bool				CreateResource();
@@ -39,7 +40,6 @@ protected:
 	virtual void				RefreshTextSize();
 	virtual void				SetObjectSize();
 
-	void						PollingCharacterData();
 
 	NetworkPlayerSelect			m_PlayerSelect[MAX_PLAYER_NUM];
 	

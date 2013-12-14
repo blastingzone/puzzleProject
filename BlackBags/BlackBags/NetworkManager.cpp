@@ -134,7 +134,7 @@ void CNetworkManager::ProcessPacket()
 					}
 				}
 			}
-
+			break;
 
 		case PKT_SC_IDX:
 			{
