@@ -80,7 +80,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\PacketType.h" />
     <ClInclude Include="BBServer.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ClientManager.h" />

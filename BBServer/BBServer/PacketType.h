@@ -12,6 +12,9 @@ enum PacketTypes
 	PKT_CS_LOGIN	= 1,
 	PKT_SC_LOGIN	= 2,
 
+	PKT_CS_CHARACTER_SELECT = 3,
+	PKT_SC_CHARACTER_SELECT = 4,
+
 	PKT_CS_IDX		= 5,
 	PKT_SC_IDX		= 6,
 } ;
@@ -51,6 +54,35 @@ struct LoginResult : public PacketHeader
 
 	int		mPlayerId ;
 	char	mName[MAX_NAME_LEN] ;
+
+} ;
+
+struct CharacterRequest : public PacketHeader
+{
+	CharacterRequest()
+	{
+		mSize = sizeof(CharacterRequest) ;
+		mType = PKT_CS_CHARACTER_SELECT ;
+		mPlayerId = -1 ;
+		mCharacterId = -1;
+	}
+
+	int		mPlayerId ;
+	int		mCharacterId ;
+} ;
+
+struct CharacterResult : public PacketHeader
+{
+	CharacterResult()
+	{
+		mSize = sizeof(CharacterResult) ;
+		mType = PKT_SC_CHARACTER_SELECT ;
+		mPlayerId = -1 ;
+		mCharacterId = -1;
+	}
+
+	int		mPlayerId ;
+	int		mCharacterId ;
 
 } ;
 
