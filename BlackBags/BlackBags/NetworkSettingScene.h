@@ -1,5 +1,7 @@
 #pragma once
 #include "settingscene.h"
+#include "NetworkSettingMenu.h"
+
 class CNetworkSettingScene :
 	public CSettingScene
 {
@@ -10,5 +12,6 @@ public:
 	virtual bool Init();
 	virtual void EventHandle(Coordinate mouseCoordinate);
 
+	CNetworkSettingMenu* m_SettingMenu;
 };
 

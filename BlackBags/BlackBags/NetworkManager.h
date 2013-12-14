@@ -15,13 +15,22 @@ public:
 	bool	Init(HWND hwnd);
 
 	bool Connect();
-	bool IsLoginComplete()  { return m_LoginComplete; }
+	bool IsLoginComplete()				{ return m_LoginComplete; }
 	void ProcessPacket();
 
-	void GetClientId();
+	int GetClientId()					{ return m_ClientId; }
+
+	CircularBuffer*	GetSendBuffer()		{ return &m_SendBuffer; }
+	CircularBuffer*	GetRecvBuffer()		{ return &m_RecvBuffer; }
+
+	void AskClientId();
 	void Read();
 	void Write();
 	void CloseSocket();
+
+	// 예외처리는 부르는 쪽에서 ( PlayerId < MAX_PLAYER_NUM )
+	int	GetCharacterId(int PlayerId)		{ assert(PlayerId < MAX_PLAYER_NUM); return m_CharacterIdx[PlayerId]; }
+
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance
 	HWND						m_Hwnd;
@@ -37,6 +46,7 @@ private:
 	CircularBuffer				m_SendBuffer;
 	CircularBuffer				m_RecvBuffer;
 
-
+	// 각 사용자의 캐릭터 선택 정보를 가져오기 위한 배열
+	int							m_CharacterIdx[MAX_PLAYER_NUM];
 };
 

@@ -120,7 +120,7 @@ public:
 	virtual void ResizeClient();
 	virtual void Render();
 
-	D2D1_SIZE_F GetStartPosition()					{ return m_StartPosition; }
+	virtual D2D1_SIZE_F GetStartPosition()					{ return m_StartPosition; }
 	D2D1_SIZE_F GetPlayerSelectButtonSize();
 	D2D1_SIZE_F GetMapSelectButtonSize();
 	D2D1_SIZE_F GetNextButtonSize();
@@ -146,8 +146,8 @@ public:
 
 	int GetPlayerMask()								{ return m_PlayerMask; }
 
-private:
-	bool CreateResource();
+protected:
+	virtual bool CreateResource();
 
 	void CalcStartPosition();
 	void RefreshTextSize();

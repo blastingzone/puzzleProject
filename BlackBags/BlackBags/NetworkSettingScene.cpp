@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "NetworkSettingScene.h"
 #include "NetworkManager.h"
+#include "PacketType.h"
 
 CNetworkSettingScene::CNetworkSettingScene(void)
 {
@@ -18,9 +19,9 @@ bool CNetworkSettingScene::Init()
 		&&!CNetworkManager::GetInstance()->IsLoginComplete())
 		return false;
 
-	CNetworkManager::GetInstance()->GetClientId();
+	CNetworkManager::GetInstance()->AskClientId();
 
-	m_SettingMenu = new CSettingMenu();
+	m_SettingMenu = new CNetworkSettingMenu();
 
 	if (m_SettingMenu == nullptr || !m_SettingMenu->Init() )
 	{
@@ -57,15 +58,29 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 				return;
 			}
 
+			CharacterRequest characterSelectedByClient;
+			characterSelectedByClient.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
+
+			// 캐릭터를 선택해서 내 걸로 만든다 조건 : IsMine이 True여야 한다
 			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
 			{
-				++m_SelectedPlayerNumber;
-				m_SettingMenu->SetPlayerSelected(idx);
+				// 서버에 물어보고 확인한다.
+// 				++m_SelectedPlayerNumber;
+// 				m_SettingMenu->SetPlayerSelected(idx);
+				
+				characterSelectedByClient.mCharacterId = idx;
+				CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize);
 			}
-			else if (m_SettingMenu->GetPlayerSelected(idx) )
+
+			// 내 캐릭터일 경우에만 취소시킬 수 있고 그 외에는 무시하게 만든다
+			else if ( m_SettingMenu->GetPlayerSelected(idx) && m_SettingMenu->GetIsMineFlag(idx) )
 			{
-				--m_SelectedPlayerNumber;
-				m_SettingMenu->CancelPlayerSelected(idx);
+				// 서버에 물어보고 확인한다.
+// 				--m_SelectedPlayerNumber;
+// 				m_SettingMenu->CancelPlayerSelected(idx);
+				
+				characterSelectedByClient.mCharacterId = -1;
+				CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize);
 			}
 		}
 	}

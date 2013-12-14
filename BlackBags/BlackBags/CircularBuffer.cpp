@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CircularBuffer.h"
+#include "PacketType.h"
 
 
 CircularBuffer::CircularBuffer(size_t capacity)
@@ -46,6 +47,42 @@ bool CircularBuffer::Write(const char* data, size_t bytes)
 
 	return true ;
 }
+
+
+bool CircularBuffer::Write(PacketHeader* packet, size_t bytes)
+{
+	if (bytes == 0)
+		return false ;
+
+	/// 용량 부족
+	if ( bytes > mCapacity - mCurrentSize )
+		return false ;
+
+	// 바로 쓰기 가능한 경우
+	if ( bytes <= mCapacity - mEndIndex )
+	{
+		memcpy(mData + mEndIndex, packet, bytes) ;
+		mEndIndex += bytes ;
+
+		if ( mEndIndex == mCapacity )
+			mEndIndex = 0 ;
+	}
+	// 쪼개서 써야 될 경우
+	else
+	{
+		size_t size1 = mCapacity - mEndIndex ;
+		memcpy(mData + mEndIndex, packet, size1) ;
+
+		size_t size2 = bytes - size1 ;
+		memcpy(mData, packet + size1, size2) ;
+		mEndIndex = size2 ;
+	}
+
+	mCurrentSize += bytes ;
+
+	return true ;
+}
+
 
 bool CircularBuffer::Read(char* data, size_t bytes)
 {

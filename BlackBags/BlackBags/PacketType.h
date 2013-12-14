@@ -77,13 +77,10 @@ struct CharacterResult : public PacketHeader
 	{
 		mSize = sizeof(CharacterResult) ;
 		mType = PKT_SC_CHARACTER_SELECT ;
-		mPlayerId = -1 ;
-		mCharacterId = -1;
+		// 인덱스가 플레이어 - 밸류가 캐릭터
+		memset( mCharacterId, -1, sizeof(mCharacterId) );
 	}
-
-	int		mPlayerId ;
-	int		mCharacterId ;
-
+	int		mCharacterId[MAX_PLAYER_NUM] ;
 } ;
 
 

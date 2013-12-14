@@ -1,5 +1,6 @@
 #pragma once
 
+struct PacketHeader;
 
 class CircularBuffer
 {
@@ -18,7 +19,8 @@ public:
   }
 
   bool Write(const char* data, size_t bytes) ;
-  
+  bool Write(PacketHeader* packet, size_t bytes) ;
+
   bool Read(char* data, size_t bytes) ;
 
   /// 데이터 훔쳐보기 (제거하지 않고)

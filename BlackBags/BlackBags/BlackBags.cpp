@@ -30,7 +30,6 @@ TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 RECT			g_ClientRect;							// window client size
 CSceneManager*	g_Manager;
-CNetworkManager* g_NetworkManager;
 
 
 // Forward declarations of functions included in this code module:
@@ -293,19 +292,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 			case FD_CONNECT:
 				{
-					g_NetworkManager->GetInstance()->GetClientId();
+					CNetworkManager::GetInstance()->AskClientId();
 				}
 				break ;
 
 			case FD_READ:
 				{
-					g_NetworkManager->GetInstance()->Read();
+					CNetworkManager::GetInstance()->Read();
 				}
 				break;
 
 			case FD_WRITE:
 				{
-					g_NetworkManager->GetInstance()->Write();
+					CNetworkManager::GetInstance()->Write();
 				}
 				break ;
 

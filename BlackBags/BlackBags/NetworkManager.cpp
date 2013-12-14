@@ -19,6 +19,11 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 	m_Port = 9001 ;
 	m_LoginComplete = false ;
 	m_Socket = NULL ;
+
+	for (int i = 0; i < MAX_PLAYER_NUM ; ++i)
+	{
+		m_CharacterIdx[i] = -1;
+	}
 }
 
 CNetworkManager::~CNetworkManager(void)
@@ -118,6 +123,19 @@ void CNetworkManager::ProcessPacket()
 			}
 			break ;
 
+		case PKT_SC_CHARACTER_SELECT:
+			{
+				CharacterResult recvData;
+				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
+				{
+					for (int PlayerIdx = 0; PlayerIdx < MAX_PLAYER_NUM ; ++PlayerIdx)
+					{
+						m_CharacterIdx[PlayerIdx] = recvData.mCharacterId[PlayerIdx];
+					}
+				}
+			}
+
+
 		case PKT_SC_IDX:
 			{
 				EventPositionResult recvData ;
@@ -149,7 +167,7 @@ void CNetworkManager::ProcessPacket()
 	}
 }
 
-void CNetworkManager::GetClientId()
+void CNetworkManager::AskClientId()
 {
 	/// NAGLE ²ö´Ù
 	int opt = 1 ;
