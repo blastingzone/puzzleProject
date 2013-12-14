@@ -8,13 +8,10 @@
 enum PacketTypes
 {
 	PKT_NONE	= 0,
-	
+
 	PKT_CS_LOGIN	= 1,
 	PKT_SC_LOGIN	= 2,
-	
-	PKT_CS_CHAT		= 3,
-	PKT_SC_CHAT		= 4,
-	
+
 	PKT_CS_IDX		= 5,
 	PKT_SC_IDX		= 6,
 } ;
@@ -57,37 +54,6 @@ struct LoginResult : public PacketHeader
 
 } ;
 
-struct ChatBroadcastRequest : public PacketHeader
-{
-	ChatBroadcastRequest()
-	{
-		mSize = sizeof(ChatBroadcastRequest) ;
-		mType = PKT_CS_CHAT ;
-		mPlayerId = -1 ;
-	
-		memset(mChat, 0, MAX_CHAT_LEN) ;
-	}
-
-	int	mPlayerId ;
-	char mChat[MAX_CHAT_LEN] ;
-} ;
-
-struct ChatBroadcastResult : public PacketHeader
-{
-	ChatBroadcastResult()
-	{
-		mSize = sizeof(ChatBroadcastResult) ;
-		mType = PKT_SC_CHAT ;
-		mPlayerId = -1 ;
-		
-		memset(mName, 0, MAX_NAME_LEN) ;
-		memset(mChat, 0, MAX_CHAT_LEN) ;
-	}
-	
-	int	mPlayerId ;
-	char mName[MAX_NAME_LEN] ;
-	char mChat[MAX_CHAT_LEN] ;
-} ;
 
 struct EventPositionRequest : public PacketHeader
 {
@@ -118,7 +84,7 @@ struct EventPositionResult : public PacketHeader
 		m_Xpos = 0;
 		m_Ypos = 0;
 	}
-	
+
 	int	mPlayerId ;
 	int m_Xpos;
 	int m_Ypos;

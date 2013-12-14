@@ -96,11 +96,15 @@ void ClientSession::OnRead(size_t len)
 				mRecvBuffer.Read((char*)&inPacket, header.mSize) ;
 
 				//클라이언트 아이디를 나눠준다.
+				LoginResult outPacket;
+				outPacket.mPlayerId = mClientId;
+				Send(&outPacket);
 
 				/// 로그인은 DB 작업을 거쳐야 하기 때문에 DB 작업 요청한다.
 				
 				LoadPlayerDataContext* newDbJob = new LoadPlayerDataContext(mSocket, inPacket.mPlayerId) ;
-				GDatabaseJobManager->PushDatabaseJobRequest(newDbJob) ;			
+				GDatabaseJobManager->PushDatabaseJobRequest(newDbJob) ;	
+				
 			}
 			break ;
 
@@ -258,9 +262,6 @@ void ClientSession::LoginDone(int pid, double x, double y, double z, const char*
 	LoginResult outPacket ;
 
 	outPacket.mPlayerId = mPlayerId = pid ;
-	outPacket.mPosX = mPosX = x ;
-	outPacket.mPosY = mPosY = y ;
-	outPacket.mPosZ = mPosZ = z ;
 	strcpy_s(mPlayerName, name) ;
 	strcpy_s(outPacket.mName, name) ;
 

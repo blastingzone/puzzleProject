@@ -28,7 +28,6 @@ public:
 	{
 		memset(&mClientAddr, 0, sizeof(SOCKADDR_IN)) ;
 		memset(mPlayerName, 0, sizeof(mPlayerName)) ;
-		memset(mClientIdList,0,sizeof(mClientIdList));
 	}
 	~ClientSession() {}
 

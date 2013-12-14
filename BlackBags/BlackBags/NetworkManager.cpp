@@ -111,43 +111,13 @@ void CNetworkManager::ProcessPacket()
 					m_LoginComplete = true ;
 				
 					char buff[128] = {0, } ;
-					sprintf_s(buff, "LOGIN SUCCESS ClientId[%d] Name[%s] POS(%.4f, %.4f, %.4f) \n", m_ClientId, recvData.mName, recvData.mPosX, recvData.mPosY, recvData.mPosZ) ;
+					//sprintf_s(buff, "LOGIN SUCCESS ClientId[%d] Name[%s] POS(%.4f, %.4f, %.4f) \n", m_ClientId, recvData.mName, recvData.mPosX, recvData.mPosY, recvData.mPosZ) ;
 
 					static int ypos = 33 ;
 					HDC hdc = GetDC(m_Hwnd) ;
 					TextOutA(hdc, 10, 33, buff, strlen(buff)) ;
 					ReleaseDC(m_Hwnd, hdc) ;
-
-					/// 채팅 방송 패킷 보내는 타이머 돌리자.. 
-					SetTimer(m_Hwnd, 337, 100, NULL) ;
 				
-				}
-				else
-				{
-					assert(false) ;
-				}
-			}
-			break ;
-
-		case PKT_SC_CHAT:
-			{
-				ChatBroadcastResult recvData ;
-				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
-				{
-					/// 여기 걸리면 로그인 안된놈이 보낸거다
-					assert( recvData.mPlayerId != -1  ) ;
-
-					char buff[MAX_CHAT_LEN] = {0, } ;
-					sprintf_s(buff, "CHAT from Player[%s]: %s \n", recvData.mName, recvData.mChat ) ;
-
-					static int y2pos = 60 ;
-					HDC hdc = GetDC(m_Hwnd) ;
-					TextOutA(hdc, 10, y2pos, buff, strlen(buff)) ;
-					ReleaseDC(m_Hwnd, hdc) ;
-					y2pos += 15 ;
-					if ( y2pos > 600 )
-						y2pos = 60 ;
-					
 				}
 				else
 				{
