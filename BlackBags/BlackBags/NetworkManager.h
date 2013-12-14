@@ -23,6 +23,8 @@ public:
 	CircularBuffer*	GetSendBuffer()		{ return &m_SendBuffer; }
 	CircularBuffer*	GetRecvBuffer()		{ return &m_RecvBuffer; }
 
+	void PostSendMessage();
+
 	void AskClientId();
 	void Read();
 	void Write();

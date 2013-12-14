@@ -26,6 +26,10 @@ public:
 	void DeletePlayer(int pid) ;
 
 	int GiveClientId();
+
+	int GetCharacterSelectedStatusByClientId(int idx)	{ return mCharacterSelectStatus[idx]; }
+	void SetCharacterSelectedStatus(int idx, int characterId) { assert(idx < MAX_CLIENT_NUM);
+																mCharacterSelectStatus[idx] = characterId; }
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
 	void DeletePlayerDone(DatabaseJobContext* dbJob) ;
@@ -41,7 +45,9 @@ private:
 
 	DWORD		mLastGCTick ;
 	DWORD		mLastClientWorkTick ;
-	bool			mClientIdList[MAX_CLIENT_NUM];
+
+	bool		mClientIdList[MAX_CLIENT_NUM];
+	int			mCharacterSelectStatus[MAX_CLIENT_NUM];
 } ;
 
 extern ClientManager* GClientManager ;

@@ -108,6 +108,24 @@ void ClientSession::OnRead(size_t len)
 			}
 			break ;
 
+		case PKT_CS_CHARACTER_SELECT:
+			{
+				CharacterRequest inPacket;
+				CharacterResult outPacket;
+
+				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
+				// 임계영역 문제 생김!
+				GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId);
+				for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
+				{
+					outPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);
+				}
+
+				if (!Broadcast(&outPacket))
+					return ;
+			}
+			break;
+
 		case PKT_CS_IDX:
 			{
 				EventPositionRequest inPacket;

@@ -72,7 +72,10 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 // 				m_SettingMenu->SetPlayerSelected(idx);
 				
 				characterSelectedByClient.mCharacterId = idx;
-				CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize);
+				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
+				{
+					CNetworkManager::GetInstance()->PostSendMessage();
+				}
 			}
 
 			// 내 캐릭터일 경우에만 취소시킬 수 있고 그 외에는 무시하게 만든다
@@ -83,7 +86,10 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 // 				m_SettingMenu->CancelPlayerSelected(idx);
 				
 				characterSelectedByClient.mCharacterId = -1;
-				CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize);
+				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
+				{
+					CNetworkManager::GetInstance()->PostSendMessage();
+				}
 			}
 		}
 	}

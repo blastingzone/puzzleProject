@@ -233,3 +233,8 @@ void CNetworkManager::CloseSocket()
 
 	//Scene change - > to mainScene
 }
+
+void CNetworkManager::PostSendMessage()
+{
+	PostMessage(m_Hwnd, WM_SOCKET, 0, FD_WRITE);
+}
