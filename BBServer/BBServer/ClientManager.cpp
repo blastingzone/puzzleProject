@@ -14,7 +14,7 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 	mClientList.insert(ClientList::value_type(sock, client)) ;
 
 	int clientId = GiveClientId();
-	if (clientId != -1)
+	if (clientId != NOT_LOGIN_CLIENT)
 	{
 		client->SetClientId(clientId);			
 	}
@@ -176,7 +176,7 @@ void ClientManager::DeletePlayerDone(DatabaseJobContext* dbJob)
 
 int ClientManager::GiveClientId()
 {
-	for ( int idx = 0 ; idx<MAX_CLIENT_NUM ; ++idx)
+	for (int idx = 0; idx < MAX_CLIENT_NUM ; ++idx)
 	{
 		if (mClientIdList[idx] == false)
 		{
@@ -185,5 +185,19 @@ int ClientManager::GiveClientId()
 		}
 	}
 
-	return -1;
+	return NOT_LOGIN_CLIENT;
+}
+
+bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId) 
+{ 
+	assert(clientId < MAX_CLIENT_NUM);
+
+	if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
+	{
+		mCharacterSelectStatus[clientId] = characterId; 
+		
+		return true;
+	}
+
+	return false;
 }

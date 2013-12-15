@@ -125,6 +125,15 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _CREDIT_MOVIE "Resource/Video/credit.avi"
 #define _OPENING_MOVIE "Resource/Video/opening.avi"
 
+/*	BMG list	*/
+#define _BGM_MAIN "Resource/Sound/Nujabes/MAIN.mp3"
+#define _BGM_SETTING "Resource/Sound/Nujabes/SETTING.mp3"
+#define _BGM_PLAY "Resource/Sound/Nujabes/PLAY.mp3"
+#define _BGM_RESULT "Resource/Sound/Nujabes/RESULT.mp3"
+
+/*	sound effect */
+#define _SE_DESC "Resource/Sound/SE1.mp3"
+
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"
 #define _MENU_FONT L"Segoe UI"

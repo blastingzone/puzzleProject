@@ -797,19 +797,22 @@ void CNetworkSettingMenu::InitMineFlag()
 
 void CNetworkSettingMenu::PollingCharacterData()
 {
-	for (int PlayerId = 0; PlayerId < MAX_PLAYER_NUM ; ++PlayerId)
+	for (int characterIdx = 0; characterIdx < MAX_PLAYER_NUM ; ++characterIdx)
 	{
-		int CharacterId = CNetworkManager::GetInstance()->GetCharacterId(PlayerId);
-		
-		m_PlayerSelect[CharacterId].m_IsSelected = false;
-		m_PlayerSelect[CharacterId].m_IsMine = false;
+		m_PlayerSelect[characterIdx].m_IsSelected = false;
+		m_PlayerSelect[characterIdx].m_IsMine = false;
 
-		if ( 0 <= CharacterId )
+		int clientId = CNetworkManager::GetInstance()->GetCharacterClientId(characterIdx);
+		
+		if (clientId != -1)
 		{
-			m_PlayerSelect[CharacterId].m_IsSelected = true;
-			if ( PlayerId == CNetworkManager::GetInstance()->GetClientId() )
+			//characterIdx에 해당하는 캐릭터를 고른 클라이언트가 있다는 이야기이므로 
+			m_PlayerSelect[characterIdx].m_IsSelected = true;
+
+			//characterIdx가 내 클라이언가 서버로부터 할당받은 아이디와 같으면 그건 내가 고른 것이므로 표시
+			if ( clientId == CNetworkManager::GetInstance()->GetClientId() )
 			{
-				m_PlayerSelect[CharacterId].m_IsMine = true;
+				m_PlayerSelect[characterIdx].m_IsMine = true;
 			}
 		}
 	}

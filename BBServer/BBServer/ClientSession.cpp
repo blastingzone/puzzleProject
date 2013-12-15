@@ -115,17 +115,20 @@ void ClientSession::OnRead(size_t len)
 
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
 				// 임계영역 문제 생김!
-				GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId);
-				for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
+				if (GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId) )
 				{
-					outPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);
-				}
+					for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
+					{
+						outPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);
+					}
 
-				if (!Broadcast(&outPacket))
-					return ;
+					if (!Broadcast(&outPacket))
+						return ;
+				}
 			}
 			break;
 
+		//아직 작업 전
 		case PKT_CS_IDX:
 			{
 				EventPositionRequest inPacket;

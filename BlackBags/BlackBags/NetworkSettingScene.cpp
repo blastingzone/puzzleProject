@@ -66,14 +66,14 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CharacterRequest characterSelectedByClient;
 			characterSelectedByClient.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
 
-			// 캐릭터를 선택해서 내 걸로 만든다 조건 : IsMine이 True여야 한다
-			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
+			// 조심해!
+			// 이건 네트워크 매니저한테서 받아오는 게 더 정확할 것 같은데?
+			// 일단 선택된 캐릭터인지 확인해야 한다.
+			if ( !m_SettingMenu->GetPlayerSelected(idx) ) // && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) <<< 이걸 체크하는 이유가 뭘까?
 			{
-				// 서버에 물어보고 확인한다.
-// 				++m_SelectedPlayerNumber;
-// 				m_SettingMenu->SetPlayerSelected(idx);
-				
 				characterSelectedByClient.mCharacterId = idx;
+
+				//내가 고른 캐릭터를 패킷에 담아서 발송!
 				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
 				{
 					CNetworkManager::GetInstance()->PostSendMessage();
@@ -81,13 +81,10 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			}
 
 			// 내 캐릭터일 경우에만 취소시킬 수 있고 그 외에는 무시하게 만든다
-			else if ( m_SettingMenu->GetPlayerSelected(idx) && m_SettingMenu->GetIsMineFlag(idx) )
+			else if (m_SettingMenu->GetIsMineFlag(idx) ) // m_SettingMenu->GetPlayerSelected(idx) && 는 중복 체크
 			{
-				// 서버에 물어보고 확인한다.
-// 				--m_SelectedPlayerNumber;
-// 				m_SettingMenu->CancelPlayerSelected(idx);
-				
 				characterSelectedByClient.mCharacterId = -1;
+
 				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
 				{
 					CNetworkManager::GetInstance()->PostSendMessage();

@@ -16,6 +16,8 @@ struct NetworkPlayerSelect
 						{};
 
 	bool		m_IsSelected;
+	bool		m_IsMine;
+
 	bool		m_IsMouseOver;
 
 	float		m_ButtonWidth;
@@ -25,8 +27,6 @@ struct NetworkPlayerSelect
 
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;
-
-	bool m_IsMine;
 };
 
 struct NetworkMapSelect

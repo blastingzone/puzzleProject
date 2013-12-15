@@ -65,24 +65,24 @@ bool CSoundRenderer::Init()
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Main);
+	FMOD_RESULT fr = m_System->createSound(_BGM_MAIN, FMOD_HARDWARE, 0, &m_Main);
 
 	// assert 추가로 경로에 없는 파일이 있으면 해당 위치에서 프로그램 죽음
 	assert(fr == FMOD_OK);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
+	fr = m_System->createSound(_BGM_SETTING, FMOD_HARDWARE, 0, &m_Setting);
 
 	assert(fr == FMOD_OK);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Play);
+	fr = m_System->createSound(_BGM_PLAY, FMOD_HARDWARE, 0, &m_Play);
 
 	assert(fr == FMOD_OK);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Result);
+	fr = m_System->createSound(_BGM_RESULT, FMOD_HARDWARE, 0, &m_Result);
 
 	assert(fr == FMOD_OK);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_SE);
+	fr = m_System->createSound(_SE_DESC, FMOD_HARDWARE, 0, &m_SE);
 
 	assert(fr == FMOD_OK);
 

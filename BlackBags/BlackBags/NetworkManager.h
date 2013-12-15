@@ -31,7 +31,8 @@ public:
 	void CloseSocket();
 
 	// 예외처리는 부르는 쪽에서 ( PlayerId < MAX_PLAYER_NUM )
-	int	GetCharacterId(int PlayerId)		{ assert(PlayerId < MAX_PLAYER_NUM); return m_CharacterIdx[PlayerId]; }
+	int	GetCharacterClientId(int characterId)		{ assert(characterId < MAX_PLAYER_NUM); return m_CharacterIdx[characterId]; }
+	void InitCharaterList();
 
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance

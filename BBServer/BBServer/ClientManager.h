@@ -12,8 +12,8 @@ class ClientManager
 public:
 	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0)
 	{
-		memset(mClientIdList,false,sizeof(mClientIdList));
-		memset(mCharacterSelectStatus,-1,sizeof(mCharacterSelectStatus));
+		memset(mClientIdList, false, sizeof(mClientIdList) );
+		memset(mCharacterSelectStatus, NOT_SELECTED, sizeof(mCharacterSelectStatus) );
 	}
 
 	ClientSession* CreateClient(SOCKET sock) ;
@@ -28,9 +28,8 @@ public:
 
 	int GiveClientId();
 
-	int GetCharacterSelectedStatusByClientId(int idx)	{ return mCharacterSelectStatus[idx]; }
-	void SetCharacterSelectedStatus(int idx, int characterId) { assert(idx < MAX_CLIENT_NUM);
-																mCharacterSelectStatus[idx] = characterId; }
+	int GetCharacterSelectedStatusByClientId(int clientId)	{ return mCharacterSelectStatus[clientId]; }
+	bool SetCharacterSelectedStatus(int clientId, int characterId);
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
 	void DeletePlayerDone(DatabaseJobContext* dbJob) ;
@@ -48,6 +47,9 @@ private:
 	DWORD		mLastClientWorkTick ;
 
 	bool		mClientIdList[MAX_CLIENT_NUM];
+
+	/*	각 클라이언트들이 몇 번 캐릭터를 선택했는지 저장
+		인덱스는 클라이언트 아이디 */
 	int			mCharacterSelectStatus[MAX_CLIENT_NUM];
 } ;
 

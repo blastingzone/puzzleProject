@@ -20,10 +20,7 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 	m_LoginComplete = false ;
 	m_Socket = NULL ;
 
-	for (int i = 0; i < MAX_PLAYER_NUM ; ++i)
-	{
-		m_CharacterIdx[i] = -1;
-	}
+	InitCharaterList();
 }
 
 CNetworkManager::~CNetworkManager(void)
@@ -128,9 +125,21 @@ void CNetworkManager::ProcessPacket()
 				CharacterResult recvData;
 				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
 				{
+					InitCharaterList();
+
 					for (int PlayerIdx = 0; PlayerIdx < MAX_PLAYER_NUM ; ++PlayerIdx)
 					{
-						m_CharacterIdx[PlayerIdx] = recvData.mCharacterId[PlayerIdx];
+						//차례대로 확인하면서 PlayerIdx에 해당하는 클라이언트가 선택한 캐릭터가 있으면
+						//그 캐릭터 배열에 선택한 PlayerIdx를 기록한다.
+
+						//조심해!!!!
+						//패킷에서는 인덱스를 클라이언트 아이디(PlayerIdx)로 사용하고 데이터를 캐릭터 넘버로 기록
+						//반면에 클라이언트에서는 캐릭터 넘버를 인덱스로 사용하고 데이터로 클라이언트 아이디를 기록한다
+						//심하게 이상하다. 기존 코드와 호완성을 생각해서 패킷 구조의 변경이 필요하다
+						if (recvData.mCharacterId[PlayerIdx] != -1)
+						{
+							m_CharacterIdx[recvData.mCharacterId[PlayerIdx] ] = PlayerIdx;
+						}
 					}
 				}
 			}
@@ -237,4 +246,12 @@ void CNetworkManager::CloseSocket()
 void CNetworkManager::PostSendMessage()
 {
 	PostMessage(m_Hwnd, WM_SOCKET, 0, FD_WRITE);
+}
+
+void CNetworkManager::InitCharaterList()
+{
+	for (int i = 0; i < MAX_PLAYER_NUM ; ++i)
+	{
+		m_CharacterIdx[i] = -1;
+	}
 }
