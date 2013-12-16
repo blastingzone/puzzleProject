@@ -128,6 +128,20 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
+		case PKT_CS_MAP_SELECT:
+			{
+				MapRequest inPacket;
+				MapResult	outPacket;
+
+				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
+				
+				outPacket.mMapIdx = inPacket.mMapIdx;
+
+				if (!Broadcast(&outPacket))
+					return;
+			}
+			break;
+
 		//아직 작업 전
 		case PKT_CS_IDX:
 			{
