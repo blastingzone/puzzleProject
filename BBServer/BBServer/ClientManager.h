@@ -27,9 +27,11 @@ public:
 	void DeletePlayer(int pid) ;
 
 	int GiveClientId();
+	int GetClientNumber();
 
 	int GetCharacterSelectedStatusByClientId(int clientId)	{ return mCharacterSelectStatus[clientId]; }
 	bool SetCharacterSelectedStatus(int clientId, int characterId);
+
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
 	void DeletePlayerDone(DatabaseJobContext* dbJob) ;

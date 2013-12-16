@@ -54,10 +54,12 @@ struct LoginResult : public PacketHeader
 		mType = PKT_SC_LOGIN ;
 		mPlayerId = -1 ;
 		memset(mName, 0, MAX_NAME_LEN) ;
+		mPlayerNumber = 0;
 	}
 
 	int		mPlayerId ;
 	char	mName[MAX_NAME_LEN] ;
+	int		mPlayerNumber;
 
 } ;
 

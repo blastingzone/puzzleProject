@@ -201,3 +201,15 @@ bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId)
 
 	return false;
 }
+
+int ClientManager::GetClientNumber()
+{
+	int connectedPlayerNumber = 0;
+	for (int i = 0; i<MAX_CLIENT_NUM;++i)
+	{
+		if (mClientIdList[i] == true)
+			++connectedPlayerNumber;
+	}
+
+	return connectedPlayerNumber;
+}

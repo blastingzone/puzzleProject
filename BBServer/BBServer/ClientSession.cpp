@@ -64,6 +64,8 @@ void ClientSession::Disconnect()
 
 	printf("[DEBUG] Client Disconnected: IP=%s, PORT=%d\n", inet_ntoa(mClientAddr.sin_addr), ntohs(mClientAddr.sin_port)) ;
 
+
+
 	::shutdown(mSocket, SD_BOTH) ;
 	::closesocket(mSocket) ;
 
@@ -98,6 +100,7 @@ void ClientSession::OnRead(size_t len)
 				//클라이언트 아이디를 나눠준다.
 				LoginResult outPacket;
 				outPacket.mPlayerId = mClientId;
+				outPacket.mPlayerNumber = GClientManager->GetClientNumber();
 				Send(&outPacket);
 
 				/// 로그인은 DB 작업을 거쳐야 하기 때문에 DB 작업 요청한다.
@@ -320,6 +323,7 @@ void CALLBACK RecvCompletion(DWORD dwError, DWORD cbTransferred, LPWSAOVERLAPPED
 	/// 에러 발생시 해당 세션 종료
 	if ( dwError || cbTransferred == 0 )
 	{
+		
 		fromClient->Disconnect() ;
 		return ;
 	}
