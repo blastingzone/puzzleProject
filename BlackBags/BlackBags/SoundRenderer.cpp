@@ -43,19 +43,17 @@ bool CSoundRenderer::Init()
 
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
-	assert(fr == FMOD_OK);
+	if ( fr == FMOD_OK)
+		fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
 
-	fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
+	if ( fr == FMOD_OK)
+		fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
 
-	assert(fr == FMOD_OK);
+	if ( fr == FMOD_OK)
+		fr = CreateSound();
 
-	fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
-
-	assert(fr == FMOD_OK);
-
-	fr = CreateSound();
-
-	assert(fr == FMOD_OK);
+	if (fr != FMOD_OK)
+		return false;
 
 	// 없어도 되는 함수;;
 	// AllocateChannel();
@@ -65,26 +63,20 @@ bool CSoundRenderer::Init()
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Main);
+	FMOD_RESULT fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Main);
 
 	// assert 추가로 경로에 없는 파일이 있으면 해당 위치에서 프로그램 죽음
-	assert(fr == FMOD_OK);
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Setting);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Setting);
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound("Resource/Sound/playscene.mp3", FMOD_HARDWARE, 0, &m_Play);
 
-	assert(fr == FMOD_OK);
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Result);
 
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Play);
-
-	assert(fr == FMOD_OK);
-
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_Result);
-
-	assert(fr == FMOD_OK);
-
-	fr = m_System->createSound("Resource/Sound/SE1.mp3", FMOD_HARDWARE, 0, &m_SE);
-
-	assert(fr == FMOD_OK);
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound("Resource/Sound/SE2.mp3", FMOD_HARDWARE, 0, &m_SE);
 
 	return fr;
 }

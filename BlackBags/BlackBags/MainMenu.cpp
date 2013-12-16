@@ -179,20 +179,22 @@ bool CMainMenu::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pMenuButtonBrush);
-		assert(SUCCEEDED(hr) );
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
-		assert(SUCCEEDED(hr) );
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pSelectedTextBrush);
-		assert(SUCCEEDED(hr) );
-
-		hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&m_DWriteFactory)
-            );
-		assert(SUCCEEDED(hr) );
+		
+		if ( hr == S_OK )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
+		
+		if ( hr == S_OK )
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pSelectedTextBrush);
+		
+		if ( hr == S_OK )
+			hr = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(IDWriteFactory),
+			reinterpret_cast<IUnknown**>(&m_DWriteFactory)
+			);
+		
+		if ( hr == S_FALSE )
+			return false;
 
 		SetObjectSize();
 		RefreshTextSize();
