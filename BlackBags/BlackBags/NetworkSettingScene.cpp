@@ -129,14 +129,14 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 	}
 
 	// GameStartButton Å¬¸¯½Ã
-	if (CheckGameStartCondition())
-	{
-		m_SettingMenu->SetNextButtonPossible();
-	}
-	else
-	{
-		m_SettingMenu->SetNextButtonImpossible();
-	}
+// 	if (CheckGameStartCondition())
+// 	{
+// 		m_SettingMenu->SetNextButtonPossible();
+// 	}
+// 	else
+// 	{
+// 		m_SettingMenu->SetNextButtonImpossible();
+// 	}
 
 	if (mouseCoordinate.m_PosX > startPosition.width + (MAX_MAPSIZE_NUM - 2) * nextButton.width
 		&& mouseCoordinate.m_PosX < startPosition.width + (MAX_MAPSIZE_NUM - 1) * nextButton.width
@@ -148,7 +148,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
 			CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
-			CGameData::GetInstance()->SetCurrentScene( SC_PLAY );
+			CGameData::GetInstance()->SetCurrentScene( SC_NETWORK_PLAY );
 			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 		}
 	}

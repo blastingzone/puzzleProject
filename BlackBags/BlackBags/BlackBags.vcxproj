@@ -103,7 +103,9 @@
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainScene.h" />
+    <ClInclude Include="NetworkGameMap.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="NetworkPlayScene.h" />
     <ClInclude Include="NetworkSettingMenu.h" />
     <ClInclude Include="NetworkSettingScene.h" />
     <ClInclude Include="OpeningScene.h" />
@@ -136,7 +138,9 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="NetworkGameMap.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkPlayScene.cpp" />
     <ClCompile Include="NetworkSettingMenu.cpp" />
     <ClCompile Include="NetworkSettingScene.cpp" />
     <ClCompile Include="OpeningScene.cpp" />

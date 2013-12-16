@@ -9,6 +9,7 @@
 #include "CreditScene.h"
 #include "GameData.h"
 #include "NetworkSettingScene.h"
+#include "NetworkPlayScene.h"
 
 
 CSceneManager::CSceneManager(HWND hWnd)
@@ -91,6 +92,9 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 	case SC_NETWORK_SETTING:
 		m_CurrentScene = new CNetworkSettingScene();
 		CGameData::GetInstance()->Init();
+		break;
+	case SC_NETWORK_PLAY:
+		m_CurrentScene = new CNetworkPlayScene();
 		break;
 	default:
 		break;
