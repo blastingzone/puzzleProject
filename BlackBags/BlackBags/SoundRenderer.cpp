@@ -43,19 +43,18 @@ bool CSoundRenderer::Init()
 
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
-	assert(fr == FMOD_OK);
+	if (fr == FMOD_OK)
+		fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
 
-	fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
+	if (fr == FMOD_OK)
+		fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
 
-	assert(fr == FMOD_OK);
+	if (fr == FMOD_OK)
+		fr = CreateSound();
 
-	fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
+	if (fr !=FMOD_OK)
+		return false;
 
-	assert(fr == FMOD_OK);
-
-	fr = CreateSound();
-
-	assert(fr == FMOD_OK);
 
 	// 없어도 되는 함수;;
 	// AllocateChannel();
@@ -68,23 +67,17 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 	FMOD_RESULT fr = m_System->createSound(_BGM_MAIN, FMOD_HARDWARE, 0, &m_Main);
 
 	// assert 추가로 경로에 없는 파일이 있으면 해당 위치에서 프로그램 죽음
-	assert(fr == FMOD_OK);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_SETTING, FMOD_HARDWARE, 0, &m_Setting);
 
-	fr = m_System->createSound(_BGM_SETTING, FMOD_HARDWARE, 0, &m_Setting);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_PLAY, FMOD_HARDWARE, 0, &m_Play);
 
-	assert(fr == FMOD_OK);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_RESULT, FMOD_HARDWARE, 0, &m_Result);
 
-	fr = m_System->createSound(_BGM_PLAY, FMOD_HARDWARE, 0, &m_Play);
-
-	assert(fr == FMOD_OK);
-
-	fr = m_System->createSound(_BGM_RESULT, FMOD_HARDWARE, 0, &m_Result);
-
-	assert(fr == FMOD_OK);
-
-	fr = m_System->createSound(_SE_DESC, FMOD_HARDWARE, 0, &m_SE);
-
-	assert(fr == FMOD_OK);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_SE_DESC, FMOD_HARDWARE, 0, &m_SE);
 
 	return fr;
 }
@@ -112,19 +105,19 @@ void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 	{
 	case BGM_MAIN:
 		fr = m_System->playSound(m_Main, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_SETTING:
 		fr = m_System->playSound(m_Setting, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_PLAY:
 		fr = m_System->playSound(m_Play, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_RESULT:
 		fr = m_System->playSound(m_Result, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	default:
 		break;

@@ -20,6 +20,7 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 	m_LoginComplete = false ;
 	m_Socket = NULL ;
 
+	m_MapIndex = -1;
 	InitCharaterList();
 }
 
@@ -141,6 +142,16 @@ void CNetworkManager::ProcessPacket()
 							m_CharacterIdx[recvData.mCharacterId[PlayerIdx] ] = PlayerIdx;
 						}
 					}
+				}
+			}
+			break;
+
+		case PKT_SC_MAP_SELECT:
+			{
+				MapResult recvData;
+				if (m_RecvBuffer.Read((char*)&recvData, header.mSize))
+				{
+					m_MapIndex = recvData.mMapIdx;
 				}
 			}
 			break;

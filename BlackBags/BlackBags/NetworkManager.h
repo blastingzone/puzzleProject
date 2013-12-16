@@ -34,6 +34,9 @@ public:
 	int	GetCharacterClientId(int characterId)		{ assert(characterId < MAX_PLAYER_NUM); return m_CharacterIdx[characterId]; }
 	void InitCharaterList();
 
+	// 맵 인댁스 전달
+	int GetMapIndex() { return m_MapIndex; }
+
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance
 	HWND						m_Hwnd;
@@ -51,5 +54,8 @@ private:
 
 	// 각 사용자의 캐릭터 선택 정보를 가져오기 위한 배열
 	int							m_CharacterIdx[MAX_PLAYER_NUM];
+
+	// 선택한 맵 인댁스
+	int							m_MapIndex;
 };
 

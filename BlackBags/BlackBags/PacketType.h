@@ -15,8 +15,11 @@ enum PacketTypes
 	PKT_CS_CHARACTER_SELECT = 3,
 	PKT_SC_CHARACTER_SELECT = 4,
 
-	PKT_CS_IDX		= 5,
-	PKT_SC_IDX		= 6,
+	PKT_CS_MAP_SELECT = 5,
+	PKT_SC_MAP_SELECT = 6,
+
+	PKT_CS_IDX		= 7,
+	PKT_SC_IDX		= 8,
 } ;
 
 #pragma pack(push, 1)
@@ -83,6 +86,31 @@ struct CharacterResult : public PacketHeader
 	int		mCharacterId[MAX_PLAYER_NUM] ;
 } ;
 
+struct MapRequest : public PacketHeader
+{
+	MapRequest()
+	{
+		mSize = sizeof(MapRequest) ;
+		mType = PKT_CS_MAP_SELECT ;
+		mPlayerId = -1 ;
+		mMapIdx = -1;
+	}
+
+	//방장만 선택할 수 있게 바꿀 것.
+	int		mPlayerId ;
+	int		mMapIdx;
+} ;
+
+struct MapResult : public PacketHeader
+{
+	MapResult()
+	{
+		mSize = sizeof(MapResult) ;
+		mType = PKT_SC_MAP_SELECT ;
+		mMapIdx = -1;
+	}
+	int		mMapIdx;
+} ;
 
 struct EventPositionRequest : public PacketHeader
 {

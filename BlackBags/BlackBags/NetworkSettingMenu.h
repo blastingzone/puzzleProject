@@ -153,6 +153,8 @@ public:
 	void	SetIsMineFlag(int idx, bool flag)		{ m_PlayerSelect[idx].m_IsMine = flag; }
 	void	InitMineFlag();
 	void	PollingCharacterData();
+	void	PollingMapData();
+
 
 protected:
 	bool			CreateResource();

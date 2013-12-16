@@ -816,4 +816,21 @@ void CNetworkSettingMenu::PollingCharacterData()
 			}
 		}
 	}
+
+	//조심해!!
+	//맵데이타도 여기서 한 번에 해준다.
+	//Polling 함수는 한번으로 끝내는 것이 좋을 듯.
+	int mapSelected = CNetworkManager::GetInstance()->GetMapIndex();
+
+	for (int i = 0; i<MAX_MAPSIZE_NUM;++i)
+	{
+			m_MapSelect[i].m_IsSelected = false;
+	}
+
+	if (mapSelected != -1 )
+		m_MapSelect[mapSelected].m_IsSelected = true;
+
 }
+
+
+

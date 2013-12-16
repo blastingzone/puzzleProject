@@ -106,7 +106,19 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			{
 				return;
 			}
+			MapRequest mapRequest;
+			mapRequest.mMapIdx = idx;
+			
+			//클라이언트아이디를 먼저 얻었어야 함.
+			mapRequest.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
+
 			m_SettingMenu->InitMapSelected();
+			
+			if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&mapRequest, mapRequest.mSize) )
+			{
+				CNetworkManager::GetInstance()->PostSendMessage();
+			}
+			
 			m_SettingMenu->SetMapSelected(idx);
 			m_SelectedMapIndex = idx;
 		}
