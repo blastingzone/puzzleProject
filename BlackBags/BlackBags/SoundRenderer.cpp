@@ -8,7 +8,8 @@ CSoundRenderer::CSoundRenderer(void) :
 	m_ChannelGroup(nullptr),
 	m_BGMChannel(nullptr),
 	m_SEChannel(nullptr),
-	m_SE(nullptr),
+	m_SE_DrawLine(nullptr),
+	m_SE_Select(nullptr),
 	m_Main(nullptr),
 	m_Setting(nullptr),
 	m_Play(nullptr),
@@ -43,17 +44,18 @@ bool CSoundRenderer::Init()
 
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
-	if ( fr == FMOD_OK)
+	if (fr == FMOD_OK)
 		fr = m_System->init( 32, FMOD_INIT_NORMAL, 0 );
 
-	if ( fr == FMOD_OK)
+	if (fr == FMOD_OK)
 		fr = m_System->createChannelGroup( "MasterChannelGroup", &m_ChannelGroup );
 
-	if ( fr == FMOD_OK)
+	if (fr == FMOD_OK)
 		fr = CreateSound();
 
-	if (fr != FMOD_OK)
+	if (fr !=FMOD_OK)
 		return false;
+
 
 	// 없어도 되는 함수;;
 	// AllocateChannel();
@@ -63,20 +65,23 @@ bool CSoundRenderer::Init()
 
 FMOD_RESULT CSoundRenderer::CreateSound()
 {
-	FMOD_RESULT fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Main);
+	FMOD_RESULT fr = m_System->createSound(_BGM_MAIN, FMOD_HARDWARE, 0, &m_Main);
 
 	// assert 추가로 경로에 없는 파일이 있으면 해당 위치에서 프로그램 죽음
-	if ( fr == FMOD_OK)
-		fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Setting);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_SETTING, FMOD_HARDWARE, 0, &m_Setting);
 
-	if ( fr == FMOD_OK)
-		fr = m_System->createSound("Resource/Sound/playscene.mp3", FMOD_HARDWARE, 0, &m_Play);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_PLAY, FMOD_HARDWARE, 0, &m_Play);
 
-	if ( fr == FMOD_OK)
-		fr = m_System->createSound("Resource/Sound/mainscene.mp3", FMOD_HARDWARE, 0, &m_Result);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_BGM_RESULT, FMOD_HARDWARE, 0, &m_Result);
 
-	if ( fr == FMOD_OK)
-		fr = m_System->createSound("Resource/Sound/SE2.mp3", FMOD_HARDWARE, 0, &m_SE);
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_SE_DRAW_LINE, FMOD_HARDWARE, 0, &m_SE_DrawLine);
+
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_SE_SELECT, FMOD_HARDWARE, 0, &m_SE_Select);
 
 	return fr;
 }
@@ -104,19 +109,19 @@ void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 	{
 	case BGM_MAIN:
 		fr = m_System->playSound(m_Main, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_SETTING:
 		fr = m_System->playSound(m_Setting, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_PLAY:
 		fr = m_System->playSound(m_Play, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	case BGM_RESULT:
 		fr = m_System->playSound(m_Result, m_ChannelGroup, false, &m_BGMChannel);
-		assert(fr == FMOD_OK);
+		//assert(fr == FMOD_OK);
 		break;
 	default:
 		break;
@@ -133,11 +138,20 @@ void CSoundRenderer::StopBGM()
 	assert(fr == FMOD_OK);
 }
 
-void CSoundRenderer::PlaySE()
+void CSoundRenderer::PlaySE_DrawLine()
 {
 	FMOD_RESULT fr;
 
-	fr = m_System->playSound(m_SE, m_ChannelGroup, false, &m_SEChannel);
+	fr = m_System->playSound(m_SE_DrawLine, m_ChannelGroup, false, &m_SEChannel);
+
+	assert(fr == FMOD_OK);
+}
+
+void CSoundRenderer::PlaySE_Select()
+{
+	FMOD_RESULT fr;
+
+	fr = m_System->playSound(m_SE_Select, m_ChannelGroup, false, &m_SEChannel);
 
 	assert(fr == FMOD_OK);
 }

@@ -26,7 +26,7 @@ public:
 	void ChangeScene(const SceneName& newScene);
 
 protected:
-	HWND	m_WindowHandle;
+	HWND	m_Hwnd;
 	CScene* m_CurrentScene;
 };
 

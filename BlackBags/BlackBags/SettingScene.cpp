@@ -56,6 +56,7 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			{
 				return;
 			}
+			CSoundRenderer::GetInstance()->PlaySE_Select();
 
 			if (!m_SettingMenu->GetPlayerSelected(idx) && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) )
 			{
@@ -83,6 +84,9 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 			{
 				return;
 			}
+
+			CSoundRenderer::GetInstance()->PlaySE_Select();
+
 			m_SettingMenu->InitMapSelected();
 			m_SettingMenu->SetMapSelected(idx);
 			m_SelectedMapIndex = idx;

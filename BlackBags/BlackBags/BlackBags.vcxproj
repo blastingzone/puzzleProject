@@ -90,6 +90,7 @@
     <ClInclude Include="BandiVideoTexture.h" />
     <ClInclude Include="BandiVideoTexture_DX9.h" />
     <ClInclude Include="BlackBags.h" />
+    <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="CreditScene.h" />
     <ClInclude Include="FPS.h" />
@@ -102,7 +103,11 @@
     <ClInclude Include="MacroSet.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainScene.h" />
+    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="NetworkSettingMenu.h" />
+    <ClInclude Include="NetworkSettingScene.h" />
     <ClInclude Include="OpeningScene.h" />
+    <ClInclude Include="PacketType.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Renderer.h" />
@@ -122,6 +127,7 @@
     <ClCompile Include="BandiVideoLibrary.cpp" />
     <ClCompile Include="BandiVideoTexture_DX9.cpp" />
     <ClCompile Include="BlackBags.cpp" />
+    <ClCompile Include="CircularBuffer.cpp" />
     <ClCompile Include="CreditScene.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="GameData.cpp" />
@@ -130,6 +136,9 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainScene.cpp" />
+    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkSettingMenu.cpp" />
+    <ClCompile Include="NetworkSettingScene.cpp" />
     <ClCompile Include="OpeningScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />

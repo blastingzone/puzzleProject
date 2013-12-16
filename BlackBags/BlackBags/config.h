@@ -125,6 +125,17 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _CREDIT_MOVIE "Resource/Video/credit.avi"
 #define _OPENING_MOVIE "Resource/Video/opening.avi"
 
+/*	BMG list	*/
+#define _BGM_MAIN "Resource/Sound/Nujabes/MAIN.mp3"
+#define _BGM_SETTING "Resource/Sound/Nujabes/SETTING.mp3"
+#define _BGM_PLAY "Resource/Sound/Nujabes/PLAY.mp3"
+#define _BGM_RESULT "Resource/Sound/Nujabes/RESULT.mp3"
+
+/*	sound effect */
+#define _SE_DRAW_LINE "Resource/Sound/SE2.mp3"
+#define _SE_SELECT "Resource/Sound/button_pop.mp3"
+
+
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"
 #define _MENU_FONT L"Segoe UI"
@@ -146,7 +157,9 @@ enum SceneName	//Scene 이름들
 	SC_RESULT,
 	SC_CREDIT,
 	SC_NOSCENE,
-	SC_EXIT
+	SC_EXIT,
+	SC_NETWORK_SETTING,
+	SC_NETWORK_PLAY
 };
 
 enum SOUND_BGMList

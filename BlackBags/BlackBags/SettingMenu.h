@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "sceneobject.h"
+#include "SceneObject.h"
 
 #define MAX_MAPSIZE_NUM 4
 
