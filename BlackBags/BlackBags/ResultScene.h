@@ -11,7 +11,7 @@ class CResultScene :
 {
 public:
 	CResultScene(void);
-	~CResultScene(void);
+	virtual ~CResultScene(void);
 
 	virtual bool Init();
 	virtual void Render();

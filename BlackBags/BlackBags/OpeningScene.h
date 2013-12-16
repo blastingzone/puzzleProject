@@ -8,7 +8,7 @@ class COpeningScene :
 {
 public:
 	COpeningScene(void);
-	~COpeningScene(void);
+	virtual ~COpeningScene(void);
 
 	virtual void EventHandle(Coordinate mouseCoordinate);
 	virtual void MouseOver(Coordinate mouseCoordinate);

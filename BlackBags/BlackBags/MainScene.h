@@ -8,7 +8,7 @@ class CMainScene :
 {
 public:
 	CMainScene(void);
-	~CMainScene(void);
+	virtual ~CMainScene(void);
 
 	virtual bool Init();
 

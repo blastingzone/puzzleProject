@@ -113,6 +113,12 @@ void CGameResult::Render()
 	{
 		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
 
+		if (tempPlayer == nullptr)
+		{
+			//게임에 오류가 있다 >>> 종료하자!
+			CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+		}
+		
 		pos.x =  m_StartPosition.width + SC_RT_HORIZONTAL_MARGIN;
 		pos.y =  m_StartPosition.height + SC_RT_VERTICAL_MARGIN + m_SceneTitleHeight + m_VoidSpace + (m_PlayerBoxHeight * i);
 		
@@ -347,10 +353,14 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_TitleTextFormat
 		);
-	assert(SUCCEEDED(hr) );
+
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 	
 	hr = m_TitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
-	assert(SUCCEEDED(hr) );
+
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -362,10 +372,14 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_PlayerNameTextFormat
 		);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 	
 	hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -377,10 +391,14 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_PlayerScoreTextFormat
 		);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 	
 	hr = m_PlayerScoreTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -392,10 +410,14 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_WinnerTextFormat
 		);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 	
 	hr = m_WinnerTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
@@ -407,13 +429,19 @@ void CGameResult::RefreshTextSize()
 		L"ko",
 		&m_ButtonTextFormat
 		);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_ButtonTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_ButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 bool CGameResult::CreateResource()
@@ -425,29 +453,43 @@ bool CGameResult::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pTextBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pWinnerTextBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SeaShell), &m_pWinnerBoxBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DimGray), &m_pTrashBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		hr = DWriteCreateFactory(
             DWRITE_FACTORY_TYPE_SHARED,
             __uuidof(IDWriteFactory),
             reinterpret_cast<IUnknown**>(&m_DWriteFactory)
             );
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		SetObjectSize();
 		RefreshTextSize();
@@ -468,6 +510,12 @@ void CGameResult::CalculateScore()
 	for (int turn = 0; turn < CGameData::GetInstance()->GetplayerNumber(); ++turn)
 	{
 		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(turn);
+
+		if (tempPlayer == nullptr)
+		{
+			//게임에 오류가 있다 >>> 종료하자!
+			CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+		}
 
 		int	totalScore = tempPlayer->GetPlayerItemNumber(MO_NOTHING) * SC_RT_SCORE_TILE
 							+ tempPlayer->GetPlayerItemNumber(MO_GOLD) * SC_RT_SCORE_GOLD
@@ -505,11 +553,11 @@ void CGameResult::SetMouseOver()
 RECT CGameResult::GetGetButtonPosition()
 {
 	RECT buttonPosition;
-	//조심해!! 형변환 확실히 표시해줄 것
-	buttonPosition.left = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth;
-	buttonPosition.right = buttonPosition.left + m_ButtonWidth;
-	buttonPosition.top = CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight;
-	buttonPosition.bottom = buttonPosition.top + m_ButtonHeight;
+
+	buttonPosition.left = static_cast<LONG>(CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_ButtonWidth);
+	buttonPosition.right = buttonPosition.left + static_cast<LONG>(m_ButtonWidth);
+	buttonPosition.top = static_cast<LONG>(CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_ButtonHeight);
+	buttonPosition.bottom = buttonPosition.top + static_cast<LONG>(m_ButtonHeight);
 
 	return buttonPosition;
 }

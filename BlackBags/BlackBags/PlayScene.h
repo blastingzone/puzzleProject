@@ -8,7 +8,7 @@ class CPlayScene : public CScene
 {
 public:
 	CPlayScene(void);
-	~CPlayScene(void);
+	virtual ~CPlayScene(void);
 
 	virtual bool Init();
 
@@ -56,8 +56,9 @@ private:
 	/*	마우스 클릭 범위 설정 */
 	void SetClickArea();
 	
+	std::array<CPlayer*, MAX_PLAYER_NUM> m_Player;
+
 	int			m_PlayerNumber;
-	CPlayer*	m_Player[MAX_PLAYER_NUM]; //조심해!!!! std::array를 쓰기로 했으면 대동단결
 	CGameMap*	m_Map;
 	int			m_PlayerTurn;
 

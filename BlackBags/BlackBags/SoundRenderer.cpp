@@ -39,9 +39,6 @@ void CSoundRenderer::ReleaseInstance()
 
 bool CSoundRenderer::Init()
 {
-	// 조심해!!
-	// assert 다 고쳐야해!!
-
 	FMOD_RESULT       fr = FMOD::System_Create( &m_System );
 
 	if (fr == FMOD_OK)
@@ -55,10 +52,6 @@ bool CSoundRenderer::Init()
 
 	if (fr !=FMOD_OK)
 		return false;
-
-
-	// 없어도 되는 함수;;
-	// AllocateChannel();
 
 	return true;
 }

@@ -21,9 +21,6 @@ CGameMap::CGameMap(MapSize mapSize)
 
 	m_pTimer = nullptr;
 
-	memset(m_ProfilePosition,0,sizeof(m_ProfilePosition));
-	memset(m_ProfileBoxPosition,0,sizeof(m_ProfileBoxPosition));
-
 	m_LineAnimationFlag = false;
 	m_TileAnimationTurnNumber = 0;
 	m_TileAnimationTurn = 0;
@@ -435,28 +432,44 @@ bool CGameMap::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 		
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 	}
 
 	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png", m_backImg);

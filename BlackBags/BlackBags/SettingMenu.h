@@ -114,7 +114,7 @@ class CSettingMenu :
 {
 public:
 	CSettingMenu(void);
-	~CSettingMenu(void);
+	virtual ~CSettingMenu(void);
 
 	virtual bool Init();
 	virtual void ResizeClient();
@@ -153,8 +153,6 @@ private:
 	void RefreshTextSize();
 	virtual void SetObjectSize();
 
-	void ErrorHandling();
-
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
@@ -175,7 +173,7 @@ private:
 
 	// 캐릭터 얼굴 브러시
 	// PlayScene 에서도 쓰는데 우선은 따로 만든다.
-	ID2D1Bitmap*			m_pCharacterFace[MAX_PLAYER_NUM];
+	std::array<ID2D1Bitmap*, MAX_PLAYER_NUM> m_pCharacterFace;
 
 	D2D1_SIZE_F				m_StartPosition;
 
@@ -204,10 +202,10 @@ private:
 	PlayerTitle				m_PlayerTitle;
 	MapTitle				m_MapTitle;
 	SettingTitle			m_SettingTitle;
-
-	PlayerSelect			m_PlayerSelect[MAX_PLAYER_NUM];
-	MapSelect				m_MapSelect[MAX_MAPSIZE_NUM];
 	NextButton				m_NextButton;
+
+	std::array<PlayerSelect, MAX_PLAYER_NUM>	 m_PlayerSelect;
+	std::array<MapSelect, MAX_MAPSIZE_NUM>		m_MapSelect;
 
 	int						m_PlayerMask;
 };

@@ -93,11 +93,7 @@ CPlayer* CGameData::GetPlayerPtrByTurn(int turn)
 		}
 	}
 
-	// 조심해!!
-	// assert는 Debug에서만 동작해!
-	// 리턴값을 넣어줘!
-
-	assert(false);
+	return nullptr;
 }
 
 void CGameData::SetPlayerTurn(int idx, int playerTurn)	

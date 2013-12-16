@@ -10,7 +10,7 @@ class CGameResult :
 {
 public:
 	CGameResult(void);
-	~CGameResult(void);
+	virtual ~CGameResult(void);
 
 	virtual void Render();
 	virtual void ResizeClient();
@@ -90,6 +90,6 @@ private:
 	ID2D1SolidColorBrush*	m_pTrashBrush;
 
 	//나중에 다른 씬과 공유하는 브러시들은 새로 생성하지 말고 공유하도록 할 것
-	ID2D1SolidColorBrush* m_TileBrush[MAX_PLAYER_NUM];
+	std::array<ID2D1SolidColorBrush*, MAX_PLAYER_NUM> m_TileBrush;
 };
 

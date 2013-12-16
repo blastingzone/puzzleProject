@@ -20,7 +20,7 @@ class CMainMenu :
 {
 public:
 	CMainMenu(void);
-	~CMainMenu(void);
+	virtual ~CMainMenu(void);
 
 	virtual void Render();
 	virtual void ResizeClient();

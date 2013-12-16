@@ -64,7 +64,7 @@ class CGameMap : public CSceneObject
 {
 public:
 	CGameMap(MapSize mapsize);
-	~CGameMap(void);
+	virtual ~CGameMap(void);
 
 	bool Init();
 	void Render();
@@ -145,7 +145,16 @@ private:
 	/*	게임 데이터를 저장하기 위한 배열
 		생성은 최대 크기로 생성하고, 
 		게임 설정에 따라서 필요한 부분만 다른 MapObject로 속성 변경해서 사용 */
-	std::array<std::array<MapObject, MAX_MAP_HEIGHT>, MAX_MAP_WIDTH> m_Map;
+	//std::array<std::array<MapObject, MAX_MAP_HEIGHT>, MAX_MAP_WIDTH> m_Map;
+	
+	template <typename IType, int ROW, int COL>
+	struct array2d_
+	{
+		typedef std::array< std::array<IType, COL>, ROW> type ;
+	} ;
+
+	typedef array2d_<MapObject, MAX_MAP_WIDTH, MAX_MAP_HEIGHT>::type MapObjMap ;
+	MapObjMap m_Map;
 
 	// 참고해!! 이런식으로 그냥 2차원 배열 형태로 쓰면 편하겠지? 
 	//@{
@@ -157,7 +166,7 @@ private:
 	} ;
 
 	typedef array2d_<MapObject, MAX_MAP_WIDTH, MAX_MAP_HEIGHT>::type MapObjMap ;
-	MapObjMap m_Mapzzzz ;
+	
 	*/
 	//@}
 
@@ -187,8 +196,8 @@ private:
 	float m_TimerWidth;
 	float m_TimerHeight;
 
-	D2D1_RECT_F		m_ProfilePosition[MAX_PLAYER_NUM];
-	D2D1_RECT_F		m_ProfileBoxPosition[MAX_PLAYER_NUM];
+	std::array<D2D1_RECT_F, MAX_PLAYER_NUM> m_ProfilePosition;
+	std::array<D2D1_RECT_F, MAX_PLAYER_NUM> m_ProfileBoxPosition;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;

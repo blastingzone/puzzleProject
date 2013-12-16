@@ -59,11 +59,6 @@ void CGameTimer::Update()
 	if (interval > 1000)
 	{
 		--m_TimeRest;
-
-		// 조심해!! 
-		// 상수 문자열을 코드상에 직접 박아 놓는것은 좋지 않다. 누누히 강조하지만 이런거는 따로 뺄 것... 
-
-		m_Result = L"³²Àº ½Ã°£ : " + std::to_wstring(m_TimeRest);
 		m_CheckedTime = m_CurrentTime;
 	}
 

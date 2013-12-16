@@ -474,8 +474,6 @@ void CNetworkSettingMenu::RefreshTextSize()
 
 void CNetworkSettingMenu::Render()
 {
-	//조심해!
-	//고칠 것!
 	PollingData();
 
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다

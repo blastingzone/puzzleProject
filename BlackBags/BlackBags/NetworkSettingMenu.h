@@ -186,7 +186,7 @@ protected:
 
 	// 캐릭터 얼굴 브러시
 	// PlayScene 에서도 쓰는데 우선은 따로 만든다.
-	ID2D1Bitmap*			m_pCharacterFace[MAX_PLAYER_NUM];
+	std::array<ID2D1Bitmap*, MAX_PLAYER_NUM> m_pCharacterFace;
 
 	D2D1_SIZE_F				m_StartPosition;
 
@@ -215,10 +215,10 @@ protected:
 	NetworkPlayerTitle		m_PlayerTitle;
 	NetworkMapTitle			m_MapTitle;
 	NetworkSettingTitle		m_SettingTitle;
-
-	NetworkPlayerSelect		m_PlayerSelect[MAX_PLAYER_NUM];
-	NetworkMapSelect		m_MapSelect[MAX_MAPSIZE_NUM];
 	NetworkNextButton		m_NextButton;
+
+	std::array<NetworkPlayerSelect, MAX_PLAYER_NUM> m_PlayerSelect;
+	std::array<NetworkMapSelect, MAX_MAPSIZE_NUM>	m_MapSelect;
 	
 	int						m_PlayerMask;
 };

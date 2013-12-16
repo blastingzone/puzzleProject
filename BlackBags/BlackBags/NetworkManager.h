@@ -54,7 +54,7 @@ private:
 	CircularBuffer				m_RecvBuffer;
 
 	// 각 사용자의 캐릭터 선택 정보를 가져오기 위한 배열
-	int							m_CharacterIdx[MAX_PLAYER_NUM];
+	std::array<int, MAX_PLAYER_NUM> m_CharacterIdx;
 
 	// 선택한 맵 인댁스
 	int							m_MapIndex;

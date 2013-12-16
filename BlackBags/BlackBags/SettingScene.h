@@ -7,7 +7,7 @@ class CSettingScene :
 {
 public:
 	CSettingScene(void);
-	~CSettingScene(void);
+	virtual ~CSettingScene(void);
 	
 	virtual bool Init();
 

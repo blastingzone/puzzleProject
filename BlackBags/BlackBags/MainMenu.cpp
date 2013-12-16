@@ -137,10 +137,14 @@ void CMainMenu::RefreshTextSize()
 			L"ko",
 			&m_TextFormat
 			);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 
 	hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	assert(SUCCEEDED(hr) );
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 
@@ -179,20 +183,28 @@ bool CMainMenu::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pMenuButtonBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pSelectedTextBrush);
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		hr = DWriteCreateFactory(
             DWRITE_FACTORY_TYPE_SHARED,
             __uuidof(IDWriteFactory),
             reinterpret_cast<IUnknown**>(&m_DWriteFactory)
             );
-		assert(SUCCEEDED(hr) );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
 
 		SetObjectSize();
 		RefreshTextSize();
@@ -200,8 +212,6 @@ bool CMainMenu::CreateResource()
 		m_ButtonList[0].m_ButtonText = L"NEW GAME";
 		m_ButtonList[0].m_LinkedScene = SC_SETTING;
 
-		//조심해!
-		//나중에 네트워크 추가되면 씬도 추가해서 수정 할 것
 		m_ButtonList[1].m_ButtonText = L"NETWORK";
 		m_ButtonList[1].m_LinkedScene = SC_NETWORK_SETTING;
 
