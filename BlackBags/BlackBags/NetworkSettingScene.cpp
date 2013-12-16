@@ -212,11 +212,7 @@ void CNetworkSettingScene::Render()
 
 bool CNetworkSettingScene::CheckGameStartCondition()
 {
-	if (m_SelectedPlayerNumber > 1 && (m_SelectedMapIndex != -1) )
-	{
-		return true;
-	}
-	return false;
+	return (m_SettingMenu->IsReady() && (m_SelectedMapIndex != -1) );
 }
 
 void CNetworkSettingScene::PlayBGM()

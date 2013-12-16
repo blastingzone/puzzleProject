@@ -27,6 +27,7 @@ public:
 	void DeletePlayer(int pid) ;
 
 	int GiveClientId();
+	int GetConnectionNum();
 
 	int GetCharacterSelectedStatusByClientId(int clientId)	{ return mCharacterSelectStatus[clientId]; }
 	bool SetCharacterSelectedStatus(int clientId, int characterId);

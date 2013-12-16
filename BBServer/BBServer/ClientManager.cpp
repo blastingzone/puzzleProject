@@ -178,7 +178,7 @@ int ClientManager::GiveClientId()
 {
 	for (int idx = 0; idx < MAX_CLIENT_NUM ; ++idx)
 	{
-		if (mClientIdList[idx] == false)
+		if (!mClientIdList[idx])
 		{
 			mClientIdList[idx] = true;
 			return idx;
@@ -186,6 +186,21 @@ int ClientManager::GiveClientId()
 	}
 
 	return NOT_LOGIN_CLIENT;
+}
+
+int ClientManager::GetConnectionNum()
+{
+	int connectionNum = 0;
+
+	for (int idx = 0; idx < MAX_CLIENT_NUM ; ++idx)
+	{
+		if (mClientIdList[idx])
+		{
+			++connectionNum;
+		}
+	}
+
+	return connectionNum;
 }
 
 bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId) 

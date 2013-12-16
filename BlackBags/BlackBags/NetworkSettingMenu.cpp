@@ -48,6 +48,9 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 	m_MapSelect[3].m_ButtonText = L"10 X 9";
 	m_MapSelect[3].m_GameDataMapSizeHeight = 10;
 	m_MapSelect[3].m_GameDataMapSizeWidth = 9;
+
+	m_SelectedPlayerNum = 0;
+	m_PlayerNum = 0;
 }
 
 
@@ -795,6 +798,9 @@ void CNetworkSettingMenu::InitMineFlag()
 
 void CNetworkSettingMenu::PollingData()
 {
+	m_PlayerNum = CNetworkManager::GetInstance()->GetPlayerNumber();
+	m_SelectedPlayerNum = 0;
+
 	for (int characterIdx = 0; characterIdx < MAX_PLAYER_NUM ; ++characterIdx)
 	{
 		m_PlayerSelect[characterIdx].m_IsSelected = false;
@@ -804,6 +810,7 @@ void CNetworkSettingMenu::PollingData()
 		
 		if (clientId != -1)
 		{
+			++m_SelectedPlayerNum;
 			//characterIdx에 해당하는 캐릭터를 고른 클라이언트가 있다는 이야기이므로 
 			m_PlayerSelect[characterIdx].m_IsSelected = true;
 
@@ -830,5 +837,14 @@ void CNetworkSettingMenu::PollingData()
 
 }
 
-
+//최대한 수정을 적게 하기 위해서 게임 시작 조건 체크를 여기서 하는 걸로 변경
+bool CNetworkSettingMenu::IsReady()
+{
+	if (m_SelectedPlayerNum > 1 
+		&& m_SelectedPlayerNum == m_PlayerNum)
+	{
+		return true;
+	}
+	return false;
+}
 

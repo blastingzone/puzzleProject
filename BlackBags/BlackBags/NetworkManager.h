@@ -38,6 +38,8 @@ public:
 	int GetMapIndex() { return m_MapIndex; }
 
 	int GetPlayerNumber() { return m_PlayerNumber; }
+	void SetPlayerNumber(int connectionNum) { m_PlayerNumber = connectionNum; }
+
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance
 	HWND						m_Hwnd;

@@ -127,6 +127,8 @@ void CNetworkManager::ProcessPacket()
 				CharacterResult recvData;
 				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
 				{
+					SetPlayerNumber(recvData.mConnectionNum);
+
 					InitCharaterList();
 
 					for (int PlayerIdx = 0; PlayerIdx < MAX_PLAYER_NUM ; ++PlayerIdx)

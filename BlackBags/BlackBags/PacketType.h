@@ -83,6 +83,7 @@ struct CharacterResult : public PacketHeader
 		// 인덱스가 플레이어 - 밸류가 캐릭터
 		memset( mCharacterId, -1, sizeof(mCharacterId) );
 	}
+	int		mConnectionNum;
 	int		mCharacterId[MAX_PLAYER_NUM] ;
 } ;
 

@@ -117,6 +117,8 @@ void ClientSession::OnRead(size_t len)
 				// 임계영역 문제 생김!
 				if (GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId) )
 				{
+					outPacket.mConnectionNum = GClientManager->GetConnectionNum();
+
 					for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
 					{
 						outPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);

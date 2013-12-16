@@ -155,6 +155,8 @@ public:
 	void	PollingData();
 	void	PollingMapData();
 
+	bool	IsReady();
+
 
 protected:
 	bool			CreateResource();
@@ -221,5 +223,9 @@ protected:
 	std::array<NetworkMapSelect, MAX_MAPSIZE_NUM>	m_MapSelect;
 	
 	int						m_PlayerMask;
+
+	//시작 조건을 체크하기 위한 변수들
+	int						m_SelectedPlayerNum;
+	int						m_PlayerNum;
 };
 
