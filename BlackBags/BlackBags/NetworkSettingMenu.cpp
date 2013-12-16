@@ -476,7 +476,7 @@ void CNetworkSettingMenu::Render()
 {
 	//조심해!
 	//고칠 것!
-	PollingCharacterData();
+	PollingData();
 
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
 	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
@@ -795,7 +795,7 @@ void CNetworkSettingMenu::InitMineFlag()
 	}
 }
 
-void CNetworkSettingMenu::PollingCharacterData()
+void CNetworkSettingMenu::PollingData()
 {
 	for (int characterIdx = 0; characterIdx < MAX_PLAYER_NUM ; ++characterIdx)
 	{

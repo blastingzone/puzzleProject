@@ -152,7 +152,7 @@ public:
 	bool	GetIsMineFlag(int idx)					{ return m_PlayerSelect[idx].m_IsMine; }
 	void	SetIsMineFlag(int idx, bool flag)		{ m_PlayerSelect[idx].m_IsMine = flag; }
 	void	InitMineFlag();
-	void	PollingCharacterData();
+	void	PollingData();
 	void	PollingMapData();
 
 

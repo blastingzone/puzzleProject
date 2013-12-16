@@ -37,6 +37,7 @@ public:
 	// ¸Ê ÀÎ´ì½º Àü´Ş
 	int GetMapIndex() { return m_MapIndex; }
 
+	int GetPlayerNumber() { return m_PlayerNumber; }
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance
 	HWND						m_Hwnd;
@@ -57,5 +58,8 @@ private:
 
 	// ¼±ÅÃÇÑ ¸Ê ÀÎ´ì½º
 	int							m_MapIndex;
+
+	// ÇÃ·¹ÀÌ¾î ¼ö
+	int							m_PlayerNumber;
 };
 

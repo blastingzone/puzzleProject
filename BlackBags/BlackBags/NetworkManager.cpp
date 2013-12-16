@@ -57,6 +57,7 @@ bool CNetworkManager::Init(HWND hwnd)
 
 void CNetworkManager::ReleaseInstance()
 {
+	SafeDelete(m_pInstance);
 }
 
 bool CNetworkManager::Connect()
