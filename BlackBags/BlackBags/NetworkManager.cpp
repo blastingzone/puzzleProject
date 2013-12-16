@@ -113,6 +113,7 @@ void CNetworkManager::ProcessPacket()
 					
 					m_ClientId = recvData.mPlayerId;
 					m_LoginComplete = true ;
+					m_PlayerNumber = recvData.mPlayerNumber;
 				
 				}
 				else
