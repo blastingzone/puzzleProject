@@ -13,7 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "VideoRender.h"
+#include "NetworkManager.h"
+#include <WinSock2.h>
 
+#define WM_SOCKET		104
 
 #define MAX_LOADSTRING 100
 
@@ -26,7 +29,7 @@ HINSTANCE		hInst;									// current instance
 TCHAR			szTitle[MAX_LOADSTRING];				// The title bar text
 TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 RECT			g_ClientRect;							// window client size
-CSceneManager*	g_Manager;								
+CSceneManager*	g_Manager;
 
 
 // Forward declarations of functions included in this code module:
@@ -82,6 +85,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	CGameData::GetInstance()->ReleaseInstance();
 	CGameTimer::GetInstance()->ReleaseInstance();
 	CSoundRenderer::GetInstance()->ReleaseInstance();
+	CNetworkManager::GetInstance()->ReleaseInstance();
 
 	FreeConsole();
 	delete g_Manager;
@@ -147,12 +151,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
 
-	if (!CSoundRenderer::GetInstance()->Init())
+	if (!CSoundRenderer::GetInstance()->Init() )
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
 
 	if (CVideoRender::GetInstance()->Init(hWnd) != S_OK)
+	{
+		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+	}
+	if (!CNetworkManager::GetInstance()->Init(hWnd) )
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
@@ -271,6 +279,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			 //PostQuitMessage(0);
 			 break;
 		break;
+	case WM_SOCKET:
+		{
+			if (WSAGETSELECTERROR(lParam))
+			{	
+				MessageBox(hWnd,L"WSAGETSELECTERROR",	L"Error", MB_OK|MB_ICONERROR);
+				SendMessage(hWnd,WM_DESTROY,NULL,NULL);
+				break;
+			}
+
+			switch (WSAGETSELECTEVENT(lParam))
+			{
+			case FD_CONNECT:
+				{
+					CNetworkManager::GetInstance()->AskClientId();
+				}
+				break ;
+
+			case FD_READ:
+				{
+					CNetworkManager::GetInstance()->Read();
+				}
+				break;
+
+			case FD_WRITE:
+				{
+					CNetworkManager::GetInstance()->Write();
+				}
+				break ;
+
+			case FD_CLOSE:
+				{
+					
+				}
+				break;
+			}
+		} 
+		break ;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
