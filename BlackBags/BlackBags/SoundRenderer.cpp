@@ -8,7 +8,8 @@ CSoundRenderer::CSoundRenderer(void) :
 	m_ChannelGroup(nullptr),
 	m_BGMChannel(nullptr),
 	m_SEChannel(nullptr),
-	m_SE(nullptr),
+	m_SE_DrawLine(nullptr),
+	m_SE_Select(nullptr),
 	m_Main(nullptr),
 	m_Setting(nullptr),
 	m_Play(nullptr),
@@ -77,7 +78,10 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 		fr = m_System->createSound(_BGM_RESULT, FMOD_HARDWARE, 0, &m_Result);
 
 	if (fr == FMOD_OK)
-		fr = m_System->createSound(_SE_DESC, FMOD_HARDWARE, 0, &m_SE);
+		fr = m_System->createSound(_SE_DRAW_LINE, FMOD_HARDWARE, 0, &m_SE_DrawLine);
+
+	if (fr == FMOD_OK)
+		fr = m_System->createSound(_SE_SELECT, FMOD_HARDWARE, 0, &m_SE_Select);
 
 	return fr;
 }
@@ -134,11 +138,20 @@ void CSoundRenderer::StopBGM()
 	assert(fr == FMOD_OK);
 }
 
-void CSoundRenderer::PlaySE()
+void CSoundRenderer::PlaySE_DrawLine()
 {
 	FMOD_RESULT fr;
 
-	fr = m_System->playSound(m_SE, m_ChannelGroup, false, &m_SEChannel);
+	fr = m_System->playSound(m_SE_DrawLine, m_ChannelGroup, false, &m_SEChannel);
+
+	assert(fr == FMOD_OK);
+}
+
+void CSoundRenderer::PlaySE_Select()
+{
+	FMOD_RESULT fr;
+
+	fr = m_System->playSound(m_SE_Select, m_ChannelGroup, false, &m_SEChannel);
 
 	assert(fr == FMOD_OK);
 }

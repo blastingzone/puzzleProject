@@ -71,6 +71,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			// 일단 선택된 캐릭터인지 확인해야 한다.
 			if ( !m_SettingMenu->GetPlayerSelected(idx) ) // && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) <<< 이걸 체크하는 이유가 뭘까?
 			{
+				CSoundRenderer::GetInstance()->PlaySE_Select();
 				characterSelectedByClient.mCharacterId = idx;
 
 				//내가 고른 캐릭터를 패킷에 담아서 발송!
@@ -106,6 +107,9 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			{
 				return;
 			}
+			CSoundRenderer::GetInstance()->PlaySE_Select();
+
+			
 			MapRequest mapRequest;
 			mapRequest.mMapIdx = idx;
 			

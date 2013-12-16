@@ -132,7 +132,9 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _BGM_RESULT "Resource/Sound/Nujabes/RESULT.mp3"
 
 /*	sound effect */
-#define _SE_DESC "Resource/Sound/SE1.mp3"
+#define _SE_DRAW_LINE "Resource/Sound/SE2.mp3"
+#define _SE_SELECT "Resource/Sound/button_pop.mp3"
+
 
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"
