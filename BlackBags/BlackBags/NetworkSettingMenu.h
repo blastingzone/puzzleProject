@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "SceneObject.h"
 
 #define MAX_MAPSIZE_NUM 4
@@ -108,7 +108,7 @@ struct NetworkMapTitle
 	std::wstring m_Title;
 };
 
-// ²®µ¥±â
+// ê»ë°ê¸°
 struct IDWriteFactory;
 struct IDWriteTextFormat;
 
@@ -175,42 +175,42 @@ protected:
 	IDWriteTextFormat*		m_SubTitleTextFormat;
 	IDWriteTextFormat*		m_MainTitleTextFormat;
 
-	// Player¿Í MapÀÌ °øÀ¯ÇÏ´Â ºê·¯½Ã
+	// Playerì™€ Mapì´ ê³µìœ í•˜ëŠ” ë¸ŒëŸ¬ì‹œ
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
 	ID2D1SolidColorBrush*	m_pButtonBrush;
 
-	// °¢ÀÚ »ç¿ëÇÏ´Â ºê·¯½Ã
+	// ê°ì ì‚¬ìš©í•˜ëŠ” ë¸ŒëŸ¬ì‹œ
 	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
 
 	ID2D1SolidColorBrush*	m_MyCharacterBrush;
 
-	// Ä³¸¯ÅÍ ¾ó±¼ ºê·¯½Ã
-	// PlayScene ¿¡¼­µµ ¾²´Âµ¥ ¿ì¼±Àº µû·Î ¸¸µç´Ù.
+	// ìºë¦­í„° ì–¼êµ´ ë¸ŒëŸ¬ì‹œ
+	// PlayScene ì—ì„œë„ ì“°ëŠ”ë° ìš°ì„ ì€ ë”°ë¡œ ë§Œë“ ë‹¤.
 	std::array<ID2D1Bitmap*, MAX_PLAYER_NUM> m_pCharacterFace;
 
 	D2D1_SIZE_F				m_StartPosition;
 
-	// Character ¼±ÅÃÃ¢ÀÇ ÀÌ¸§ ºÎºĞ
+	// Character ì„ íƒì°½ì˜ ì´ë¦„ ë¶€ë¶„
 	float					m_PlayerSelectTextSize;
 	float					m_PlayerSelectTextMargin;
-	// Map ¼±ÅÃÃ¢
+	// Map ì„ íƒì°½
 	float					m_MapSelectTextSize;
 	float					m_MapSelectTextMargin;
-	// GameStart ¹öÆ°
+	// GameStart ë²„íŠ¼
 	float					m_NextButtonTextSize;
 	float					m_NextButtonTextMargin;
-	// PLAYER Å¸ÀÌÆ²
+	// PLAYER íƒ€ì´í‹€
 	float					m_PlayerTitleTextSize;
 	float					m_PlayerTitleTextMargin;
-	// MAP Å¸ÀÌÆ²
+	// MAP íƒ€ì´í‹€
 	float					m_MapTitleTextSize;
 	float					m_MapTitleTextMargin;
-	// SettingScene Å¸ÀÌÆ²
+	// SettingScene íƒ€ì´í‹€
 	float					m_SettingTitleTextSize;
 	float					m_SettingTitleTextMargin;
-	// Ä³¸¯ÅÍ ÃÊ»óÈ­ °ü·Ã
+	// ìºë¦­í„° ì´ˆìƒí™” ê´€ë ¨
 	float					m_PortraitHeight;
 	float					m_PortraitWidth;
 	
@@ -224,7 +224,7 @@ protected:
 	
 	int						m_PlayerMask;
 
-	//½ÃÀÛ Á¶°ÇÀ» Ã¼Å©ÇÏ±â À§ÇÑ º¯¼öµé
+	//ì‹œì‘ ì¡°ê±´ì„ ì²´í¬í•˜ê¸° ìœ„í•œ ë³€ìˆ˜ë“¤
 	int						m_SelectedPlayerNum;
 	int						m_PlayerNum;
 };

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include "NetworkSettingScene.h"
 #include "NetworkManager.h"
 #include "PacketType.h"
@@ -57,7 +57,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
-			// ¿Œµ¶Ω∫∞° ≥—æÓ∞°¡ˆ æ ∞‘ «‘
+			// Ïù∏Îç±Ïä§Í∞Ä ÎÑòÏñ¥Í∞ÄÏßÄ ÏïäÍ≤å Ìï®
 			if (idx >= MAX_PLAYER_NUM)
 			{
 				return;
@@ -66,23 +66,23 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			CharacterRequest characterSelectedByClient;
 			characterSelectedByClient.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
 
-			// ¡∂Ω…«ÿ!
-			// ¿Ã∞« ≥◊∆Æøˆ≈© ∏≈¥œ¿˙«—≈◊º≠ πﬁæ∆ø¿¥¬ ∞‘ ¥ı ¡§»Æ«“ ∞Õ ∞∞¿∫µ•?
-			// ¿œ¥‹ º±≈√µ» ƒ≥∏Ø≈Õ¿Œ¡ˆ »Æ¿Œ«ÿæﬂ «—¥Ÿ.
-			if ( !m_SettingMenu->GetPlayerSelected(idx) ) // && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) <<< ¿Ã∞… √º≈©«œ¥¬ ¿Ã¿Ø∞° πª±Ó?
+			// Ï°∞Ïã¨Ìï¥!
+			// Ïù¥Í±¥ ÎÑ§Ìä∏ÏõåÌÅ¨ Îß§ÎãàÏ†ÄÌïúÌÖåÏÑú Î∞õÏïÑÏò§Îäî Í≤å Îçî Ï†ïÌôïÌï† Í≤É Í∞ôÏùÄÎç∞?
+			// ÏùºÎã® ÏÑ†ÌÉùÎêú Ï∫êÎ¶≠ÌÑ∞Ïù∏ÏßÄ ÌôïÏù∏Ìï¥Ïïº ÌïúÎã§.
+			if ( !m_SettingMenu->GetPlayerSelected(idx) ) // && (m_SelectedPlayerNumber < MAX_PLAYER_NUM) <<< Ïù¥Í±∏ Ï≤¥ÌÅ¨ÌïòÎäî Ïù¥Ïú†Í∞Ä Î≠òÍπå?
 			{
 				CSoundRenderer::GetInstance()->PlaySE_Select();
 				characterSelectedByClient.mCharacterId = idx;
 
-				//≥ª∞° ∞Ì∏• ƒ≥∏Ø≈Õ∏¶ ∆–≈∂ø° ¥„æ∆º≠ πﬂº€!
+				//ÎÇ¥Í∞Ä Í≥†Î•∏ Ï∫êÎ¶≠ÌÑ∞Î•º Ìå®ÌÇ∑Ïóê Îã¥ÏïÑÏÑú Î∞úÏÜ°!
 				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
 				{
 					CNetworkManager::GetInstance()->PostSendMessage();
 				}
 			}
 
-			// ≥ª ƒ≥∏Ø≈Õ¿œ ∞ÊøÏø°∏∏ √Îº“Ω√≈≥ ºˆ ¿÷∞Ì ±◊ ø‹ø°¥¬ π´Ω√«œ∞‘ ∏∏µÁ¥Ÿ
-			else if (m_SettingMenu->GetIsMineFlag(idx) ) // m_SettingMenu->GetPlayerSelected(idx) && ¥¬ ¡ﬂ∫π √º≈©
+			// ÎÇ¥ Ï∫êÎ¶≠ÌÑ∞Ïùº Í≤ΩÏö∞ÏóêÎßå Ï∑®ÏÜåÏãúÌÇ¨ Ïàò ÏûàÍ≥† Í∑∏ Ïô∏ÏóêÎäî Î¨¥ÏãúÌïòÍ≤å ÎßåÎì†Îã§
+			else if (m_SettingMenu->GetIsMineFlag(idx) ) // m_SettingMenu->GetPlayerSelected(idx) && Îäî Ï§ëÎ≥µ Ï≤¥ÌÅ¨
 			{
 				characterSelectedByClient.mCharacterId = -1;
 
@@ -102,7 +102,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
-			// ¿Œµ¶Ω∫∞° ≥—æÓ∞°¡ˆ æ ∞‘ «‘
+			// Ïù∏Îç±Ïä§Í∞Ä ÎÑòÏñ¥Í∞ÄÏßÄ ÏïäÍ≤å Ìï®
 			if (idx >= MAX_MAPSIZE_NUM)
 			{
 				return;
@@ -113,7 +113,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			MapRequest mapRequest;
 			mapRequest.mMapIdx = idx;
 			
-			//≈¨∂Û¿Ãæ∆Ææ∆¿Ãµ∏¶ ∏’¿˙ æÚæ˙æÓæﬂ «‘.
+			//ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ÏïÑÏù¥ÎîîÎ•º Î®ºÏ†Ä ÏñªÏóàÏñ¥Ïïº Ìï®.
 			mapRequest.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
 
 			m_SettingMenu->InitMapSelected();
@@ -128,7 +128,7 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 		}
 	}
 
-	// GameStartButton ≈¨∏ØΩ√
+	// GameStartButton ÌÅ¥Î¶≠Ïãú
 // 	if (CheckGameStartCondition())
 // 	{
 // 		m_SettingMenu->SetNextButtonPossible();
@@ -183,7 +183,7 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
-			// ¿Œµ¶Ω∫∞° ≥—æÓ∞°¡ˆ æ ∞‘ «‘
+			// Ïù∏Îç±Ïä§Í∞Ä ÎÑòÏñ¥Í∞ÄÏßÄ ÏïäÍ≤å Ìï®
 			if (idx >= MAX_PLAYER_NUM)
 			{
 				return;
@@ -200,7 +200,7 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 		{
 			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
-			// ¿Œµ¶Ω∫∞° ≥—æÓ∞°¡ˆ æ ∞‘ «‘
+			// Ïù∏Îç±Ïä§Í∞Ä ÎÑòÏñ¥Í∞ÄÏßÄ ÏïäÍ≤å Ìï®
 			if (idx >= MAX_MAPSIZE_NUM)
 			{
 				return;

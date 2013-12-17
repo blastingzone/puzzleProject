@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Config.h"
 
 #define MAX_CHAT_LEN	1024
@@ -84,7 +84,7 @@ struct CharacterResult : public PacketHeader
 	{
 		mSize = sizeof(CharacterResult) ;
 		mType = PKT_SC_CHARACTER_SELECT ;
-		// ÀÎµ¦½º°¡ ÇÃ·¹ÀÌ¾î - ¹ë·ù°¡ Ä³¸¯ÅÍ
+		// ì¸ë±ìŠ¤ê°€ í”Œë ˆì´ì–´ - ë°¸ë¥˜ê°€ ìºë¦­í„°
 		memset( mCharacterId, -1, sizeof(mCharacterId) );
 	}
 	int		mConnectionNum;
@@ -101,7 +101,7 @@ struct MapRequest : public PacketHeader
 		mMapIdx = -1;
 	}
 
-	//¹æÀå¸¸ ¼±ÅÃÇÒ ¼ö ÀÖ°Ô ¹Ù²Ü °Í.
+	//ë°©ì¥ë§Œ ì„ íƒí•  ìˆ˜ ìˆê²Œ ë°”ê¿€ ê²ƒ.
 	int		mPlayerId ;
 	int		mMapIdx;
 } ;

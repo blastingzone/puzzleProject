@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <winsock2.h>
 #include "CircularBuffer.h"
@@ -30,11 +30,11 @@ public:
 	void Write();
 	void CloseSocket();
 
-	// ¿¹¿ÜÃ³¸®´Â ºÎ¸£´Â ÂÊ¿¡¼­ ( PlayerId < MAX_PLAYER_NUM )
+	// ì˜ˆì™¸ì²˜ë¦¬ëŠ” ë¶€ë¥´ëŠ” ìª½ì—ì„œ ( PlayerId < MAX_PLAYER_NUM )
 	int	GetCharacterClientId(int characterId)		{ assert(characterId < MAX_PLAYER_NUM); return m_CharacterIdx[characterId]; }
 	void InitCharaterList();
 
-	// ¸Ê ÀÎ´ì½º Àü´Ş
+	// ë§µ ì¸ëŒìŠ¤ ì „ë‹¬
 	int GetMapIndex() { return m_MapIndex; }
 
 	int GetPlayerNumber() { return m_PlayerNumber; }
@@ -50,18 +50,18 @@ private:
 	bool						m_LoginComplete;
 
 	
-	// ¼ÒÄÏ + º¸³»±â ¹öÆÛ + ¹Ş±â ¹öÆÛ
+	// ì†Œì¼“ + ë³´ë‚´ê¸° ë²„í¼ + ë°›ê¸° ë²„í¼
 	SOCKET						m_Socket;
 	CircularBuffer				m_SendBuffer;
 	CircularBuffer				m_RecvBuffer;
 
-	// °¢ »ç¿ëÀÚÀÇ Ä³¸¯ÅÍ ¼±ÅÃ Á¤º¸¸¦ °¡Á®¿À±â À§ÇÑ ¹è¿­
+	// ê° ì‚¬ìš©ìì˜ ìºë¦­í„° ì„ íƒ ì •ë³´ë¥¼ ê°€ì ¸ì˜¤ê¸° ìœ„í•œ ë°°ì—´
 	std::array<int, MAX_PLAYER_NUM> m_CharacterIdx;
 
-	// ¼±ÅÃÇÑ ¸Ê ÀÎ´ì½º
+	// ì„ íƒí•œ ë§µ ì¸ëŒìŠ¤
 	int							m_MapIndex;
 
-	// ÇÃ·¹ÀÌ¾î ¼ö
+	// í”Œë ˆì´ì–´ ìˆ˜
 	int							m_PlayerNumber;
 };
 

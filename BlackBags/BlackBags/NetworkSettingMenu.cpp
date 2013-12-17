@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "NetworkSettingMenu.h"
 #include "NetworkManager.h"
 #include <dwrite.h>
@@ -22,7 +22,7 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 
 	m_PlayerMask = 0;
 
-	// ¹öÆ° ÃÊ±â°ªµéÀ» ¼³Á¤ÇÔ
+	// ë²„íŠ¼ ì´ˆê¸°ê°’ë“¤ì„ ì„¤ì •í•¨
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
@@ -78,7 +78,7 @@ void CNetworkSettingMenu::CalcStartPosition()
 	m_StartPosition = Position;
 }
 
-// SettingMenu¿¡¼­ ·»´õÇÏ´Â °´Ã¼µéÀÇ Å©±â¸¦ Á¶Á¤ÇÑ´Ù (ÅØ½ºÆ® Æ÷¸ËÀº µû·Î)
+// SettingMenuì—ì„œ ë Œë”í•˜ëŠ” ê°ì²´ë“¤ì˜ í¬ê¸°ë¥¼ ì¡°ì •í•œë‹¤ (í…ìŠ¤íŠ¸ í¬ë§·ì€ ë”°ë¡œ)
 void CNetworkSettingMenu::SetObjectSize()
 {
 	float CurrentScale = CRenderer::GetInstance()->GetDisplayScale();
@@ -131,7 +131,7 @@ void CNetworkSettingMenu::SetObjectSize()
 
 void CNetworkSettingMenu::ResizeClient()
 {
-	//È­¸é Å©±â Á¶Àı
+	//í™”ë©´ í¬ê¸° ì¡°ì ˆ
 	CalcStartPosition();
 	SetObjectSize();
 	RefreshTextSize();
@@ -148,7 +148,7 @@ bool CNetworkSettingMenu::CreateResource()
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
 		assert(SUCCEEDED(hr));
 
-		// ³×Æ®¿öÅ©¿ë ³»°¡ ¼±ÅÃÇÑ Ä³¸¯ÅÍ Ç¥½Ã
+		// ë„¤íŠ¸ì›Œí¬ìš© ë‚´ê°€ ì„ íƒí•œ ìºë¦­í„° í‘œì‹œ
 		if (SUCCEEDED(hr))
 		{
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_MyCharacterBrush);
@@ -167,7 +167,7 @@ bool CNetworkSettingMenu::CreateResource()
 		{
 			ErrorHandling();
 		}
-		/* Playerº° ¸¶¿ì½º ¿À¹ö ¹× ¼±ÅÃ½Ã »ö»ó */
+		/* Playerë³„ ë§ˆìš°ìŠ¤ ì˜¤ë²„ ë° ì„ íƒì‹œ ìƒ‰ìƒ */
 		assert(SUCCEEDED(hr));
 		if (SUCCEEDED(hr))
 		{
@@ -239,7 +239,7 @@ bool CNetworkSettingMenu::CreateResource()
 		}
 		assert(SUCCEEDED(hr));
 
-		/* Player, ¸Ê ¹öÆ°¿¡¼­ ¸¶¿ì½º ¿À¹ö ¹× ¼±ÅÃ½Ã »ö»ó */
+		/* Player, ë§µ ë²„íŠ¼ì—ì„œ ë§ˆìš°ìŠ¤ ì˜¤ë²„ ë° ì„ íƒì‹œ ìƒ‰ìƒ */
 
 		if (SUCCEEDED(hr))
 		{
@@ -286,7 +286,7 @@ bool CNetworkSettingMenu::CreateResource()
 		{
 			int i = 0;
 
-			// Ä³¸¯ÅÍ ÃÊ»óÈ­ »ı¼º
+			// ìºë¦­í„° ì´ˆìƒí™” ìƒì„±
 
 			for (i; i < MAX_PLAYER_NUM; ++i)
 			{
@@ -329,7 +329,7 @@ void CNetworkSettingMenu::RefreshTextSize()
 	SafeRelease(m_SubTitleTextFormat);
 	SafeRelease(m_MainTitleTextFormat);
 
-	// PlayerSelect Ã¢ºÎÅÍ ¹Ù²Ş
+	// PlayerSelect ì°½ë¶€í„° ë°”ê¿ˆ
 	hr = m_DWriteFactory->CreateTextFormat(
 		_MENU_FONT,
 		NULL,
@@ -352,7 +352,7 @@ void CNetworkSettingMenu::RefreshTextSize()
 	}
 	assert(SUCCEEDED(hr));
 
-	// MapSelect Ã¢ÀÇ TextFormatµµ ¹Ù²Ş
+	// MapSelect ì°½ì˜ TextFormatë„ ë°”ê¿ˆ
 	if ( SUCCEEDED(hr) )
 	{
 		hr = m_DWriteFactory->CreateTextFormat(
@@ -383,7 +383,7 @@ void CNetworkSettingMenu::RefreshTextSize()
 	}
 	assert(SUCCEEDED(hr));
 
-	// NextButton TextFormat »ı¼º
+	// NextButton TextFormat ìƒì„±
 	if (SUCCEEDED(hr))
 	{
 		hr = m_DWriteFactory->CreateTextFormat(
@@ -413,8 +413,8 @@ void CNetworkSettingMenu::RefreshTextSize()
 	}
 	assert(SUCCEEDED(hr));
 
-	// Subtitle TextFormat »ı¼º
-	// PlayerTitle ±âÁØÀ¸·Î ÅëÀÏ
+	// Subtitle TextFormat ìƒì„±
+	// PlayerTitle ê¸°ì¤€ìœ¼ë¡œ í†µì¼
 	if (SUCCEEDED(hr))
 	{
 		hr = m_DWriteFactory->CreateTextFormat(
@@ -446,7 +446,7 @@ void CNetworkSettingMenu::RefreshTextSize()
 
 	if (SUCCEEDED(hr))
 	{
-		// Maintitle TextFormat »ı¼º
+		// Maintitle TextFormat ìƒì„±
 		hr = m_DWriteFactory->CreateTextFormat(
 			_MENU_FONT,
 			NULL,
@@ -479,11 +479,11 @@ void CNetworkSettingMenu::Render()
 {
 	PollingData();
 
-	//»óÀÚ¸¦ ¸ÕÀú ±×¸®°í ±× À§¿¡ ±ÛÀÚ¸¦ ¾ñ´Â ½ÄÀÌ´Ù
+	//ìƒìë¥¼ ë¨¼ì € ê·¸ë¦¬ê³  ê·¸ ìœ„ì— ê¸€ìë¥¼ ì–¹ëŠ” ì‹ì´ë‹¤
 	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
 	D2D1_POINT_2F	pos;
 
-	//Setting TitleÀ» ·»´õ
+	//Setting Titleì„ ë Œë”
 	pos.x = m_StartPosition.width - m_SettingTitle.m_LayerWidth;
 	pos.y = m_StartPosition.height - m_SettingTitle.m_LayerHeight * 3;
 
@@ -498,8 +498,8 @@ void CNetworkSettingMenu::Render()
 		m_pUnselectedTextBrush
 		);
 
-	// Ä³¸¯ÅÍ ¼±ÅÃÃ¢À» ¾Ë¸®´Â Å¸ÀÌÆ²À» ·»´õ
-	// À§Ä¡¼±Á¤
+	// ìºë¦­í„° ì„ íƒì°½ì„ ì•Œë¦¬ëŠ” íƒ€ì´í‹€ì„ ë Œë”
+	// ìœ„ì¹˜ì„ ì •
 	pos.x = m_StartPosition.width + (-1) * m_PlayerSelect[0].m_ButtonWidth;
 	pos.y = m_StartPosition.height - m_PlayerTitle.m_LayerHeight;
 
@@ -514,10 +514,10 @@ void CNetworkSettingMenu::Render()
 		m_pUnselectedTextBrush
 		);
 
-	// Ä³¸¯ÅÍ ¼±ÅÃÃ¢ y °ª
+	// ìºë¦­í„° ì„ íƒì°½ y ê°’
 	pos.y = m_StartPosition.height + m_PlayerSelect[0].m_ButtonHeight * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE;
 
-	//Ä³¸¯ÅÍ ¼±ÅÃÃ¢ ·»´õ
+	//ìºë¦­í„° ì„ íƒì°½ ë Œë”
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		pos.x = m_StartPosition.width + ( (i - 1) * m_PlayerSelect[i].m_ButtonWidth);
@@ -531,14 +531,14 @@ void CNetworkSettingMenu::Render()
 			rectElement.top,
 			rectElement.right,
 			rectElement.bottom);
-		// Ä³¸¯ÅÍ ÃÊ»óÈ­ ºÎºĞ
-		// MouseOver ±¸Çö½Ã ¾Æ·¡ÀÇ if else ¹®¿¡ ³Ö¾î¼­ Á¶ÀıÇØÁØ´Ù
+		// ìºë¦­í„° ì´ˆìƒí™” ë¶€ë¶„
+		// MouseOver êµ¬í˜„ì‹œ ì•„ë˜ì˜ if else ë¬¸ì— ë„£ì–´ì„œ ì¡°ì ˆí•´ì¤€ë‹¤
 		CharacterPortraitPosition = D2D1::Rect ( rectElement.left,
 			rectElement.top - m_PortraitHeight,
 			rectElement.left + m_PortraitWidth,
 			rectElement.top);
 
-		// ¸¶¿ì½º°¡ ¿Ã¶ó°¡°Å³ª ¼±ÅÃµÈ »óÅÂ¸é ÀÚ½ÅÀÌ °¡Áø ºê·¯½¬·Î ÀÚ½ÅÀ» Ä¥ÇÔ
+		// ë§ˆìš°ìŠ¤ê°€ ì˜¬ë¼ê°€ê±°ë‚˜ ì„ íƒëœ ìƒíƒœë©´ ìì‹ ì´ ê°€ì§„ ë¸ŒëŸ¬ì‰¬ë¡œ ìì‹ ì„ ì¹ í•¨
 		if (m_PlayerSelect[i].m_IsMouseOver || m_PlayerSelect[i].m_IsSelected)
 		{
 			if (m_PlayerSelect[i].m_IsMine)
@@ -558,7 +558,7 @@ void CNetworkSettingMenu::Render()
 				m_pSelectedTextBrush
 				);
 		}
-		else // ¾Æ´Ï¸é ±ÛÀÚ¸¸ ³ª¿È
+		else // ì•„ë‹ˆë©´ ê¸€ìë§Œ ë‚˜ì˜´
 		{
 			m_pRenderTarget->DrawText(
 				m_PlayerSelect[i].m_ButtonText.c_str(),
@@ -568,12 +568,12 @@ void CNetworkSettingMenu::Render()
 				m_pUnselectedTextBrush
 				);
 		}
-		// Ä³¸¯ÅÍ ÃÊ»óÈ­ Æ÷Áö¼ÇÀº Character ¼±ÅÃÃ¢ÀÇ Áß½ÉÀ¸·ÎºÎÅÍ
-		// Ä³¸¯ÅÍ ÃÊ»óÈ­ ·»´õ
+		// ìºë¦­í„° ì´ˆìƒí™” í¬ì§€ì…˜ì€ Character ì„ íƒì°½ì˜ ì¤‘ì‹¬ìœ¼ë¡œë¶€í„°
+		// ìºë¦­í„° ì´ˆìƒí™” ë Œë”
 		m_pRenderTarget->DrawBitmap(m_pCharacterFace[i], CharacterPortraitPosition);
 	}
 
-	// ¸Ê ¼±ÅÃÃ¢À» ¾Ë¸®´Â Å¸ÀÌÆ²À» ·»´õ
+	// ë§µ ì„ íƒì°½ì„ ì•Œë¦¬ëŠ” íƒ€ì´í‹€ì„ ë Œë”
 	pos.x = m_StartPosition.width + (-1) * m_MapSelect[0].m_ButtonWidth;
 	pos.y = m_StartPosition.height + m_PlayerTitle.m_LayerHeight * (SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE - 2);
 
@@ -592,10 +592,10 @@ void CNetworkSettingMenu::Render()
 		m_pUnselectedTextBrush
 		);
 
-	// ¸Ê ¼±ÅÃÃ¢ y ¹ØÀ¸·Î ¾ó¸¶³ª ³»·Á°¥Áö
+	// ë§µ ì„ íƒì°½ y ë°‘ìœ¼ë¡œ ì–¼ë§ˆë‚˜ ë‚´ë ¤ê°ˆì§€
 	pos.y = m_StartPosition.height + m_PlayerSelect[0].m_ButtonHeight * SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE;
 
-	// ¸Ê ¼±ÅÃÃ¢ ·»´õ
+	// ë§µ ì„ íƒì°½ ë Œë”
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		pos.x = m_StartPosition.width + ( (j - 1) * m_MapSelect[j].m_ButtonWidth);
@@ -609,7 +609,7 @@ void CNetworkSettingMenu::Render()
 			rectElement.right,
 			rectElement.bottom);
 
-		// ¸Êµµ ¸¶Âù°¡Áö·Î ¼±ÅÃµÇ°Å³ª ¸¶¿ì½º°¡ ¿Ã¶ó°¡ ÀÖÀ¸¸é »öÀÌ º¯ÇÔ
+		// ë§µë„ ë§ˆì°¬ê°€ì§€ë¡œ ì„ íƒë˜ê±°ë‚˜ ë§ˆìš°ìŠ¤ê°€ ì˜¬ë¼ê°€ ìˆìœ¼ë©´ ìƒ‰ì´ ë³€í•¨
 		if (m_MapSelect[j].m_IsMouseOver && !m_MapSelect[j].m_IsSelected)
 		{
 			m_pRenderTarget->FillRectangle(rectElement, m_pMapBackgroundBrush);
@@ -646,11 +646,11 @@ void CNetworkSettingMenu::Render()
 		}
 	}
 
-	//NextButton Á¶°ÇÀÌ ºÎÇÕÇÏ¸é ·»´õ. ÀÌ Á¶°ÇÀÌ ºÎÇÕÇÏÁö ¾ÊÀ¸¸é È°¼ºÈ­µÇÁöµµ ¾Ê´Â´Ù(Å¬¸¯ºÒ°¡)
+	//NextButton ì¡°ê±´ì´ ë¶€í•©í•˜ë©´ ë Œë”. ì´ ì¡°ê±´ì´ ë¶€í•©í•˜ì§€ ì•Šìœ¼ë©´ í™œì„±í™”ë˜ì§€ë„ ì•ŠëŠ”ë‹¤(í´ë¦­ë¶ˆê°€)
 	if (m_NextButton.m_IsPossible)
 	{
 		pos.x = m_StartPosition.width + ( (MAX_MAPSIZE_NUM - 2) * m_MapSelect[0].m_ButtonWidth);
-		// ¹ØÀ¸·Î  ¾ó¸¶³ª ³»·Á°¥Áö
+		// ë°‘ìœ¼ë¡œ  ì–¼ë§ˆë‚˜ ë‚´ë ¤ê°ˆì§€
 		pos.y = m_StartPosition.height + m_PlayerSelect[0].m_ButtonHeight * SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE;
 
 		rectElement = D2D1::Rect( pos.x,
@@ -727,7 +727,7 @@ void CNetworkSettingMenu::InitMouseOver()
 	}
 }
 
-// ¸ÊÀ» ¼±ÅÃÇßÀ» ¶§, È¤Àº ¼±ÅÃÇÑ ¸ÊÀ» ´Ù½Ã Å¬¸¯ÇßÀ» ¶§ ¹ß»ı
+// ë§µì„ ì„ íƒí–ˆì„ ë•Œ, í˜¹ì€ ì„ íƒí•œ ë§µì„ ë‹¤ì‹œ í´ë¦­í–ˆì„ ë•Œ ë°œìƒ
 void CNetworkSettingMenu::InitMapSelected()
 {
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
@@ -736,7 +736,7 @@ void CNetworkSettingMenu::InitMapSelected()
 	}
 }
 
-// Mask °ªÀ» ÇÒ´çÇÏ¿© ¾î¶² ÇÃ·¹ÀÌ¾î°¡ ¼±ÅÃµÇ¾ú´ÂÁö 4ºñÆ®·Î ¾Ë ¼ö ÀÖ°Ô
+// Mask ê°’ì„ í• ë‹¹í•˜ì—¬ ì–´ë–¤ í”Œë ˆì´ì–´ê°€ ì„ íƒë˜ì—ˆëŠ”ì§€ 4ë¹„íŠ¸ë¡œ ì•Œ ìˆ˜ ìˆê²Œ
 void CNetworkSettingMenu::SetPlayerSelected(int idx)
 {
 	m_PlayerSelect[idx].m_IsSelected = true;
@@ -779,12 +779,12 @@ void CNetworkSettingMenu::CancelPlayerSelected(int idx)
 
 void CNetworkSettingMenu::ErrorHandling()
 {
-	//¿Ö MessageBox ÇÔ¼ö°¡ ÀÛµ¿ÇÏÁö ¾Ê´ÂÁö??
-	//ÇØ°á : MB_DEFAULT_DESKTOP_ONLY¸¦ Ãß°¡ÇØÁØ´Ù!
+	//ì™œ MessageBox í•¨ìˆ˜ê°€ ì‘ë™í•˜ì§€ ì•ŠëŠ”ì§€??
+	//í•´ê²° : MB_DEFAULT_DESKTOP_ONLYë¥¼ ì¶”ê°€í•´ì¤€ë‹¤!
 	std::wstring errorText = L"Error Code : ";
 	errorText.append( std::to_wstring( GetLastError() ) );
 	MessageBox(NULL, errorText.c_str(), L"Error!", MB_ICONERROR|MB_DEFAULT_DESKTOP_ONLY);
-	// ºñÁ¤»ó Á¾·á
+	// ë¹„ì •ìƒ ì¢…ë£Œ
 	PostQuitMessage(-1);
 }
 
@@ -811,10 +811,10 @@ void CNetworkSettingMenu::PollingData()
 		if (clientId != -1)
 		{
 			++m_SelectedPlayerNum;
-			//characterIdx¿¡ ÇØ´çÇÏ´Â Ä³¸¯ÅÍ¸¦ °í¸¥ Å¬¶óÀÌ¾ğÆ®°¡ ÀÖ´Ù´Â ÀÌ¾ß±âÀÌ¹Ç·Î 
+			//characterIdxì— í•´ë‹¹í•˜ëŠ” ìºë¦­í„°ë¥¼ ê³ ë¥¸ í´ë¼ì´ì–¸íŠ¸ê°€ ìˆë‹¤ëŠ” ì´ì•¼ê¸°ì´ë¯€ë¡œ 
 			m_PlayerSelect[characterIdx].m_IsSelected = true;
 
-			//characterIdx°¡ ³» Å¬¶óÀÌ¾ğ°¡ ¼­¹ö·ÎºÎÅÍ ÇÒ´ç¹ŞÀº ¾ÆÀÌµğ¿Í °°À¸¸é ±×°Ç ³»°¡ °í¸¥ °ÍÀÌ¹Ç·Î Ç¥½Ã
+			//characterIdxê°€ ë‚´ í´ë¼ì´ì–¸ê°€ ì„œë²„ë¡œë¶€í„° í• ë‹¹ë°›ì€ ì•„ì´ë””ì™€ ê°™ìœ¼ë©´ ê·¸ê±´ ë‚´ê°€ ê³ ë¥¸ ê²ƒì´ë¯€ë¡œ í‘œì‹œ
 			if ( clientId == CNetworkManager::GetInstance()->GetClientId() )
 			{
 				m_PlayerSelect[characterIdx].m_IsMine = true;
@@ -822,9 +822,9 @@ void CNetworkSettingMenu::PollingData()
 		}
 	}
 
-	//Á¶½ÉÇØ!!
-	//¸Êµ¥ÀÌÅ¸µµ ¿©±â¼­ ÇÑ ¹ø¿¡ ÇØÁØ´Ù.
-	//Polling ÇÔ¼ö´Â ÇÑ¹øÀ¸·Î ³¡³»´Â °ÍÀÌ ÁÁÀ» µí.
+	//ì¡°ì‹¬í•´!!
+	//ë§µë°ì´íƒ€ë„ ì—¬ê¸°ì„œ í•œ ë²ˆì— í•´ì¤€ë‹¤.
+	//Polling í•¨ìˆ˜ëŠ” í•œë²ˆìœ¼ë¡œ ëë‚´ëŠ” ê²ƒì´ ì¢‹ì„ ë“¯.
 	int mapSelected = CNetworkManager::GetInstance()->GetMapIndex();
 
 	for (int i = 0; i < MAX_MAPSIZE_NUM; ++i)
@@ -835,7 +835,7 @@ void CNetworkSettingMenu::PollingData()
 	if (mapSelected != -1 )
 		m_MapSelect[mapSelected].m_IsSelected = true;
 
-	//½ÃÀÛ Á¶°ÇÀÌ ÃæÁ·µÇ¸é StartButtonÀÌ »ı±æ¼ö ÀÖµµ·Ï ÇÑ´Ù.
+	//ì‹œì‘ ì¡°ê±´ì´ ì¶©ì¡±ë˜ë©´ StartButtonì´ ìƒê¸¸ìˆ˜ ìˆë„ë¡ í•œë‹¤.
 	if (IsReady() && mapSelected != -1)
 	{
 		SetNextButtonPossible();
@@ -847,7 +847,7 @@ void CNetworkSettingMenu::PollingData()
 
 }
 
-//ÃÖ´ëÇÑ ¼öÁ¤À» Àû°Ô ÇÏ±â À§ÇØ¼­ °ÔÀÓ ½ÃÀÛ Á¶°Ç Ã¼Å©¸¦ ¿©±â¼­ ÇÏ´Â °É·Î º¯°æ
+//ìµœëŒ€í•œ ìˆ˜ì •ì„ ì ê²Œ í•˜ê¸° ìœ„í•´ì„œ ê²Œì„ ì‹œì‘ ì¡°ê±´ ì²´í¬ë¥¼ ì—¬ê¸°ì„œ í•˜ëŠ” ê±¸ë¡œ ë³€ê²½
 bool CNetworkSettingMenu::IsReady()
 {
 	if (m_SelectedPlayerNum > 1 

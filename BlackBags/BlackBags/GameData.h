@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <string>
 #include <d2d1.h>
@@ -66,10 +66,10 @@ private:
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerData;
 
-	// ���� ��鸵�� ���� HWND
-	// �� �̰� ����� ������µ� �Ƚᵵ �ǳ׿�;; �޽��� �ڽ� �ɼ��� �˾Ƽ� �� ����
+	// 에러 헨들링을 위한 HWND
+	// 아 이거 힘들게 만들었는데 안써도 되네요;; 메시지 박스 옵션이 알아서 함 ㅎㅎ
 	HWND				m_hWnd;
 
-	//��Ʈ��ũ�� ������ �Ѿ�� ���� Ȯ�� �÷���
+	//네트워크용 다음씬 넘어가는 조건 확인 플래그
 	bool				m_NetworkNextSceneFlag;
 };

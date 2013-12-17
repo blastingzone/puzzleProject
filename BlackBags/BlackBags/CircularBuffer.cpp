@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "CircularBuffer.h"
 #include "PacketType.h"
 
@@ -19,11 +19,11 @@ bool CircularBuffer::Write(const char* data, size_t bytes)
 	if (bytes == 0)
 		return false ;
 
-	/// ¿ë·® ºÎÁ·
+	/// ìš©ëŸ‰ ë¶€ì¡±
 	if ( bytes > mCapacity - mCurrentSize )
 		return false ;
 	
-	// ¹Ù·Î ¾²±â °¡´ÉÇÑ °æ¿ì
+	// ë°”ë¡œ ì“°ê¸° ê°€ëŠ¥í•œ ê²½ìš°
 	if ( bytes <= mCapacity - mEndIndex )
 	{
 		memcpy(mData + mEndIndex, data, bytes) ;
@@ -32,7 +32,7 @@ bool CircularBuffer::Write(const char* data, size_t bytes)
 		if ( mEndIndex == mCapacity )
 			mEndIndex = 0 ;
 	}
-	// ÂÉ°³¼­ ½á¾ß µÉ °æ¿ì
+	// ìª¼ê°œì„œ ì¨ì•¼ ë  ê²½ìš°
 	else
 	{
 		size_t size1 = mCapacity - mEndIndex ;
@@ -54,11 +54,11 @@ bool CircularBuffer::Write(PacketHeader* packet, size_t bytes)
 	if (bytes == 0)
 		return false ;
 
-	/// ¿ë·® ºÎÁ·
+	/// ìš©ëŸ‰ ë¶€ì¡±
 	if ( bytes > mCapacity - mCurrentSize )
 		return false ;
 
-	// ¹Ù·Î ¾²±â °¡´ÉÇÑ °æ¿ì
+	// ë°”ë¡œ ì“°ê¸° ê°€ëŠ¥í•œ ê²½ìš°
 	if ( bytes <= mCapacity - mEndIndex )
 	{
 		memcpy(mData + mEndIndex, packet, bytes) ;
@@ -67,7 +67,7 @@ bool CircularBuffer::Write(PacketHeader* packet, size_t bytes)
 		if ( mEndIndex == mCapacity )
 			mEndIndex = 0 ;
 	}
-	// ÂÉ°³¼­ ½á¾ß µÉ °æ¿ì
+	// ìª¼ê°œì„œ ì¨ì•¼ ë  ê²½ìš°
 	else
 	{
 		size_t size1 = mCapacity - mEndIndex ;
@@ -92,7 +92,7 @@ bool CircularBuffer::Read(char* data, size_t bytes)
 	if ( mCurrentSize < bytes )
 		return false ;
 
-	/// ¹Ù·Î ÇÑ¹ø¿¡ ÀÐ¾î ¿Ã ¼ö ÀÖ´Â °æ¿ì
+	/// ë°”ë¡œ í•œë²ˆì— ì½ì–´ ì˜¬ ìˆ˜ ìžˆëŠ” ê²½ìš°
 	if ( bytes <= mCapacity - mBeginIndex )
 	{
 		memcpy(data, mData + mBeginIndex, bytes) ;
@@ -101,7 +101,7 @@ bool CircularBuffer::Read(char* data, size_t bytes)
 		if ( mBeginIndex == mCapacity )
 			mBeginIndex = 0 ;
 	}
-	/// ÀÐ¾î¿Ã µ¥ÀÌÅÍ°¡ ÂÉ°³Á® ÀÖ´Â °æ¿ì
+	/// ì½ì–´ì˜¬ ë°ì´í„°ê°€ ìª¼ê°œì ¸ ìžˆëŠ” ê²½ìš°
 	else
 	{
 		size_t size1 = mCapacity - mBeginIndex ;
@@ -119,12 +119,12 @@ bool CircularBuffer::Read(char* data, size_t bytes)
 
 void CircularBuffer::Peek(char* data)
 {
-	/// ¹Ù·Î ÇÑ¹ø¿¡ ÀÐ¾î ¿Ã ¼ö ÀÖ´Â °æ¿ì
+	/// ë°”ë¡œ í•œë²ˆì— ì½ì–´ ì˜¬ ìˆ˜ ìžˆëŠ” ê²½ìš°
 	if ( mCurrentSize <= mCapacity - mBeginIndex )
 	{
 		memcpy(data, mData + mBeginIndex, mCurrentSize) ;
 	}
-	/// ÀÐ¾î¿Ã µ¥ÀÌÅÍ°¡ ÂÉ°³Á® ÀÖ´Â °æ¿ì
+	/// ì½ì–´ì˜¬ ë°ì´í„°ê°€ ìª¼ê°œì ¸ ìžˆëŠ” ê²½ìš°
 	else
 	{
 		size_t size1 = mCapacity - mBeginIndex ;
@@ -143,12 +143,12 @@ bool CircularBuffer::Peek(char* data, size_t bytes)
 	if ( mCurrentSize < bytes )
 		return false ;
 
-	/// ¹Ù·Î ÇÑ¹ø¿¡ ÀÐ¾î ¿Ã ¼ö ÀÖ´Â °æ¿ì
+	/// ë°”ë¡œ í•œë²ˆì— ì½ì–´ ì˜¬ ìˆ˜ ìžˆëŠ” ê²½ìš°
 	if ( bytes <= mCapacity - mBeginIndex )
 	{
 		memcpy(data, mData + mBeginIndex, bytes) ;
 	}
-	/// ÀÐ¾î¿Ã µ¥ÀÌÅÍ°¡ ÂÉ°³Á® ÀÖ´Â °æ¿ì
+	/// ì½ì–´ì˜¬ ë°ì´í„°ê°€ ìª¼ê°œì ¸ ìžˆëŠ” ê²½ìš°
 	else
 	{
 		size_t size1 = mCapacity - mBeginIndex ;
@@ -170,7 +170,7 @@ bool CircularBuffer::Consume(size_t bytes)
 	if ( mCurrentSize < bytes )
 		return false ;
 
-	/// ¹Ù·Î ÇÑ¹ø¿¡ Á¦°ÅÇÒ ¼ö ÀÖ´Â °æ¿ì
+	/// ë°”ë¡œ í•œë²ˆì— ì œê±°í•  ìˆ˜ ìžˆëŠ” ê²½ìš°
 	if ( bytes <= mCapacity - mBeginIndex )
 	{
 		mBeginIndex += bytes ;
@@ -178,7 +178,7 @@ bool CircularBuffer::Consume(size_t bytes)
 		if ( mBeginIndex == mCapacity )
 			mBeginIndex = 0 ;
 	}
-	/// Á¦°ÅÇÒ µ¥ÀÌÅÍ°¡ ÂÉ°³Á® ÀÖ´Â °æ¿ì
+	/// ì œê±°í•  ë°ì´í„°ê°€ ìª¼ê°œì ¸ ìžˆëŠ” ê²½ìš°
 	else
 	{
 		size_t size2 = bytes + mBeginIndex - mCapacity ;

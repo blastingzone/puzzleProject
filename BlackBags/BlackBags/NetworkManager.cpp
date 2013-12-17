@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "NetworkManager.h"
 #include "PacketType.h"
 
@@ -84,7 +84,7 @@ bool CNetworkManager::Connect()
 	return true ;
 }
 
-/// ÆĞÅ¶Ã³¸® 
+/// íŒ¨í‚·ì²˜ë¦¬ 
 void CNetworkManager::ProcessPacket()
 {
 	while ( true )
@@ -104,10 +104,10 @@ void CNetworkManager::ProcessPacket()
 				LoginResult recvData ;
 				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
 				{
-					// ÆĞÅ¶Ã³¸®
+					// íŒ¨í‚·ì²˜ë¦¬
 					if ( recvData.mPlayerId == -1  )
 					{
-						/// ¿©±â °É¸®¸é ·Î±×ÀÎ ½ÇÆĞ´Ù.
+						/// ì—¬ê¸° ê±¸ë¦¬ë©´ ë¡œê·¸ì¸ ì‹¤íŒ¨ë‹¤.
 						ExitProcess(-1) ;
 					}
 					
@@ -133,13 +133,13 @@ void CNetworkManager::ProcessPacket()
 
 					for (int PlayerIdx = 0; PlayerIdx < MAX_PLAYER_NUM ; ++PlayerIdx)
 					{
-						//Â÷·Ê´ë·Î È®ÀÎÇÏ¸é¼­ PlayerIdx¿¡ ÇØ´çÇÏ´Â Å¬¶óÀÌ¾ğÆ®°¡ ¼±ÅÃÇÑ Ä³¸¯ÅÍ°¡ ÀÖÀ¸¸é
-						//±× Ä³¸¯ÅÍ ¹è¿­¿¡ ¼±ÅÃÇÑ PlayerIdx¸¦ ±â·ÏÇÑ´Ù.
+						//ì°¨ë¡€ëŒ€ë¡œ í™•ì¸í•˜ë©´ì„œ PlayerIdxì— í•´ë‹¹í•˜ëŠ” í´ë¼ì´ì–¸íŠ¸ê°€ ì„ íƒí•œ ìºë¦­í„°ê°€ ìˆìœ¼ë©´
+						//ê·¸ ìºë¦­í„° ë°°ì—´ì— ì„ íƒí•œ PlayerIdxë¥¼ ê¸°ë¡í•œë‹¤.
 
-						//Á¶½ÉÇØ!!!!
-						//ÆĞÅ¶¿¡¼­´Â ÀÎµ¦½º¸¦ Å¬¶óÀÌ¾ğÆ® ¾ÆÀÌµğ(PlayerIdx)·Î »ç¿ëÇÏ°í µ¥ÀÌÅÍ¸¦ Ä³¸¯ÅÍ ³Ñ¹ö·Î ±â·Ï
-						//¹İ¸é¿¡ Å¬¶óÀÌ¾ğÆ®¿¡¼­´Â Ä³¸¯ÅÍ ³Ñ¹ö¸¦ ÀÎµ¦½º·Î »ç¿ëÇÏ°í µ¥ÀÌÅÍ·Î Å¬¶óÀÌ¾ğÆ® ¾ÆÀÌµğ¸¦ ±â·ÏÇÑ´Ù
-						//½ÉÇÏ°Ô ÀÌ»óÇÏ´Ù. ±âÁ¸ ÄÚµå¿Í È£¿Ï¼ºÀ» »ı°¢ÇØ¼­ ÆĞÅ¶ ±¸Á¶ÀÇ º¯°æÀÌ ÇÊ¿äÇÏ´Ù
+						//ì¡°ì‹¬í•´!!!!
+						//íŒ¨í‚·ì—ì„œëŠ” ì¸ë±ìŠ¤ë¥¼ í´ë¼ì´ì–¸íŠ¸ ì•„ì´ë””(PlayerIdx)ë¡œ ì‚¬ìš©í•˜ê³  ë°ì´í„°ë¥¼ ìºë¦­í„° ë„˜ë²„ë¡œ ê¸°ë¡
+						//ë°˜ë©´ì— í´ë¼ì´ì–¸íŠ¸ì—ì„œëŠ” ìºë¦­í„° ë„˜ë²„ë¥¼ ì¸ë±ìŠ¤ë¡œ ì‚¬ìš©í•˜ê³  ë°ì´í„°ë¡œ í´ë¼ì´ì–¸íŠ¸ ì•„ì´ë””ë¥¼ ê¸°ë¡í•œë‹¤
+						//ì‹¬í•˜ê²Œ ì´ìƒí•˜ë‹¤. ê¸°ì¡´ ì½”ë“œì™€ í˜¸ì™„ì„±ì„ ìƒê°í•´ì„œ íŒ¨í‚· êµ¬ì¡°ì˜ ë³€ê²½ì´ í•„ìš”í•˜ë‹¤
 						if (recvData.mCharacterId[PlayerIdx] != -1)
 						{
 							m_CharacterIdx[recvData.mCharacterId[PlayerIdx] ] = PlayerIdx;
@@ -164,7 +164,7 @@ void CNetworkManager::ProcessPacket()
 				GameStartResult recvData;
 				if (m_RecvBuffer.Read((char*)&recvData, header.mSize))
 				{
-					//ÀÌ°É ¾ÀÀÌ Ã³¸®ÇÏ°Ô ÇØ¾ß ÇÏ³ª...¿ì¼±Àº ¿©±â¼­ ´ÙÀ½ ¾À ¼¼ÆÃÇØ¼­ ³Ñ°Ü¹ö¸³´Ï´Ù.
+					//ì´ê±¸ ì”¬ì´ ì²˜ë¦¬í•˜ê²Œ í•´ì•¼ í•˜ë‚˜...ìš°ì„ ì€ ì—¬ê¸°ì„œ ë‹¤ìŒ ì”¬ ì„¸íŒ…í•´ì„œ ë„˜ê²¨ë²„ë¦½ë‹ˆë‹¤.
 					CGameData::GetInstance()->SetNetworkNextSceneFlag(recvData.mStart);
 				}
 			}
@@ -203,7 +203,7 @@ void CNetworkManager::ProcessPacket()
 
 void CNetworkManager::AskClientId()
 {
-	/// NAGLE ²ö´Ù
+	/// NAGLE ëˆë‹¤
 	int opt = 1 ;
 	::setsockopt(m_Socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
 
@@ -232,7 +232,7 @@ void CNetworkManager::Read()
 
 	if ( !m_RecvBuffer.Write(inBuf, recvLen) )
 	{
-		/// ¹öÆÛ ²ËÃ¡´Ù. 
+		/// ë²„í¼ ê½‰ì°¼ë‹¤. 
 		assert(false) ;
 	}
 					
@@ -241,7 +241,7 @@ void CNetworkManager::Read()
 
 void CNetworkManager::Write()
 {
-	/// ½ÇÁ¦·Î ¹öÆÛ¿¡ ÀÖ´Â°Íµé ²¨³»¼­ º¸³»±â
+	/// ì‹¤ì œë¡œ ë²„í¼ì— ìˆëŠ”ê²ƒë“¤ êº¼ë‚´ì„œ ë³´ë‚´ê¸°
 	int size = m_SendBuffer.GetCurrentSize() ;
 	if ( size > 0 )
 	{
@@ -250,7 +250,7 @@ void CNetworkManager::Write()
 
 		int sent = send(m_Socket, data, size, 0) ;
 						
-		/// ´Ù¸¦¼ö ÀÖ´Ù
+		/// ë‹¤ë¥¼ìˆ˜ ìˆë‹¤
 		if ( sent != size )
 			OutputDebugStringA("sent != request\n") ;
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "BBServer.h"
 #include "PacketType.h"
 #include "ClientSession.h"
@@ -29,7 +29,7 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 
 void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 {
-	///FYI: C++ STL iterator ½ºÅ¸ÀÏÀÇ ·çÇÁ
+	///FYI: C++ STL iterator ìŠ¤íƒ€ì¼ì˜ ë£¨í”„
 	for (ClientList::const_iterator it=mClientList.begin() ; it!=mClientList.end() ; ++it)
 	{
 		ClientSession* client = it->second ;
@@ -43,7 +43,7 @@ void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 
 void ClientManager::OnPeriodWork()
 {
-	/// Á¢¼ÓÀÌ ²÷±ä ¼¼¼Çµé ÁÖ±âÀûÀ¸·Î Á¤¸® (1ÃÊ Á¤µµ ¸¶´Ù ÇØÁÖÀÚ)
+	/// ì ‘ì†ì´ ëŠê¸´ ì„¸ì…˜ë“¤ ì£¼ê¸°ì ìœ¼ë¡œ ì •ë¦¬ (1ì´ˆ ì •ë„ ë§ˆë‹¤ í•´ì£¼ì)
 	DWORD currTick = GetTickCount() ;
 	if ( currTick - mLastGCTick >= 1000 )
 	{
@@ -51,14 +51,14 @@ void ClientManager::OnPeriodWork()
 		mLastGCTick = currTick ;
 	}
 
-	/// Á¢¼ÓµÈ Å¬¶óÀÌ¾ğÆ® ¼¼¼Çº°·Î ÁÖ±âÀûÀ¸·Î ÇØÁà¾ß ÇÏ´Â ÀÏ (ÁÖ±â´Â ¾Ë¾Æ¼­ Á¤ÇÏ¸é µÊ - Áö±İÀº 1ÃÊ·Î ¤¾¤¾)
+	/// ì ‘ì†ëœ í´ë¼ì´ì–¸íŠ¸ ì„¸ì…˜ë³„ë¡œ ì£¼ê¸°ì ìœ¼ë¡œ í•´ì¤˜ì•¼ í•˜ëŠ” ì¼ (ì£¼ê¸°ëŠ” ì•Œì•„ì„œ ì •í•˜ë©´ ë¨ - ì§€ê¸ˆì€ 1ì´ˆë¡œ ã…ã…)
 	if ( currTick - mLastClientWorkTick >= 1000 )
 	{
 		ClientPeriodWork() ;
 		mLastClientWorkTick = currTick ;
 	}
 
-	/// Ã³¸® ¿Ï·áµÈ DB ÀÛ¾÷µé °¢°¢ÀÇ Client·Î dispatch
+	/// ì²˜ë¦¬ ì™„ë£Œëœ DB ì‘ì—…ë“¤ ê°ê°ì˜ Clientë¡œ dispatch
 	//DispatchDatabaseJobResults() ;
 		
 }
@@ -67,7 +67,7 @@ void ClientManager::CollectGarbageSessions()
 {
 	std::vector<ClientSession*> disconnectedSessions ;
 	
-	///FYI: C++ 11 ¶÷´Ù¸¦ ÀÌ¿ëÇÑ ½ºÅ¸ÀÏ
+	///FYI: C++ 11 ëŒë‹¤ë¥¼ ì´ìš©í•œ ìŠ¤íƒ€ì¼
 	std::for_each(mClientList.begin(), mClientList.end(),
 		[&](ClientList::const_reference it)
 		{
@@ -79,7 +79,7 @@ void ClientManager::CollectGarbageSessions()
 	) ;
 	
 
-	///FYI: C¾ğ¾î ½ºÅ¸ÀÏÀÇ ·çÇÁ
+	///FYI: Cì–¸ì–´ ìŠ¤íƒ€ì¼ì˜ ë£¨í”„
 // 	for (size_t i=0 ; i<disconnectedSessions.size() ; ++i)
 // 	{
 // 		ClientSession* client = disconnectedSessions[i] ;
@@ -91,7 +91,7 @@ void ClientManager::CollectGarbageSessions()
 
 void ClientManager::ClientPeriodWork()
 {
-	/// FYI: C++ 11 ½ºÅ¸ÀÏÀÇ ·çÇÁ
+	/// FYI: C++ 11 ìŠ¤íƒ€ì¼ì˜ ë£¨í”„
 	for (auto& it : mClientList)
 	{
 		ClientSession* client = it.second ;
@@ -101,7 +101,7 @@ void ClientManager::ClientPeriodWork()
 
 void ClientManager::DispatchDatabaseJobResults()
 {
-	/// ½×¿© ÀÖ´Â DB ÀÛ¾÷ Ã³¸® °á°úµéÀ» °¢°¢ÀÇ Å¬¶ó¿¡°Ô ³Ñ±ä´Ù
+	/// ìŒ“ì—¬ ìˆëŠ” DB ì‘ì—… ì²˜ë¦¬ ê²°ê³¼ë“¤ì„ ê°ê°ì˜ í´ë¼ì—ê²Œ ë„˜ê¸´ë‹¤
 	DatabaseJobContext* dbResult = nullptr ;
 	while ( GDatabaseJobManager->PopDatabaseJobResult(dbResult) )
 	{
@@ -121,7 +121,7 @@ void ClientManager::DispatchDatabaseJobResults()
 			}
 			else
 			{
-				/// ¿©±â´Â ÇØ´ç DB¿äÃ»À» Çß´ø Å¬¶óÀÌ¾ğÆ®¿¡¼­ Á÷Á¢ ÇØÁà¾ß ´Â °æ¿ì´Ù
+				/// ì—¬ê¸°ëŠ” í•´ë‹¹ DBìš”ì²­ì„ í–ˆë˜ í´ë¼ì´ì–¸íŠ¸ì—ì„œ ì§ì ‘ í•´ì¤˜ì•¼ ëŠ” ê²½ìš°ë‹¤
 				auto& it = mClientList.find(dbResult->mSockKey) ;
 
 				if ( it != mClientList.end() && it->second->IsConnected() )
@@ -133,7 +133,7 @@ void ClientManager::DispatchDatabaseJobResults()
 		}
 	
 	
-		/// ¿Ï·áµÈ DB ÀÛ¾÷ ÄÁÅØ½ºÆ®´Â »èÁ¦ÇØÁÖÀÚ
+		/// ì™„ë£Œëœ DB ì‘ì—… ì»¨í…ìŠ¤íŠ¸ëŠ” ì‚­ì œí•´ì£¼ì
 		DatabaseJobContext* toBeDelete = dbResult ;
 		delete toBeDelete ;
 	}
@@ -205,10 +205,10 @@ int ClientManager::GetConnectionNum()
 
 bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId) 
 { 
-	//·Î±×ÀÎ ¸ø ÇÑ ³ğÀÌ¸é Ã³¸® ¾È ÇÑ´Ù
+	//ë¡œê·¸ì¸ ëª» í•œ ë†ˆì´ë©´ ì²˜ë¦¬ ì•ˆ í•œë‹¤
 	if (clientId >= 0 && clientId < MAX_CLIENT_NUM);
 	{
-		//Ä³¸¯ÅÍ°¡ ¾ÆÁ÷ ¼±ÅÃ ¾È µÈ »óÅÂÀÌ¸é ÇÒ´çÇØÁØ´Ù
+		//ìºë¦­í„°ê°€ ì•„ì§ ì„ íƒ ì•ˆ ëœ ìƒíƒœì´ë©´ í• ë‹¹í•´ì¤€ë‹¤
 		if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
 		{
 			mCharacterSelectStatus[clientId] = characterId; 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "NetworkGameMap.h"
 #include "GameTimer.h"
 #include "Player.h"
@@ -67,8 +67,8 @@ CNetworkGameMap::~CNetworkGameMap(void)
 
 void CNetworkGameMap::CreateMap()
 {
-	/*	½ÇÁ¦·Î °ÔÀÓ¿¡ »ç¿ëµÇ´Â Å¸ÀÏ ¿Ü¿¡µµ ¿ïÅ¸¸®¿Í Á¡À» Ç¥½ÃÇÏ±â À§ÇÑ Ä­µµ ÇÊ¿ä
-		»ı¼ºµÈ °ÔÀÓ ÁÖº¯Àº ±âº»°ªÀÎ MO_SENTINEL·Î µÎ¾î¼­ IsClosed()¿Í °°Àº ÀÛ¾÷½Ã È°¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÔ */
+	/*	ì‹¤ì œë¡œ ê²Œì„ì— ì‚¬ìš©ë˜ëŠ” íƒ€ì¼ ì™¸ì—ë„ ìš¸íƒ€ë¦¬ì™€ ì ì„ í‘œì‹œí•˜ê¸° ìœ„í•œ ì¹¸ë„ í•„ìš”
+		ìƒì„±ëœ ê²Œì„ ì£¼ë³€ì€ ê¸°ë³¸ê°’ì¸ MO_SENTINELë¡œ ë‘ì–´ì„œ IsClosed()ì™€ ê°™ì€ ì‘ì—…ì‹œ í™œìš©í•  ìˆ˜ ìˆë„ë¡ í•¨ */
 	int targetRow, targetColumn;
 
 	for (targetRow = 1; targetRow <= m_MapSize.m_Height*2 + 1; ++targetRow)
@@ -141,16 +141,16 @@ void CNetworkGameMap::Render()
 	D2D1_RECT_F		rectElement;
 	D2D1_POINT_2F	m_pos;
 
-	/*	¾Ö´Ï¸ŞÀÌ¼Ç Ãß°¡
-		±âº»ÀûÀ¸·Î ¾Ö´Ï¸ŞÀÌ¼Ç flag´Â line°ú tile µÎ °¡Áö°¡ ÀÖÀ½
-		ÀÌ Áß¿¡¼­ ÇÏ³ª¶óµµ ÁøÇà Áß(flag°¡ true)ÀÌ¸é ¸¶¿ì½º ÀÔ·ÂÀº ¹ŞÁö ¾Ê°í ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¿Ï·á µÇ¾î¾ß °ÔÀÓ ÁøÇà
-		¾Ö´Ï¸ŞÀÌ¼Ç ¼ø¼­´Â line >> tile
-		Å¸ÀÏ ¾Ö´Ï¸ŞÀÌ¼Ç¿¡´Â Àç»ıµÇ´Â ¼ø¼­°¡ ÁöÁ¤µÇ¾î ÀÖÀ½
-		(¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ÁöÁ¤µÈ Å¸ÀÏµéÀÇ Àç»ıÀÌ ¸ğµÎ ¿Ï·áµÇ¾î¾ß ÀüÃ¼ Å¸ÀÏ ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·á) */
+	/*	ì• ë‹ˆë©”ì´ì…˜ ì¶”ê°€
+		ê¸°ë³¸ì ìœ¼ë¡œ ì• ë‹ˆë©”ì´ì…˜ flagëŠ” lineê³¼ tile ë‘ ê°€ì§€ê°€ ìˆìŒ
+		ì´ ì¤‘ì—ì„œ í•˜ë‚˜ë¼ë„ ì§„í–‰ ì¤‘(flagê°€ true)ì´ë©´ ë§ˆìš°ìŠ¤ ì…ë ¥ì€ ë°›ì§€ ì•Šê³  ì• ë‹ˆë©”ì´ì…˜ì´ ì™„ë£Œ ë˜ì–´ì•¼ ê²Œì„ ì§„í–‰
+		ì• ë‹ˆë©”ì´ì…˜ ìˆœì„œëŠ” line >> tile
+		íƒ€ì¼ ì• ë‹ˆë©”ì´ì…˜ì—ëŠ” ì¬ìƒë˜ëŠ” ìˆœì„œê°€ ì§€ì •ë˜ì–´ ìˆìŒ
+		(ì• ë‹ˆë©”ì´ì…˜ì´ ì§€ì •ëœ íƒ€ì¼ë“¤ì˜ ì¬ìƒì´ ëª¨ë‘ ì™„ë£Œë˜ì–´ì•¼ ì „ì²´ íƒ€ì¼ ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œ) */
 
-	/*	layer : background - tile - line - dot ¼ø¼­´ë·Î ·»´õ¸µ 
-		ÇöÀç´Â °ãÃÄÁ®¼­ Ç¥½ÃµÇ´Â °ÍÀÌ ¾øÀ¸¹Ç·Î ÇÊ¿ä¾øÀ½
-		ÃßÈÄ ¾ÆÀÌÅÛ°ú UI Ãß°¡ ½Ã »óÈ²¿¡ ¸ÂÃç¼­ ·¹ÀÌ¾î ±¸ºĞ »õ·Î ÇÒ °Í */
+	/*	layer : background - tile - line - dot ìˆœì„œëŒ€ë¡œ ë Œë”ë§ 
+		í˜„ì¬ëŠ” ê²¹ì³ì ¸ì„œ í‘œì‹œë˜ëŠ” ê²ƒì´ ì—†ìœ¼ë¯€ë¡œ í•„ìš”ì—†ìŒ
+		ì¶”í›„ ì•„ì´í…œê³¼ UI ì¶”ê°€ ì‹œ ìƒí™©ì— ë§ì¶°ì„œ ë ˆì´ì–´ êµ¬ë¶„ ìƒˆë¡œ í•  ê²ƒ */
 
 	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
@@ -188,14 +188,14 @@ void CNetworkGameMap::Render()
 					break;
 				}
 				
-				//¾ÆÁ÷ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ±×¸± Â÷·Ê°¡ ¾Æ´Ï¸é ¼ÒÀ¯ÁÖ°¡ ¾ø´Â »óÅÂ·Î µ¤¾î ¹ö¸°´Ù.
+				//ì•„ì§ ì• ë‹ˆë©”ì´ì…˜ì„ ê·¸ë¦´ ì°¨ë¡€ê°€ ì•„ë‹ˆë©´ ì†Œìœ ì£¼ê°€ ì—†ëŠ” ìƒíƒœë¡œ ë®ì–´ ë²„ë¦°ë‹¤.
 				if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
 					|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
 				{
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 				}
-				//ÁøÇàÁßÀÎ ¶óÀÎ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾ø°í 
-				//¾Ö´Ï¸ŞÀÌ¼Ç ±×¸± ÅÏÀÌ µÇ¾ú°Å³ª ÁøÇà ÁßÀÌ¶ó¸é
+				//ì§„í–‰ì¤‘ì¸ ë¼ì¸ ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ê³  
+				//ì• ë‹ˆë©”ì´ì…˜ ê·¸ë¦´ í„´ì´ ë˜ì—ˆê±°ë‚˜ ì§„í–‰ ì¤‘ì´ë¼ë©´
 				else if (!m_LineAnimationFlag 
 					&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
 					&& m_TileAnimationTurn > 0
@@ -210,7 +210,7 @@ void CNetworkGameMap::Render()
 
 					float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
 					
-					//¸¸¾à ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ½Ã°£À» ÃÊ°úÇÏ¸é ÃÖ´ë Å©±â·Î ÇÒ´ç
+					//ë§Œì•½ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì‹œê°„ì„ ì´ˆê³¼í•˜ë©´ ìµœëŒ€ í¬ê¸°ë¡œ í• ë‹¹
 					float tempLine = 0;
 					if (progressedTimeRatio >= 1)
 					{
@@ -223,15 +223,15 @@ void CNetworkGameMap::Render()
 
 					if ( tempLine >= m_TileSize)
 					{
-						//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀÌ ¿Ï·áµÇ¸é ÇöÀç Å¸ÀÏ º¯¼ö ÃÊ±âÈ­ ¹× ´ÙÀ½ ÅÏ ±×¸± ÁØºñ
+						//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì´ ì™„ë£Œë˜ë©´ í˜„ì¬ íƒ€ì¼ ë³€ìˆ˜ ì´ˆê¸°í™” ë° ë‹¤ìŒ í„´ ê·¸ë¦´ ì¤€ë¹„
 						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
 						m_Map[i][j].m_AnimationTurn = 0;
 						m_Map[i][j].m_AnimationFlag = false;
 						
-						//È¤½Ã¶óµµ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ½Ã°£ÀÌ 20ÃÊ¸¦ ³Ñ±æ °æ¿ì¸¦ ´ëºñÇØ¼­ ÁÖ±âÀûÀ¸·Î ÃÊ±âÈ­
+						//í˜¹ì‹œë¼ë„ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì‹œê°„ì´ 20ì´ˆë¥¼ ë„˜ê¸¸ ê²½ìš°ë¥¼ ëŒ€ë¹„í•´ì„œ ì£¼ê¸°ì ìœ¼ë¡œ ì´ˆê¸°í™”
 						CGameTimer::GetInstance()->SetTimerStart();
 						
-						//Å¸ÀÏ ¾Ö´Ï¸ŞÀÌ¼Ç ÀüÃ¼°¡ ³¡³­°Å¶ó¸é °ü·Ã º¯¼ö ÃÊ±âÈ­
+						//íƒ€ì¼ ì• ë‹ˆë©”ì´ì…˜ ì „ì²´ê°€ ëë‚œê±°ë¼ë©´ ê´€ë ¨ ë³€ìˆ˜ ì´ˆê¸°í™”
 						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
 						{
 							m_TileAnimationTurn = 0;
@@ -240,10 +240,10 @@ void CNetworkGameMap::Render()
 					}
 					else
 					{
-						//¾Ö´Ï¸ŞÀÌ¼ÇÀÌ Àç»ı ÁßÀÌ¶ó¸é 
+						//ì• ë‹ˆë©”ì´ì…˜ì´ ì¬ìƒ ì¤‘ì´ë¼ë©´ 
 						D2D1_RECT_F animationRect;
 						
-						//¾Ö´Ï¸ŞÀÌ¼ÇÀ» ±×¸°´Ù
+						//ì• ë‹ˆë©”ì´ì…˜ì„ ê·¸ë¦°ë‹¤
 						switch (m_Map[i][j].m_Direction)
 						{
 						case DI_UP:
@@ -315,10 +315,10 @@ void CNetworkGameMap::Render()
 					break;
 				case MO_LINE_CONNECTED:
 					//animation
-					//GET - SET function ¸¸µé °Í
+					//GET - SET function ë§Œë“¤ ê²ƒ
 					if (m_Map[i][j].m_AnimationFlag)
 					{
-						//UnconnectedLineÀ» ¹è°æ¿¡ µÎ°í À§¿¡ ±×·Á¾ß ÇÏ¹Ç·Î ¹è°æÀ» ¸ÕÀú ±×¸²
+						//UnconnectedLineì„ ë°°ê²½ì— ë‘ê³  ìœ„ì— ê·¸ë ¤ì•¼ í•˜ë¯€ë¡œ ë°°ê²½ì„ ë¨¼ì € ê·¸ë¦¼
 						m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 						if (m_Map[i][j].m_StartTime == 0)
@@ -333,12 +333,12 @@ void CNetworkGameMap::Render()
 
 						if (tempLine > m_TileSize)
 						{
-							//line ¾Ö´Ï¸ŞÀÌ¼Ç Á¾·áµÇ¸é °ü·Ã º¯¼ö ÃÊ±âÈ­
+							//line ì• ë‹ˆë©”ì´ì…˜ ì¢…ë£Œë˜ë©´ ê´€ë ¨ ë³€ìˆ˜ ì´ˆê¸°í™”
 							m_Map[i][j].m_AnimationFlag = false;
 							m_LineAnimationFlag = false;
 							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
 
-							//´ÙÀ½¿¡ Àç»ıÇÒ Å¸ÀÏ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾øÀ¸¸é Å¸ÀÌ¸Ó ÃÊ±âÈ­ÇØ¼­ ´ÙÀ½ ÅÏ ÁøÇà
+							//ë‹¤ìŒì— ì¬ìƒí•  íƒ€ì¼ ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ìœ¼ë©´ íƒ€ì´ë¨¸ ì´ˆê¸°í™”í•´ì„œ ë‹¤ìŒ í„´ ì§„í–‰
 							if (m_TileAnimationTurnNumber == 0)
 							{
 								CGameTimer::GetInstance()->SetTimerStart();
@@ -346,7 +346,7 @@ void CNetworkGameMap::Render()
 						}
 						else
 						{
-							//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+							//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
 							if (i%2==0)
 							{
 								rectElement = D2D1::Rect( m_pos.x - m_LineWeight / 2, m_pos.y - tempLine / 2, m_pos.x + m_LineWeight / 2, m_pos.y + tempLine / 2);
@@ -398,13 +398,13 @@ void CNetworkGameMap::Render()
 	m_pos.x = centerPosition.width;
 	m_pos.y = m_TimerPositionHeight;
 
-	//¹è°æ
+	//ë°°ê²½
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x + (m_TimerWidth / 2), m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
 	
-	//animation Àç»ı Áß¿¡´Â Å¸ÀÌ¸Ó ¾È ÁÙ¾îµå´Â °ÍÃ³·³ º¸ÀÌ°Ô ÇÔ
+	//animation ì¬ìƒ ì¤‘ì—ëŠ” íƒ€ì´ë¨¸ ì•ˆ ì¤„ì–´ë“œëŠ” ê²ƒì²˜ëŸ¼ ë³´ì´ê²Œ í•¨
 	if (m_LineAnimationFlag || m_TileAnimationTurn != 0)
 	{
 		remainTimeRatio = 1.0f;
@@ -412,7 +412,7 @@ void CNetworkGameMap::Render()
 
 	float currentTimerLength = m_TimerWidth * remainTimeRatio;
 
-	//³²Àº ½Ã°£ Ç¥½Ã (ºê·¯½Ã »õ·Î ¸¸µé¾î ¾µ °Í)
+	//ë‚¨ì€ ì‹œê°„ í‘œì‹œ (ë¸ŒëŸ¬ì‹œ ìƒˆë¡œ ë§Œë“¤ì–´ ì“¸ ê²ƒ)
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pTimer);
 }
@@ -482,7 +482,7 @@ bool CNetworkGameMap::CreateResource()
 
 void CNetworkGameMap::DrawLine(const IndexedPosition& indexedPosition)
 {
-	// ¹üÀ§¸¦ ¹ş¾î³­ °æ¿ì ¿¹¿Ü Ã³¸®
+	// ë²”ìœ„ë¥¼ ë²—ì–´ë‚œ ê²½ìš° ì˜ˆì™¸ ì²˜ë¦¬
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
@@ -494,10 +494,10 @@ void CNetworkGameMap::DrawLine(const IndexedPosition& indexedPosition)
 
 void CNetworkGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 {
-	// ¹üÀ§¸¦ ¹ş¾î³­ °æ¿ì ¿¹¿Ü Ã³¸®
+	// ë²”ìœ„ë¥¼ ë²—ì–´ë‚œ ê²½ìš° ì˜ˆì™¸ ì²˜ë¦¬
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
-	//·£´ı ¶óÀÎ ±ß´Â °úÁ¤¿¡¼­ÀÇ ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ º¯È­ µÇµ¹¸®±â
+	//ëœë¤ ë¼ì¸ ê¸‹ëŠ” ê³¼ì •ì—ì„œì˜ ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ ë³€í™” ë˜ëŒë¦¬ê¸°
 	for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
 	{
 		for (int tempJ = 0 ; tempJ < MAX_MAP_HEIGHT; ++tempJ)
@@ -506,7 +506,7 @@ void CNetworkGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 
 			if (GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
 			{
-				//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ µ¥ÀÌÅÍµµ ÃÊ±âÈ­
+				//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ë°ì´í„°ë„ ì´ˆê¸°í™”
 				InitAnimationState(IndexedPosition(tempI, tempJ) );
 			}
 		}
@@ -517,8 +517,8 @@ void CNetworkGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 
 void CNetworkGameMap::CalcStartPosition()
 {
-	/*	ÇöÀç È­¸éÀÇ Áß½ÉÁ¡À» ±âÁØÀ¸·Î »ı¼ºµÈ ¸ÊÀÇ Å©±âÀÇ ¹İ¸¸Å­
-		¿ŞÂÊ°ú À§ÂÊÀ¸·Î ÀÌµ¿ÇÑ ÁöÁ¡À» m_StartPositionÀ¸·Î ÁöÁ¤ */
+	/*	í˜„ì¬ í™”ë©´ì˜ ì¤‘ì‹¬ì ì„ ê¸°ì¤€ìœ¼ë¡œ ìƒì„±ëœ ë§µì˜ í¬ê¸°ì˜ ë°˜ë§Œí¼
+		ì™¼ìª½ê³¼ ìœ„ìª½ìœ¼ë¡œ ì´ë™í•œ ì§€ì ì„ m_StartPositionìœ¼ë¡œ ì§€ì • */
 	m_CenterPosition = m_pRenderTarget->GetSize();
 	m_CenterPosition.height /= 2;
 	m_CenterPosition.width /= 2;
@@ -540,8 +540,8 @@ void CNetworkGameMap::ResizeClient()
 
 void CNetworkGameMap::SetObjectSize()
 {
-	/*	ÇöÀç ·»´õ·¯¿¡ ÀúÀåµÈ È­¸é ½ºÄÉÀÏ¿¡ ¸ÂÃç¼­ 
-		·»´õ¸µ ÇÒ ¶§ »ç¿ëµÈ ¿ÀºêÁ§Æ®µé Å©±â Á¶Á¤ */
+	/*	í˜„ì¬ ë Œë”ëŸ¬ì— ì €ì¥ëœ í™”ë©´ ìŠ¤ì¼€ì¼ì— ë§ì¶°ì„œ 
+		ë Œë”ë§ í•  ë•Œ ì‚¬ìš©ëœ ì˜¤ë¸Œì íŠ¸ë“¤ í¬ê¸° ì¡°ì • */
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
 	m_TileSize = tempScale * DEFAULT_TILE_SIZE;
@@ -583,8 +583,8 @@ MO_TYPE CNetworkGameMap::GetMapType(IndexedPosition indexedPosition)
 		return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type;
 	}
 
-	/*	°ÔÀÓÀÌ ÁøÇàµÇ´Â ¸Ê ¿µ¿ª ¹ÛÀº ¸ğµÎ MO_SENTINEL·Î °£ÁÖÇÏ¹Ç·Î 
-		¹è¿­ ¹üÀ§ ¹ÛÀ» ¹ş¾î³ªµµ ¸ğµÎ MO_SENTINEL·Î Ã³¸®	*/
+	/*	ê²Œì„ì´ ì§„í–‰ë˜ëŠ” ë§µ ì˜ì—­ ë°–ì€ ëª¨ë‘ MO_SENTINELë¡œ ê°„ì£¼í•˜ë¯€ë¡œ 
+		ë°°ì—´ ë²”ìœ„ ë°–ì„ ë²—ì–´ë‚˜ë„ ëª¨ë‘ MO_SENTINELë¡œ ì²˜ë¦¬	*/
 	return MO_SENTINEL;
 }
 

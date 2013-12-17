@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "NetworkPlayScene.h"
 #include "GameTimer.h"
 #include <queue>
@@ -69,10 +69,10 @@ void CNetworkPlayScene::SetClickArea()
 	m_ClickTileSize = m_Map->GetTileSize() - (m_ClickBuffer * 2);
 }
 
-//Áöµµ °ü·Ã Á¤º¸¸¦ ¾÷µ¥ÀÌÆ® ÇØÁÖ´Â ÇÔ¼ö
+//ì§€ë„ ê´€ë ¨ ì •ë³´ë¥¼ ì—…ë°ì´íŠ¸ í•´ì£¼ëŠ” í•¨ìˆ˜
 void CNetworkPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
-	//ÀÔ·ÂµÈ ¸¶¿ì½º Æ÷ÀÎÅÍ À§Ä¡°¡ °ÔÀÓ ¸Ê ¹üÀ§ ¾ÈÀÌ°í ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÁßÀÌ ¾Æ´Ò ¶§¸¸ Ã³¸®
+	//ì…ë ¥ëœ ë§ˆìš°ìŠ¤ í¬ì¸í„° ìœ„ì¹˜ê°€ ê²Œì„ ë§µ ë²”ìœ„ ì•ˆì´ê³  ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ ì¤‘ì´ ì•„ë‹ ë•Œë§Œ ì²˜ë¦¬
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
@@ -90,10 +90,10 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 	{
 		CSoundRenderer::GetInstance()->PlaySE_DrawLine();
 #ifdef _DEBUG
-		printf("<<< ---- ÇöÀç ÇÃ·¹ÀÌ¾î : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
+		printf("<<< ---- í˜„ì¬ í”Œë ˆì´ì–´ : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
 		printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
 #endif
-		//IsPossible Ã¼Å© ÈÄ¿¡ gameMap È£ÃâÇØ¼­ ¹İ¿µ
+		//IsPossible ì²´í¬ í›„ì— gameMap í˜¸ì¶œí•´ì„œ ë°˜ì˜
 		m_Map->DrawLine(indexedPosition);
 		//memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
 
@@ -108,16 +108,16 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 			int i = 0;
 			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
 			{
-				//º»·¡ Å¸ÀÏ¿¡ ¹¹°¡ ÀÖ¾ú´ÂÁö È®ÀÎÇØ¼­ °¢ÀÚ ¹Ù²Ü °Í!!
+				//ë³¸ë˜ íƒ€ì¼ì— ë­ê°€ ìˆì—ˆëŠ”ì§€ í™•ì¸í•´ì„œ ê°ì ë°”ê¿€ ê²ƒ!!
 				m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)(m_PlayerTurn % m_PlayerNumber) );
 				m_Map->SubtractVoidCount();
 				i++;
 			}
 
-			//tile animation ½ÃÀÛ ¼³Á¤
+			//tile animation ì‹œì‘ ì„¤ì •
 			m_Map->SetTileAnimationTurn(1);
 #ifdef _DEBUG
-			printf("¿ì¿Í! ÇÃ·¹ÀÌ¾î %d°¡ ¶¥À» ¸Ô¾ú´Ù!\n",(m_PlayerTurn%m_PlayerNumber));
+			printf("ìš°ì™€! í”Œë ˆì´ì–´ %dê°€ ë•…ì„ ë¨¹ì—ˆë‹¤!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif
 		}
 
@@ -139,7 +139,7 @@ void CNetworkPlayScene::MouseOver(Coordinate mouseCoordinate)
 {
 	m_Map->InitVirtualLineState();
 
-	//ÀÔ·ÂµÈ ¸¶¿ì½º Æ÷ÀÎÅÍ À§Ä¡°¡ °ÔÀÓ ¸Ê ¹üÀ§ ¾ÈÀÏ ¶§¸¸ Ã³¸®
+	//ì…ë ¥ëœ ë§ˆìš°ìŠ¤ í¬ì¸í„° ìœ„ì¹˜ê°€ ê²Œì„ ë§µ ë²”ìœ„ ì•ˆì¼ ë•Œë§Œ ì²˜ë¦¬
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
 		&& mouseCoordinate.m_PosY > m_Map->GetStartPosition().height - m_ClickBuffer
@@ -167,11 +167,11 @@ void CNetworkPlayScene::TimeOut()
 	//random line creation
 	while (true)
 	{
-		// ¿ïÅ¸¸®´Â (2,1), (1,2) ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î
+		// ìš¸íƒ€ë¦¬ëŠ” (2,1), (1,2) ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ
 		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 1; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 1;
 
-		// ·£´ı °ªÀ¸·Î »ÌÀº ÁÂÇ¥°¡ MO_LINE_UNCONNECTEDÀÏ °æ¿ì¿¡
+		// ëœë¤ ê°’ìœ¼ë¡œ ë½‘ì€ ì¢Œí‘œê°€ MO_LINE_UNCONNECTEDì¼ ê²½ìš°ì—
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 		{
 			if ( IsPossible(RandomTargetPosition) )
@@ -183,17 +183,17 @@ void CNetworkPlayScene::TimeOut()
 	}
 }
 
-//¸¶¿ì½º ÁÂÇ¥°ªÀ» index·Î ¹Ù²Ù´Â ÇÔ¼ö
+//ë§ˆìš°ìŠ¤ ì¢Œí‘œê°’ì„ indexë¡œ ë°”ê¾¸ëŠ” í•¨ìˆ˜
 IndexedPosition CNetworkPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 {
 	IndexedPosition indexedPosition;
 
-	//¸¶¿ì½ºÀÇ À§Ä¡¸¦ ¸ÊÀÌ ±×·ÁÁö´Â ±âÁØÁ¡ ÁÂÇ¥°è¸¦ ±âÁØÀ¸·Î º¯È¯
+	//ë§ˆìš°ìŠ¤ì˜ ìœ„ì¹˜ë¥¼ ë§µì´ ê·¸ë ¤ì§€ëŠ” ê¸°ì¤€ì  ì¢Œí‘œê³„ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë³€í™˜
 	mouseCoordinate.m_PosX -= static_cast<int>(m_Map->GetStartPosition().width) - m_ClickBuffer;
 	mouseCoordinate.m_PosY -= static_cast<int>(m_Map->GetStartPosition().height) - m_ClickBuffer;
 
 	float indexUnit = m_ClickLineWeight + m_ClickTileSize;
-	//Å¸ÀÏ ÇÏ³ª¿Í ¶óÀÎ ÇÏ³ª¸¦ ¹­¾î¼­ ¸ğµâ·¯ ¿¬»êÀ¸·Î ÀÎµ¦½º °ª °è»ê
+	//íƒ€ì¼ í•˜ë‚˜ì™€ ë¼ì¸ í•˜ë‚˜ë¥¼ ë¬¶ì–´ì„œ ëª¨ë“ˆëŸ¬ ì—°ì‚°ìœ¼ë¡œ ì¸ë±ìŠ¤ ê°’ ê³„ì‚°
 	if (indexUnit > 0)
 	{
 		indexedPosition.m_PosI = 
@@ -209,7 +209,7 @@ IndexedPosition CNetworkPlayScene::CalculateIndex( Coordinate mouseCoordinate )
 
 void CNetworkPlayScene::SetPlayerNumber()
 {
-	//SettingScene¿¡¼­ÀÇ ÇÃ·¹ÀÌ¾î ¼ö¸¦ ¹Ş¾Æ¿Â´Ù.
+	//SettingSceneì—ì„œì˜ í”Œë ˆì´ì–´ ìˆ˜ë¥¼ ë°›ì•„ì˜¨ë‹¤.
 	m_PlayerNumber = CGameData::GetInstance()->GetplayerNumber();
 }
 
@@ -220,13 +220,13 @@ void CNetworkPlayScene::LinkPlayers()
 	srand( static_cast<unsigned int>(time(NULL)) );
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 
-	//player turn ¼³Á¤
+	//player turn ì„¤ì •
 	int joinPlayerIdx = 0;
 	int notJoinPlayerIdx = m_PlayerNumber;
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		//¸¸¾à °ÔÀÓ¿¡ Âü°¡ÇÏ´Â ÇÃ·¹ÀÌ¾î(Ä³¸¯ÅÍ)¶ó¸é ÇÃ·¹ÀÌ¾î ÅÏÀ» °ü¸®ÇÏ´Â Å×ÀÌºí ¾ÕÂÊ¿¡ Ãß°¡
-		//m_map°ú Áßº¹ µ¥ÀÌÅÍ
+		//ë§Œì•½ ê²Œì„ì— ì°¸ê°€í•˜ëŠ” í”Œë ˆì´ì–´(ìºë¦­í„°)ë¼ë©´ í”Œë ˆì´ì–´ í„´ì„ ê´€ë¦¬í•˜ëŠ” í…Œì´ë¸” ì•ìª½ì— ì¶”ê°€
+		//m_mapê³¼ ì¤‘ë³µ ë°ì´í„°
 		if (CGameData::GetInstance()->GetPlayerCreatedFlag(PlayerTurn[i]) )
 		{
 			assert(joinPlayerIdx >= 0 && joinPlayerIdx < MAX_PLAYER_NUM);
@@ -234,7 +234,7 @@ void CNetworkPlayScene::LinkPlayers()
 			m_Player[joinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
 			m_Map->SetPlayerTurnTable(joinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
 
-			//gamedata¿¡ player turn ÁöÁ¤
+			//gamedataì— player turn ì§€ì •
 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], joinPlayerIdx++);
 		}
 		else
@@ -244,7 +244,7 @@ void CNetworkPlayScene::LinkPlayers()
 			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
 			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
 
-			//gamedata¿¡ player turn ÁöÁ¤
+			//gamedataì— player turn ì§€ì •
 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], notJoinPlayerIdx++);
 		}
 	}
@@ -257,22 +257,22 @@ bool CNetworkPlayScene::IsClosed( IndexedPosition indexedPosition)
 	printf("idx I : %d / idx J : %d\n", indexedPosition.m_PosI, indexedPosition.m_PosJ);
 #endif
 
-	//¼±ÅÃµÈ ¿ïÅ¸¸®ÀÇ À§ÂÊ È®ÀÎ
+	//ì„ íƒëœ ìš¸íƒ€ë¦¬ì˜ ìœ„ìª½ í™•ì¸
 	CollectClosedTile(indexedPosition,DI_UP);
 	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
-	//¼±ÅÃµÈ ¿ïÅ¸¸®ÀÇ ¿À¸¥ÂÊ È®ÀÎ
+	//ì„ íƒëœ ìš¸íƒ€ë¦¬ì˜ ì˜¤ë¥¸ìª½ í™•ì¸
 	CollectClosedTile(indexedPosition, DI_RIGHT);
 	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
-	//¼±ÅÃµÈ ¿ïÅ¸¸®ÀÇ ¾Æ·¡ÂÊ È®ÀÎ
+	//ì„ íƒëœ ìš¸íƒ€ë¦¬ì˜ ì•„ë˜ìª½ í™•ì¸
 	CollectClosedTile(indexedPosition, DI_DOWN);
 	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
 
-	//¼±ÅÃµÈ ¿ïÅ¸¸®ÀÇ ¿ŞÂÊ È®ÀÎ
+	//ì„ íƒëœ ìš¸íƒ€ë¦¬ì˜ ì™¼ìª½ í™•ì¸
 	CollectClosedTile(indexedPosition, DI_LEFT);
 	if (m_ClosedTile[0].m_PosI != 0 && m_ClosedTile[0].m_PosJ != 0)
 		return true;
@@ -286,7 +286,7 @@ bool CNetworkPlayScene::IsPossible(IndexedPosition indexedPosition)
 	{
 		int tileVoidCount = 0;
 
-		//ÀÔ·ÂµÈ ¿ïÅ¸¸® ÁÖº¯À» È®ÀÎÇØ¼­ ¼ÒÀ¯ÁÖ°¡ ¾ø´Â Å¸ÀÏ°ú ¼¾Æ¼³ÎÀÇ ¼ıÀÚ¸¦ ¼¾´Ù
+		//ì…ë ¥ëœ ìš¸íƒ€ë¦¬ ì£¼ë³€ì„ í™•ì¸í•´ì„œ ì†Œìœ ì£¼ê°€ ì—†ëŠ” íƒ€ì¼ê³¼ ì„¼í‹°ë„ì˜ ìˆ«ìë¥¼ ì„¼ë‹¤
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI + 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
 
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI - 1, indexedPosition.m_PosJ) == MO_NOBODY) { ++tileVoidCount; }
@@ -295,7 +295,7 @@ bool CNetworkPlayScene::IsPossible(IndexedPosition indexedPosition)
 
 		if (m_Map->GetMapOwner(indexedPosition.m_PosI, indexedPosition.m_PosJ - 1) == MO_NOBODY) { ++tileVoidCount; }
 
-		//È®ÀÎµÈ Å¸ÀÏÀÇ ¼ö°¡ 4°¡ µÇ¸é ÀÔ·ÂµÈ ¿ïÅ¸¸®´Â ¿­¸° Å¸ÀÏµé »çÀÌ¿¡ ÀÖÀ¸¹Ç·Î ±×À» ¼ö ÀÖÀ½??
+		//í™•ì¸ëœ íƒ€ì¼ì˜ ìˆ˜ê°€ 4ê°€ ë˜ë©´ ì…ë ¥ëœ ìš¸íƒ€ë¦¬ëŠ” ì—´ë¦° íƒ€ì¼ë“¤ ì‚¬ì´ì— ìˆìœ¼ë¯€ë¡œ ê·¸ì„ ìˆ˜ ìˆìŒ??
 		if (tileVoidCount == 4)
 		{
 			return true;
@@ -317,7 +317,7 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 	IndexedPosition currentTile;
 	IndexedPosition nextTile;
 
-	//È®ÀÎ ÇÒ ¹æÇâÀ» ÁöÁ¤
+	//í™•ì¸ í•  ë°©í–¥ì„ ì§€ì •
 	switch (direction)
 	{
 	case DI_UP:
@@ -340,14 +340,14 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 		break;
 	}
 
-	//È®ÀÎ ÇÒ ¹æÇâÀÇ Ãâ¹ßÁ¡ÀÌ Á¡ÀÌ¸é È®ÀÎ ¾È ÇÔ
+	//í™•ì¸ í•  ë°©í–¥ì˜ ì¶œë°œì ì´ ì ì´ë©´ í™•ì¸ ì•ˆ í•¨
 	if (m_Map->GetMapType(currentTile) != MO_DOT)
 	{
-		//Å¸ÀÏ¿¡ ¾Ö´Ï¸ŞÀÌ¼Ç Àû¿ëÇÏ´Â ¼ø¼­ ³ªÅ¸³»±â À§ÇÑ º¯¼ö
+		//íƒ€ì¼ì— ì• ë‹ˆë©”ì´ì…˜ ì ìš©í•˜ëŠ” ìˆœì„œ ë‚˜íƒ€ë‚´ê¸° ìœ„í•œ ë³€ìˆ˜
 		int animationTurn = 1;
 		m_Map->SetAnimationState(currentTile, animationTurn, direction);
 
-		//¾Õ¿¡¼­ °»½ÅÇÑ Å½»ö Ãâ¹ß ÁöÁ¡À» Å¥¿Í ¹è¿­¿¡ ³Ö´Â´Ù.
+		//ì•ì—ì„œ ê°±ì‹ í•œ íƒìƒ‰ ì¶œë°œ ì§€ì ì„ íì™€ ë°°ì—´ì— ë„£ëŠ”ë‹¤.
 		int i = 0;
 
 		searchTiles.push(currentTile);
@@ -360,7 +360,7 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 			currentTile.m_PosJ = searchTiles.front().m_PosJ;
 			searchTiles.pop();
 
-			//currentTileÀÌ sentinelÀÌ¸é Áö±İ±îÁö È®ÀÎÇÑ ¹æÇâÀ¸·Î´Â µµÇüÀÌ ¿­·ÁÀÖÀ¸¹Ç·Î È®ÀÎÇÑ Å¸ÀÏÀ» ÀúÀåÇÏ´Â ¹è¿­Àº ÃÊ±âÈ­ÇÏ°í È®ÀÎ Á¾·á
+			//currentTileì´ sentinelì´ë©´ ì§€ê¸ˆê¹Œì§€ í™•ì¸í•œ ë°©í–¥ìœ¼ë¡œëŠ” ë„í˜•ì´ ì—´ë ¤ìˆìœ¼ë¯€ë¡œ í™•ì¸í•œ íƒ€ì¼ì„ ì €ì¥í•˜ëŠ” ë°°ì—´ì€ ì´ˆê¸°í™”í•˜ê³  í™•ì¸ ì¢…ë£Œ
 			if (m_Map->GetMapType(currentTile) == MO_SENTINEL)
 			{
 				for (int tempI = 0 ; tempI < MAX_MAP_WIDTH; ++tempI)
@@ -371,11 +371,11 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 
 						if (m_Map->GetMapType(IndexedPosition(tempI, tempJ) ) == MO_TILE)
 						{
-							//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ µ¥ÀÌÅÍµµ ÃÊ±âÈ­
+							//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ë°ì´í„°ë„ ì´ˆê¸°í™”
 							m_Map->InitAnimationState(IndexedPosition(tempI, tempJ) );
 						}
 
-						//Àç»ıÇÒ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾øÀ¸¹Ç·Î 0À¸·Î ¼³Á¤
+						//ì¬ìƒí•  ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ìœ¼ë¯€ë¡œ 0ìœ¼ë¡œ ì„¤ì •
 						animationTurn = 0;
 					}
 				}
@@ -387,14 +387,14 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 					m_ClosedTile[i].m_PosJ = 0;
 				}
 #ifdef _DEBUG
-				printf("¼¾Æ¼³ÚÀ» ¸¸³µ¾î¿ä\n");
+				printf("ì„¼í‹°ë„¬ì„ ë§Œë‚¬ì–´ìš”\n");
 #endif
 				break;
 			}
 #ifdef _DEBUG
 			printf("idx I : %d / idx J : %d\n", currentTile.m_PosI, currentTile.m_PosJ);
 #endif
-			//ÇöÀç Å¸ÀÏÀÇ À§ÂÊ È®ÀÎ
+			//í˜„ì¬ íƒ€ì¼ì˜ ìœ„ìª½ í™•ì¸
 			if (m_Map->GetMapType(currentTile.m_PosI - 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 			{
 				nextTile.m_PosI = currentTile.m_PosI - 2;
@@ -405,13 +405,13 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
 
-					//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ ¼ø¼­¿Í ¹æÇâ ÁöÁ¤
+					//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ìˆœì„œì™€ ë°©í–¥ ì§€ì •
 					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_UP);
 				}				
 			}
 
-			//ÇöÀç Å¸ÀÏÀÇ ¿À¸¥ÂÊ È®ÀÎ
+			//í˜„ì¬ íƒ€ì¼ì˜ ì˜¤ë¥¸ìª½ í™•ì¸
 			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ + 1) == MO_LINE_UNCONNECTED)
 			{
 				nextTile.m_PosI = currentTile.m_PosI;
@@ -422,13 +422,13 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
 
-					//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ ¼ø¼­¿Í ¹æÇâ ÁöÁ¤
+					//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ìˆœì„œì™€ ë°©í–¥ ì§€ì •
 					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_RIGHT);
 				}				
 			}
 
-			//ÇöÀç Å¸ÀÏÀÇ ¾Æ·¡ÂÊ È®ÀÎ
+			//í˜„ì¬ íƒ€ì¼ì˜ ì•„ë˜ìª½ í™•ì¸
 			if (m_Map->GetMapType(currentTile.m_PosI + 1, currentTile.m_PosJ) == MO_LINE_UNCONNECTED)
 			{
 				nextTile.m_PosI = currentTile.m_PosI + 2;
@@ -439,13 +439,13 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
 
-					//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ ¼ø¼­¿Í ¹æÇâ ÁöÁ¤
+					//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ìˆœì„œì™€ ë°©í–¥ ì§€ì •
 					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_DOWN);
 				}				
 			}
 
-			//ÇöÀç Å¸ÀÏÀÇ ¿ŞÂÊ È®ÀÎ
+			//í˜„ì¬ íƒ€ì¼ì˜ ì™¼ìª½ í™•ì¸
 			if (m_Map->GetMapType(currentTile.m_PosI, currentTile.m_PosJ - 1) == MO_LINE_UNCONNECTED)
 			{
 				nextTile.m_PosI = currentTile.m_PosI;
@@ -456,53 +456,53 @@ void CNetworkPlayScene::CollectClosedTile(IndexedPosition indexedPosition, Direc
 					m_ClosedTile[i++] = nextTile;
 					m_Map->SetMapFlag(nextTile, true);
 
-					//¾Ö´Ï¸ŞÀÌ¼Ç Àç»ıÀ» À§ÇÑ ¼ø¼­¿Í ¹æÇâ ÁöÁ¤
+					//ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒì„ ìœ„í•œ ìˆœì„œì™€ ë°©í–¥ ì§€ì •
 					animationTurn = m_Map->GetTileAnimationTurn(currentTile) + 1;
 					m_Map->SetAnimationState(nextTile, animationTurn, DI_LEFT);
 				}				
 			}
 		}
-		//´İÈù Å¸ÀÏÀÌ ÀÖÀ¸¹Ç·Î ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇàÇÏ¶ó´Â ÇÃ·¡±× ¼³Á¤
+		//ë‹«íŒ íƒ€ì¼ì´ ìˆìœ¼ë¯€ë¡œ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰í•˜ë¼ëŠ” í”Œë˜ê·¸ ì„¤ì •
 		m_Map->SetTileAnimationTurnNumber(animationTurn);
 	}
 }
 
-// ÃÊ±â¿¡ ¸Ê¿¡ ·£´ıÀ¸·Î ¾ÆÀÌÅÛ°ú ¿ïÅ¸¸®¸¦ ¹èÄ¡ÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù.
+// ì´ˆê¸°ì— ë§µì— ëœë¤ìœ¼ë¡œ ì•„ì´í…œê³¼ ìš¸íƒ€ë¦¬ë¥¼ ë°°ì¹˜í•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 void CNetworkPlayScene::InitRandomMap()
 {
-	// ¿ïÅ¸¸®, ±İ, ¾²·¹±âÀÇ ÃÊ±â°ªÀ» °¢°¢ ¼³Á¤ÇØÁİ´Ï´Ù.
+	// ìš¸íƒ€ë¦¬, ê¸ˆ, ì“°ë ˆê¸°ì˜ ì´ˆê¸°ê°’ì„ ê°ê° ì„¤ì •í•´ì¤ë‹ˆë‹¤.
 	int startLineNumber =	m_PlayerNumber * 5;
 	int startGoldNumber =	m_PlayerNumber * 2;
 	int startTrashNumber =	m_PlayerNumber * 2;
 
-	// IsClosed¿¡¼­ »ç¿ëÇÒ º¯¼öµéÀÔ´Ï´Ù.
+	// IsClosedì—ì„œ ì‚¬ìš©í•  ë³€ìˆ˜ë“¤ì…ë‹ˆë‹¤.
 	IndexedPosition RandomTargetPosition;
 
-	// °íÁ¤ÀûÀÎ ½Ãµå°ªÀÌ ÇÊ¿äÇÒ °æ¿ì ¾Æ·¡ ½Ãµå¸¦ ½áº¸½Ã±â ¹Ù¶ø´Ï´Ù.
+	// ê³ ì •ì ì¸ ì‹œë“œê°’ì´ í•„ìš”í•  ê²½ìš° ì•„ë˜ ì‹œë“œë¥¼ ì¨ë³´ì‹œê¸° ë°”ëë‹ˆë‹¤.
 	//srand(1383706550);
 
-	// ¿ïÅ¸¸®¸¦ »Ñ·ÁÁÖ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	// ìš¸íƒ€ë¦¬ë¥¼ ë¿Œë ¤ì£¼ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 	while (startLineNumber)
 	{
-		// ¿ïÅ¸¸®´Â (2,1), (1,2) ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î
+		// ìš¸íƒ€ë¦¬ëŠ” (2,1), (1,2) ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ
 		RandomTargetPosition.m_PosI = rand() % MAX_MAP_HEIGHT + 1; 
 		RandomTargetPosition.m_PosJ = rand() % MAX_MAP_WIDTH + 1;
 
-		// ·£´ı °ªÀ¸·Î »ÌÀº ÁÂÇ¥°¡ MO_LINE_UNCONNECTEDÀÏ °æ¿ì¿¡
+		// ëœë¤ ê°’ìœ¼ë¡œ ë½‘ì€ ì¢Œí‘œê°€ MO_LINE_UNCONNECTEDì¼ ê²½ìš°ì—
 		if ( m_Map->GetMapType(RandomTargetPosition) == MO_LINE_UNCONNECTED )
 		{
-			// IsPossibleÀ» ¸¸Á·ÇÏ¸é
+			// IsPossibleì„ ë§Œì¡±í•˜ë©´
 			if ( IsPossible(RandomTargetPosition) )
 			{
-				// ÀÏ´Ü ±×¸³´Ï´Ù(IsClosed °Ë»ç¸¦ À§ÇØ¼­)
+				// ì¼ë‹¨ ê·¸ë¦½ë‹ˆë‹¤(IsClosed ê²€ì‚¬ë¥¼ ìœ„í•´ì„œ)
 				//printf("random %d , %d\n",RandomTargetPosition.m_PosI,RandomTargetPosition.m_PosJ);
 				m_Map->DrawLine(RandomTargetPosition);
 				--startLineNumber;
 
-				// Áö±İ ¸· ±×·ÁÁø ¼±ÀÌ IsClosed() Á¶°ÇÀ» ¸¸Á·ÇÏÁö ¾ÊÀ¸¸é ±×´ë·Î Á¾·á
+				// ì§€ê¸ˆ ë§‰ ê·¸ë ¤ì§„ ì„ ì´ IsClosed() ì¡°ê±´ì„ ë§Œì¡±í•˜ì§€ ì•Šìœ¼ë©´ ê·¸ëŒ€ë¡œ ì¢…ë£Œ
 				if ( IsClosed(RandomTargetPosition) )
 				{
-					// ¸¸¾à Áö±İ ¸· ±×·ÁÁø ¼±ÀÌ ¾î¶² µµÇüÀ» ´İ´Â´Ù¸é ÇØ´ç ¼±À» »èÁ¦ÇÏ°í ¶óÀÎ Ä«¿îÅÍ¸¦ º¹±¸
+					// ë§Œì•½ ì§€ê¸ˆ ë§‰ ê·¸ë ¤ì§„ ì„ ì´ ì–´ë–¤ ë„í˜•ì„ ë‹«ëŠ”ë‹¤ë©´ í•´ë‹¹ ì„ ì„ ì‚­ì œí•˜ê³  ë¼ì¸ ì¹´ìš´í„°ë¥¼ ë³µêµ¬
 					m_Map->DeleteLine(RandomTargetPosition);
 					++startLineNumber;
 				}
@@ -511,10 +511,10 @@ void CNetworkPlayScene::InitRandomMap()
 
 	}
 
-	// Å¸ÀÏ ¼Ó¼ºÀ» ¾ê³×µé·Î ¹Ù²Ù±â Àü¿¡
-	// 1. ºê·¯½¬¸¦ »õ·Î ÁØºñÇØ¼­ Å¸ÀÏ À§¿¡ ±×·ÁÁà¾ß ÇÕ´Ï´Ù
-	// 2. ±×¸®°í IsClosed ¿¡¼­ Àß µ¹¾Æ°¡´ÂÁö ÇÑ ¹ø Å×½ºÆ® ÇØ º¸°í ÁøÂ¥ ¹İ¿µ
-	// 3. ¾ê³×µéÀº ÀÌ¹ÌÁö ÆÄÀÏ·Î ³Ö¾îÁÖ´Â°Ô ¿¹»Ü µí ÇÕ´Ï´Ù
+	// íƒ€ì¼ ì†ì„±ì„ ì–˜ë„¤ë“¤ë¡œ ë°”ê¾¸ê¸° ì „ì—
+	// 1. ë¸ŒëŸ¬ì‰¬ë¥¼ ìƒˆë¡œ ì¤€ë¹„í•´ì„œ íƒ€ì¼ ìœ„ì— ê·¸ë ¤ì¤˜ì•¼ í•©ë‹ˆë‹¤
+	// 2. ê·¸ë¦¬ê³  IsClosed ì—ì„œ ì˜ ëŒì•„ê°€ëŠ”ì§€ í•œ ë²ˆ í…ŒìŠ¤íŠ¸ í•´ ë³´ê³  ì§„ì§œ ë°˜ì˜
+	// 3. ì–˜ë„¤ë“¤ì€ ì´ë¯¸ì§€ íŒŒì¼ë¡œ ë„£ì–´ì£¼ëŠ”ê²Œ ì˜ˆì  ë“¯ í•©ë‹ˆë‹¤
 
 	while (startGoldNumber)
 	{
@@ -557,7 +557,7 @@ void CNetworkPlayScene::Render()
 	}
 
 	CGameTimer::GetInstance()->Update();
-	//timer ¿©±â¿¡ Ãß°¡ÇÒ °Í
+	//timer ì—¬ê¸°ì— ì¶”ê°€í•  ê²ƒ
 	CGameTimer::GetInstance()->Render();
 
 	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() )

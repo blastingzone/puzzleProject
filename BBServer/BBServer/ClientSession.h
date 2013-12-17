@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Config.h"
 #include "PacketType.h"
@@ -55,7 +55,7 @@ public:
 	void SetClientId (int clientId) { mClientId = clientId; }
 	int	GetClientId() {return mClientId;}
 
-	/// ÇöÀç Send/Recv ¿äÃ» ÁßÀÎ »óÅÂÀÎÁö °Ë»çÇÏ±â À§ÇÔ
+	/// í˜„ìž¬ Send/Recv ìš”ì²­ ì¤‘ì¸ ìƒíƒœì¸ì§€ ê²€ì‚¬í•˜ê¸° ìœ„í•¨
 	void	IncOverlappedRequest()		{ ++mOverlappedRequested ; }
 	void	DecOverlappedRequest()		{ --mOverlappedRequested ; }
 	bool	DoingOverlappedOperation() const { return mOverlappedRequested > 0 ; }
@@ -88,7 +88,7 @@ private:
 	OverlappedIO	mOverlappedRecv ;
 	int				mOverlappedRequested ;
 
-	int				mDbUpdateCount ; ///< DB¿¡ ÁÖ±âÀûÀ¸·Î ¾÷µ¥ÀÌÆ® ÇÏ±â À§ÇÑ º¯¼ö
+	int				mDbUpdateCount ; ///< DBì— ì£¼ê¸°ì ìœ¼ë¡œ ì—…ë°ì´íŠ¸ í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
 
 	int				mClientId;
 

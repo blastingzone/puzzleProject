@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <map>
 #include <WinSock2.h>
@@ -22,7 +22,7 @@ public:
 
 	void OnPeriodWork() ;
 
-	/// DB¿¡ ÇÃ·¹ÀÌ¾î Á¤º¸¸¦ »ı¼ºÇÏ°Å³ª »èÁ¦ÇÏ´Â ÇÔ¼ö
+	/// DBì— í”Œë ˆì´ì–´ ì •ë³´ë¥¼ ìƒì„±í•˜ê±°ë‚˜ ì‚­ì œí•˜ëŠ” í•¨ìˆ˜
 	void CreatePlayer(int pid, double x, double y, double z, const char* name, const char* comment) ;
 	void DeletePlayer(int pid) ;
 
@@ -50,8 +50,8 @@ private:
 
 	bool		mClientIdList[MAX_CLIENT_NUM];
 
-	/*	°¢ Å¬¶óÀÌ¾ğÆ®µéÀÌ ¸î ¹ø Ä³¸¯ÅÍ¸¦ ¼±ÅÃÇß´ÂÁö ÀúÀå
-		ÀÎµ¦½º´Â Å¬¶óÀÌ¾ğÆ® ¾ÆÀÌµğ */
+	/*	ê° í´ë¼ì´ì–¸íŠ¸ë“¤ì´ ëª‡ ë²ˆ ìºë¦­í„°ë¥¼ ì„ íƒí–ˆëŠ”ì§€ ì €ì¥
+		ì¸ë±ìŠ¤ëŠ” í´ë¼ì´ì–¸íŠ¸ ì•„ì´ë”” */
 	int			mCharacterSelectStatus[MAX_CLIENT_NUM];
 } ;
 

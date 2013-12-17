@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "ClientSession.h"
 #include "PacketType.h"
 #include "ClientManager.h"
@@ -10,15 +10,15 @@ bool ClientSession::OnConnect(SOCKADDR_IN* addr)
 	memcpy(&mClientAddr, addr, sizeof(SOCKADDR_IN)) ;
 
 	//////////////////////////////////////////////////////////////////////////
-	/// ¼ÒÄÏÀ» ³Íºí·¯Å·À¸·Î ¹Ù²Ù°í
+	/// ì†Œì¼“ì„ ë„Œë¸”ëŸ¬í‚¹ìœ¼ë¡œ ë°”ê¾¸ê³ 
 	//////////////////////////////////////////////////////////////////////////
 	u_long arg = 1 ;
-	// Á¶½ÉÇØ?
-	// ÀÌ ¾Õ¿¡ :: ÀÌ°Ç ¹»±î¿ä Áö¿öµµ ¿¡·¯ ¾È³ª´øµ¥
+	// ì¡°ì‹¬í•´?
+	// ì´ ì•ì— :: ì´ê±´ ë­˜ê¹Œìš” ì§€ì›Œë„ ì—ëŸ¬ ì•ˆë‚˜ë˜ë°
 	::ioctlsocket(mSocket, FIONBIO, &arg) ;
 
 	//////////////////////////////////////////////////////////////////////////
-	/// nagle ¾Ë°í¸®Áò ²ô±â
+	/// nagle ì•Œê³ ë¦¬ì¦˜ ë„ê¸°
 	//////////////////////////////////////////////////////////////////////////
 	int opt = 1 ;
 	::setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
@@ -45,7 +45,7 @@ bool ClientSession::PostRecv()
 	memset(&mOverlappedRecv, 0, sizeof(OverlappedIO)) ;
 	mOverlappedRecv.mObject = this ;
 
-	/// ºñµ¿±â ÀÔÃâ·Â ½ÃÀÛ
+	/// ë¹„ë™ê¸° ì…ì¶œë ¥ ì‹œì‘
 	if ( SOCKET_ERROR == WSARecv(mSocket, &buf, 1, &recvbytes, &flags, &mOverlappedRecv, RecvCompletion) )
 	{
 		if ( WSAGetLastError() != WSA_IO_PENDING )
@@ -80,19 +80,19 @@ void ClientSession::OnRead(size_t len)
 {
 	mRecvBuffer.Commit(len) ;
 
-	/// ÆĞÅ¶ ÆÄ½ÌÇÏ°í Ã³¸®
+	/// íŒ¨í‚· íŒŒì‹±í•˜ê³  ì²˜ë¦¬
 	while ( true )
 	{
-		/// ÆĞÅ¶ Çì´õ Å©±â ¸¸Å­ ÀĞ¾î¿Íº¸±â
+		/// íŒ¨í‚· í—¤ë” í¬ê¸° ë§Œí¼ ì½ì–´ì™€ë³´ê¸°
 		PacketHeader header ;
 		if ( false == mRecvBuffer.Peek((char*)&header, sizeof(PacketHeader)) )
 			return ;
 
-		/// ÆĞÅ¶ ¿Ï¼ºÀÌ µÇ´Â°¡? 
+		/// íŒ¨í‚· ì™„ì„±ì´ ë˜ëŠ”ê°€? 
 		if ( mRecvBuffer.GetStoredSize() < (header.mSize - sizeof(PacketHeader)) )
 			return ;
 
-		/// ÆĞÅ¶ ÇÚµé¸µ
+		/// íŒ¨í‚· í•¸ë“¤ë§
 		switch ( header.mType )
 		{
 		case PKT_CS_LOGIN:
@@ -100,12 +100,12 @@ void ClientSession::OnRead(size_t len)
 				LoginRequest inPacket ;
 				mRecvBuffer.Read((char*)&inPacket, header.mSize) ;
 
-				//Å¬¶óÀÌ¾ğÆ® ¾ÆÀÌµğ¸¦ ³ª´²ÁØ´Ù.
+				//í´ë¼ì´ì–¸íŠ¸ ì•„ì´ë””ë¥¼ ë‚˜ëˆ ì¤€ë‹¤.
 				LoginResult outPacket;
 				outPacket.mPlayerId = mClientId;
 				Send(&outPacket);
 
-				/// ·Î±×ÀÎÀº DB ÀÛ¾÷À» °ÅÃÄ¾ß ÇÏ±â ¶§¹®¿¡ DB ÀÛ¾÷ ¿äÃ»ÇÑ´Ù.
+				/// ë¡œê·¸ì¸ì€ DB ì‘ì—…ì„ ê±°ì³ì•¼ í•˜ê¸° ë•Œë¬¸ì— DB ì‘ì—… ìš”ì²­í•œë‹¤.
 				
 				LoadPlayerDataContext* newDbJob = new LoadPlayerDataContext(mSocket, inPacket.mPlayerId) ;
 				GDatabaseJobManager->PushDatabaseJobRequest(newDbJob) ;	
@@ -119,7 +119,7 @@ void ClientSession::OnRead(size_t len)
 				CharacterResult outPacket;
 
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
-				// ÀÓ°è¿µ¿ª ¹®Á¦ »ı±è!
+				// ì„ê³„ì˜ì—­ ë¬¸ì œ ìƒê¹€!
 				if (GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId) )
 				{
 					outPacket.mConnectionNum = GClientManager->GetConnectionNum();
@@ -163,7 +163,7 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
-		//¾ÆÁ÷ ÀÛ¾÷ Àü
+		//ì•„ì§ ì‘ì—… ì „
 		case PKT_CS_IDX:
 			{
 				EventPositionRequest inPacket;
@@ -182,7 +182,7 @@ void ClientSession::OnRead(size_t len)
 
 		default:
 			{
-				/// ¿©±â µé¾î¿À¸é ÀÌ»óÇÑ ÆĞÅ¶ º¸³½°Å´Ù.
+				/// ì—¬ê¸° ë“¤ì–´ì˜¤ë©´ ì´ìƒí•œ íŒ¨í‚· ë³´ë‚¸ê±°ë‹¤.
 				Disconnect() ;
 				return ;
 			}
@@ -196,19 +196,19 @@ bool ClientSession::Send(PacketHeader* pkt)
 	if ( !IsConnected() )
 		return false ;
 
-	/// ¹öÆÛ ¿ë·® ºÎÁ·ÀÎ °æ¿ì´Â ²÷¾î¹ö¸²
+	/// ë²„í¼ ìš©ëŸ‰ ë¶€ì¡±ì¸ ê²½ìš°ëŠ” ëŠì–´ë²„ë¦¼
 	if ( false == mSendBuffer.Write((char*)pkt, pkt->mSize) )
 	{
 		Disconnect() ;
 		return false ;
 	}
 
-	/// º¸³¾ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö °Ë»ç
+	/// ë³´ë‚¼ ë°ì´í„°ê°€ ìˆëŠ”ì§€ ê²€ì‚¬
 	if ( mSendBuffer.GetContiguiousBytes() == 0 )
 	{
-		/// ¹æ±İÀü¿¡ write Çß´Âµ¥, µ¥ÀÌÅÍ°¡ ¾ø´Ù¸é ¹º°¡ Àß¸øµÈ °Í
+		/// ë°©ê¸ˆì „ì— write í–ˆëŠ”ë°, ë°ì´í„°ê°€ ì—†ë‹¤ë©´ ë­”ê°€ ì˜ëª»ëœ ê²ƒ
 		//////////////////////////////////////////////////////////////////////////
-		// Disconnect() ÇÏ±â Àü¿¡ assert È£ÃâÇØµµ µÇ´Â °ÍÀÎ°¡??
+		// Disconnect() í•˜ê¸° ì „ì— assert í˜¸ì¶œí•´ë„ ë˜ëŠ” ê²ƒì¸ê°€??
 		assert(false) ;
 		Disconnect() ;
 		return false ;
@@ -224,7 +224,7 @@ bool ClientSession::Send(PacketHeader* pkt)
 	memset(&mOverlappedSend, 0, sizeof(OverlappedIO)) ;
 	mOverlappedSend.mObject = this ;
 
-	// ºñµ¿±â ÀÔÃâ·Â ½ÃÀÛ
+	// ë¹„ë™ê¸° ì…ì¶œë ¥ ì‹œì‘
 	if ( SOCKET_ERROR == WSASend(mSocket, &buf, 1, &sendbytes, flags, &mOverlappedSend, SendCompletion) )
 	{
 		if ( WSAGetLastError() != WSA_IO_PENDING )
@@ -237,10 +237,10 @@ bool ClientSession::Send(PacketHeader* pkt)
 
 void ClientSession::OnWriteComplete(size_t len)
 {
-	/// º¸³»±â ¿Ï·áÇÑ µ¥ÀÌÅÍ´Â ¹öÆÛ¿¡¼­ Á¦°Å
+	/// ë³´ë‚´ê¸° ì™„ë£Œí•œ ë°ì´í„°ëŠ” ë²„í¼ì—ì„œ ì œê±°
 	mSendBuffer.Remove(len) ;
 
-	/// ¾ó·¡? ´ú º¸³½ °æ¿ìµµ ÀÖ³ª? (Ä¿³ÎÀÇ send queue°¡ ²ËÃ¡°Å³ª, Send CompletionÀÌÀü¿¡ ¶Ç send ÇÑ °æ¿ì?)
+	/// ì–¼ë˜? ëœ ë³´ë‚¸ ê²½ìš°ë„ ìˆë‚˜? (ì»¤ë„ì˜ send queueê°€ ê½‰ì°¼ê±°ë‚˜, Send Completionì´ì „ì— ë˜ send í•œ ê²½ìš°?)
 	if ( mSendBuffer.GetContiguiousBytes() > 0 )
 	{
 		assert(false) ;
@@ -263,9 +263,9 @@ bool ClientSession::Broadcast(PacketHeader* pkt)
 
 void ClientSession::OnTick()
 {
-	/// Å¬¶óº°·Î ÁÖ±âÀûÀ¸·Î ÇØ¾ßµÉ ÀÏÀº ¿©±â¿¡
+	/// í´ë¼ë³„ë¡œ ì£¼ê¸°ì ìœ¼ë¡œ í•´ì•¼ë  ì¼ì€ ì—¬ê¸°ì—
 
-	/// Æ¯Á¤ ÁÖ±â·Î DB¿¡ À§Ä¡ ÀúÀå
+	/// íŠ¹ì • ì£¼ê¸°ë¡œ DBì— ìœ„ì¹˜ ì €ì¥
 	if ( ++mDbUpdateCount == PLAYER_DB_UPDATE_CYCLE )
 	{
 		mDbUpdateCount = 0 ;
@@ -274,7 +274,7 @@ void ClientSession::OnTick()
 		updatePlayer->mPosX = mPosX ;
 		updatePlayer->mPosY = mPosY ;
 		updatePlayer->mPosZ = mPosZ ;
-		strcpy_s(updatePlayer->mComment, "updated_test") ; ///< ÀÏ´ÜÀº Å×½ºÆ®¸¦ À§ÇØ
+		strcpy_s(updatePlayer->mComment, "updated_test") ; ///< ì¼ë‹¨ì€ í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´
 		GDatabaseJobManager->PushDatabaseJobRequest(updatePlayer) ;
 	}
 	
@@ -307,7 +307,7 @@ void ClientSession::DatabaseJobDone(DatabaseJobContext* result)
 
 void ClientSession::UpdateDone()
 {
-	/// ÄÜÅÙÃ÷¸¦ ³Ö±â Àü±îÁö´Â µüÈ÷ ÇØÁÙ °ÍÀÌ ¾ø´Ù. ´ÜÁö Å×½ºÆ®¸¦ À§ÇØ¼­..
+	/// ì½˜í…ì¸ ë¥¼ ë„£ê¸° ì „ê¹Œì§€ëŠ” ë”±íˆ í•´ì¤„ ê²ƒì´ ì—†ë‹¤. ë‹¨ì§€ í…ŒìŠ¤íŠ¸ë¥¼ ìœ„í•´ì„œ..
 	printf("DEBUG: Player[%d] Update Done\n", mPlayerId) ;
 }
 
@@ -338,17 +338,17 @@ void CALLBACK RecvCompletion(DWORD dwError, DWORD cbTransferred, LPWSAOVERLAPPED
 	if ( !fromClient->IsConnected() )
 		return ;
 
-	/// ¿¡·¯ ¹ß»ı½Ã ÇØ´ç ¼¼¼Ç Á¾·á
+	/// ì—ëŸ¬ ë°œìƒì‹œ í•´ë‹¹ ì„¸ì…˜ ì¢…ë£Œ
 	if ( dwError || cbTransferred == 0 )
 	{
 		fromClient->Disconnect() ;
 		return ;
 	}
 
-	/// ¹ŞÀº µ¥ÀÌÅÍ Ã³¸®
+	/// ë°›ì€ ë°ì´í„° ì²˜ë¦¬
 	fromClient->OnRead(cbTransferred) ;
 
-	/// ´Ù½Ã ¹Ş±â
+	/// ë‹¤ì‹œ ë°›ê¸°
 	if ( false == fromClient->PostRecv() )
 	{
 		fromClient->Disconnect() ;
@@ -366,7 +366,7 @@ void CALLBACK SendCompletion(DWORD dwError, DWORD cbTransferred, LPWSAOVERLAPPED
 	if ( !fromClient->IsConnected() )
 		return ;
 
-	/// ¿¡·¯ ¹ß»ı½Ã ÇØ´ç ¼¼¼Ç Á¾·á
+	/// ì—ëŸ¬ ë°œìƒì‹œ í•´ë‹¹ ì„¸ì…˜ ì¢…ë£Œ
 	if ( dwError || cbTransferred == 0 )
 	{
 		fromClient->Disconnect() ;

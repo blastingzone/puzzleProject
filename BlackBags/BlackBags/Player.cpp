@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Player.h"
 #include "Renderer.h"
 
@@ -97,7 +97,7 @@ int CPlayer::GetPlayerItemNumber(MO_ITEM itemType)
 		break;
 	}
 
-	return 0; //Àß¸øµÈ °ªÀ» Ã£À¸¸é 0¹İÈ¯ÇØ¼­ ½ºÅµ
+	return 0; //ì˜ëª»ëœ ê°’ì„ ì°¾ìœ¼ë©´ 0ë°˜í™˜í•´ì„œ ìŠ¤í‚µ
 }
 
 void CPlayer::UpdatePlayerResult(MO_ITEM item)

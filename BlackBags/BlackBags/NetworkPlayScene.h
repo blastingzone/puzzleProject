@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "GameMap.h"
 #include "Player.h"
 #include "Scene.h"
@@ -16,7 +16,7 @@ public:
 	void SetPlayerNumber();
 	void LinkPlayers();
 
-	//¸Ê ÃÊ±âÈ­ ÇÒ ¶§ À¯Àú ¼ö¿¡ ¸Â°Ô ¿ïÅ¸¸®¶û ¾ÆÀÌÅÛ ·£´ı ¹èÄ¡ÇÏ´Â ¸Ş¼Òµå
+	//ë§µ ì´ˆê¸°í™” í•  ë•Œ ìœ ì € ìˆ˜ì— ë§ê²Œ ìš¸íƒ€ë¦¬ë‘ ì•„ì´í…œ ëœë¤ ë°°ì¹˜í•˜ëŠ” ë©”ì†Œë“œ
 	void InitRandomMap();
 
 	void ShowResult();
@@ -47,13 +47,13 @@ private:
 
 	static CNetworkPlayScene*	m_pInstance; //singleton instance
 
-	/*	ÁÖ¾îÁø indexÀÇ ¿ïÅ¸¸® ÁÖº¯ Å¸ÀÏÀ» È®ÀÎ ÇÕ´Ï´Ù */
+	/*	ì£¼ì–´ì§„ indexì˜ ìš¸íƒ€ë¦¬ ì£¼ë³€ íƒ€ì¼ì„ í™•ì¸ í•©ë‹ˆë‹¤ */
 	void CollectClosedTile(IndexedPosition indexedPosition, Direction direction);
 
-	/*	IsClosedÇÔ¼ö¿¡¼­ Å½»ö ÁßÀÎ Å¸ÀÏÀÌ ÀÌ¹Ì Å½»öµÈ °÷ÀÎÁö Ã¼Å©ÇÏ´Â ÇÔ¼öÀÔ´Ï´Ù */
+	/*	IsClosedí•¨ìˆ˜ì—ì„œ íƒìƒ‰ ì¤‘ì¸ íƒ€ì¼ì´ ì´ë¯¸ íƒìƒ‰ëœ ê³³ì¸ì§€ ì²´í¬í•˜ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤ */
 	bool IsAlreadyChecked(const IndexedPosition& nextTile);
 
-	/*	¸¶¿ì½º Å¬¸¯ ¹üÀ§ ¼³Á¤ */
+	/*	ë§ˆìš°ìŠ¤ í´ë¦­ ë²”ìœ„ ì„¤ì • */
 	void SetClickArea();
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_Player;

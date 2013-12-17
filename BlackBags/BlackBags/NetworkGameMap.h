@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "d2d1.h"
 #include "SceneObject.h"
 #include <array>
 #include <dwrite.h>
 
-/*	°ÔÀÓ ¸ÊÀÇ Å¸ÀÏ ÁÂÇ¥¸¦ Ç¥ÇöÇÏ±â À§ÇÑ ±¸Á¶Ã¼ */
+/*	ê²Œì„ ë§µì˜ íƒ€ì¼ ì¢Œí‘œë¥¼ í‘œí˜„í•˜ê¸° ìœ„í•œ êµ¬ì¡°ì²´ */
 struct IndexedPosition
 {
 	IndexedPosition() : m_PosI(0), m_PosJ(0) {}
@@ -15,8 +15,8 @@ struct IndexedPosition
 		m_PosJ = inputIndexedPosition.m_PosJ;
 	}
 
-	/*	º¹»ç ´ëÀÔ ¿¬»êÀÚ ¿À¹ö¶óÀÌµù
-		queue°°Àº °÷¿¡ pushÇØµµ º¹»ç¸¦ Àß ÇØÁİ´Ï´ç */
+	/*	ë³µì‚¬ ëŒ€ì… ì—°ì‚°ì ì˜¤ë²„ë¼ì´ë”©
+		queueê°™ì€ ê³³ì— pushí•´ë„ ë³µì‚¬ë¥¼ ì˜ í•´ì¤ë‹ˆë‹¹ */
 	IndexedPosition& operator=(const IndexedPosition& inputIndexedPosition) 
 	{
 		m_PosI = inputIndexedPosition.m_PosI;
@@ -73,13 +73,13 @@ public:
 	void DrawPlayerUI(int playerNumber);
 	void GetPlayerUIPosition();
 
-	/*	ÀÔ·ÂµÈ ÁÂÇ¥ÀÇ ¿ÀºêÁ§Æ®¸¦ ¿¬°á µÈ »óÅÂ·Î º¯°æ */
+	/*	ì…ë ¥ëœ ì¢Œí‘œì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ì—°ê²° ëœ ìƒíƒœë¡œ ë³€ê²½ */
 	void DrawLine(const IndexedPosition& indexedPosition);
 	void InitVirtualLineState();
 	void ShowVirtualLine(const IndexedPosition& indexedPosition);
 
-	/*	ÀÔ·ÂµÈ ÁÂÇ¥ÀÇ ¿ÀºêÁ§Æ®¸¦ ¿¬°áµÇÁö ¾ÊÀº »óÅÂ·Î º¯°æ
-		(°ÔÀÓÀ» »ı¼ºÇÏ¸é¼­ ·£´ıÀ¸·Î ¿ïÅ¸¸® ¹èÄ¥ ÇÒ ¶§ »ç¿ëµÊ) */
+	/*	ì…ë ¥ëœ ì¢Œí‘œì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ì—°ê²°ë˜ì§€ ì•Šì€ ìƒíƒœë¡œ ë³€ê²½
+		(ê²Œì„ì„ ìƒì„±í•˜ë©´ì„œ ëœë¤ìœ¼ë¡œ ìš¸íƒ€ë¦¬ ë°°ì¹  í•  ë•Œ ì‚¬ìš©ë¨) */
 	void DeleteLine(const IndexedPosition& indexedPosition);
 
 	D2D1_SIZE_F GetStartPosition()							{ return m_StartPosition; }
@@ -94,15 +94,15 @@ public:
 	void		SetItem(IndexedPosition indexedPosition, MO_ITEM item);
 	MO_ITEM		GetItem(IndexedPosition indexedPosition)	{ return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Item; }
 
-	/*	Å¸ÀÏ Å½»ö ½Ã Å½»ö ¿©ºÎ¸¦ È®ÀÎÇÏ´Â flag ÁöÁ¤ ¹× È®ÀÎ */
+	/*	íƒ€ì¼ íƒìƒ‰ ì‹œ íƒìƒ‰ ì—¬ë¶€ë¥¼ í™•ì¸í•˜ëŠ” flag ì§€ì • ë° í™•ì¸ */
 	void		SetMapFlag(IndexedPosition indexedPosition,bool flag);
 	bool		GetMapFlag(IndexedPosition indexedPosition) { return m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Flag; }
 
-	/*	¸Ê ¿ÀÇÁÁ§Æ® Å©±â ¹İÈ¯ÇÏ´Â ÇÔ¼öµé */
+	/*	ë§µ ì˜¤í”„ì íŠ¸ í¬ê¸° ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜ë“¤ */
 	float		GetTileSize()								{ return m_TileSize; };
 	float		GetLineWeight()								{ return m_LineWeight; }
 
-	/*	¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ¸¦ ÁöÁ¤, ¹İÈ¯ÇÏ´Â ÇÔ¼öµé */
+	/*	ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœë¥¼ ì§€ì •, ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜ë“¤ */
 	bool		GetLineAnimationFlag()						{ return m_LineAnimationFlag; }
 	int			GetTileAnimationTurnNumber()				{ return m_TileAnimationTurnNumber; }
 	void		SetTileAnimationTurnNumber(int turnNumber)	{ m_TileAnimationTurnNumber = turnNumber; }
@@ -116,35 +116,35 @@ public:
 
 	void ResizeClient();
 
-	/*	È­¸é¿¡ Ç¥½ÃµÉ SceneObject Å©±â ÁöÁ¤ */
+	/*	í™”ë©´ì— í‘œì‹œë  SceneObject í¬ê¸° ì§€ì • */
 	void SetObjectSize();
 
-	// °ÔÀÓ °á°ú¸¦ GameData Å¬·¡½º¿¡ ±â·ÏÇÏ´Â ¸Ş¼Òµå
+	// ê²Œì„ ê²°ê³¼ë¥¼ GameData í´ë˜ìŠ¤ì— ê¸°ë¡í•˜ëŠ” ë©”ì†Œë“œ
 	void WriteResult();
 
-	/*	player turn table ±¸¼º ÇÔ¼ö */
+	/*	player turn table êµ¬ì„± í•¨ìˆ˜ */
 	void SetPlayerTurnTable(int idx, CPlayer* playerPtr);
 
-	/* °ÔÀÓ ¸Ê¿¡¼­ ÇöÀç ÅÏÀ» ¾ò±â À§ÇÑ ÇÔ¼ö */
+	/* ê²Œì„ ë§µì—ì„œ í˜„ì¬ í„´ì„ ì–»ê¸° ìœ„í•œ í•¨ìˆ˜ */
 	void SetCurrentTurn(int turn)							{ m_CurrentTurn = turn; }
 
 private: 
 	bool CreateResource();
 
-	/*	Å¸ÀÏÀÇ °¡·Î, ¼¼·Î ¼ıÀÚ¸¸ ÀÎÀÚ·Î ¹Ş¾Æ¼­ ÇÊ¿äÇÑ ¿µ¿ªÀÇ 
-		MapObject ¼Ó¼ºÀ» º¯°æ ½ÃÄÑ¼­ ¸ÊÀ» »ı¼º */
+	/*	íƒ€ì¼ì˜ ê°€ë¡œ, ì„¸ë¡œ ìˆ«ìë§Œ ì¸ìë¡œ ë°›ì•„ì„œ í•„ìš”í•œ ì˜ì—­ì˜ 
+		MapObject ì†ì„±ì„ ë³€ê²½ ì‹œì¼œì„œ ë§µì„ ìƒì„± */
 	void CreateMap();
 
-	/*	ÇöÀç Å©±â¿¡ ¸ÂÃç¼­ m_StartPositionÀÇ ÁÂÇ¥¸¦ °è»ê */
+	/*	í˜„ì¬ í¬ê¸°ì— ë§ì¶°ì„œ m_StartPositionì˜ ì¢Œí‘œë¥¼ ê³„ì‚° */
 	void CalcStartPosition();
 
-	/*	ÁÖÀÎÀÌ ¾ø´Â Å¸ÀÏÀÇ ¼ö¸¦ ÀúÀåÇÏ´Â º¯¼ö
-		Á¾·á Á¶°ÇÀ» ½±°Ô È®ÀÎÇÏ±â À§ÇØ¼­ »ı¼º */
+	/*	ì£¼ì¸ì´ ì—†ëŠ” íƒ€ì¼ì˜ ìˆ˜ë¥¼ ì €ì¥í•˜ëŠ” ë³€ìˆ˜
+		ì¢…ë£Œ ì¡°ê±´ì„ ì‰½ê²Œ í™•ì¸í•˜ê¸° ìœ„í•´ì„œ ìƒì„± */
 	int	m_VoidTileCount;
 
-	/*	°ÔÀÓ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ±â À§ÇÑ ¹è¿­
-		»ı¼ºÀº ÃÖ´ë Å©±â·Î »ı¼ºÇÏ°í, 
-		°ÔÀÓ ¼³Á¤¿¡ µû¶ó¼­ ÇÊ¿äÇÑ ºÎºĞ¸¸ ´Ù¸¥ MapObject·Î ¼Ó¼º º¯°æÇØ¼­ »ç¿ë */
+	/*	ê²Œì„ ë°ì´í„°ë¥¼ ì €ì¥í•˜ê¸° ìœ„í•œ ë°°ì—´
+		ìƒì„±ì€ ìµœëŒ€ í¬ê¸°ë¡œ ìƒì„±í•˜ê³ , 
+		ê²Œì„ ì„¤ì •ì— ë”°ë¼ì„œ í•„ìš”í•œ ë¶€ë¶„ë§Œ ë‹¤ë¥¸ MapObjectë¡œ ì†ì„± ë³€ê²½í•´ì„œ ì‚¬ìš© */
 	//std::array<std::array<MapObject, MAX_MAP_HEIGHT>, MAX_MAP_WIDTH> m_Map;
 	
 	template <typename IType, int ROW, int COL>
@@ -156,9 +156,9 @@ private:
 	typedef array2d_<MapObject, MAX_MAP_WIDTH, MAX_MAP_HEIGHT>::type MapObjMap ;
 	MapObjMap m_Map;
 
-	// Âü°íÇØ!! ÀÌ·±½ÄÀ¸·Î ±×³É 2Â÷¿ø ¹è¿­ ÇüÅÂ·Î ¾²¸é ÆíÇÏ°ÚÁö? 
+	// ì°¸ê³ í•´!! ì´ëŸ°ì‹ìœ¼ë¡œ ê·¸ëƒ¥ 2ì°¨ì› ë°°ì—´ í˜•íƒœë¡œ ì“°ë©´ í¸í•˜ê² ì§€? 
 	//@{
-	/* ¿©±â Àß º¸½Ã¿À
+	/* ì—¬ê¸° ì˜ ë³´ì‹œì˜¤
 	template <typename IType, int ROW, int COL>
 	struct array2d_
 	{
@@ -171,14 +171,14 @@ private:
 	//@}
 
 
-	/*	½ÇÁ¦ °ÔÀÓ ¼³Á¤¿¡ µû¸¥ ÇÊ¿äÇÑ ¸Ê Å©±â
-		¿ïÅ¸¸®³ª Á¡Àº °í·ÁÇÏÁö ¾ÊÀº ¼ø¼öÇÑ Å¸ÀÏ ¼ö¸¸ ÀÇ¹Ì */
+	/*	ì‹¤ì œ ê²Œì„ ì„¤ì •ì— ë”°ë¥¸ í•„ìš”í•œ ë§µ í¬ê¸°
+		ìš¸íƒ€ë¦¬ë‚˜ ì ì€ ê³ ë ¤í•˜ì§€ ì•Šì€ ìˆœìˆ˜í•œ íƒ€ì¼ ìˆ˜ë§Œ ì˜ë¯¸ */
 	MapSize	m_MapSize;
 
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
-	/*	°ÔÀÓ ¸ÊÀ» ±×¸®±âÀ§ÇÑ È­¸é ±âÁØ Á¡
-		°ÔÀÓ ¸ÊÀÇ °¡Àå ¿ŞÂÊ »ó´Ü À§Ä¡ */
+	/*	ê²Œì„ ë§µì„ ê·¸ë¦¬ê¸°ìœ„í•œ í™”ë©´ ê¸°ì¤€ ì 
+		ê²Œì„ ë§µì˜ ê°€ì¥ ì™¼ìª½ ìƒë‹¨ ìœ„ì¹˜ */
 	D2D1_SIZE_F	m_StartPosition;
 	D2D1_SIZE_F  m_CenterPosition;
 
@@ -227,7 +227,7 @@ private:
 
 	bool m_isMouseOn;
 
-	//playScene°ú Áßº¹µÇ´Â µ¥ÀÌÅÍ
+	//playSceneê³¼ ì¤‘ë³µë˜ëŠ” ë°ì´í„°
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
 
 	int m_CurrentTurn;
