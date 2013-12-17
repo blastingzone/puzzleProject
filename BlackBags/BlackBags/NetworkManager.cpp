@@ -159,6 +159,17 @@ void CNetworkManager::ProcessPacket()
 			}
 			break;
 
+		case PKT_SC_GAME_START:
+			{
+				GameStartResult recvData;
+				if (m_RecvBuffer.Read((char*)&recvData, header.mSize))
+				{
+					//이걸 씬이 처리하게 해야 하나...우선은 여기서 다음 씬 세팅해서 넘겨버립니다.
+					CGameData::GetInstance()->SetNetworkNextSceneFlag(recvData.mStart);
+				}
+			}
+			break;
+
 		case PKT_SC_IDX:
 			{
 				EventPositionResult recvData ;

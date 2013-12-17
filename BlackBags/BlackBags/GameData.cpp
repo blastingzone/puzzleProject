@@ -68,6 +68,8 @@ void CGameData::Init()
 	m_PlaySceneTimerFlag = false;
 
 	m_hWnd = nullptr;
+
+	m_NetworkNextSceneFlag = false;
 }
 
 void CGameData::SetMapSize(int x, int y)

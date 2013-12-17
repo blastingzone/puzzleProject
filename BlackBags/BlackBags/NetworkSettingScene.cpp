@@ -123,8 +123,8 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 				CNetworkManager::GetInstance()->PostSendMessage();
 			}
 			
-			m_SettingMenu->SetMapSelected(idx);
-			m_SelectedMapIndex = idx;
+			//m_SettingMenu->SetMapSelected(idx);
+			//m_SelectedMapIndex = idx;
 		}
 	}
 
@@ -145,15 +145,27 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 		if (mouseCoordinate.m_PosY > startPosition.height + (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE-1) * nextButton.height
 			&& mouseCoordinate.m_PosY > startPosition.height + SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * nextButton.height)
 		{
-			CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
-				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
-			CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
-			CGameData::GetInstance()->SetCurrentScene( SC_NETWORK_PLAY );
-			CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
+			//send packet
+			GameStartRequest startRequest;
+
+			startRequest.mStart = true;
+
+			if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&startRequest, startRequest.mSize) )
+			{
+				CNetworkManager::GetInstance()->PostSendMessage();
+			}
 		}
 	}
 }
 
+void CNetworkSettingScene::GoNextScene()
+{
+	CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
+				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
+	CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
+	CGameData::GetInstance()->SetCurrentScene( SC_NETWORK_PLAY );
+	CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
+}
 
 void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 {
@@ -200,6 +212,14 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 
 void CNetworkSettingScene::Render()
 {
+	if (CGameData::GetInstance()->GetNetworkNextSceneFlag() )
+	{
+		CGameData::GetInstance()->SetNetworkNextSceneFlag(false);
+		GoNextScene();
+
+		return;
+	}
+
 	for (auto iter: m_Object)
 	{
 		iter->Render();

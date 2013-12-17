@@ -47,6 +47,9 @@ public:
 	void		SetWindowsHwnd(HWND hWnd)						{ m_hWnd = hWnd; }
 	HWND		GetWindowsHwnd()								{ if (nullptr != m_hWnd) return m_hWnd; }
 
+	bool		GetNetworkNextSceneFlag()						{ return m_NetworkNextSceneFlag; }
+	void		SetNetworkNextSceneFlag(bool flag)				{ m_NetworkNextSceneFlag = flag; }
+
 private:
 	void		createPlayer();
 
@@ -66,4 +69,7 @@ private:
 	// 에러 헨들링을 위한 HWND
 	// 아 이거 힘들게 만들었는데 안써도 되네요;; 메시지 박스 옵션이 알아서 함 ㅎㅎ
 	HWND				m_hWnd;
+
+	//네트워크용 다음씬 넘어가는 조건 확인 플래그
+	bool				m_NetworkNextSceneFlag;
 };

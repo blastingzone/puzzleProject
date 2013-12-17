@@ -149,6 +149,20 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
+		case PKT_CS_GAME_START:
+			{
+				GameStartRequest	inPacket;
+				GameStartResult		outPacket;
+
+				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
+				
+				outPacket.mStart = inPacket.mStart;
+
+				if (!Broadcast(&outPacket))
+					return;
+			}
+			break;
+
 		//아직 작업 전
 		case PKT_CS_IDX:
 			{

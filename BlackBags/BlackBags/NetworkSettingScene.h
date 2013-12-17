@@ -20,6 +20,8 @@ public:
 
 	bool CheckGameStartCondition();
 
+	void GoNextScene();
+
 private:
 	CNetworkSettingMenu*	m_SettingMenu;
 	int						m_SelectedPlayerNumber;

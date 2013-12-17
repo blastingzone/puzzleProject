@@ -19,8 +19,11 @@ enum PacketTypes
 	PKT_CS_MAP_SELECT = 5,
 	PKT_SC_MAP_SELECT = 6,
 
-	PKT_CS_IDX		= 7,
-	PKT_SC_IDX		= 8,
+	PKT_CS_GAME_START = 7,
+	PKT_SC_GAME_START = 8,
+
+	PKT_CS_IDX		= 9,
+	PKT_SC_IDX		= 10,
 } ;
 
 #pragma pack(push, 1)
@@ -112,6 +115,28 @@ struct MapResult : public PacketHeader
 		mMapIdx = -1;
 	}
 	int		mMapIdx;
+} ;
+
+struct GameStartRequest : public PacketHeader
+{
+	GameStartRequest()
+	{
+		mSize = sizeof(MapResult) ;
+		mType = PKT_CS_GAME_START ;
+		mStart = false;
+	}
+	bool mStart;
+} ;
+
+struct GameStartResult : public PacketHeader
+{
+	GameStartResult()
+	{
+		mSize = sizeof(MapResult) ;
+		mType = PKT_SC_GAME_START ;
+		mStart = false;
+	}
+	int mStart;
 } ;
 
 struct EventPositionRequest : public PacketHeader

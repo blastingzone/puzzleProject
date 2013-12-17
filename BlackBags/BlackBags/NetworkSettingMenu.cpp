@@ -827,7 +827,7 @@ void CNetworkSettingMenu::PollingData()
 	//Polling 함수는 한번으로 끝내는 것이 좋을 듯.
 	int mapSelected = CNetworkManager::GetInstance()->GetMapIndex();
 
-	for (int i = 0; i<MAX_MAPSIZE_NUM;++i)
+	for (int i = 0; i < MAX_MAPSIZE_NUM; ++i)
 	{
 			m_MapSelect[i].m_IsSelected = false;
 	}
