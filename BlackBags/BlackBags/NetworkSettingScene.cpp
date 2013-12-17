@@ -162,9 +162,9 @@ void CNetworkSettingScene::GoNextScene()
 {
 	//시작 조건 확인시에 이미 값이 들어가있다.
 	//m_SelectedMapIndex =  CNetworkManager::GetInstance()->GetMapIndex();
-	CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
-				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
-	CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
+	CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(CNetworkManager::GetInstance()->GetMapIndex())
+				,m_SettingMenu->GetMapSizeWidth(CNetworkManager::GetInstance()->GetMapIndex()));
+	CGameData::GetInstance()->SetPlayerNumber(CNetworkManager::GetInstance()->GetPlayerNumber() );
 	CGameData::GetInstance()->SetCurrentScene( SC_NETWORK_PLAY );
 	CGameData::GetInstance()->SetPlayerMask(m_SettingMenu->GetPlayerMask() );
 }
