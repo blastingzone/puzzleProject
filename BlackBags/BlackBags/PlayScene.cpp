@@ -111,7 +111,11 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 				m_Map->SubtractVoidCount();
 				i++;
 			}
-
+			//게임 피드백 추가 i > 10일 경우 Excellent! 애니메이션 추가할 것.
+#ifdef _DEBUG
+			if ( i> 10 )
+				printf("대박\n");
+#endif
 			//tile animation 시작 설정
 			m_Map->SetTileAnimationTurn(1);
 #ifdef _DEBUG

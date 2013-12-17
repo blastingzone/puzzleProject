@@ -82,6 +82,9 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 	fr = m_System->createSound("Resource/Sound/SE2.mp3", FMOD_HARDWARE, 0, &m_SE);
 
 	assert(fr == FMOD_OK);
+	
+	m_SEChannel->setVolume(1.0f);
+	m_BGMChannel->setVolume(0.5f);
 
 	return fr;
 }

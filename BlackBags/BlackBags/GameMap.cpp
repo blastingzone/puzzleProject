@@ -412,6 +412,12 @@ void CGameMap::Render()
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
+	//animation 재생 중에는 타이머 안 줄어드는 것처럼 보이게 함
+	if (m_LineAnimationFlag || m_TileAnimationTurn != 0)
+	{
+		remainTimeRatio = 1.0f;
+	}
+
 	float currentTimerLength = m_TimerWidth * remainTimeRatio;
 
 	//남은 시간 표시

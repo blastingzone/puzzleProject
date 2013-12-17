@@ -110,7 +110,6 @@ public:
 	void		InitAnimationState(IndexedPosition indexedPosition);
 	void		SetTileAnimationTurn(int turn) { m_TileAnimationTurn = turn; }
 	int			GetTileAnimationTurn(IndexedPosition indexedPosition);
-	
 	void SubtractVoidCount() { --m_VoidTileCount; }
 	int	GetVoidTileCount() { return m_VoidTileCount; }
 
