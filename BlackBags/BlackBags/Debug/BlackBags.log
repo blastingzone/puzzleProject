@@ -1,38 +1,9 @@
-﻿빌드 시작: 2013-12-05 오후 12:09:44
-     1>2 노드의 "C:\Users\JungGang\Desktop\trunk\BlackBags\BlackBags\BlackBags.vcxproj" 프로젝트(Build 대상)입니다.
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W4 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\BlackBags.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt GameData.cpp
-         GameData.cpp
-     1>c:\users\junggang\desktop\trunk\blackbags\blackbags\gamedata.cpp(126): warning C4715: 'CGameData::GetPlayerItemNumber' : 모든 제어 경로에서 값을 반환하지는 않습니다.
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\JungGang\Desktop\trunk\BlackBags\Debug\BlackBags.exe" /INCREMENTAL /NOLOGO d2d1.lib dwrite.lib d3d9.lib Library/FMOD/lib/fmod_vc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\JungGang\Desktop\trunk\BlackBags\Debug\BlackBags.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\JungGang\Desktop\trunk\BlackBags\Debug\BlackBags.lib" /MACHINE:X86 Debug\BlackBags.res
-         Debug\BandiVideoLibrary.obj
-         Debug\BandiVideoTexture_DX9.obj
-         Debug\BlackBags.obj
-         Debug\CreditScene.obj
-         Debug\FPS.obj
-         Debug\GameData.obj
-         Debug\GameMap.obj
-         Debug\GameResult.obj
-         Debug\GameTimer.obj
-         Debug\MainMenu.obj
-         Debug\MainScene.obj
-         Debug\OpeningScene.obj
-         Debug\Player.obj
-         Debug\PlayScene.obj
-         Debug\Renderer.obj
-         Debug\ResultScene.obj
-         Debug\Scene.obj
-         Debug\SceneManager.obj
-         Debug\SceneObject.obj
-         Debug\SettingMenu.obj
-         Debug\SettingScene.obj
-         Debug\SoundRenderer.obj
-         Debug\stdafx.obj
-         Debug\VideoRender.obj
-         BlackBags.vcxproj -> C:\Users\JungGang\Desktop\trunk\BlackBags\Debug\BlackBags.exe
-     1>"C:\Users\JungGang\Desktop\trunk\BlackBags\BlackBags\BlackBags.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+﻿Build started 2013-12-11 오전 11:01:18.
+     1>Project "C:\Users\wooq\Documents\homework\BlackBags_WIN32\branches\animation_JG\BlackBags\BlackBags\BlackBags.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         BlackBags.vcxproj -> C:\Users\wooq\Documents\homework\BlackBags_WIN32\branches\animation_JG\BlackBags\Debug\BlackBags.exe
+     1>Done Building Project "C:\Users\wooq\Documents\homework\BlackBags_WIN32\branches\animation_JG\BlackBags\BlackBags\BlackBags.vcxproj" (Build target(s)).
 
-빌드했습니다.
+Build succeeded.
 
-경과 시간: 00:00:00.57
+Time Elapsed 00:00:00.15
