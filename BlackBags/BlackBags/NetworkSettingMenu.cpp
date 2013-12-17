@@ -833,8 +833,10 @@ void CNetworkSettingMenu::PollingData()
 	}
 
 	if (mapSelected != -1 )
+	{
 		m_MapSelect[mapSelected].m_IsSelected = true;
-
+		SetMapSelected(mapSelected);
+	}
 	//시작 조건이 충족되면 StartButton이 생길수 있도록 한다.
 	if (IsReady() && mapSelected != -1)
 	{
@@ -850,7 +852,7 @@ void CNetworkSettingMenu::PollingData()
 //최대한 수정을 적게 하기 위해서 게임 시작 조건 체크를 여기서 하는 걸로 변경
 bool CNetworkSettingMenu::IsReady()
 {
-	if (m_SelectedPlayerNum > 1 
+	if (m_PlayerNum > 1 
 		&& m_SelectedPlayerNum == m_PlayerNum)
 	{
 		return true;

@@ -160,6 +160,8 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 
 void CNetworkSettingScene::GoNextScene()
 {
+	//시작 조건 확인시에 이미 값이 들어가있다.
+	//m_SelectedMapIndex =  CNetworkManager::GetInstance()->GetMapIndex();
 	CGameData::GetInstance()->SetMapSize(m_SettingMenu->GetMapSizeHeight(m_SelectedMapIndex)
 				,m_SettingMenu->GetMapSizeWidth(m_SelectedMapIndex));
 	CGameData::GetInstance()->SetPlayerNumber(m_SelectedPlayerNumber);
@@ -232,6 +234,7 @@ void CNetworkSettingScene::Render()
 
 bool CNetworkSettingScene::CheckGameStartCondition()
 {
+	m_SelectedMapIndex =  CNetworkManager::GetInstance()->GetMapIndex();
 	return (m_SettingMenu->IsReady() && (m_SelectedMapIndex != -1) );
 }
 
