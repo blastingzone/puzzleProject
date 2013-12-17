@@ -23,9 +23,6 @@
     <Filter Include="Scenes\SettingScene">
       <UniqueIdentifier>{5866b183-6a75-4fee-83f4-10b72e4e9c86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\ReusltScene">
-      <UniqueIdentifier>{fa830e96-8976-48cc-86aa-3e45e0bc1592}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenes\PlayScene">
       <UniqueIdentifier>{8c710fba-757b-425e-9590-5c049869f860}</UniqueIdentifier>
     </Filter>
@@ -56,6 +53,9 @@
     </Filter>
     <Filter Include="Scenes\NetworkPlayScene">
       <UniqueIdentifier>{8e20a725-2bd9-427a-b66a-f66ca90e9d10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\ResultScene">
+      <UniqueIdentifier>{fa830e96-8976-48cc-86aa-3e45e0bc1592}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,13 +116,13 @@
       <Filter>Scenes\OpeningScene</Filter>
     </ClInclude>
     <ClInclude Include="ResultScene.h">
-      <Filter>Scenes\ReusltScene</Filter>
+      <Filter>Scenes\ResultScene</Filter>
     </ClInclude>
     <ClInclude Include="SettingScene.h">
       <Filter>Scenes\SettingScene</Filter>
     </ClInclude>
     <ClInclude Include="GameResult.h">
-      <Filter>Scenes\ReusltScene</Filter>
+      <Filter>Scenes\ResultScene</Filter>
     </ClInclude>
     <ClInclude Include="SettingMenu.h">
       <Filter>Scenes\SettingScene</Filter>
@@ -220,13 +220,13 @@
       <Filter>Scenes\OpeningScene</Filter>
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
-      <Filter>Scenes\ReusltScene</Filter>
+      <Filter>Scenes\ResultScene</Filter>
     </ClCompile>
     <ClCompile Include="SettingScene.cpp">
       <Filter>Scenes\SettingScene</Filter>
     </ClCompile>
     <ClCompile Include="GameResult.cpp">
-      <Filter>Scenes\ReusltScene</Filter>
+      <Filter>Scenes\ResultScene</Filter>
     </ClCompile>
     <ClCompile Include="SettingMenu.cpp">
       <Filter>Scenes\SettingScene</Filter>

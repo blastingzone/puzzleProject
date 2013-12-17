@@ -44,6 +44,7 @@ bool CNetworkPlayScene::Init()
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 
+	//sm9: new에 대해서는 널체크 일일이 할 필요 없이 그냥 assert 쓰면 된다. 어차피 new해서 메모리가 할당 안된다는 말은, 시스템이 맛간 경우라, 종료해야 됨.
 	if ( m_Map == nullptr || !m_Map->Init() )
 	{
 		return false;
@@ -90,7 +91,7 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 	{
 		CSoundRenderer::GetInstance()->PlaySE_DrawLine();
 #ifdef _DEBUG
-		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
+		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber)); //sm9: m_PlayerNumber가 0인 경우가 생긴다.
 		printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
 #endif
 		//IsPossible 체크 후에 gameMap 호출해서 반영

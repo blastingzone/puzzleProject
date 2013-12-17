@@ -128,6 +128,8 @@ DWORD CGameTimer::GetRemainTime()
 
 	if (remainTime < 0)
 	{
+		//sm9: 이쪽으로 들어올 일이 절대 없다. 왜냐고? 안얄랴줌
+
 		//애니메이션 재생 중
 		remainTime = 0;
 	}

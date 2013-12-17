@@ -21,7 +21,7 @@ CNetworkSettingScene::~CNetworkSettingScene(void)
 bool CNetworkSettingScene::Init()
 {
 	if (!CNetworkManager::GetInstance()->Connect()
-		&&!CNetworkManager::GetInstance()->IsLoginComplete())
+		&&!CNetworkManager::GetInstance()->IsLoginComplete()) //sm9: 두번째 조건문이 필요한 이유는?
 		return false;
 
 	CNetworkManager::GetInstance()->AskClientId();

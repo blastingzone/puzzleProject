@@ -140,6 +140,9 @@ void CNetworkManager::ProcessPacket()
 						//패킷에서는 인덱스를 클라이언트 아이디(PlayerIdx)로 사용하고 데이터를 캐릭터 넘버로 기록
 						//반면에 클라이언트에서는 캐릭터 넘버를 인덱스로 사용하고 데이터로 클라이언트 아이디를 기록한다
 						//심하게 이상하다. 기존 코드와 호완성을 생각해서 패킷 구조의 변경이 필요하다
+						
+						//sm9: 그래. 대동단결하는게 좋다.
+						
 						if (recvData.mCharacterId[PlayerIdx] != -1)
 						{
 							m_CharacterIdx[recvData.mCharacterId[PlayerIdx] ] = PlayerIdx;
@@ -193,6 +196,7 @@ void CNetworkManager::ProcessPacket()
 void CNetworkManager::AskClientId()
 {
 	/// NAGLE 끈다
+	//sm9: 사실 이 부분은 네트워크 초기화 하는데 있어야 한다.
 	int opt = 1 ;
 	::setsockopt(m_Socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
 

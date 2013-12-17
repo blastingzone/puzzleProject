@@ -22,7 +22,7 @@ CSettingMenu::CSettingMenu(void)
 	// 버튼 초기값들을 설정함
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
+		m_PlayerSelect[i].m_ButtonText = L"Character %d", i; //sm9: 안얄랴줌
 	}
 
 	m_PlayerSelect[0].m_ButtonText = L"Character 1";

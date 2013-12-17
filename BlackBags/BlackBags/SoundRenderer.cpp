@@ -125,6 +125,7 @@ void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 		break;
 	}
 
+	//sm9: fr이 쓰레기값이 들어 있는 상태에서 여기 진입할 수 있다. 항상 로컬변수는 선언시에 초기값으로 세팅하는 습관을 들이쟈.
 	if (!SUCCEEDED(fr) )
 	{
 		ErrorHandling();
