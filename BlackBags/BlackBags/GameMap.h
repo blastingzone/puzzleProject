@@ -4,7 +4,8 @@
 #include <array>
 #include <dwrite.h>
 
-/*	게임 맵의 타일 좌표를 표현하기 위한 구조체 */
+/*
+//	게임 맵의 타일 좌표를 표현하기 위한 구조체 
 struct IndexedPosition
 {
 	IndexedPosition() : m_PosI(0), m_PosJ(0) {}
@@ -15,8 +16,8 @@ struct IndexedPosition
 		m_PosJ = inputIndexedPosition.m_PosJ;
 	}
 
-	/*	복사 대입 연산자 오버라이딩
-		queue같은 곳에 push해도 복사를 잘 해줍니당 */
+//	복사 대입 연산자 오버라이딩
+//		queue같은 곳에 push해도 복사를 잘 해줍니당 
 	IndexedPosition& operator=(const IndexedPosition& inputIndexedPosition) 
 	{
 		m_PosI = inputIndexedPosition.m_PosI;
@@ -59,6 +60,7 @@ struct MapObject
 	int			m_AnimationTurn;
 	Direction	m_Direction;
 };
+*/
 
 class CGameMap : public CSceneObject
 {

@@ -42,7 +42,7 @@ bool CNetworkPlayScene::Init()
 {
 	SetPlayerNumber();
 
-	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
+	m_Map = new CNetworkGameMap(CGameData::GetInstance()->GetMapSize());
 
 	if ( m_Map == nullptr || !m_Map->Init() )
 	{
