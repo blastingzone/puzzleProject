@@ -50,6 +50,9 @@ public:
 	bool		GetNetworkNextSceneFlag()						{ return m_NetworkNextSceneFlag; }
 	void		SetNetworkNextSceneFlag(bool flag)				{ m_NetworkNextSceneFlag = flag; }
 
+	bool		GetNetworkRandomSeed()							{ return m_NetworkRandomSeed; }
+	void		SetNetworkRandomSeed(unsigned int seed)			{ m_NetworkRandomSeed = seed; }
+
 private:
 	void		createPlayer();
 
@@ -72,4 +75,5 @@ private:
 
 	//네트워크용 다음씬 넘어가는 조건 확인 플래그
 	bool				m_NetworkNextSceneFlag;
+	unsigned int		m_NetworkRandomSeed;
 };

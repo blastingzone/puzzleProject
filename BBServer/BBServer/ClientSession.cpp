@@ -4,6 +4,7 @@
 #include "ClientManager.h"
 #include "DatabaseJobContext.h"
 #include "DatabaseJobManager.h"
+#include <time.h>
 
 bool ClientSession::OnConnect(SOCKADDR_IN* addr)
 {
@@ -157,6 +158,7 @@ void ClientSession::OnRead(size_t len)
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
 				
 				outPacket.mStart = inPacket.mStart;
+				outPacket.randomSeed = static_cast<unsigned int> (time(NULL) );
 
 				if (!Broadcast(&outPacket))
 					return;

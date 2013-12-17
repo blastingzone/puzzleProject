@@ -134,8 +134,10 @@ struct GameStartResult : public PacketHeader
 		mSize = sizeof(MapResult) ;
 		mType = PKT_SC_GAME_START ;
 		mStart = false;
+		randomSeed = 0;
 	}
 	int mStart;
+	unsigned int randomSeed;
 } ;
 
 struct EventPositionRequest : public PacketHeader

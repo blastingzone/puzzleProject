@@ -70,6 +70,7 @@ void CGameData::Init()
 	m_hWnd = nullptr;
 
 	m_NetworkNextSceneFlag = false;
+	m_NetworkRandomSeed = 0;
 }
 
 void CGameData::SetMapSize(int x, int y)
