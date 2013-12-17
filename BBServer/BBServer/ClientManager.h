@@ -28,6 +28,7 @@ public:
 
 	int GiveClientId();
 	int GetConnectionNum();
+	void LogOut(int clientId);
 
 	int GetCharacterSelectedStatusByClientId(int clientId)	{ return mCharacterSelectStatus[clientId]; }
 	bool SetCharacterSelectedStatus(int clientId, int characterId);

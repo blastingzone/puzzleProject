@@ -26,7 +26,7 @@ bool ClientSession::OnConnect(SOCKADDR_IN* addr)
 	printf("[DEBUG] Client Connected: IP=%s, PORT=%d\n", inet_ntoa(mClientAddr.sin_addr), ntohs(mClientAddr.sin_port)) ;
 	
 	mConnected = true ;
-
+	//mClientId = -1;
 
 	return PostRecv() ;
 }
@@ -63,6 +63,11 @@ void ClientSession::Disconnect()
 		return ;
 
 	printf("[DEBUG] Client Disconnected: IP=%s, PORT=%d\n", inet_ntoa(mClientAddr.sin_addr), ntohs(mClientAddr.sin_port)) ;
+
+	if (mClientId >= 0 && mClientId < MAX_CLIENT_NUM)
+	{
+		GClientManager->LogOut(mClientId);
+	}
 
 	::shutdown(mSocket, SD_BOTH) ;
 	::closesocket(mSocket) ;

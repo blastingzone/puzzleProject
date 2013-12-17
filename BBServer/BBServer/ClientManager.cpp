@@ -205,14 +205,23 @@ int ClientManager::GetConnectionNum()
 
 bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId) 
 { 
-	assert(clientId < MAX_CLIENT_NUM);
-
-	if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
+	//로그인 못 한 놈이면 처리 안 한다
+	if (clientId >= 0 && clientId < MAX_CLIENT_NUM);
 	{
-		mCharacterSelectStatus[clientId] = characterId; 
+		//캐릭터가 아직 선택 안 된 상태이면 할당해준다
+		if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
+		{
+			mCharacterSelectStatus[clientId] = characterId; 
 		
-		return true;
+			return true;
+		}
 	}
 
 	return false;
+}
+
+void ClientManager::LogOut(int clientId) 
+{
+	mCharacterSelectStatus[clientId] = NOT_SELECTED;
+	mClientIdList[clientId] = false; 
 }
