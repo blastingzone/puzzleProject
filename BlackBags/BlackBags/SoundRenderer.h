@@ -16,7 +16,6 @@ public:
 	static void					ReleaseInstance();
 
 	FMOD_RESULT CreateSound();
-	void AllocateChannel();
 
 	void PlayBGM(SOUND_BGMList BGMName);
 	void StopBGM();
@@ -27,6 +26,8 @@ public:
 	FMOD::System* GetSystem() { return m_System; }
 
 private:
+	void					ErrorHandling();
+
 	static CSoundRenderer*	m_pInstance;
 
 	FMOD::System*			m_System;
@@ -37,8 +38,6 @@ private:
 	FMOD::Channel*			m_BGMChannel;
 	FMOD::Channel*			m_SEChannel;
 
-	//조심해
-	//임시로 5를 넣어 놓은 것.
 	FMOD::Sound*			m_SE_DrawLine;
 	FMOD::Sound*			m_SE_Select;
 	FMOD::Sound*			m_Main;
