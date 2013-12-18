@@ -240,7 +240,7 @@ void CNetworkPlayScene::LinkPlayers()
 		}
 		else
 		{
-			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx < MAX_PLAYER_NUM);
+			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx <= MAX_PLAYER_NUM);
 
 			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
 			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );

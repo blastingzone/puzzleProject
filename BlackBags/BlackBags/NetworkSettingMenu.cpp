@@ -800,6 +800,8 @@ void CNetworkSettingMenu::PollingData()
 {
 	m_PlayerNum = CNetworkManager::GetInstance()->GetPlayerNumber();
 	m_SelectedPlayerNum = 0;
+	// 매번 마스크를 초기화시킨다
+	m_PlayerMask = 0;
 
 	for (int characterIdx = 0; characterIdx < MAX_PLAYER_NUM ; ++characterIdx)
 	{
@@ -810,10 +812,14 @@ void CNetworkSettingMenu::PollingData()
 		
 		if (clientId != -1)
 		{
+			// 선택된 캐릭터가 무엇인가에 따라서 마스크를 늘려준다
+			// 싱글 플레이의 SetPlayerSelected 부분
+			m_PlayerMask += (1 << characterIdx);
+
 			++m_SelectedPlayerNum;
 			//characterIdx에 해당하는 캐릭터를 고른 클라이언트가 있다는 이야기이므로 
 			m_PlayerSelect[characterIdx].m_IsSelected = true;
-
+			
 			//characterIdx가 내 클라이언가 서버로부터 할당받은 아이디와 같으면 그건 내가 고른 것이므로 표시
 			if ( clientId == CNetworkManager::GetInstance()->GetClientId() )
 			{

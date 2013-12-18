@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "NetworkGameMap.h"
 #include "Player.h"
 #include "Scene.h"
 #include <time.h>
+#include "NetworkGameMap.h"
 
 class CNetworkPlayScene : public CScene
 {
@@ -58,9 +58,9 @@ private:
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_Player;
 
-	int					m_PlayerNumber;
+	int			m_PlayerNumber;
 	CNetworkGameMap*	m_Map;
-	int					m_PlayerTurn;
+	int			m_PlayerTurn;
 
 	float		m_ClickBuffer;
 	float		m_ClickLineWeight;
