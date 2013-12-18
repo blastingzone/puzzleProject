@@ -84,24 +84,9 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 	return fr;
 }
 
-// 없어도 되는 함수
-// 예제를 보니 얘네들을 따로 초기화해서 쓰는게 아니라 PlaySound 이후에 선언해야 한다
-// void CSoundRenderer::AllocateChannel()
-// {
-// 	//FMOD_RESULT fr;
-// 
-// 	//fr = m_SEChannel->setChannelGroup(m_ChannelGroup);
-// 
-// 	//assert(fr == FMOD_OK);
-// 
-// 	//fr = m_BGMChannel->setChannelGroup(m_ChannelGroup);
-// 
-// 	//assert(fr == FMOD_OK);
-// }
-
 void CSoundRenderer::PlayBGM(SOUND_BGMList BGMName)
 {
-	FMOD_RESULT fr;
+	FMOD_RESULT fr = FMOD_OK;
 
 	switch (BGMName)
 	{

@@ -15,7 +15,6 @@ public:
 	bool	Init(HWND hwnd);
 
 	bool Connect();
-	bool IsLoginComplete()				{ return m_LoginComplete; }
 	void ProcessPacket();
 
 	int GetClientId()					{ return m_ClientId; }
@@ -47,7 +46,6 @@ private:
 
 	char*						m_ServerAddr;
 	int							m_Port;
-	bool						m_LoginComplete;
 
 	
 	// 소켓 + 보내기 버퍼 + 받기 버퍼

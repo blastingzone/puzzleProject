@@ -517,6 +517,9 @@ void CGameResult::CalculateScore()
 			CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
 		}
 
+		//조심해 최경욱!!!!!
+		//tempPlayer가 null인경우 아래 코드가 실행되면?
+
 		int	totalScore = tempPlayer->GetPlayerItemNumber(MO_NOTHING) * SC_RT_SCORE_TILE
 							+ tempPlayer->GetPlayerItemNumber(MO_GOLD) * SC_RT_SCORE_GOLD
 							+ tempPlayer->GetPlayerItemNumber(MO_TRASH) * SC_RT_SCORE_TRASH;

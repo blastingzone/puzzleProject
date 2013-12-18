@@ -17,7 +17,6 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 
 	m_ServerAddr = "localhost" ;
 	m_Port = 9001 ;
-	m_LoginComplete = false ;
 	m_Socket = NULL ;
 
 	m_MapIndex = -1;
@@ -51,6 +50,10 @@ bool CNetworkManager::Init(HWND hwnd)
 	m_Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) ;
 	if ( m_Socket == INVALID_SOCKET )
 		return false ;
+	
+	/// NAGLE 끈다
+	int opt = 1 ;
+	::setsockopt(m_Socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
 
 	return true ;
 }
@@ -113,9 +116,7 @@ void CNetworkManager::ProcessPacket()
 						ExitProcess(-1) ;
 					}
 					
-					m_ClientId = recvData.mPlayerId;
-					m_LoginComplete = true ;
-				
+					m_ClientId = recvData.mPlayerId;				
 				}
 				else
 				{
@@ -208,9 +209,7 @@ void CNetworkManager::ProcessPacket()
 
 void CNetworkManager::AskClientId()
 {
-	/// NAGLE 끈다
-	int opt = 1 ;
-	::setsockopt(m_Socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
+	
 
 	LoginRequest sendData ;
 	sendData.mPlayerId = -1;

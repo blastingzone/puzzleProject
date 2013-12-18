@@ -44,7 +44,9 @@ bool CPlayScene::Init()
 
 	m_Map = new CGameMap(CGameData::GetInstance()->GetMapSize());
 
-	if ( m_Map == nullptr || !m_Map->Init() )
+	assert(m_Map!=nullptr);
+
+	if (!m_Map->Init() )
 	{
 		return false;
 	}

@@ -23,11 +23,6 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 	m_PlayerMask = 0;
 
 	// 버튼 초기값들을 설정함
-	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
-	{
-		m_PlayerSelect[i].m_ButtonText = L"Character %d", i;
-	}
-
 	m_PlayerSelect[0].m_ButtonText = L"Character 1";
 	m_PlayerSelect[1].m_ButtonText = L"Character 2";
 	m_PlayerSelect[2].m_ButtonText = L"Character 3";

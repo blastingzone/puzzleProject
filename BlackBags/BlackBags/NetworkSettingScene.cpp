@@ -20,8 +20,7 @@ CNetworkSettingScene::~CNetworkSettingScene(void)
 
 bool CNetworkSettingScene::Init()
 {
-	if (!CNetworkManager::GetInstance()->Connect()
-		&&!CNetworkManager::GetInstance()->IsLoginComplete())
+	if (!CNetworkManager::GetInstance()->Connect())
 		return false;
 
 	CNetworkManager::GetInstance()->AskClientId();

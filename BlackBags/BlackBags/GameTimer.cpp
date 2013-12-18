@@ -123,13 +123,11 @@ DWORD CGameTimer::GetRemainTime()
 	DWORD progressedTime = now - m_StartTime;
 	DWORD remainTime = TIME_LIMIT - progressedTime;
 	*/
-
 	DWORD remainTime = TIME_LIMIT - (GetTickCount() - m_StartTime);
-
-	if (remainTime < 0)
+	
+	if (remainTime > TIME_LIMIT)
 	{
-		//애니메이션 재생 중
-		remainTime = 0;
+		remainTime = TIME_LIMIT;
 	}
 	else if (remainTime > TIME_LIMIT)
 	{
