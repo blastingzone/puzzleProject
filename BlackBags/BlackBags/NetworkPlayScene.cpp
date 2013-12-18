@@ -227,8 +227,9 @@ void CNetworkPlayScene::LinkPlayers()
 	std::array<int, MAX_PLAYER_NUM> PlayerTurn = {0, 1, 2, 3};
 
 	//srand( static_cast<unsigned int>(time(NULL)) );
+	// 서버에서 받아온 랜덤시드로 대동단결!
 	srand(CGameData::GetInstance()->GetNetworkRandomSeed() );
-	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
+	//std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 
 	//player turn 설정
 // 	int joinPlayerIdx = 0;

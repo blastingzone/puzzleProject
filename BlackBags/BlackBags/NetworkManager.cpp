@@ -170,7 +170,7 @@ void CNetworkManager::ProcessPacket()
 				{
 					//이걸 씬이 처리하게 해야 하나...우선은 여기서 다음 씬 세팅해서 넘겨버립니다.
 					CGameData::GetInstance()->SetNetworkNextSceneFlag(recvData.mStart);
-
+				
 					//초기 맵 그리는데 필요한 랜덤 시드도 넣어줌
 					CGameData::GetInstance()->SetNetworkRandomSeed(recvData.randomSeed);	
 				}
