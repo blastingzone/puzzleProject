@@ -53,6 +53,10 @@ public:
 	bool		GetNetworkRandomSeed()							{ return m_NetworkRandomSeed; }
 	void		SetNetworkRandomSeed(unsigned int seed)			{ m_NetworkRandomSeed = seed; }
 
+	int			GetCurrentTurnId()								{ return m_CurrentTurnId; }
+	//조심해!! 예외처리를 잘 생각해서 불가능한 ID가 들어오지 않게!!
+	void		SetCurrentTurnId(int id)						{ assert(id >= 0 && id < MAX_PLAYER_NUM ); m_CurrentTurnId = id; }
+
 private:
 	void		createPlayer();
 
@@ -73,7 +77,10 @@ private:
 	// 아 이거 힘들게 만들었는데 안써도 되네요;; 메시지 박스 옵션이 알아서 함 ㅎㅎ
 	HWND				m_hWnd;
 
-	//네트워크용 다음씬 넘어가는 조건 확인 플래그
+	// 네트워크용 다음씬 넘어가는 조건 확인 플래그
 	bool				m_NetworkNextSceneFlag;
 	unsigned int		m_NetworkRandomSeed;
+
+	// 현재 플레이어 턴을 저장하는 변수
+	int					m_CurrentTurnId;
 };

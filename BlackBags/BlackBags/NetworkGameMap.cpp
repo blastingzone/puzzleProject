@@ -1,10 +1,12 @@
 ﻿#include "stdafx.h"
 #include "NetworkGameMap.h"
-#include "GameTimer.h"
+#include "NetworkGameTimer.h"
 #include "Player.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include "PacketType.h"
+#include "NetworkManager.h"
 
 CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 {
@@ -46,7 +48,7 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		m_PlayerTurnTable[i] = nullptr;
+		m_CharacterByClientId[i] = nullptr;
 	}
 }
 
@@ -68,7 +70,7 @@ CNetworkGameMap::~CNetworkGameMap(void)
 void CNetworkGameMap::CreateMap()
 {
 	/*	실제로 게임에 사용되는 타일 외에도 울타리와 점을 표시하기 위한 칸도 필요
-		생성된 게임 주변은 기본값인 MO_SENTINEL로 두어서 IsClosed()와 같은 작업시 활용할 수 있도록 함 */
+	생성된 게임 주변은 기본값인 MO_SENTINEL로 두어서 IsClosed()와 같은 작업시 활용할 수 있도록 함 */
 	int targetRow, targetColumn;
 
 	for (targetRow = 1; targetRow <= m_MapSize.m_Height*2 + 1; ++targetRow)
@@ -119,18 +121,29 @@ bool CNetworkGameMap::Init()
 	return true;
 }
 
-void CNetworkGameMap::DrawPlayerUI( int playerNumber )
+void CNetworkGameMap::DrawPlayerUI()
 {
 	GetPlayerUIPosition();
 
-	for (int i = 0 ; i <playerNumber; ++i)
-	{
-		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
+	int position = 0;
 
-		if (m_CurrentTurn == i)
-			m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerBox(), m_ProfileBoxPosition[i]);
-		else
-			m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[i]);
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		if ( m_CharacterByClientId[i] != nullptr )
+		{
+			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerFace(), m_ProfilePosition[position]);
+
+			if (i == CNetworkManager::GetInstance()->GetCurrentTurnId() )
+			{
+				m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerBox(), m_ProfileBoxPosition[position]);
+			}
+			else
+			{
+				m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[position]);
+			}
+
+			++position;
+		}
 	}
 }
 
@@ -142,19 +155,19 @@ void CNetworkGameMap::Render()
 	D2D1_POINT_2F	m_pos;
 
 	/*	애니메이션 추가
-		기본적으로 애니메이션 flag는 line과 tile 두 가지가 있음
-		이 중에서 하나라도 진행 중(flag가 true)이면 마우스 입력은 받지 않고 애니메이션이 완료 되어야 게임 진행
-		애니메이션 순서는 line >> tile
-		타일 애니메이션에는 재생되는 순서가 지정되어 있음
-		(애니메이션이 지정된 타일들의 재생이 모두 완료되어야 전체 타일 애니메이션 종료) */
+	기본적으로 애니메이션 flag는 line과 tile 두 가지가 있음
+	이 중에서 하나라도 진행 중(flag가 true)이면 마우스 입력은 받지 않고 애니메이션이 완료 되어야 게임 진행
+	애니메이션 순서는 line >> tile
+	타일 애니메이션에는 재생되는 순서가 지정되어 있음
+	(애니메이션이 지정된 타일들의 재생이 모두 완료되어야 전체 타일 애니메이션 종료) */
 
 	/*	layer : background - tile - line - dot 순서대로 렌더링 
-		현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
-		추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
+	현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
+	추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
 
 	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
 
-	DrawPlayerUI(CGameData::GetInstance()->GetplayerNumber());
+	DrawPlayerUI();
 
 	/*	tile layer */
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
@@ -173,21 +186,21 @@ void CNetworkGameMap::Render()
 					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 					break;
 				case MO_PLAYER1:
-					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[0]->GetPlayerBrush() );
+					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[0]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER2:
-					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[1]->GetPlayerBrush() );
+					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[1]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER3:
-					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[2]->GetPlayerBrush() );
+					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[2]->GetPlayerBrush() );
 					break;
 				case MO_PLAYER4:
-					m_pRenderTarget->FillRectangle(rectElement, m_PlayerTurnTable[3]->GetPlayerBrush() );
+					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[3]->GetPlayerBrush() );
 					break;
 				default:
 					break;
 				}
-				
+
 				//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
 				if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
 					|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
@@ -203,13 +216,13 @@ void CNetworkGameMap::Render()
 				{
 					if (m_Map[i][j].m_StartTime == 0)
 					{
-						m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+						m_Map[i][j].m_StartTime = CNetworkGameTimer::GetInstance()->GetTime();
 					}
-					
-					DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+
+					DWORD currentTime = CNetworkGameTimer::GetInstance()->GetTime();
 
 					float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
-					
+
 					//만약 애니메이션 재생 시간을 초과하면 최대 크기로 할당
 					float tempLine = 0;
 					if (progressedTimeRatio >= 1)
@@ -227,22 +240,31 @@ void CNetworkGameMap::Render()
 						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
 						m_Map[i][j].m_AnimationTurn = 0;
 						m_Map[i][j].m_AnimationFlag = false;
-						
+
 						//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
-						CGameTimer::GetInstance()->SetTimerStart();
-						
+						//CNetworkGameTimer::GetInstance()->SetTimerStart();
+
 						//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
 						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
 						{
 							m_TileAnimationTurn = 0;
 							m_TileAnimationTurnNumber = 0;
+
+							// 서버에 Ready 상태 보고
+							TurnReadyRequest sendData;
+							sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+							if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+							{
+								CNetworkManager::GetInstance()->PostSendMessage();
+							}
 						}
 					}
 					else
 					{
 						//애니메이션이 재생 중이라면 
 						D2D1_RECT_F animationRect;
-						
+
 						//애니메이션을 그린다
 						switch (m_Map[i][j].m_Direction)
 						{
@@ -283,7 +305,7 @@ void CNetworkGameMap::Render()
 					default:
 						break;
 					}
-					
+
 				}
 			}
 		}
@@ -323,10 +345,10 @@ void CNetworkGameMap::Render()
 
 						if (m_Map[i][j].m_StartTime == 0)
 						{
-							m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+							m_Map[i][j].m_StartTime = CNetworkGameTimer::GetInstance()->GetTime();
 						}
 
-						DWORD currentTime = CGameTimer::GetInstance()->GetTime();
+						DWORD currentTime = CNetworkGameTimer::GetInstance()->GetTime();
 						float timeWeight = currentTime - m_Map[i][j].m_StartTime;
 
 						float tempLine = m_TileSize * ( timeWeight / SC_P_LINE_ANIMATION_TIME);
@@ -338,10 +360,17 @@ void CNetworkGameMap::Render()
 							m_LineAnimationFlag = false;
 							m_pRenderTarget->FillRectangle(rectElement, m_pConnectedLineBrush);
 
-							//다음에 재생할 타일 애니메이션이 없으면 타이머 초기화해서 다음 턴 진행
+							//다음에 재생할 타일 애니메이션이 없으면 서버에 보고
 							if (m_TileAnimationTurnNumber == 0)
 							{
-								CGameTimer::GetInstance()->SetTimerStart();
+								// 서버에 Ready 상태 보고
+								TurnReadyRequest sendData;
+								sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+								if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+								{
+									CNetworkManager::GetInstance()->PostSendMessage();
+								}
 							}
 						}
 						else
@@ -402,8 +431,8 @@ void CNetworkGameMap::Render()
 	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x + (m_TimerWidth / 2), m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
-	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
-	
+	float remainTimeRatio = (CNetworkGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
+
 	//animation 재생 중에는 타이머 안 줄어드는 것처럼 보이게 함
 	if (m_LineAnimationFlag || m_TileAnimationTurn != 0)
 	{
@@ -432,42 +461,42 @@ bool CNetworkGameMap::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-		
+
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(212.0f/255, 72.0f/255, 101.0f/255), &m_pTimer);
-		
+
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 	}
@@ -486,7 +515,7 @@ void CNetworkGameMap::DrawLine(const IndexedPosition& indexedPosition)
 	assert(indexedPosition.m_PosI < MAX_MAP_WIDTH && indexedPosition.m_PosJ<MAX_MAP_HEIGHT) ;
 
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_Type = MO_LINE_CONNECTED;
-	
+
 	//animaiton start
 	m_LineAnimationFlag = true;
 	m_Map[indexedPosition.m_PosI][indexedPosition.m_PosJ].m_AnimationFlag = true;
@@ -518,7 +547,7 @@ void CNetworkGameMap::DeleteLine( const IndexedPosition& indexedPosition )
 void CNetworkGameMap::CalcStartPosition()
 {
 	/*	현재 화면의 중심점을 기준으로 생성된 맵의 크기의 반만큼
-		왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
+	왼쪽과 위쪽으로 이동한 지점을 m_StartPosition으로 지정 */
 	m_CenterPosition = m_pRenderTarget->GetSize();
 	m_CenterPosition.height /= 2;
 	m_CenterPosition.width /= 2;
@@ -541,7 +570,7 @@ void CNetworkGameMap::ResizeClient()
 void CNetworkGameMap::SetObjectSize()
 {
 	/*	현재 렌더러에 저장된 화면 스케일에 맞춰서 
-		렌더링 할 때 사용된 오브젝트들 크기 조정 */
+	렌더링 할 때 사용된 오브젝트들 크기 조정 */
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
 	//맵 사이즈가 큰 경우에는 화면 스케일을 줄여주기 위해
@@ -587,7 +616,7 @@ MO_TYPE CNetworkGameMap::GetMapType(IndexedPosition indexedPosition)
 	}
 
 	/*	게임이 진행되는 맵 영역 밖은 모두 MO_SENTINEL로 간주하므로 
-		배열 범위 밖을 벗어나도 모두 MO_SENTINEL로 처리	*/
+	배열 범위 밖을 벗어나도 모두 MO_SENTINEL로 처리	*/
 	return MO_SENTINEL;
 }
 
@@ -637,7 +666,7 @@ void CNetworkGameMap::WriteResult()
 		{
 			if ( GetMapType(i, j) == MO_TILE )
 			{
-				m_PlayerTurnTable[static_cast<int>(GetMapOwner(i, j) )]->UpdatePlayerResult( GetItem( IndexedPosition(i, j) ) );
+				m_CharacterByClientId[static_cast<int>(GetMapOwner(i, j) )]->UpdatePlayerResult( GetItem( IndexedPosition(i, j) ) );
 			}
 		}
 	}
@@ -690,5 +719,5 @@ int	CNetworkGameMap::GetTileAnimationTurn(IndexedPosition indexedPosition)
 void CNetworkGameMap::SetPlayerTurnTable(int idx, CPlayer* playerPtr)
 {
 	assert(idx >= 0 && idx < MAX_PLAYER_NUM);
-	m_PlayerTurnTable[idx] = playerPtr;
+	m_CharacterByClientId[idx] = playerPtr;
 }

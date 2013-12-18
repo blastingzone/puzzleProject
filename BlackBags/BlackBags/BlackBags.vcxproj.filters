@@ -181,6 +181,9 @@
     <ClInclude Include="NetworkPlayScene.h">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkGameTimer.h">
+      <Filter>Scenes\NetworkPlayScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -271,6 +274,9 @@
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClCompile>
     <ClCompile Include="NetworkPlayScene.cpp">
+      <Filter>Scenes\NetworkPlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkGameTimer.cpp">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClCompile>
   </ItemGroup>

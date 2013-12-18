@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "NetworkPlayScene.h"
-#include "GameTimer.h"
+#include "NetworkGameTimer.h"
+#include "NetworkManager.h"
 #include <queue>
 #include <array>
 
@@ -55,7 +56,7 @@ bool CNetworkPlayScene::Init()
 	AddObject(m_Map);
 
 	SetClickArea();
-	CGameTimer::GetInstance()->SetTimerStart();
+	CNetworkGameTimer::GetInstance()->SetTimerStart();
 
 	PlayBGM();
 
@@ -86,6 +87,8 @@ void CNetworkPlayScene::EventHandle(Coordinate mouseCoordinate)
 
 void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 {
+	int clientIdIdx = CNetworkManager::GetInstance()->GetCurrentTurnId();
+
 	if (IsPossible(indexedPosition) )
 	{
 		CSoundRenderer::GetInstance()->PlaySE_DrawLine();
@@ -93,8 +96,8 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 		assert(m_PlayerNumber>0);
 
 #ifdef _DEBUG
-		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(m_PlayerTurn%m_PlayerNumber));
-		printf(" i : %d, j : %d\n",indexedPosition.m_PosI,indexedPosition.m_PosJ);
+		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(clientIdIdx));
+		printf(" i : %d, j : %d\n",indexedPosition.m_PosI, indexedPosition.m_PosJ);
 #endif
 		//IsPossible 체크 후에 gameMap 호출해서 반영
 		m_Map->DrawLine(indexedPosition);
@@ -112,7 +115,7 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
 			{
 				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-				m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)(m_PlayerTurn % m_PlayerNumber) );
+				m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)(clientIdIdx) );
 				m_Map->SubtractVoidCount();
 				i++;
 			}
@@ -120,7 +123,7 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 			//tile animation 시작 설정
 			m_Map->SetTileAnimationTurn(1);
 #ifdef _DEBUG
-			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
+			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(clientIdIdx));
 #endif
 		}
 
@@ -130,11 +133,13 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
 		}
 
-		++m_PlayerTurn;
+		// 턴이랑 타이머는 서버 통제
 
-		m_Map->SetCurrentTurn(m_PlayerTurn%m_PlayerNumber);
+		//++m_PlayerTurn;
 
-		CGameTimer::GetInstance()->SetTimerStart();
+		//m_Map->SetCurrentTurn(m_PlayerTurn%m_PlayerNumber);
+
+		//CNetworkGameTimer::GetInstance()->SetTimerStart();
 	}
 }
 
@@ -179,6 +184,7 @@ void CNetworkPlayScene::TimeOut()
 		{
 			if ( IsPossible(RandomTargetPosition) )
 			{
+				// 조심해!! 네트워크에서는 지가 멋대로 그으면 안되고 서버한테 허락받아야돼!
 				EventHandle(RandomTargetPosition);
 				break;
 			}
@@ -225,33 +231,46 @@ void CNetworkPlayScene::LinkPlayers()
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 
 	//player turn 설정
-	int joinPlayerIdx = 0;
-	int notJoinPlayerIdx = m_PlayerNumber;
+// 	int joinPlayerIdx = 0;
+// 	int notJoinPlayerIdx = m_PlayerNumber;
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		//만약 게임에 참가하는 플레이어(캐릭터)라면 플레이어 턴을 관리하는 테이블 앞쪽에 추가
-		//m_map과 중복 데이터
-		if (CGameData::GetInstance()->GetPlayerCreatedFlag(PlayerTurn[i]) )
+		int playerIndex = CNetworkManager::GetInstance()->GetCharacterClientId(i);
+		if (playerIndex != -1 )
 		{
-			assert(joinPlayerIdx >= 0 && joinPlayerIdx < MAX_PLAYER_NUM);
-
-			m_Player[joinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
-			m_Map->SetPlayerTurnTable(joinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
-
-			//gamedata에 player turn 지정
-			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], joinPlayerIdx++);
+			m_Player[playerIndex] = CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i] );
+			m_Map->SetPlayerTurnTable(playerIndex, CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i]) );
 		}
 		else
 		{
-			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx <= MAX_PLAYER_NUM);
-
-			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
-			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
-
-			//gamedata에 player turn 지정
-			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], notJoinPlayerIdx++);
+			m_Player[playerIndex] = nullptr;
+			m_Map->SetPlayerTurnTable( playerIndex, nullptr );
 		}
 	}
+		//만약 게임에 참가하는 플레이어(캐릭터)라면 플레이어 턴을 관리하는 테이블 앞쪽에 추가
+		//m_map과 중복 데이터
+//		if (CGameData::GetInstance()->GetPlayerCreatedFlag(PlayerTurn[i]) )
+//		{
+
+//			assert(joinPlayerIdx >= 0 && joinPlayerIdx < MAX_PLAYER_NUM);
+
+// 			m_Player[joinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
+// 			m_Map->SetPlayerTurnTable(joinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
+// 
+// 			//gamedata에 player turn 지정
+// 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], joinPlayerIdx++);
+//		}
+//		else
+//		{
+
+//			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx <= MAX_PLAYER_NUM);
+
+// 			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
+// 			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
+// 
+// 			//gamedata에 player turn 지정
+// 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], notJoinPlayerIdx++);
+//		}
 }
 
 bool CNetworkPlayScene::IsClosed( IndexedPosition indexedPosition)
@@ -560,9 +579,9 @@ void CNetworkPlayScene::Render()
 		iter->Render();
 	}
 
-	CGameTimer::GetInstance()->Update();
+	CNetworkGameTimer::GetInstance()->Update();
 	//timer 여기에 추가할 것
-	CGameTimer::GetInstance()->Render();
+	CNetworkGameTimer::GetInstance()->Render();
 
 	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() )
 	{

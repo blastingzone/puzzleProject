@@ -24,6 +24,9 @@ enum PacketTypes
 
 	PKT_CS_IDX		= 9,
 	PKT_SC_IDX		= 10,
+
+	PKT_CS_TURN_READY = 11,
+	PKT_SC_TURN_START = 12,
 } ;
 
 #pragma pack(push, 1)
@@ -141,6 +144,7 @@ struct GameStartResult : public PacketHeader
 	unsigned int randomSeed;
 } ;
 
+// 현재 턴인 클라이언트가 어떤 선을 골랐는지 서버에 통보
 struct EventPositionRequest : public PacketHeader
 {
 	EventPositionRequest()
@@ -156,9 +160,9 @@ struct EventPositionRequest : public PacketHeader
 	int	mPlayerId ;
 	int m_Xpos;
 	int m_Ypos;
-	char mName[MAX_NAME_LEN];
 };
 
+// 현재 턴인 클라이언트가 어떤 선을 골랐는지 각 클라이언트에 방송
 struct EventPositionResult : public PacketHeader
 {
 	EventPositionResult()
@@ -174,7 +178,31 @@ struct EventPositionResult : public PacketHeader
 	int	mPlayerId ;
 	int m_Xpos;
 	int m_Ypos;
-	char mName[MAX_NAME_LEN];
+};
 
+// 용도 : 클라이언트가 다음 턴으로 진행할 준비가 되었다 (애니메이션이 끝남)
+struct TurnReadyRequest : public PacketHeader
+{
+	TurnReadyRequest()
+	{
+		mSize = sizeof(TurnReadyRequest);
+		mType = PKT_CS_TURN_READY;
+		mClientId = -1;
+	}
+
+	int mClientId;
+};
+
+// 용도 : 다음 턴으로 바꾸고 타이머를 시작
+struct TurnStartResult : public PacketHeader
+{
+	TurnStartResult()
+	{
+		mSize = sizeof(TurnStartResult);
+		mType = PKT_SC_TURN_START;
+		mNextTurnId = -1;
+	}
+
+	int mNextTurnId;
 };
 #pragma pack(pop)

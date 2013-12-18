@@ -58,13 +58,13 @@ private:
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_Player;
 
-	int			m_PlayerNumber;
+	int					m_PlayerNumber;
 	CNetworkGameMap*	m_Map;
-	int			m_PlayerTurn;
+	int					m_PlayerTurn;
 
-	float		m_ClickBuffer;
-	float		m_ClickLineWeight;
-	float		m_ClickTileSize;
+	float				m_ClickBuffer;
+	float				m_ClickLineWeight;
+	float				m_ClickTileSize;
 
 	std::array<IndexedPosition, CHECKLIST_LENGTH> m_ClosedTile;
 };

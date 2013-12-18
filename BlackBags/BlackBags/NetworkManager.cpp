@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "NetworkManager.h"
 #include "PacketType.h"
+#include "NetworkGameTimer.h"
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -181,16 +182,7 @@ void CNetworkManager::ProcessPacket()
 				EventPositionResult recvData ;
 				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
 				{
-					char buff[MAX_CHAT_LEN] = {0, } ;
-					sprintf_s(buff, "CHAT from Player[%s]: X : %d, Y : %d \n", recvData.mName, recvData.m_Xpos, recvData.m_Ypos ) ;
-
-					static int y2pos = 60 ;
-					HDC hdc = GetDC(m_Hwnd) ;
-					TextOutA(hdc, 10, y2pos, buff, strlen(buff)) ;
-					ReleaseDC(m_Hwnd, hdc) ;
-					y2pos += 15 ;
-					if ( y2pos > 600 )
-						y2pos = 60 ;
+					
 
 				}
 				else
@@ -199,6 +191,17 @@ void CNetworkManager::ProcessPacket()
 				}
 			}
 			break ;
+
+		case PKT_SC_TURN_START:
+			{
+				TurnStartResult recvData ;
+				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize ) )
+				{
+					CNetworkManager::GetInstance()->SetCurrentTurnId(recvData.mNextTurnId);
+					CNetworkGameTimer::GetInstance()->SetTimerStart();
+				}
+			}
+			break;
 
 		default:
 			assert(false) ;

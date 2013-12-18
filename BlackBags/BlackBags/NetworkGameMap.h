@@ -15,7 +15,7 @@ public:
 	void Render();
 
 	void SetMapSize(MapSize mapsize);
-	void DrawPlayerUI(int playerNumber);
+	void DrawPlayerUI();
 	void GetPlayerUIPosition();
 
 	/*	입력된 좌표의 오브젝트를 연결 된 상태로 변경 */
@@ -173,7 +173,7 @@ private:
 	bool m_isMouseOn;
 
 	//playScene과 중복되는 데이터
-	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
+	std::array<CPlayer*, MAX_PLAYER_NUM> m_CharacterByClientId;
 
 	int m_CurrentTurn;
 };

@@ -15,7 +15,7 @@ bool ClientSession::OnConnect(SOCKADDR_IN* addr)
 	//////////////////////////////////////////////////////////////////////////
 	u_long arg = 1 ;
 	// 조심해?
-	// 이 앞에 :: 이건 뭘까요 지워도 에러 안나던데
+	// 이 앞에 :: 이건 뭘까요 지워도 에러 안나던데 -> 전역 함수 앞에 붙여주는 것입니다
 	::ioctlsocket(mSocket, FIONBIO, &arg) ;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,6 @@ void ClientSession::OnRead(size_t len)
 				
 				LoadPlayerDataContext* newDbJob = new LoadPlayerDataContext(mSocket, inPacket.mPlayerId) ;
 				GDatabaseJobManager->PushDatabaseJobRequest(newDbJob) ;	
-				
 			}
 			break ;
 
@@ -174,8 +173,6 @@ void ClientSession::OnRead(size_t len)
 				EventPositionResult outPacket;
 				outPacket.m_Xpos = inPacket.m_Xpos;
 				outPacket.m_Ypos = inPacket.m_Ypos;
-
-				strcpy_s(outPacket.mName, inPacket.mName);
 
 				if ( !Broadcast(&outPacket) )
 					return ;
@@ -268,17 +265,18 @@ void ClientSession::OnTick()
 	/// 클라별로 주기적으로 해야될 일은 여기에
 
 	/// 특정 주기로 DB에 위치 저장
-	if ( ++mDbUpdateCount == PLAYER_DB_UPDATE_CYCLE )
-	{
-		mDbUpdateCount = 0 ;
-		UpdatePlayerDataContext* updatePlayer = new UpdatePlayerDataContext(mSocket, mPlayerId) ;
-
-		updatePlayer->mPosX = mPosX ;
-		updatePlayer->mPosY = mPosY ;
-		updatePlayer->mPosZ = mPosZ ;
-		strcpy_s(updatePlayer->mComment, "updated_test") ; ///< 일단은 테스트를 위해
-		GDatabaseJobManager->PushDatabaseJobRequest(updatePlayer) ;
-	}
+	/// blackbags 에서는 없어도 되는 코드
+// 	if ( ++mDbUpdateCount == PLAYER_DB_UPDATE_CYCLE )
+// 	{
+// 		mDbUpdateCount = 0 ;
+// 		UpdatePlayerDataContext* updatePlayer = new UpdatePlayerDataContext(mSocket, mPlayerId) ;
+// 
+// 		updatePlayer->mPosX = mPosX ;
+// 		updatePlayer->mPosY = mPosY ;
+// 		updatePlayer->mPosZ = mPosZ ;
+// 		strcpy_s(updatePlayer->mComment, "updated_test") ; ///< 일단은 테스트를 위해
+// 		GDatabaseJobManager->PushDatabaseJobRequest(updatePlayer) ;
+// 	}
 	
 }
 
