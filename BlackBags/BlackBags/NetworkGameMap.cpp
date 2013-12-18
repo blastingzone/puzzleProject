@@ -544,10 +544,13 @@ void CNetworkGameMap::SetObjectSize()
 		렌더링 할 때 사용된 오브젝트들 크기 조정 */
 	float tempScale = CRenderer::GetInstance()->GetDisplayScale();
 
-	m_TileSize = tempScale * DEFAULT_TILE_SIZE;
-	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT;
-	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS;
-	m_ItemRadius = tempScale * DEFAULT_ITEM_RADIUS;
+	//맵 사이즈가 큰 경우에는 화면 스케일을 줄여주기 위해
+	float scaleWeight = (m_MapSize.m_Height > 7) ? 0.8f : 1.0f;
+
+	m_TileSize = tempScale * DEFAULT_TILE_SIZE * scaleWeight;
+	m_LineWeight = tempScale * DEFAULT_LINE_WEIGHT * scaleWeight;
+	m_DotRadius = tempScale * DEFAULT_DOT_RADIUS * scaleWeight;
+	m_ItemRadius = tempScale * DEFAULT_ITEM_RADIUS * scaleWeight;
 
 	m_TimerPositionHeight = tempScale * SC_P_TIMER_POSITION_HEIGHT;
 	m_TimerWidth = tempScale * SC_P_TIMER_WIDTH;
