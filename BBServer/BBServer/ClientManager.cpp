@@ -225,3 +225,35 @@ void ClientManager::LogOut(int clientId)
 	mCharacterSelectStatus[clientId] = NOT_SELECTED;
 	mClientIdList[clientId] = false; 
 }
+
+bool ClientManager::IsReady()
+{
+	int totalPlayerNumber = GetConnectionNum();
+	int readyPlayerNumber = 0;
+	
+	for (int i = 0; i < totalPlayerNumber; ++i)
+	{
+		readyPlayerNumber += mReadyTable[i];
+	}
+
+	if (readyPlayerNumber == totalPlayerNumber)
+		return true;
+	
+	return false;
+}
+
+void ClientManager::RandomTurnGenerate()
+{
+	std::array<int, MAX_CLIENT_NUM> PlayerTurn = {0, 1, 2, 3};
+	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
+
+	int idx = 0;
+
+	for (int i = 0; i < MAX_CLIENT_NUM; ++i)
+	{
+		if ( mClientIdList[PlayerTurn[i]] )
+		{
+			mRandomPlayerTurnTable[idx++] = PlayerTurn[i];
+		}
+	}
+}

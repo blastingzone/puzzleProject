@@ -179,6 +179,28 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
+		case PKT_CS_TURN_READY:
+			{
+				TurnReadyRequest inPacket;
+				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
+
+				GClientManager->SetReady(inPacket.mClientId);
+				
+				//만약 다음 턴으로 이동할 준비가 되었다면
+				if ( GClientManager->IsReady() )
+				{
+					// 준비 현황 테이블을 초기화해주고
+					GClientManager->InitReadyTable();
+
+					TurnStartResult outPacket;
+					outPacket.mNextTurnId = GClientManager->GetNextTurn();
+
+					if ( !Broadcast(&outPacket) )
+						return ;
+				}
+			}
+			break;
+
 		default:
 			{
 				/// 여기 들어오면 이상한 패킷 보낸거다.
