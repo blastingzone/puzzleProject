@@ -2,6 +2,7 @@
 #include "NetworkPlayScene.h"
 #include "NetworkGameTimer.h"
 #include "NetworkManager.h"
+#include "PacketType.h"
 #include <queue>
 #include <array>
 
@@ -56,7 +57,16 @@ bool CNetworkPlayScene::Init()
 	AddObject(m_Map);
 
 	SetClickArea();
-	CNetworkGameTimer::GetInstance()->SetTimerStart();
+	//CNetworkGameTimer::GetInstance()->SetTimerStart();
+
+	// 서버에 Ready 상태 보고
+	TurnReadyRequest sendData;
+	sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+	if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+	{
+		CNetworkManager::GetInstance()->PostSendMessage();
+	}
 
 	PlayBGM();
 
@@ -236,16 +246,17 @@ void CNetworkPlayScene::LinkPlayers()
 // 	int notJoinPlayerIdx = m_PlayerNumber;
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
-		int playerIndex = CNetworkManager::GetInstance()->GetCharacterClientId(i);
-		if (playerIndex != -1 )
+		int clientIdx = CNetworkManager::GetInstance()->GetCharacterClientId(i);
+		if (clientIdx != -1 )
 		{
-			m_Player[playerIndex] = CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i] );
-			m_Map->SetPlayerTurnTable(playerIndex, CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i]) );
+			m_Player[clientIdx] = CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i] );
+			m_Map->SetPlayerTurnTable(clientIdx, CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i]) );
 		}
 		else
 		{
-			m_Player[playerIndex] = nullptr;
-			m_Map->SetPlayerTurnTable( playerIndex, nullptr );
+			//이미 조건에 clientIdx = -1이라는 건데 그걸로 배열을 접근하니까 에러가 나지요 ㅋㅋ
+			//m_Player[clientIdx] = nullptr;
+			//m_Map->SetPlayerTurnTable( clientIdx, nullptr );
 		}
 	}
 		//만약 게임에 참가하는 플레이어(캐릭터)라면 플레이어 턴을 관리하는 테이블 앞쪽에 추가

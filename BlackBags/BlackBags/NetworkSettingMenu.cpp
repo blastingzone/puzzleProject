@@ -809,7 +809,7 @@ void CNetworkSettingMenu::PollingData()
 		{
 			// 선택된 캐릭터가 무엇인가에 따라서 마스크를 늘려준다
 			// 싱글 플레이의 SetPlayerSelected 부분
-			m_PlayerMask += (1 << characterIdx);
+			m_PlayerMask += (0x1 << characterIdx);
 
 			++m_SelectedPlayerNum;
 			//characterIdx에 해당하는 캐릭터를 고른 클라이언트가 있다는 이야기이므로 
