@@ -49,11 +49,11 @@ public:
 
 	void	DatabaseJobDone(DatabaseJobContext* result) ;
 
-	void SetPlayerId (int playerId) { mPlayerId = playerId; }
-	int	GetPlayerId() {return mPlayerId;}
+	void	SetPlayerId (int playerId) { mPlayerId = playerId; }
+	int		GetPlayerId() {return mPlayerId;}
 
-	void SetClientId (int clientId) { mClientId = clientId; }
-	int	GetClientId() {return mClientId;}
+	void	SetClientId (int clientId) { mClientId = clientId; }
+	int		GetClientId() {return mClientId;}
 
 	/// 현재 Send/Recv 요청 중인 상태인지 검사하기 위함
 	void	IncOverlappedRequest()		{ ++mOverlappedRequested ; }

@@ -27,6 +27,7 @@ bool ClientSession::OnConnect(SOCKADDR_IN* addr)
 	printf("[DEBUG] Client Connected: IP=%s, PORT=%d\n", inet_ntoa(mClientAddr.sin_addr), ntohs(mClientAddr.sin_port)) ;
 	
 	mConnected = true ;
+	printf_s("%d : connected\n", mClientId);
 	//mClientId = -1;
 
 	return PostRecv() ;
@@ -74,6 +75,7 @@ void ClientSession::Disconnect()
 	::closesocket(mSocket) ;
 
 	mConnected = false ;
+	mClientId = -1;
 }
 
 
@@ -215,8 +217,10 @@ void ClientSession::OnRead(size_t len)
 bool ClientSession::Send(PacketHeader* pkt)
 {
 	if ( !IsConnected() )
+	{
+		printf_s("%d : disconnected\n", mClientId);
 		return false ;
-
+	}
 	/// 버퍼 용량 부족인 경우는 끊어버림
 	if ( false == mSendBuffer.Write((char*)pkt, pkt->mSize) )
 	{
@@ -253,6 +257,7 @@ bool ClientSession::Send(PacketHeader* pkt)
 	}
 
 	IncOverlappedRequest() ;
+	printf_s("%d : received\n", mClientId);
 	return true ;
 }
 

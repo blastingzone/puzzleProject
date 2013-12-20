@@ -21,6 +21,7 @@ public:
 		for (int i = 0; i < MAX_CLIENT_NUM; ++i)
 		{
 			mRandomPlayerTurnTable[i] = -1;
+			mBroadcastList[i] = nullptr;
 		}
 	}
 
@@ -78,6 +79,8 @@ private:
 	/* 랜덤 턴을 저장하고 다음 턴을 클라이언트에게 보내주기 위한 배열	*/
 	int								mCurrentTurn;
 	std::array<int, MAX_CLIENT_NUM> mRandomPlayerTurnTable;
+
+	std::array<ClientSession*, MAX_CLIENT_NUM> mBroadcastList;
 } ;
 
 extern ClientManager* GClientManager ;

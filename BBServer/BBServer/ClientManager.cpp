@@ -16,7 +16,8 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 	int clientId = GiveClientId();
 	if (clientId != NOT_LOGIN_CLIENT)
 	{
-		client->SetClientId(clientId);			
+		client->SetClientId(clientId);
+		mBroadcastList[clientId] = client;
 	}
 	else
 		client->Disconnect();
@@ -29,6 +30,7 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 
 void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 {
+	/*
 	///FYI: C++ STL iterator 스타일의 루프
 	for (ClientList::const_iterator it=mClientList.begin() ; it!=mClientList.end() ; ++it)
 	{
@@ -38,6 +40,18 @@ void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 			continue ;
 		
 		client->Send(pkt) ;
+	}
+	*/
+
+	for (int i = 0; i < MAX_CLIENT_NUM ; ++i)
+	{
+		if (mBroadcastList[i] != nullptr)
+		{
+			if ( from == mBroadcastList[i] )
+				continue ; 
+
+			mBroadcastList[i]->Send(pkt);
+		}
 	}
 }
 
@@ -224,6 +238,7 @@ void ClientManager::LogOut(int clientId)
 {
 	mCharacterSelectStatus[clientId] = NOT_SELECTED;
 	mClientIdList[clientId] = false; 
+	mBroadcastList[clientId] = nullptr;
 }
 
 bool ClientManager::IsReady()
