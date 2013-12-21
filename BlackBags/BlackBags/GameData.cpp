@@ -9,6 +9,7 @@ CGameData::CGameData(void)
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_PlayerData[i] = nullptr;
+		m_NetworkClientList[i] = nullptr;
 	}
 
 	m_CurrentScene = SC_NOSCENE;
@@ -49,6 +50,8 @@ void CGameData::Init()
 		이미 존재하면 초기화가 필요한 내부 변수만 초기화 */
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
+		m_NetworkClientList[i] = nullptr;
+
 		if (m_PlayerData[i] == nullptr)
 		{
 			m_PlayerData[i] = new CPlayer();

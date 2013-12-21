@@ -53,6 +53,8 @@ public:
 	bool		GetNetworkRandomSeed()							{ return m_NetworkRandomSeed; }
 	void		SetNetworkRandomSeed(unsigned int seed)			{ m_NetworkRandomSeed = seed; }
 
+	CPlayer*	GetNetworkClinent(int clientId)					{ return m_NetworkClientList[clientId]; }
+	void	SetNetworkClientList(int clientId, CPlayer* player) { m_NetworkClientList[clientId] = player; }
 
 private:
 	void		createPlayer();
@@ -69,6 +71,7 @@ private:
 	int					m_PlayerNumber;
 
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerData;
+	std::array<CPlayer*, MAX_PLAYER_NUM> m_NetworkClientList;
 
 	// 에러 헨들링을 위한 HWND
 	// 아 이거 힘들게 만들었는데 안써도 되네요;; 메시지 박스 옵션이 알아서 함 ㅎㅎ

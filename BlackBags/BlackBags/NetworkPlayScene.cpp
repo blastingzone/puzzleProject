@@ -232,6 +232,7 @@ void CNetworkPlayScene::LinkPlayers()
 		{
 			m_Player[clientIdx] = CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i] );
 			m_Map->SetPlayerTurnTable(clientIdx, CGameData::GetInstance()->GetPlayerPtr( PlayerTurn[i]) );
+			CGameData::GetInstance()->SetNetworkClientList(clientIdx, m_Player[clientIdx]);
 		}
 		else
 		{

@@ -111,7 +111,7 @@ void CGameResult::Render()
 	//player part
 	for (int i = 0; i < CGameData::GetInstance()->GetplayerNumber(); ++i)
 	{
-		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
+		tempPlayer = CGameData::GetInstance()->GetNetworkClinent(i);
 
 		if (tempPlayer == nullptr)
 		{
@@ -166,7 +166,7 @@ void CGameResult::Render()
 
 			m_pRenderTarget->FillRectangle(
 				rectElement, 
-				CGameData::GetInstance()->GetPlayerPtrByTurn(i)->GetPlayerBrush()
+				CGameData::GetInstance()->GetNetworkClinent(i)->GetPlayerBrush()
 			);
 		}
 
@@ -507,9 +507,9 @@ void CGameResult::CalculateScore()
 {
 	CPlayer* tempPlayer = nullptr;
 
-	for (int turn = 0; turn < CGameData::GetInstance()->GetplayerNumber(); ++turn)
+	for (int clientId = 0; clientId < CGameData::GetInstance()->GetplayerNumber(); ++clientId)
 	{
-		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(turn);
+		tempPlayer = CGameData::GetInstance()->GetNetworkClinent(clientId);
 
 		if (tempPlayer == nullptr)
 		{
@@ -524,7 +524,7 @@ void CGameResult::CalculateScore()
 							+ tempPlayer->GetPlayerItemNumber(MO_GOLD) * SC_RT_SCORE_GOLD
 							+ tempPlayer->GetPlayerItemNumber(MO_TRASH) * SC_RT_SCORE_TRASH;
 		
-		m_PlayerScore[turn] = totalScore;
+		m_PlayerScore[clientId] = totalScore;
 	}
 }
 
