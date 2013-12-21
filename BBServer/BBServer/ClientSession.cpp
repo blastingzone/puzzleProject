@@ -77,8 +77,7 @@ void ClientSession::Disconnect()
 			TurnStartResult outPacket;
 			outPacket.mNextTurnId = GClientManager->GetCurrentTurn();
 
-			if ( !Broadcast(&outPacket) )
-				return ;
+			GClientManager->BroadcastPacket(this, &outPacket) ;
 		}
 
 		GClientManager->LogOut(mClientId);
