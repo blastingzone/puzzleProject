@@ -49,7 +49,7 @@ public:
 
 	/// 랜덤 턴을 생성하고 유지하기 위한 메소드
 	void RandomTurnGenerate();
-	int  GetNextTurn()				{ return mRandomPlayerTurnTable[mCurrentTurn++ %  GetConnectionNum()]; }
+	int  GetNextTurn();
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;

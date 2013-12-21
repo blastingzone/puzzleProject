@@ -266,9 +266,16 @@ void ClientManager::RandomTurnGenerate()
 
 	for (int i = 0; i < MAX_CLIENT_NUM; ++i)
 	{
-		if ( mClientIdList[PlayerTurn[i]] )
+		if ( mCharacterSelectStatus[PlayerTurn[i]] != -1 )
 		{
-			mRandomPlayerTurnTable[idx++] = PlayerTurn[i];
+			mRandomPlayerTurnTable[idx++] = mClientIdList[PlayerTurn[i]];
 		}
 	}
+}
+
+int ClientManager::GetNextTurn()
+{
+	mCurrentTurn = ++mCurrentTurn %  GetConnectionNum();
+
+	return mCurrentTurn;
 }
