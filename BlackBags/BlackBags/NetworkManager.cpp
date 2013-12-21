@@ -22,6 +22,10 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 
 	m_MapIndex = -1;
 	InitCharaterList();
+
+	m_DrawLineFlag = false;
+	m_IndexedPositionFromServer.m_PosJ = 0;
+	m_IndexedPositionFromServer.m_PosI = 0;
 }
 
 CNetworkManager::~CNetworkManager(void)
