@@ -3,7 +3,7 @@
 
 /// DB 연결 스트링 
 #define DB_CONN_STR "..\\Database\\user_example.db3"
-#define LISTEN_PORT	9001
+#define LISTEN_PORT	22222
 
 
 /// 1분마다 플레이어 상태 저장

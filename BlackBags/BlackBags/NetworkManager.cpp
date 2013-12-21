@@ -17,7 +17,7 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 	m_ClientId = -1;
 
 	m_ServerAddr = "localhost" ;
-	m_Port = 9001 ;
+	m_Port = 22222 ;
 	m_Socket = NULL ;
 
 	m_MapIndex = -1;
@@ -76,10 +76,10 @@ bool CNetworkManager::Connect()
 	SOCKADDR_IN SockAddr ;
 	SockAddr.sin_port = htons(m_Port) ;
 	SockAddr.sin_family = AF_INET;
-	SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
+	//SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
 	
 	//다른 컴퓨터 연결
-	//SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.38.130" );
+	SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.44.30" );
 
 	if ( SOCKET_ERROR == connect(m_Socket, (LPSOCKADDR)(&SockAddr), sizeof(SockAddr)) )
 	{
