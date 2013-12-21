@@ -182,8 +182,11 @@ void CNetworkManager::ProcessPacket()
 				EventPositionResult recvData ;
 				if ( m_RecvBuffer.Read((char*)&recvData, header.mSize) )
 				{
-					
+					// 얘네들을 맵에 그린다! 그리는 부분은 NetworkPlayScene에서
+					m_IndexedPositionFromServer.m_PosI = recvData.m_Xpos;
+					m_IndexedPositionFromServer.m_PosJ = recvData.m_Ypos;
 
+					SetDrawLineFlag(true);
 				}
 				else
 				{

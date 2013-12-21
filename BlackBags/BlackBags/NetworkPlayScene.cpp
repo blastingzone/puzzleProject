@@ -99,7 +99,12 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 {
 	int clientIdIdx = CNetworkManager::GetInstance()->GetCurrentTurnId();
 
-	if (IsPossible(indexedPosition) )
+	// 현재 턴의 ClientId가 내 ClientId와 다르면 튕겨낸다
+	// 내 턴일 때 IsPossible 이면 서버로 보내고, 패킷을 받으면 DrawLine을 실행한다.
+	if (clientIdIdx != CNetworkManager::GetInstance()->GetClientId() )
+		return;
+
+	if (IsPossible(indexedPosition))
 	{
 		CSoundRenderer::GetInstance()->PlaySE_DrawLine();
 
@@ -109,38 +114,14 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 		printf("<<< ---- 현재 플레이어 : %d ---- >>>\n",(clientIdIdx));
 		printf(" i : %d, j : %d\n",indexedPosition.m_PosI, indexedPosition.m_PosJ);
 #endif
-		//IsPossible 체크 후에 gameMap 호출해서 반영
-		m_Map->DrawLine(indexedPosition);
-		//memset(m_ClosedTile, 0, sizeof(IndexedPosition) * CHECKLIST_LENGTH);
+		EventPositionRequest sendData;
+		sendData.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
+		sendData.m_Xpos = indexedPosition.m_PosI;
+		sendData.m_Ypos = indexedPosition.m_PosJ;
 
-		for (int i = 0; i < m_ClosedTile.size(); ++i)
+		if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
 		{
-			m_ClosedTile[i].m_PosI = 0;
-			m_ClosedTile[i].m_PosJ = 0;
-		}
-
-		if (IsClosed(indexedPosition))
-		{
-			int i = 0;
-			while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
-			{
-				//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
-				m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)(clientIdIdx) );
-				m_Map->SubtractVoidCount();
-				i++;
-			}
-
-			//tile animation 시작 설정
-			m_Map->SetTileAnimationTurn(1);
-#ifdef _DEBUG
-			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(clientIdIdx));
-#endif
-		}
-
-		if (IsEnd() )
-		{
-			m_Map->WriteResult();
-			CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+			CNetworkManager::GetInstance()->PostSendMessage();
 		}
 
 		// 턴이랑 타이머는 서버 통제
@@ -586,6 +567,17 @@ bool CNetworkPlayScene::IsEnd()
 
 void CNetworkPlayScene::Render()
 {
+	// 그려야 할 것이 있으면 그린다
+	if (CNetworkManager::GetInstance()->GetDrawLineFlag() )
+	{
+		CNetworkManager::GetInstance()->SetDrawLineFlag(false);
+
+		IndexedPosition position = CNetworkManager::GetInstance()->GetIndexedPositionFromServer();
+		int currentPlayerId = CNetworkManager::GetInstance()->GetCurrentTurnId();
+
+		DrawLineFromServer( position, currentPlayerId );
+	}
+
 	for (auto iter: m_Object)
 	{
 		iter->Render();
@@ -625,4 +617,45 @@ void CNetworkPlayScene::ResizeClient()
 	}
 
 	SetClickArea();
+}
+
+void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPosition, int clientId)
+{
+	//IsPossible 체크 후에 gameMap 호출해서 반영
+	// 조심해! IsPossible 이라고 막 그리면 안됨!! 서버로 보내야햇!
+	assert(indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosI > 0);
+	assert(indexedPosition.m_PosJ < MAX_MAP_HEIGHT && indexedPosition.m_PosJ > 0);
+
+	m_Map->DrawLine(indexedPosition);
+
+	for (int i = 0; i < m_ClosedTile.size(); ++i)
+	{
+		m_ClosedTile[i].m_PosI = 0;
+		m_ClosedTile[i].m_PosJ = 0;
+	}
+
+	if (IsClosed(indexedPosition))
+	{
+		int i = 0;
+		while (m_ClosedTile[i].m_PosI != 0 && m_ClosedTile[i].m_PosJ != 0 )
+		{
+			//본래 타일에 뭐가 있었는지 확인해서 각자 바꿀 것!!
+			m_Map->SetMapOwner(m_ClosedTile[i], (MO_OWNER)(clientId) );
+			m_Map->SubtractVoidCount();
+			++i;
+		}
+
+		//tile animation 시작 설정
+		m_Map->SetTileAnimationTurn(1);
+#ifdef _DEBUG
+		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(clientId));
+#endif
+	}
+
+	if (IsEnd() )
+	{
+		m_Map->WriteResult();
+		CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+	}
+
 }

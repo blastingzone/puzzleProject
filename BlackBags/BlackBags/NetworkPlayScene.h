@@ -28,8 +28,8 @@ public:
 	virtual void		Render();
 	virtual void		ResizeClient();
 
-	virtual void PlayBGM();
-	virtual void StopBGM();
+	virtual void		PlayBGM();
+	virtual void		StopBGM();
 
 	IndexedPosition CalculateIndex(Coordinate mouseCoordinate);
 
@@ -41,6 +41,8 @@ public:
 	void GetMapSize();
 
 	void WriteResult();
+
+	void DrawLineFromServer(const IndexedPosition& indexedPosition, int clientId);
 
 private:
 	void TimeOut();

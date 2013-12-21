@@ -43,9 +43,15 @@ public:
 	//조심해!! 예외처리를 잘 생각해서 불가능한 ID가 들어오지 않게!!
 	void		SetCurrentTurnId(int id)						{ assert(id >= 0 && id < MAX_PLAYER_NUM ); m_CurrentTurnId = id; }
 
+
+	bool			GetDrawLineFlag()							{ return m_DrawLineFlag; }
+	void			SetDrawLineFlag(bool flag)					{ m_DrawLineFlag = flag; }
+	IndexedPosition GetIndexedPositionFromServer()				{ return m_IndexedPositionFromServer; }
+
 private:
 	static CNetworkManager*		m_pInstance; //singleton instance
 	HWND						m_Hwnd;
+	// 내 아이디. 중요하다.
 	int							m_ClientId;
 
 	char*						m_ServerAddr;
@@ -68,6 +74,10 @@ private:
 	int							m_PlayerNumber;
 
 	// 현재 플레이어 턴을 저장하는 변수
-	int					m_CurrentTurnId;
+	int							m_CurrentTurnId;
+
+	// 서버한테서 받아온 인덱스를 저장해두고 나중에 그릴 수 있게 해 줌
+	bool						m_DrawLineFlag;
+	IndexedPosition				m_IndexedPositionFromServer;
 };
 
