@@ -68,6 +68,19 @@ void ClientSession::Disconnect()
 
 	if (mClientId >= 0 && mClientId < MAX_CLIENT_NUM)
 	{
+		if( mClientId == GClientManager->GetCurrentTurn() )
+		{
+			GClientManager->SetNextTurn();
+			
+			GClientManager->InitReadyTable();
+
+			TurnStartResult outPacket;
+			outPacket.mNextTurnId = GClientManager->GetCurrentTurn();
+
+			if ( !Broadcast(&outPacket) )
+				return ;
+		}
+
 		GClientManager->LogOut(mClientId);
 	}
 
