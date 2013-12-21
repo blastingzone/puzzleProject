@@ -172,13 +172,18 @@ void ClientSession::OnRead(size_t len)
 				EventPositionRequest inPacket;
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize ) ;
 
-				EventPositionResult outPacket;
-				outPacket.m_Xpos = inPacket.m_Xpos;
-				outPacket.m_Ypos = inPacket.m_Ypos;
-				outPacket.mPlayerId = inPacket.mPlayerId;
+				if (inPacket.mPlayerId == GClientManager->GetCurrentTurn() )
+				{
+					GClientManager->SetNextTurn();
 
-				if ( !Broadcast(&outPacket) )
-					return ;
+					EventPositionResult outPacket;
+					outPacket.m_Xpos = inPacket.m_Xpos;
+					outPacket.m_Ypos = inPacket.m_Ypos;
+					outPacket.mPlayerId = inPacket.mPlayerId;
+
+					if ( !Broadcast(&outPacket) )
+						return ;
+				}
 			}
 			break;
 
@@ -196,7 +201,7 @@ void ClientSession::OnRead(size_t len)
 					GClientManager->InitReadyTable();
 
 					TurnStartResult outPacket;
-					outPacket.mNextTurnId = GClientManager->GetNextTurn();
+					outPacket.mNextTurnId = GClientManager->GetCurrentTurn();
 
 					if ( !Broadcast(&outPacket) )
 						return ;

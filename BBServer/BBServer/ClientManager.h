@@ -49,7 +49,8 @@ public:
 
 	/// 랜덤 턴을 생성하고 유지하기 위한 메소드
 	void RandomTurnGenerate();
-	int  GetNextTurn();
+	void SetNextTurn();
+	int	GetCurrentTurn();
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;

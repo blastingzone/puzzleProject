@@ -273,9 +273,12 @@ void ClientManager::RandomTurnGenerate()
 	}
 }
 
-int ClientManager::GetNextTurn()
+void ClientManager::SetNextTurn()
 {
 	mCurrentTurn = ++mCurrentTurn %  GetConnectionNum();
+}
 
+int	ClientManager::GetCurrentTurn()
+{
 	return mCurrentTurn;
 }
