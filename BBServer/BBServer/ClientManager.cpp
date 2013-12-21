@@ -192,9 +192,9 @@ int ClientManager::GiveClientId()
 {
 	for (int idx = 0; idx < MAX_CLIENT_NUM ; ++idx)
 	{
-		if (!mClientIdList[idx])
+		if (!mClientIdStatusList[idx])
 		{
-			mClientIdList[idx] = true;
+			mClientIdStatusList[idx] = true;
 			return idx;
 		}
 	}
@@ -208,7 +208,7 @@ int ClientManager::GetConnectionNum()
 
 	for (int idx = 0; idx < MAX_CLIENT_NUM ; ++idx)
 	{
-		if (mClientIdList[idx])
+		if (mClientIdStatusList[idx])
 		{
 			++connectionNum;
 		}
@@ -237,8 +237,9 @@ bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId)
 void ClientManager::LogOut(int clientId) 
 {
 	mCharacterSelectStatus[clientId] = NOT_SELECTED;
-	mClientIdList[clientId] = false; 
+	mClientIdStatusList[clientId] = false; 
 	mBroadcastList[clientId] = nullptr;
+	mRandomPlayerTurnTable[mCurrentTurn] = NOT_LOGIN_CLIENT;
 }
 
 bool ClientManager::IsReady()
@@ -266,19 +267,30 @@ void ClientManager::RandomTurnGenerate()
 
 	for (int i = 0; i < MAX_CLIENT_NUM; ++i)
 	{
-		if ( mCharacterSelectStatus[PlayerTurn[i]] != -1 )
+		if ( mClientIdStatusList[PlayerTurn[i]] )
 		{
-			mRandomPlayerTurnTable[idx++] = mClientIdList[PlayerTurn[i]];
+			mRandomPlayerTurnTable[idx++] = PlayerTurn[i];
 		}
 	}
+
+	mPlayingNumber = GetConnectionNum();
 }
 
 void ClientManager::SetNextTurn()
 {
-	mCurrentTurn = ++mCurrentTurn %  GetConnectionNum();
+	do
+	{
+		// 만약 게임 진행 도중에 나간 사람이 있다면 그 차례는 넘긴다.
+		mCurrentTurn = ++mCurrentTurn % mPlayingNumber;
+	} while ( !mClientIdStatusList[mCurrentTurn] );
 }
 
 int	ClientManager::GetCurrentTurn()
 {
 	return mCurrentTurn;
+}
+
+int ClientManager::GetCurrentTurnClientId()
+{
+	return mRandomPlayerTurnTable[mCurrentTurn];
 }

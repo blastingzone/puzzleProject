@@ -68,14 +68,15 @@ void ClientSession::Disconnect()
 
 	if (mClientId >= 0 && mClientId < MAX_CLIENT_NUM)
 	{
-		if( mClientId == GClientManager->GetCurrentTurn() )
+		//자기 차례에 나가면 그 턴을 다시 시작해줘야한다. 아니면 나간 사람의 패킷을 계속 기다리게 된다.
+		if( mClientId == GClientManager->GetCurrentTurnClientId() )
 		{
-			GClientManager->SetNextTurn();
-			
+			//일단 배열을 정리하자
 			GClientManager->InitReadyTable();
+			GClientManager->SetNextTurn();
 
 			TurnStartResult outPacket;
-			outPacket.mNextTurnId = GClientManager->GetCurrentTurn();
+			outPacket.mNextTurnId = GClientManager->GetCurrentTurnClientId();
 
 			GClientManager->BroadcastPacket(this, &outPacket) ;
 		}
@@ -170,6 +171,8 @@ void ClientSession::OnRead(size_t len)
 
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
 				
+				GClientManager->RandomTurnGenerate();
+
 				outPacket.mStart = inPacket.mStart;
 				outPacket.randomSeed = static_cast<unsigned int> (time(NULL) );
 
@@ -178,7 +181,6 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
-		//아직 작업 전
 		case PKT_CS_IDX:
 			{
 				EventPositionRequest inPacket;
@@ -186,8 +188,6 @@ void ClientSession::OnRead(size_t len)
 
 				if (inPacket.mPlayerId == GClientManager->GetCurrentTurn() )
 				{
-					GClientManager->SetNextTurn();
-
 					EventPositionResult outPacket;
 					outPacket.m_Xpos = inPacket.m_Xpos;
 					outPacket.m_Ypos = inPacket.m_Ypos;
@@ -209,17 +209,22 @@ void ClientSession::OnRead(size_t len)
 				//만약 다음 턴으로 이동할 준비가 되었다면
 				if ( GClientManager->IsReady() )
 				{
-					// 준비 현황 테이블을 초기화해주고
+					// 준비 현황 테이블을 초기화해주고, 다음 턴으로 설정한다
 					GClientManager->InitReadyTable();
+					GClientManager->SetNextTurn();
 
 					TurnStartResult outPacket;
-					outPacket.mNextTurnId = GClientManager->GetCurrentTurn();
+					outPacket.mNextTurnId = GClientManager->GetCurrentTurnClientId();
 
 					if ( !Broadcast(&outPacket) )
 						return ;
 				}
 			}
 			break;
+
+			// 조심해!
+			// 게임 종료 패킷을 추가하고, 그 패킷을 수신하면 플레이어 넘버 수를 초기화하고 이 세션은 연결을 끊는다.
+			// 추가로 게임을 진행 중일 때는 새로운 연결을 받지 않는다.
 
 		default:
 			{

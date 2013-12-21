@@ -11,9 +11,9 @@ struct DatabaseJobContext ;
 class ClientManager
 {
 public:
-	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0), mCurrentTurn(0)
+	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0), mCurrentTurn(0), mPlayingNumber(0)
 	{
-		memset(mClientIdList, false, sizeof(mClientIdList) );
+		memset(mClientIdStatusList, false, sizeof(mClientIdStatusList) );
 		memset(mCharacterSelectStatus, NOT_SELECTED, sizeof(mCharacterSelectStatus) );
 
 		// 조심해!
@@ -51,6 +51,10 @@ public:
 	void RandomTurnGenerate();
 	void SetNextTurn();
 	int	GetCurrentTurn();
+	int GetCurrentTurnClientId();
+
+	/// 게임 종료
+	void InitPlayingNumber()		{ mPlayingNumber = 0; }
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
@@ -68,7 +72,7 @@ private:
 	DWORD		mLastGCTick ;
 	DWORD		mLastClientWorkTick ;
 
-	bool		mClientIdList[MAX_CLIENT_NUM];
+	bool		mClientIdStatusList[MAX_CLIENT_NUM];
 
 	/*	각 클라이언트들이 몇 번 캐릭터를 선택했는지 저장
 		인덱스는 클라이언트 아이디 */
@@ -82,6 +86,9 @@ private:
 	std::array<int, MAX_CLIENT_NUM> mRandomPlayerTurnTable;
 
 	std::array<ClientSession*, MAX_CLIENT_NUM> mBroadcastList;
+
+	//처음 게임이 시작할 때 인원
+	int mPlayingNumber;
 } ;
 
 extern ClientManager* GClientManager ;
