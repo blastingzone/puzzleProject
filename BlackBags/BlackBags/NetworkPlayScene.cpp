@@ -106,7 +106,7 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 	if (IsPossible(indexedPosition))
 	{
-		CSoundRenderer::GetInstance()->PlaySE_DrawLine();
+		/*CSoundRenderer::GetInstance()->PlaySE_DrawLine();*/
 
 		assert(m_PlayerNumber>0);
 
@@ -577,6 +577,7 @@ void CNetworkPlayScene::Render()
 		int currentPlayerId = CNetworkManager::GetInstance()->GetCurrentTurnId();
 
 		DrawLineFromServer( position, currentPlayerId );
+
 	}
 
 	for (auto iter: m_Object)
@@ -622,6 +623,7 @@ void CNetworkPlayScene::ResizeClient()
 
 void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPosition, int clientId)
 {
+	CSoundRenderer::GetInstance()->PlaySE_DrawLine();
 	//IsPossible 체크 후에 gameMap 호출해서 반영
 	// 조심해! IsPossible 이라고 막 그리면 안됨!! 서버로 보내야햇!
 	assert(indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosI > 0);
