@@ -175,6 +175,7 @@ void ClientSession::OnRead(size_t len)
 				EventPositionResult outPacket;
 				outPacket.m_Xpos = inPacket.m_Xpos;
 				outPacket.m_Ypos = inPacket.m_Ypos;
+				outPacket.mPlayerId = inPacket.mPlayerId;
 
 				if ( !Broadcast(&outPacket) )
 					return ;
