@@ -36,6 +36,9 @@ CRenderer* CRenderer::GetInstance()
 bool CRenderer::Init(HWND hwnd)
 {
 	HRESULT hr;
+
+	m_Hwnd = hwnd;
+
 	hr = D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_ipD2DFactory);
 	if (hr != S_OK)
 	{

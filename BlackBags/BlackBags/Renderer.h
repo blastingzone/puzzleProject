@@ -15,6 +15,7 @@ public:
 	ID2D1HwndRenderTarget*	GetHwndRenderTarget() const { return m_ipRenderTarget; }
 
 	bool	Init(HWND hwnd);
+	HWND GetWindowHandle() {return m_Hwnd;}
 	bool	Clear();
 	bool	Begin();
 	bool	End();
@@ -41,4 +42,6 @@ private:
 	IWICFormatConverter* m_pConvertedSourceBitmap;
 	ID2D1BitmapRenderTarget* m_ipBitampTraget;
 	ID2D1Bitmap *m_pD2DBitmap;
+
+	HWND m_Hwnd;
 };

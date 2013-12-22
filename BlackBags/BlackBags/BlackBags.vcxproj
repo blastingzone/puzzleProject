@@ -85,6 +85,7 @@
     <Text Include="updateNote.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationRenderer.h" />
     <ClInclude Include="bandivid.h" />
     <ClInclude Include="BandiVideoLibrary.h" />
     <ClInclude Include="BandiVideoTexture.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="VideoRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationRenderer.cpp" />
     <ClCompile Include="BandiVideoLibrary.cpp" />
     <ClCompile Include="BandiVideoTexture_DX9.cpp" />
     <ClCompile Include="BlackBags.cpp" />

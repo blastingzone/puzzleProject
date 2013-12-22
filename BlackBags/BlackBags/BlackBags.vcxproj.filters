@@ -184,6 +184,9 @@
     <ClInclude Include="NetworkGameTimer.h">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationRenderer.h">
+      <Filter>BlackBags</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -279,6 +282,7 @@
     <ClCompile Include="NetworkGameTimer.cpp">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="BlackBags.ico">
