@@ -8,25 +8,27 @@
 
 enum PacketTypes
 {
-	PKT_NONE	= 0,
+	PKT_NONE				= 0,
 
-	PKT_CS_LOGIN	= 1,
-	PKT_SC_LOGIN	= 2,
+	PKT_CS_LOGIN			= 1,
+	PKT_SC_LOGIN			= 2,
 
 	PKT_CS_CHARACTER_SELECT = 3,
 	PKT_SC_CHARACTER_SELECT = 4,
 
-	PKT_CS_MAP_SELECT = 5,
-	PKT_SC_MAP_SELECT = 6,
+	PKT_CS_MAP_SELECT		= 5,
+	PKT_SC_MAP_SELECT		= 6,
 
-	PKT_CS_GAME_START = 7,
-	PKT_SC_GAME_START = 8,
+	PKT_CS_GAME_START		= 7,
+	PKT_SC_GAME_START		= 8,
 
-	PKT_CS_IDX		= 9,
-	PKT_SC_IDX		= 10,
+	PKT_CS_IDX				= 9,
+	PKT_SC_IDX				= 10,
 
-	PKT_CS_TURN_READY = 11,
-	PKT_SC_TURN_START = 12,
+	PKT_CS_TURN_READY		= 11,
+	PKT_SC_TURN_START		= 12,
+
+	PKT_CS_GAME_END			= 13,
 } ;
 
 #pragma pack(push, 1)
@@ -205,4 +207,18 @@ struct TurnStartResult : public PacketHeader
 
 	int mNextTurnId;
 };
+
+// 용도 : 게임이 종료되었음을 알린다
+struct GameEndRequest : public PacketHeader
+{
+	GameEndRequest()
+	{
+		mSize = sizeof(TurnStartResult);
+		mType = PKT_CS_GAME_END;
+		mClientId = -1;
+	}
+
+	int mClientId;
+};
+
 #pragma pack(pop)

@@ -26,6 +26,8 @@ enum PacketTypes
 
 	PKT_CS_TURN_READY		= 11,
 	PKT_SC_TURN_START		= 12,
+
+	PKT_CS_GAME_END			= 13,
 } ;
 
 #pragma pack(push, 1)
@@ -203,6 +205,19 @@ struct TurnStartResult : public PacketHeader
 	}
 
 	int mNextTurnId;
+};
+
+// 용도 : 게임이 종료되었음을 알린다
+struct GameEndRequest : public PacketHeader
+{
+	GameEndRequest()
+	{
+		mSize = sizeof(TurnStartResult);
+		mType = PKT_CS_GAME_END;
+		mClientId = -1;
+	}
+
+	int mClientId;
 };
 
 #pragma pack(pop)

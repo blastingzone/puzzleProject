@@ -222,9 +222,15 @@ void ClientSession::OnRead(size_t len)
 			}
 			break;
 
-			// 조심해!
-			// 게임 종료 패킷을 추가하고, 그 패킷을 수신하면 플레이어 넘버 수를 초기화하고 이 세션은 연결을 끊는다.
-			// 추가로 게임을 진행 중일 때는 새로운 연결을 받지 않는다.
+		case PKT_CS_GAME_END:
+			{
+				//종료 조건을 설정하고 자신의 접속을 끊는다.
+				GClientManager->SetGameEndFlag();
+
+				Disconnect();
+				return;
+			}
+			break;
 
 		default:
 			{

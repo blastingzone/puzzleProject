@@ -14,14 +14,16 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 	mClientList.insert(ClientList::value_type(sock, client)) ;
 
 	int clientId = GiveClientId();
-	if (clientId != NOT_LOGIN_CLIENT)
+	if (clientId == NOT_LOGIN_CLIENT || mGamePlayingFlag)
+	{
+		//이미 게임이 진행 중이거나 풀방이므로 나가주세요
+		client->Disconnect();
+	}
+	else
 	{
 		client->SetClientId(clientId);
 		mBroadcastList[clientId] = client;
 	}
-	else
-		client->Disconnect();
-	//GiveClientId();
 
 	return client ;
 }
@@ -43,6 +45,7 @@ void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 	}
 	*/
 
+	//기존 루프로는 뭔가 제대로 방송이 안 돼서 따로 관리 ㅠ
 	for (int i = 0; i < MAX_CLIENT_NUM ; ++i)
 	{
 		if (mBroadcastList[i] != nullptr)
@@ -63,6 +66,12 @@ void ClientManager::OnPeriodWork()
 	{
 		CollectGarbageSessions() ;
 		mLastGCTick = currTick ;
+
+		//게임 종료 메시지를 받았고, 모든 접속이 종료가 되면 게임에 관련된 정보들을 초기화한다.
+		if (mGameEndFlag && GetConnectionNum() == 0)
+		{
+			InitGameCondition();
+		}
 	}
 
 	/// 접속된 클라이언트 세션별로 주기적으로 해줘야 하는 일 (주기는 알아서 정하면 됨 - 지금은 1초로 ㅎㅎ)
@@ -260,6 +269,10 @@ bool ClientManager::IsReady()
 
 void ClientManager::RandomTurnGenerate()
 {
+	//게임이 시작했으니 새로 접속하는 애들은 못하게 플래그를 설정하자
+	//임계영역이랄까... 완벽하게 해결되는 방법은 아니므로 수정 ㄱㄱ
+	mGamePlayingFlag = true;
+
 	std::array<int, MAX_CLIENT_NUM> PlayerTurn = {0, 1, 2, 3};
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 
@@ -292,5 +305,26 @@ int	ClientManager::GetCurrentTurn()
 
 int ClientManager::GetCurrentTurnClientId()
 {
-	return mRandomPlayerTurnTable[mCurrentTurn];
+	if (mGamePlayingFlag)
+		return mRandomPlayerTurnTable[mCurrentTurn];
+
+	return -1; //enum으로 교체
+}
+
+void ClientManager::InitGameCondition()
+{
+	memset(mClientIdStatusList, false, sizeof(mClientIdStatusList) );
+	memset(mCharacterSelectStatus, NOT_SELECTED, sizeof(mCharacterSelectStatus) );
+	memset(mReadyTable, 0, sizeof(mCharacterSelectStatus) );
+	
+	for (int i = 0; i < MAX_CLIENT_NUM; ++i)
+	{
+		mRandomPlayerTurnTable[i] = NOT_LOGIN_CLIENT;
+		mBroadcastList[i] = nullptr;
+	}
+
+	mCurrentTurn = 0;
+	mPlayingNumber = 0;
+	mGamePlayingFlag = false;
+	mGameEndFlag = false;
 }

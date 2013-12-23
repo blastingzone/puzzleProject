@@ -657,6 +657,14 @@ void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPositio
 	{
 		m_Map->WriteResult();
 		CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+
+		GameEndRequest sendData;
+		sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+		if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+		{
+			CNetworkManager::GetInstance()->PostSendMessage();
+		}
 	}
 
 }

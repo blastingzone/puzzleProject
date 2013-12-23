@@ -11,18 +11,9 @@ struct DatabaseJobContext ;
 class ClientManager
 {
 public:
-	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0), mCurrentTurn(0), mPlayingNumber(0)
+	ClientManager() : mLastGCTick(0), mLastClientWorkTick(0)
 	{
-		memset(mClientIdStatusList, false, sizeof(mClientIdStatusList) );
-		memset(mCharacterSelectStatus, NOT_SELECTED, sizeof(mCharacterSelectStatus) );
-
-		// 조심해!
-		// std::array는 선언하면 초기화 된다는데 사실입니까?
-		for (int i = 0; i < MAX_CLIENT_NUM; ++i)
-		{
-			mRandomPlayerTurnTable[i] = -1;
-			mBroadcastList[i] = nullptr;
-		}
+		InitGameCondition();
 	}
 
 	ClientSession* CreateClient(SOCKET sock) ;
@@ -54,7 +45,10 @@ public:
 	int GetCurrentTurnClientId();
 
 	/// 게임 종료
-	void InitPlayingNumber()		{ mPlayingNumber = 0; }
+	void SetGameEndFlag()		{ mGameEndFlag = true; }
+
+	/// 게임 조건 초기화
+	void InitGameCondition();
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
@@ -89,6 +83,12 @@ private:
 
 	//처음 게임이 시작할 때 인원
 	int mPlayingNumber;
+
+	//게임 플레이 플레그
+	bool mGamePlayingFlag;
+
+	//게임 종료 플래그
+	bool mGameEndFlag;
 } ;
 
 extern ClientManager* GClientManager ;
