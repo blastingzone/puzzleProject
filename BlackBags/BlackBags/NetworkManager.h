@@ -40,7 +40,6 @@ public:
 	void SetPlayerNumber(int connectionNum)						{ m_PlayerNumber = connectionNum; }
 
 	int			GetCurrentTurnId()								{ return m_CurrentTurnId; }
-	//조심해!! 예외처리를 잘 생각해서 불가능한 ID가 들어오지 않게!!
 	void		SetCurrentTurnId(int id)						{ assert(id >= 0 && id < MAX_PLAYER_NUM ); m_CurrentTurnId = id; }
 
 

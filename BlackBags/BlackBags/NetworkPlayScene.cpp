@@ -123,14 +123,6 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 		{
 			CNetworkManager::GetInstance()->PostSendMessage();
 		}
-
-		// 턴이랑 타이머는 서버 통제
-
-		//++m_PlayerTurn;
-
-		//m_Map->SetCurrentTurn(m_PlayerTurn%m_PlayerNumber);
-
-		//CNetworkGameTimer::GetInstance()->SetTimerStart();
 	}
 }
 
@@ -175,8 +167,15 @@ void CNetworkPlayScene::TimeOut()
 		{
 			if ( IsPossible(RandomTargetPosition) )
 			{
-				// 조심해!! 네트워크에서는 지가 멋대로 그으면 안되고 서버한테 허락받아야돼!
-				EventHandle(RandomTargetPosition);
+				EventPositionRequest sendData;
+				sendData.mPlayerId = CNetworkManager::GetInstance()->GetClientId();
+				sendData.m_Xpos = RandomTargetPosition.m_PosI;
+				sendData.m_Ypos = RandomTargetPosition.m_PosJ;
+
+				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+				{
+					CNetworkManager::GetInstance()->PostSendMessage();
+				}
 				break;
 			}
 		}
@@ -624,8 +623,7 @@ void CNetworkPlayScene::ResizeClient()
 void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPosition, int clientId)
 {
 	CSoundRenderer::GetInstance()->PlaySE_DrawLine();
-	//IsPossible 체크 후에 gameMap 호출해서 반영
-	// 조심해! IsPossible 이라고 막 그리면 안됨!! 서버로 보내야햇!
+
 	assert(indexedPosition.m_PosI < MAX_MAP_HEIGHT && indexedPosition.m_PosI > 0);
 	assert(indexedPosition.m_PosJ < MAX_MAP_HEIGHT && indexedPosition.m_PosJ > 0);
 

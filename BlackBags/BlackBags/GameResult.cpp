@@ -164,9 +164,17 @@ void CGameResult::Render()
 				pos.x + m_PlayerTileSize, 
 				pos.y + m_PlayerTileSize);
 
+			tempPlayer = CGameData::GetInstance()->GetNetworkClinent(i);
+
+			if (tempPlayer == nullptr)
+			{
+				//게임에 오류가 있다 >>> 종료하자!
+				CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+			}
+
 			m_pRenderTarget->FillRectangle(
 				rectElement, 
-				CGameData::GetInstance()->GetNetworkClinent(i)->GetPlayerBrush()
+				tempPlayer->GetPlayerBrush()
 			);
 		}
 
@@ -516,9 +524,6 @@ void CGameResult::CalculateScore()
 			//게임에 오류가 있다 >>> 종료하자!
 			CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
 		}
-
-		//조심해 최경욱!!!!!
-		//tempPlayer가 null인경우 아래 코드가 실행되면?
 
 		int	totalScore = tempPlayer->GetPlayerItemNumber(MO_NOTHING) * SC_RT_SCORE_TILE
 							+ tempPlayer->GetPlayerItemNumber(MO_GOLD) * SC_RT_SCORE_GOLD
