@@ -20,12 +20,6 @@ CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUF
 	m_Port = 22222 ;
 	m_Socket = NULL ;
 
-	m_MapIndex = -1;
-	InitCharaterList();
-
-	m_DrawLineFlag = false;
-	m_IndexedPositionFromServer.m_PosJ = 0;
-	m_IndexedPositionFromServer.m_PosI = 0;
 }
 
 CNetworkManager::~CNetworkManager(void)
@@ -42,9 +36,16 @@ CNetworkManager* CNetworkManager::GetInstance()
 	return m_pInstance;
 }
 
-bool CNetworkManager::Init(HWND hwnd)
+bool CNetworkManager::Init()
 {
-	m_Hwnd = hwnd;
+	m_CurrentTurnId = 0;
+	m_PlayerNumber = 0;
+	m_MapIndex = -1;
+	InitCharaterList();
+
+	m_DrawLineFlag = false;
+	m_IndexedPositionFromServer.m_PosJ = 0;
+	m_IndexedPositionFromServer.m_PosI = 0;
 
 	WSADATA WsaDat ;
 
@@ -61,6 +62,11 @@ bool CNetworkManager::Init(HWND hwnd)
 	::setsockopt(m_Socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(int)) ;
 
 	return true ;
+}
+
+void CNetworkManager::SetHwnd(HWND hwnd)
+{
+	m_Hwnd = hwnd;
 }
 
 void CNetworkManager::ReleaseInstance()
@@ -80,13 +86,14 @@ bool CNetworkManager::Connect()
 	SOCKADDR_IN SockAddr ;
 	SockAddr.sin_port = htons(m_Port) ;
 	SockAddr.sin_family = AF_INET;
-	SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
+	//SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
 	
 	//다른 컴퓨터 연결
-	//SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.44.30" );
+	SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.44.30" );
 
 	if ( SOCKET_ERROR == connect(m_Socket, (LPSOCKADDR)(&SockAddr), sizeof(SockAddr)) )
 	{
+		DWORD err = GetLastError();
 		if (GetLastError() != WSAEWOULDBLOCK )
 			return false ;
 	}
@@ -276,7 +283,7 @@ void CNetworkManager::Write()
 
 void CNetworkManager::CloseSocket()
 {
-	MessageBox(m_Hwnd, L"Server closed connection", L"Connection closed!", MB_ICONINFORMATION|MB_OK);
+	//MessageBox(m_Hwnd, L"Server closed connection", L"Connection closed!", MB_ICONINFORMATION|MB_OK);
 	closesocket(m_Socket);
 
 	//Scene change - > to mainScene

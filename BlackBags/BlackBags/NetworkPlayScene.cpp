@@ -240,30 +240,6 @@ void CNetworkPlayScene::LinkPlayers()
 			//m_Map->SetPlayerTurnTable( clientIdx, nullptr );
 		}
 	}
-		//만약 게임에 참가하는 플레이어(캐릭터)라면 플레이어 턴을 관리하는 테이블 앞쪽에 추가
-		//m_map과 중복 데이터
-//		if (CGameData::GetInstance()->GetPlayerCreatedFlag(PlayerTurn[i]) )
-//		{
-
-//			assert(joinPlayerIdx >= 0 && joinPlayerIdx < MAX_PLAYER_NUM);
-
-// 			m_Player[joinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
-// 			m_Map->SetPlayerTurnTable(joinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
-// 
-// 			//gamedata에 player turn 지정
-// 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], joinPlayerIdx++);
-//		}
-//		else
-//		{
-
-//			assert(notJoinPlayerIdx >= 0 && notJoinPlayerIdx <= MAX_PLAYER_NUM);
-
-// 			m_Player[notJoinPlayerIdx] = CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]);
-// 			m_Map->SetPlayerTurnTable(notJoinPlayerIdx, CGameData::GetInstance()->GetPlayerPtr(PlayerTurn[i]) );
-// 
-// 			//gamedata에 player turn 지정
-// 			CGameData::GetInstance()->SetPlayerTurn(PlayerTurn[i], notJoinPlayerIdx++);
-//		}
 }
 
 bool CNetworkPlayScene::IsClosed( IndexedPosition indexedPosition)

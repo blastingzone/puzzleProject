@@ -20,6 +20,7 @@ CNetworkSettingScene::~CNetworkSettingScene(void)
 
 bool CNetworkSettingScene::Init()
 {
+
 	if (!CNetworkManager::GetInstance()->Connect())
 		return false;
 

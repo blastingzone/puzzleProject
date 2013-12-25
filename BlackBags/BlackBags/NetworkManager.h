@@ -15,7 +15,8 @@ public:
 	//조심해!
 	//init과 생성자에서 게임에 관련된 변수들은 따로 빼서 초기화 할 수 있도록 할 것
 	//게임이 종료되고 나면 다시 연결을 시도하면서 connect 실패함 -> 변수 초기화하면서 실패하지 않도록 만들 것
-	bool	Init(HWND hwnd);
+	bool	Init();
+	void	SetHwnd(HWND hwnd);
 
 	bool Connect();
 	void ProcessPacket();

@@ -160,12 +160,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 	}
-	if (!CNetworkManager::GetInstance()->Init(hWnd) )
-	{
-		SendMessage(hWnd, WM_DESTROY, NULL, NULL);
-	}
 	else 
 	{
+		CNetworkManager::GetInstance()->SetHwnd(hWnd);
 		g_Manager = new CSceneManager(hWnd);
 		if (!g_Manager->Init() )
 		{
@@ -310,7 +307,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			case FD_CLOSE:
 				{
-					
+					CNetworkManager::GetInstance()->CloseSocket();
 				}
 				break;
 			}

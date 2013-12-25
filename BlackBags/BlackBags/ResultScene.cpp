@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ResultScene.h"
 #include "GameResult.h"
+#include "NetworkManager.h"
 
 CResultScene::CResultScene(void)
 {

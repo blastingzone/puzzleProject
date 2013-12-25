@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "SceneManager.h"
-
+#include "NetworkManager.h"
 #include "OpeningScene.h"
 #include "MainScene.h"
 #include "SettingScene.h"
@@ -90,6 +90,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 		return;
 	case SC_NETWORK_SETTING:
+		CNetworkManager::GetInstance()->Init();
 		m_CurrentScene = new CNetworkSettingScene();
 		CGameData::GetInstance()->Init();
 		break;
