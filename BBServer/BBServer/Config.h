@@ -13,3 +13,10 @@
 
 #define NOT_SELECTED -1
 #define NOT_LOGIN_CLIENT -1
+
+enum GameScene
+{
+	SC_SETTING,
+	SC_PLAY,
+	SC_NOSCENE,
+};

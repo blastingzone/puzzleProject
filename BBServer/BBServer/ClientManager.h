@@ -37,7 +37,6 @@ public:
 	bool IsReady();
 	void SetReady(int idx)			{ mReadyTable[idx] = 1; }
 	void InitReadyTable()			{ memset( mReadyTable, 0, sizeof(mReadyTable) ); }
-	bool IsPlaying()				{ return mGamePlayingFlag; }
 
 	/// 랜덤 턴을 생성하고 유지하기 위한 메소드
 	void RandomTurnGenerate();
@@ -45,11 +44,12 @@ public:
 	int	GetCurrentTurn();
 	int GetCurrentTurnClientId();
 
-	/// 게임 종료
-	void SetGameEndFlag()		{ mGameEndFlag = true; }
-
 	/// 게임 조건 초기화
 	void InitGameCondition();
+
+	/// 게임 상태 확인 및 설정
+	void		SetCurrentScene(GameScene scene)	{ mCurrentScene = scene; }
+	GameScene	GetCurrentScene()					{ return mCurrentScene; }
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
@@ -85,11 +85,7 @@ private:
 	//처음 게임이 시작할 때 인원
 	int mPlayingNumber;
 
-	//게임 플레이 플레그
-	bool mGamePlayingFlag;
-
-	//게임 종료 플래그
-	bool mGameEndFlag;
+	GameScene mCurrentScene;
 } ;
 
 extern ClientManager* GClientManager ;

@@ -14,7 +14,7 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 	mClientList.insert(ClientList::value_type(sock, client)) ;
 
 	int clientId = GiveClientId();
-	if (clientId == NOT_LOGIN_CLIENT || mGamePlayingFlag)
+	if (clientId == NOT_LOGIN_CLIENT || mCurrentScene == SC_PLAY)
 	{
 		//이미 게임이 진행 중이거나 풀방이므로 나가주세요
 		client->Disconnect();
@@ -50,8 +50,8 @@ void ClientManager::BroadcastPacket(ClientSession* from, PacketHeader* pkt)
 	{
 		if (mBroadcastList[i] != nullptr)
 		{
-			if ( from == mBroadcastList[i] )
-				continue ; 
+			//if ( from == mBroadcastList[i] )
+			//	continue ; 
 
 			mBroadcastList[i]->Send(pkt);
 		}
@@ -68,7 +68,7 @@ void ClientManager::OnPeriodWork()
 		mLastGCTick = currTick ;
 
 		//게임 종료 메시지를 받았고, 모든 접속이 종료가 되면 게임에 관련된 정보들을 초기화한다.
-		if (mGameEndFlag && GetConnectionNum() == 0)
+		if (mCurrentScene == SC_NOSCENE && GetConnectionNum() == 0)
 		{
 			InitGameCondition();
 		}
@@ -269,10 +269,6 @@ bool ClientManager::IsReady()
 
 void ClientManager::RandomTurnGenerate()
 {
-	//게임이 시작했으니 새로 접속하는 애들은 못하게 플래그를 설정하자
-	//임계영역이랄까... 완벽하게 해결되는 방법은 아니므로 수정 ㄱㄱ
-	mGamePlayingFlag = true;
-
 	std::array<int, MAX_CLIENT_NUM> PlayerTurn = {0, 1, 2, 3};
 	std::random_shuffle(PlayerTurn.begin(), PlayerTurn.end());
 
@@ -291,7 +287,7 @@ void ClientManager::RandomTurnGenerate()
 
 void ClientManager::SetNextTurn()
 {
-	if (mPlayingNumber ==0 || !mGamePlayingFlag)
+	if (mPlayingNumber ==0 || mCurrentScene != SC_PLAY)
 		return;
 
 	do
@@ -308,7 +304,7 @@ int	ClientManager::GetCurrentTurn()
 
 int ClientManager::GetCurrentTurnClientId()
 {
-	if (mGamePlayingFlag)
+	if (mCurrentScene == SC_PLAY)
 		return mRandomPlayerTurnTable[mCurrentTurn];
 
 	return -1; //enum으로 교체
@@ -328,6 +324,5 @@ void ClientManager::InitGameCondition()
 
 	mCurrentTurn = 0;
 	mPlayingNumber = 0;
-	mGamePlayingFlag = false;
-	mGameEndFlag = false;
+	mCurrentScene = SC_NOSCENE;
 }

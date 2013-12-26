@@ -82,6 +82,30 @@ void ClientSession::Disconnect()
 		}
 
 		GClientManager->LogOut(mClientId);
+
+		//세팅씬에서 나간거면 선택 상태 다시 보내줘야한다.
+		if (GClientManager->GetCurrentScene() == SC_SETTING)
+		{
+			//캐릭터 초기화
+			CharacterResult characterPacket;
+			characterPacket.mConnectionNum = GClientManager->GetConnectionNum();
+
+			for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
+			{
+				characterPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);
+			}
+
+			if (!Broadcast(&characterPacket))
+				return;
+
+			//맵 초기화
+			MapResult mapPacket;
+
+			mapPacket.mMapIdx = -1;
+
+			if (!Broadcast(&mapPacket))
+				return;
+		}
 	}
 
 	::shutdown(mSocket, SD_BOTH) ;
@@ -113,6 +137,8 @@ void ClientSession::OnRead(size_t len)
 		{
 		case PKT_CS_LOGIN:
 			{
+				GClientManager->SetCurrentScene(SC_SETTING);
+
 				LoginRequest inPacket ;
 				mRecvBuffer.Read((char*)&inPacket, header.mSize) ;
 
@@ -170,8 +196,9 @@ void ClientSession::OnRead(size_t len)
 				GameStartResult		outPacket;
 
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
-				
+
 				GClientManager->RandomTurnGenerate();
+				GClientManager->SetCurrentScene(SC_PLAY);
 
 				outPacket.mStart = inPacket.mStart;
 				outPacket.randomSeed = static_cast<unsigned int> (time(NULL) );
@@ -201,7 +228,7 @@ void ClientSession::OnRead(size_t len)
 
 		case PKT_CS_TURN_READY:
 			{
-				if ( !GClientManager->IsPlaying() )
+				if ( GClientManager->GetCurrentScene() != SC_PLAY )
 					return;
 
 				TurnReadyRequest inPacket;
@@ -228,7 +255,7 @@ void ClientSession::OnRead(size_t len)
 		case PKT_CS_GAME_END:
 			{
 				//종료 조건을 설정하고 자신의 접속을 끊는다.
-				GClientManager->SetGameEndFlag();
+				GClientManager->SetCurrentScene(SC_NOSCENE);
 
 				Disconnect();
 				return;
@@ -308,8 +335,8 @@ void ClientSession::OnWriteComplete(size_t len)
 
 bool ClientSession::Broadcast(PacketHeader* pkt)
 {
-	if ( !Send(pkt) )
-		return false ;
+	//if ( !Send(pkt) )
+	//	return false ;
 
 	if ( !IsConnected() )
 		return false ;
