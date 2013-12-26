@@ -291,6 +291,9 @@ void ClientManager::RandomTurnGenerate()
 
 void ClientManager::SetNextTurn()
 {
+	if (mPlayingNumber ==0 || !mGamePlayingFlag)
+		return;
+
 	do
 	{
 		// 만약 게임 진행 도중에 나간 사람이 있다면 그 차례는 넘긴다.
