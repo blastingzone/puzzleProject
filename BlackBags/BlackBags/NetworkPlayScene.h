@@ -68,6 +68,9 @@ private:
 	float				m_ClickLineWeight;
 	float				m_ClickTileSize;
 
+	/*	게임 종료 플래그 */
+	bool				m_EndFlag;
+
 	std::array<IndexedPosition, CHECKLIST_LENGTH> m_ClosedTile;
 };
 

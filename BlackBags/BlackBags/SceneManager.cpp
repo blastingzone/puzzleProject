@@ -10,6 +10,7 @@
 #include "GameData.h"
 #include "NetworkSettingScene.h"
 #include "NetworkPlayScene.h"
+#include "NetworkResultScene.h"
 
 
 CSceneManager::CSceneManager(HWND hWnd)
@@ -99,6 +100,9 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		break;
 	case SC_NETWORK_PLAY:
 		m_CurrentScene = new CNetworkPlayScene();
+		break;
+	case SC_NETWORK_RESULT:
+		m_CurrentScene = new CNetworkResultScene();
 		break;
 	default:
 		break;

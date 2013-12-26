@@ -57,6 +57,9 @@
     <Filter Include="Scenes\NetworkPlayScene">
       <UniqueIdentifier>{8e20a725-2bd9-427a-b66a-f66ca90e9d10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\NetworkResultScene">
+      <UniqueIdentifier>{0c0c8713-5e87-447b-8a9b-16237b84e83a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -187,6 +190,12 @@
     <ClInclude Include="AnimationRenderer.h">
       <Filter>BlackBags</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkResultScene.h">
+      <Filter>Scenes\NetworkResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkGameResult.h">
+      <Filter>Scenes\NetworkResultScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -283,6 +292,12 @@
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClCompile>
     <ClCompile Include="AnimationRenderer.cpp" />
+    <ClCompile Include="NetworkResultScene.cpp">
+      <Filter>Scenes\NetworkResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkGameResult.cpp">
+      <Filter>Scenes\NetworkResultScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="BlackBags.ico">

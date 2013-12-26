@@ -22,6 +22,8 @@ CNetworkPlayScene::CNetworkPlayScene(void)
 	m_ClickLineWeight = 0;
 	m_ClickTileSize = 0;
 
+	m_EndFlag = false;
+
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_Player[i] = nullptr;
@@ -83,6 +85,15 @@ void CNetworkPlayScene::SetClickArea()
 //지도 관련 정보를 업데이트 해주는 함수
 void CNetworkPlayScene::EventHandle(Coordinate mouseCoordinate)
 {
+
+	if (m_EndFlag)
+	{
+		m_Map->WriteResult();
+		CGameData::GetInstance()->SetCurrentScene( SC_NETWORK_RESULT );
+		
+		return;
+	}
+	
 	//입력된 마우스 포인터 위치가 게임 맵 범위 안이고 애니메이션 재생 중이 아닐 때만 처리
 	if (mouseCoordinate.m_PosX > m_Map->GetStartPosition().width - m_ClickBuffer
 		&& mouseCoordinate.m_PosX < CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_Map->GetStartPosition().width + m_ClickBuffer
@@ -631,8 +642,7 @@ void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPositio
 
 	if (IsEnd() )
 	{
-		m_Map->WriteResult();
-		CGameData::GetInstance()->SetCurrentScene( SC_RESULT );
+		m_EndFlag = true;
 
 		GameEndRequest sendData;
 		sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
