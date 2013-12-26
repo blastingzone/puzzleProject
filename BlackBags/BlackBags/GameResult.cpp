@@ -111,7 +111,7 @@ void CGameResult::Render()
 	//player part
 	for (int i = 0; i < CGameData::GetInstance()->GetplayerNumber(); ++i)
 	{
-		tempPlayer = CGameData::GetInstance()->GetNetworkClinent(i);
+		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
 
 		if (tempPlayer == nullptr)
 		{
@@ -164,7 +164,7 @@ void CGameResult::Render()
 				pos.x + m_PlayerTileSize, 
 				pos.y + m_PlayerTileSize);
 
-			tempPlayer = CGameData::GetInstance()->GetNetworkClinent(i);
+			tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(i);
 
 			if (tempPlayer == nullptr)
 			{
@@ -517,12 +517,13 @@ void CGameResult::CalculateScore()
 
 	for (int clientId = 0; clientId < CGameData::GetInstance()->GetplayerNumber(); ++clientId)
 	{
-		tempPlayer = CGameData::GetInstance()->GetNetworkClinent(clientId);
+		tempPlayer = CGameData::GetInstance()->GetPlayerPtrByTurn(clientId);
 
 		if (tempPlayer == nullptr)
 		{
 			//게임에 오류가 있다 >>> 종료하자!
 			CGameData::GetInstance()->SetCurrentScene(SC_EXIT);
+			return;
 		}
 
 		int	totalScore = tempPlayer->GetPlayerItemNumber(MO_NOTHING) * SC_RT_SCORE_TILE
