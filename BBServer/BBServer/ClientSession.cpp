@@ -201,6 +201,9 @@ void ClientSession::OnRead(size_t len)
 
 		case PKT_CS_TURN_READY:
 			{
+				if ( !GClientManager->IsPlaying() )
+					return;
+
 				TurnReadyRequest inPacket;
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
 

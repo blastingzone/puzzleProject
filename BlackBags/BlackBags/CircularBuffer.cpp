@@ -190,3 +190,12 @@ bool CircularBuffer::Consume(size_t bytes)
 	return true ;
 
 }
+
+void CircularBuffer::Clear()
+{
+	memset(mData, 0, sizeof(mData) );
+
+	mBeginIndex = 0;
+	mEndIndex = 0;
+	mCurrentSize = 0;
+}

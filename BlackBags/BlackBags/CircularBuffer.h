@@ -30,6 +30,9 @@ public:
   /// 데이터 제거
   bool Consume(size_t bytes) ;
 
+  /// 버퍼 초기화
+  void Clear();
+
 private:
 
 

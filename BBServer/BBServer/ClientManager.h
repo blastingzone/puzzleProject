@@ -37,6 +37,7 @@ public:
 	bool IsReady();
 	void SetReady(int idx)			{ mReadyTable[idx] = 1; }
 	void InitReadyTable()			{ memset( mReadyTable, 0, sizeof(mReadyTable) ); }
+	bool IsPlaying()				{ return mGamePlayingFlag; }
 
 	/// 랜덤 턴을 생성하고 유지하기 위한 메소드
 	void RandomTurnGenerate();
