@@ -4,23 +4,19 @@
 #include <assert.h>
 #include <combaseapi.h>
 
-CAnimationRenderer::CAnimationRenderer(void)
-{
-}
-
-
 CAnimationRenderer::~CAnimationRenderer(void)
 {
-	SafeRelease(m_LoadedBitmap);
-	SafeRelease(m_ipBitampTraget);
-	SafeRelease(m_pConvertedSourceBitmap);
-	SafeRelease(m_pDecoder);
-	SafeRelease(m_pImagingFactory);
+
 }
 
 void CAnimationRenderer::Release()
 {
-
+	SafeRelease(m_pImagingFactory);
+	SafeRelease(m_pDecoder);
+	SafeRelease(m_pFrame);
+	SafeRelease(m_pConvertedSourceBitmap);
+	SafeRelease(m_ipBitampTraget);
+	SafeRelease(m_LoadedBitmap);
 }
 
 bool CAnimationRenderer::LoadAnimationImage(float width, float height, float frameSpeed, LoopType loopType)

@@ -17,16 +17,12 @@ enum AnimationState
 };
 class CAnimationRenderer
 {
-public:
-	CAnimationRenderer(void);
-	~CAnimationRenderer(void);
-
 public : CAnimationRenderer(std::wstring fileName)
 		 {
 			 m_ipD2DFactory = CRenderer::GetInstance()->GetD2DFactory();
 			 m_ipRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-			 m_pImagingFactory;
+			 m_pImagingFactory = nullptr;
 			 m_pDecoder = nullptr;
 			 m_pFrame = nullptr;	
 			 m_pConvertedSourceBitmap = nullptr;
@@ -38,6 +34,7 @@ public : CAnimationRenderer(std::wstring fileName)
 
 			 m_fileName = fileName;
 		 }
+		 ~CAnimationRenderer(void);
 
 		 void Release();
 
@@ -84,7 +81,6 @@ public : CAnimationRenderer(std::wstring fileName)
 
 
 private:
-	CAnimationRenderer* m_Sprite;
 	std::wstring m_fileName;
 
 	LoopType m_LoopType;
