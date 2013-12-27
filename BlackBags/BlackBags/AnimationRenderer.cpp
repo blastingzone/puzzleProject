@@ -3,54 +3,29 @@
 #include "MacroSet.h"
 #include <assert.h>
 #include <combaseapi.h>
-#include "Renderer.h"
 
 CAnimationRenderer::CAnimationRenderer(void)
 {
-	m_ipD2DFactory = nullptr;
-	m_ipRenderTarget = nullptr;
-
-	m_pImagingFactory = nullptr;
-	m_pDecoder = nullptr;
-	m_pFrame = nullptr;	
-	m_pConvertedSourceBitmap = nullptr;
-	m_ipBitampTraget = nullptr;
-	m_LoadedBitmap = nullptr;
-
-	m_TotalFrameNumber = -1;
-	m_CurrentFrame = 0;
 }
 
 
 CAnimationRenderer::~CAnimationRenderer(void)
 {
+	SafeRelease(m_LoadedBitmap);
+	SafeRelease(m_ipBitampTraget);
+	SafeRelease(m_pConvertedSourceBitmap);
+	SafeRelease(m_pDecoder);
+	SafeRelease(m_pImagingFactory);
 }
 
-bool CAnimationRenderer::SetRenderTarget()
+void CAnimationRenderer::Release()
 {
-	HRESULT hr;
-	hr = D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_ipD2DFactory);
-	if (hr != S_OK)
-	{
-		return false;
-	}
 
-	HWND hwnd = CRenderer::GetInstance()->GetWindowHandle();
-
-	RECT rt;
-	GetClientRect(hwnd, &rt);
-	D2D1_SIZE_U size = D2D1::SizeU(rt.right - rt.left, rt.bottom - rt.top);
-
-	//일단 프레임률 하락 구간 확인을 위해서 vsync는 끈 상태로 생성
-	hr = m_ipD2DFactory->CreateHwndRenderTarget( D2D1::RenderTargetProperties(),
-		D2D1::HwndRenderTargetProperties(hwnd, size, D2D1_PRESENT_OPTIONS_IMMEDIATELY),
-		&m_ipRenderTarget );
-
-	return hr;
 }
-bool CAnimationRenderer::LoadAnimationImage()
+
+bool CAnimationRenderer::LoadAnimationImage(float width, float height, float frameSpeed, LoopType loopType)
 {
-	if (SetRenderTarget()!=S_OK)
+	if ( m_ipRenderTarget == nullptr )
 		return false;
 
 	HRESULT hr;
@@ -113,6 +88,10 @@ bool CAnimationRenderer::LoadAnimationImage()
 	SafeRelease(m_pFrame);
 
 	m_AnimationState = S_PAUSE;
+
+	CutFrames(width, height);
+	SetFrameSpeed(frameSpeed);
+	SetLoop(loopType);
 
 	return true;
 }

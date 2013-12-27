@@ -823,9 +823,7 @@ void CNetworkSettingMenu::PollingData()
 		}
 	}
 
-	//조심해!!
-	//맵데이타도 여기서 한 번에 해준다.
-	//Polling 함수는 한번으로 끝내는 것이 좋을 듯.
+	// 선택된 맵을 받아온다.
 	int mapSelected = CNetworkManager::GetInstance()->GetMapIndex();
 
 	for (int i = 0; i < MAX_MAPSIZE_NUM; ++i)
@@ -838,6 +836,7 @@ void CNetworkSettingMenu::PollingData()
 		m_MapSelect[mapSelected].m_IsSelected = true;
 		SetMapSelected(mapSelected);
 	}
+
 	//시작 조건이 충족되면 StartButton이 생길수 있도록 한다.
 	if (IsReady() && mapSelected != -1)
 	{

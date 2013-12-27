@@ -62,6 +62,8 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pTrashBrush);
 
 	SafeRelease(m_pTimer);
+	SafeRelease(m_Sprite);
+
 }
 
 
@@ -116,6 +118,10 @@ bool CGameMap::Init()
 	SetMapSize(m_MapSize);
 	CreateMap();
 
+	m_Sprite = new CAnimationRenderer(L"Resource/Image/sample.png");
+	if (m_Sprite->LoadAnimationImage(118.3f,118.3f,0.3f,S_LT_INFINITE) != true )
+		return false;
+
 	return true;
 }
 
@@ -132,6 +138,9 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 		else
 			m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[i]);
 	}
+
+	m_Sprite->StartAnimation(m_ProfileBoxPosition[0]);
+
 }
 
 

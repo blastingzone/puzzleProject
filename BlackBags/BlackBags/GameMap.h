@@ -3,6 +3,7 @@
 #include "SceneObject.h"
 #include <array>
 #include <dwrite.h>
+#include "AnimationRenderer.h"
 
 class CGameMap : public CSceneObject
 {
@@ -175,5 +176,7 @@ private:
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_PlayerTurnTable;
 
 	int m_CurrentTurn;
+
+	CAnimationRenderer* m_Sprite;
 };
 

@@ -3,6 +3,7 @@
 #include <d2d1.h>
 #include <wincodec.h>
 #include <array>
+#include "Renderer.h"
 enum LoopType
 {
 	S_LT_ONCE,
@@ -22,10 +23,10 @@ public:
 
 public : CAnimationRenderer(std::wstring fileName)
 		 {
-			 m_ipD2DFactory = nullptr;
-			 m_ipRenderTarget = nullptr;
+			 m_ipD2DFactory = CRenderer::GetInstance()->GetD2DFactory();
+			 m_ipRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-			 m_pImagingFactory = nullptr;
+			 m_pImagingFactory;
 			 m_pDecoder = nullptr;
 			 m_pFrame = nullptr;	
 			 m_pConvertedSourceBitmap = nullptr;
@@ -38,13 +39,12 @@ public : CAnimationRenderer(std::wstring fileName)
 			 m_fileName = fileName;
 		 }
 
-		 ID2D1Factory*			GetD2DFactory() const { return m_ipD2DFactory; }
-		 ID2D1HwndRenderTarget*	GetHwndRenderTarget() const { return m_ipRenderTarget; }
+		 void Release();
 
-		 bool SetRenderTarget();
+		// bool SetRenderTarget();
 
 		 //생성후->그림을 준비한다.
-		 bool LoadAnimationImage();
+		 bool LoadAnimationImage(float width, float height, float frameSpeed, LoopType loopType);
 
 		 //프레임 속도를 정한다. (프레임당 초를 입력)
 		 void SetFrameSpeed(float second) { m_FrameSpeed = second*1000;}
