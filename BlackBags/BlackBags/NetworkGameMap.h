@@ -4,6 +4,8 @@
 #include <array>
 #include <dwrite.h>
 
+struct IDWriteFactory;
+struct IDWriteTextFormat;
 
 class CNetworkGameMap : public CSceneObject
 {
@@ -79,6 +81,9 @@ private:
 	/*	타일의 가로, 세로 숫자만 인자로 받아서 필요한 영역의 
 		MapObject 속성을 변경 시켜서 맵을 생성 */
 	void CreateMap();
+	
+	/*	텍스트 사이즈 리사이징 */
+	void RefreshTextSize();
 
 	/*	현재 크기에 맞춰서 m_StartPosition의 좌표를 계산 */
 	void CalcStartPosition();
@@ -160,14 +165,19 @@ private:
 	ID2D1Bitmap* m_gold;
 	ID2D1Bitmap* m_trash;
 
-	IDWriteFactory*			m_DWriteFactory;
-	IDWriteTextFormat*		m_TextFormat;
-
 	bool m_isMouseOn;
 
 	//playScene과 중복되는 데이터
 	std::array<CPlayer*, MAX_PLAYER_NUM> m_CharacterByClientId;
 
 	int m_CurrentTurn;
+	
+	IDWriteFactory*			m_DWriteFactory;
+	IDWriteTextFormat*		m_PlayerNameTextFormat;
+	ID2D1SolidColorBrush*	m_pPlayerNameTextBrush;
+	
+	float m_PlayerNameTextSize;
+	float m_PlayerNameTextMaginV;
+	float m_PlayerNameTextMaginH;
 };
 

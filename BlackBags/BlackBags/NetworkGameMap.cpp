@@ -49,6 +49,14 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	{
 		m_CharacterByClientId[i] = nullptr;
 	}
+
+	m_DWriteFactory = nullptr;
+	m_PlayerNameTextFormat = nullptr;
+	m_pPlayerNameTextBrush = nullptr;
+	
+	m_PlayerNameTextSize = 0;
+	m_PlayerNameTextMaginV = 0;
+	m_PlayerNameTextMaginH = 0;
 }
 
 CNetworkGameMap::~CNetworkGameMap(void)
@@ -59,6 +67,9 @@ CNetworkGameMap::~CNetworkGameMap(void)
 	SafeRelease(m_pPossibleLineBrush);
 	SafeRelease(m_pTileBrush);
 	SafeRelease(m_pVoidTileBrush);
+	SafeRelease(m_DWriteFactory);
+	SafeRelease(m_PlayerNameTextFormat);
+	SafeRelease(m_pPlayerNameTextBrush);
 
 	SafeRelease(m_pTimer);
 }
@@ -120,6 +131,8 @@ bool CNetworkGameMap::Init()
 
 void CNetworkGameMap::DrawPlayerUI()
 {
+	D2D1_RECT_F	textPosition;
+
 	GetPlayerUIPosition();
 
 	int position = 0;
@@ -129,6 +142,22 @@ void CNetworkGameMap::DrawPlayerUI()
 		if ( m_CharacterByClientId[i] != nullptr )
 		{
 			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerFace(), m_ProfilePosition[position]);
+			
+			//이름 표현할 것
+			textPosition = D2D1::Rect(
+				m_ProfilePosition[i].left, 
+				m_ProfilePosition[i].bottom - m_PlayerNameTextSize - m_PlayerNameTextMaginV, 
+				m_ProfilePosition[i].right, 
+				m_ProfilePosition[i].bottom - m_PlayerNameTextMaginV
+				);
+
+			m_pRenderTarget->DrawText(
+				m_CharacterByClientId[i]->GetPlayerName().c_str(),
+				m_CharacterByClientId[i]->GetPlayerName().length(),
+				m_PlayerNameTextFormat,
+				textPosition,
+				m_pPlayerNameTextBrush
+				);
 
 			/*
 			if (i == CNetworkManager::GetInstance()->GetCurrentTurnId() )
@@ -501,10 +530,27 @@ bool CNetworkGameMap::CreateResource()
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-	}
 
-	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
-	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pPlayerNameTextBrush);
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
+
+		hr = DWriteCreateFactory(
+            DWRITE_FACTORY_TYPE_SHARED,
+            __uuidof(IDWriteFactory),
+            reinterpret_cast<IUnknown**>(&m_DWriteFactory)
+            );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
+
+		SetObjectSize();
+		RefreshTextSize();
+
+		m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
+		m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+	}
 
 	return true;
 }
@@ -563,8 +609,9 @@ void CNetworkGameMap::CalcStartPosition()
 
 void CNetworkGameMap::ResizeClient()
 {
-	SetObjectSize();
 	CalcStartPosition();
+	SetObjectSize();
+	RefreshTextSize();
 }
 
 void CNetworkGameMap::SetObjectSize()
@@ -590,6 +637,41 @@ void CNetworkGameMap::SetObjectSize()
 
 	m_ProfileHorizontalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_H;
 	m_ProfileVerticalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_V;
+
+	m_PlayerNameTextSize = tempScale * DEFAULT_CHARACTER_NAME_TEXT_SIZE;
+	m_PlayerNameTextMaginV = tempScale * DEFAULT_CHARACTER_NAME_MARGIN_V;
+	m_PlayerNameTextMaginH = tempScale * DEFAULT_CHARACTER_NAME_MARGIN_H;
+}
+
+void CNetworkGameMap::RefreshTextSize()
+{
+	HRESULT hr;
+
+	SafeRelease(m_PlayerNameTextFormat);
+
+	hr = m_DWriteFactory->CreateTextFormat(
+		_MENU_FONT,
+		NULL,
+		DWRITE_FONT_WEIGHT_SEMI_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		m_PlayerNameTextSize,
+		L"ko",
+		&m_PlayerNameTextFormat
+		);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
+
+	hr = m_PlayerNameTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
+
+	hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 void CNetworkGameMap::GetPlayerUIPosition()

@@ -47,6 +47,14 @@ CGameMap::CGameMap(MapSize mapSize)
 	{
 		m_PlayerTurnTable[i] = nullptr;
 	}
+
+	m_DWriteFactory = nullptr;
+	m_PlayerNameTextFormat = nullptr;
+	m_pPlayerNameTextBrush = nullptr;
+	
+	m_PlayerNameTextSize = 0;
+	m_PlayerNameTextMaginV = 0;
+	m_PlayerNameTextMaginH = 0;
 }
 
 CGameMap::~CGameMap(void)
@@ -58,9 +66,12 @@ CGameMap::~CGameMap(void)
 	SafeRelease(m_pTileBrush);
 	SafeRelease(m_pVoidTileBrush);
 
+	SafeRelease(m_DWriteFactory);
+	SafeRelease(m_PlayerNameTextFormat);
+	SafeRelease(m_pPlayerNameTextBrush);
+
 	SafeRelease(m_pTimer);
 	//SafeRelease(m_Sprite);
-
 }
 
 
@@ -124,13 +135,30 @@ bool CGameMap::Init()
 
 void CGameMap::DrawPlayerUI( int playerNumber )
 {
-	GetPlayerUIPosition();
+	D2D1_RECT_F	textPosition;
 
+	GetPlayerUIPosition();
+	
 	for (int i = 0 ; i <playerNumber; ++i)
 	{
 		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
 
 		//이름 표현할 것
+		textPosition = D2D1::Rect(
+			m_ProfilePosition[i].left, 
+			m_ProfilePosition[i].bottom - m_PlayerNameTextSize - m_PlayerNameTextMaginV, 
+			m_ProfilePosition[i].right, 
+			m_ProfilePosition[i].bottom - m_PlayerNameTextMaginV
+			);
+
+		m_pRenderTarget->DrawText(
+			m_PlayerTurnTable[i]->GetPlayerName().c_str(),
+			m_PlayerTurnTable[i]->GetPlayerName().length(),
+			m_PlayerNameTextFormat,
+			textPosition,
+			m_pPlayerNameTextBrush
+			);
+
 
 		/*
 		턴 표시는 어떻게 할까?
@@ -483,10 +511,27 @@ bool CGameMap::CreateResource()
 		
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
-	}
 
-	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
-	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pPlayerNameTextBrush);
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
+
+		hr = DWriteCreateFactory(
+            DWRITE_FACTORY_TYPE_SHARED,
+            __uuidof(IDWriteFactory),
+            reinterpret_cast<IUnknown**>(&m_DWriteFactory)
+            );
+		
+		if (!SUCCEEDED(hr) )
+			ErrorHandling();
+
+		SetObjectSize();
+		RefreshTextSize();
+
+		m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
+		m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+	}
 
 	return true;
 }
@@ -545,8 +590,9 @@ void CGameMap::CalcStartPosition()
 
 void CGameMap::ResizeClient()
 {
-	SetObjectSize();
 	CalcStartPosition();
+	SetObjectSize();
+	RefreshTextSize();
 }
 
 void CGameMap::SetObjectSize()
@@ -572,6 +618,41 @@ void CGameMap::SetObjectSize()
 
 	m_ProfileHorizontalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_H;
 	m_ProfileVerticalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_V;
+
+	m_PlayerNameTextSize = tempScale * DEFAULT_CHARACTER_NAME_TEXT_SIZE;
+	m_PlayerNameTextMaginV = tempScale * DEFAULT_CHARACTER_NAME_MARGIN_V;
+	m_PlayerNameTextMaginH = tempScale * DEFAULT_CHARACTER_NAME_MARGIN_H;
+}
+
+void CGameMap::RefreshTextSize()
+{
+	HRESULT hr;
+
+	SafeRelease(m_PlayerNameTextFormat);
+
+	hr = m_DWriteFactory->CreateTextFormat(
+		_MENU_FONT,
+		NULL,
+		DWRITE_FONT_WEIGHT_SEMI_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		m_PlayerNameTextSize,
+		L"ko",
+		&m_PlayerNameTextFormat
+		);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
+
+	hr = m_PlayerNameTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
+
+	hr = m_PlayerNameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 void CGameMap::GetPlayerUIPosition()
