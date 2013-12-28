@@ -56,8 +56,9 @@ public:
 	CPlayer*	GetNetworkClinent(int clientId)					{ return m_NetworkClientList[clientId]; }
 	void	SetNetworkClientList(int clientId, CPlayer* player) { m_NetworkClientList[clientId] = player; }
 
+	ID2D1Bitmap* GetBackgroundImage()							{ return m_pBackground; }
 private:
-	void		createPlayer();
+	void				createPlayer();
 
 	static CGameData*	m_pInstance; //singleton instance
 	MapSize				m_MapSize;
@@ -80,4 +81,6 @@ private:
 	// 네트워크용 다음씬 넘어가는 조건 확인 플래그
 	bool				m_NetworkNextSceneFlag;
 	unsigned int		m_NetworkRandomSeed;
+
+	ID2D1Bitmap*		m_pBackground;
 };

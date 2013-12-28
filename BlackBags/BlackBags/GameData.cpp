@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "GameData.h"
 #include "Player.h"
+#include "Renderer.h"
 
 CGameData* CGameData::m_pInstance = nullptr;
 
@@ -13,6 +14,8 @@ CGameData::CGameData(void)
 	}
 
 	m_CurrentScene = SC_NOSCENE;
+
+	m_pBackground = nullptr;
 }
 
 
@@ -74,6 +77,8 @@ void CGameData::Init()
 
 	m_NetworkNextSceneFlag = false;
 	m_NetworkRandomSeed = 0;
+
+	m_pBackground = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/background.png", m_pBackground);
 }
 
 void CGameData::SetMapSize(int x, int y)

@@ -1,14 +1,16 @@
 ﻿#pragma once
 #include "sceneobject.h"
 
-#define BUTTON_NUMBER 5
+#define BUTTON_NUMBER 4
 
 struct Button
 {
-	Button() : m_MouseOver(false), m_ButtonText(L""), m_LinkedScene(SC_NOSCENE) {}
+	Button() : m_MouseOver(false), m_pSelected(nullptr), m_pUnselected(nullptr), m_LinkedScene(SC_NOSCENE) {}
 
 	bool m_MouseOver;
-	std::wstring m_ButtonText;
+	//std::wstring m_ButtonText;
+	ID2D1Bitmap*		m_pSelected;
+	ID2D1Bitmap*		m_pUnselected;
 	SceneName m_LinkedScene;
 };
 
@@ -43,7 +45,7 @@ private:
 	bool CreateResource();
 
 	/*	현재 화면 스케일에 맞춰서 m_TextFormat 갱신  */
-	void RefreshTextSize();
+	//void RefreshTextSize();
 
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
@@ -54,21 +56,15 @@ private:
 	/*	화면에 표시되는 버튼들 */
 	Button m_ButtonList[BUTTON_NUMBER];
 
-	IDWriteFactory*			m_DWriteFactory;
-	IDWriteTextFormat*		m_TextFormat;
-
 	float m_MenuButtonWidth;
 	float m_MenuButtonHeight;
-	float m_MenuTextMagin;
-	float m_MenuTextSize;
+	float m_MenuMenuMargin;
+	float m_TitleWidth;
+	float m_TitleHeight;
+	float m_TitleMargin;
 	float m_BackgroundWidth;
 	float m_BackgroundHeight;
 
-	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
-	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
-	ID2D1SolidColorBrush*	m_pMenuButtonBrush;
-	ID2D1SolidColorBrush*	m_pBackgroundBrush;
-
-	ID2D1Bitmap *m_pBackgroundImage;
+	ID2D1Bitmap*		m_pTitle;
 };
 

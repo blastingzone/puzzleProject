@@ -7,71 +7,49 @@
 CMainMenu::CMainMenu(void)
 {
 	m_pRenderTarget = nullptr;
-
-	m_DWriteFactory = nullptr;
-	m_TextFormat = nullptr;
-
-	m_pUnselectedTextBrush = nullptr;
-	m_pSelectedTextBrush = nullptr;
-	m_pMenuButtonBrush = nullptr;
-	m_pBackgroundBrush = nullptr;
 }
 
 
 CMainMenu::~CMainMenu(void)
 {
-	SafeRelease(m_DWriteFactory);
-	SafeRelease(m_TextFormat);
-
-	SafeRelease(m_pUnselectedTextBrush);
-	SafeRelease(m_pSelectedTextBrush);
-	SafeRelease(m_pMenuButtonBrush);
-	SafeRelease(m_pBackgroundBrush);
 }
 
 void CMainMenu::Render()
 {
-	D2D1_RECT_F		rectElement, textPosition;
+	D2D1_RECT_F		rectElement;
 	D2D1_POINT_2F	pos;
 	
-	m_pRenderTarget->DrawBitmap(m_pBackgroundImage,D2D1::RectF(0,0,m_BackgroundWidth,m_BackgroundHeight));
+	//background
+	m_pRenderTarget->DrawBitmap(CGameData::GetInstance()->GetBackgroundImage(), D2D1::RectF(0,0,m_BackgroundWidth,m_BackgroundHeight) );
+
+	//title
+	pos.x = m_StartPosition.width - (m_TitleWidth / 2);
+	pos.y = m_StartPosition.height - m_TitleHeight - m_TitleMargin;
+
+	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_TitleWidth, pos.y + m_TitleHeight);
+
+	m_pRenderTarget->DrawBitmap(m_pTitle, rectElement);
+
+	//buttons
+	pos.x = m_StartPosition.width - (m_MenuButtonWidth / 2);
+	pos.y = m_StartPosition.height;
 
 	for (int i = 0; i < BUTTON_NUMBER; ++i)
 	{
-		//pos는 메뉴 버튼의 왼쪽 상단
-		pos.x = m_StartPosition.width - m_MenuButtonWidth;
-		pos.y = m_StartPosition.height + (m_MenuButtonHeight * i);
-
 		rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_MenuButtonWidth, pos.y + m_MenuButtonHeight);
-		textPosition =  D2D1::Rect( rectElement.left + m_MenuTextMagin, rectElement.top, rectElement.right, rectElement.bottom);
 
-		/*	해당 버튼에 mouseOver상태가 true이면 버튼을 화면에 표시하고 그 위에 텍스트를 렌더 */
+		//mouseover에 따른 이미지 렌더
 		if (m_ButtonList[i].m_MouseOver)
 		{
-			m_pRenderTarget->FillRectangle(rectElement, m_pMenuButtonBrush);
-
-			rectElement.left += m_MenuTextMagin;
-
-			m_pRenderTarget->DrawText(
-			m_ButtonList[i].m_ButtonText.c_str(),
-			m_ButtonList[i].m_ButtonText.length(),
-			m_TextFormat,
-			textPosition,
-			m_pSelectedTextBrush
-			);
+			m_pRenderTarget->DrawBitmap(m_ButtonList[i].m_pSelected, rectElement);
 		}
 		else
 		{
-			rectElement.left -= m_MenuTextMagin;
-
-			m_pRenderTarget->DrawText(
-				m_ButtonList[i].m_ButtonText.c_str(),
-				m_ButtonList[i].m_ButtonText.length(),
-				m_TextFormat,
-				textPosition,
-				m_pUnselectedTextBrush
-				);
+			m_pRenderTarget->DrawBitmap(m_ButtonList[i].m_pUnselected, rectElement);
 		}
+
+		//다음 버튼 그릴 위치 지정
+		pos.y += m_MenuButtonHeight;
 	}
 }
 
@@ -82,8 +60,7 @@ bool CMainMenu::Init()
 		return false;
 	}
 	ResizeClient();
-	m_pBackgroundImage = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_menu.png",m_pBackgroundImage);
-
+	
 	return true;
 }
 
@@ -92,18 +69,18 @@ void CMainMenu::ResizeClient()
 	//화면 크기 조절
 	CalcStartPosition();
 	SetObjectSize();
-	RefreshTextSize();
 }
 
 void CMainMenu::CalcStartPosition()
 {
 	/*	현재 화면의 오른쪽 가운데를 기준점으로 사용 */
-	D2D1_SIZE_F rightPosition = m_pRenderTarget->GetSize();
+	D2D1_SIZE_F centerPosition = m_pRenderTarget->GetSize();
 
-	rightPosition.height /= 2;
+	centerPosition.height /= 2;
+	centerPosition.width /= 2;
 
-	m_StartPosition.width = rightPosition.width;
-	m_StartPosition.height = rightPosition.height;
+	m_StartPosition.width = centerPosition.width;
+	m_StartPosition.height = centerPosition.height;
 }
 
 void CMainMenu::SetObjectSize()
@@ -115,38 +92,13 @@ void CMainMenu::SetObjectSize()
 
 	m_MenuButtonWidth = tempScale * SC_M_DEFAULT_MENU_BUTTON_WIDTH;
 	m_MenuButtonHeight = tempScale * SC_M_DEFAULT_MENU_BUTTON_HEIGHT;
-	m_MenuTextMagin = tempScale * SC_M_DEFAULT_TEXT_MARGIN;
-	m_MenuTextSize = tempScale * SC_M_DEFAULT_TEXT_SIZE;
+	m_MenuMenuMargin = tempScale * SC_M_DEFAULT_MENU_MARGIN;
+	m_TitleWidth = tempScale * SC_M_DEFAULT_TITLE_WIDTH;
+	m_TitleHeight = tempScale * SC_M_DEFAULT_TITLE_HEIGHT;
+	m_TitleMargin = tempScale * SC_M_DEFAULT_TITLE_MARGIN;
 	m_BackgroundWidth = tempScale * WINDOW_WIDTH;
-	m_BackgroundHeight = tempScale * WINDOW_HEIGHT;
+	m_BackgroundHeight = tempScale * WINDOW_HEIGHT;;
 }
-
-void CMainMenu::RefreshTextSize()
-{
-	HRESULT hr;
-
-	SafeRelease(m_TextFormat);
-
-	hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_MenuTextSize,
-			L"ko",
-			&m_TextFormat
-			);
-	
-	if (!SUCCEEDED(hr) )
-		ErrorHandling();
-
-	hr = m_TextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	
-	if (!SUCCEEDED(hr) )
-		ErrorHandling();
-}
-
 
 void CMainMenu::InitMouseOver()
 {
@@ -182,47 +134,29 @@ bool CMainMenu::CreateResource()
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pMenuButtonBrush);
-		
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_pUnselectedTextBrush);
-		
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_pSelectedTextBrush);
-		
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
-
-		hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&m_DWriteFactory)
-            );
-		
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
+		m_pTitle = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/monsterDoodle.png", m_pTitle);
 
 		SetObjectSize();
-		RefreshTextSize();
 
-		m_ButtonList[0].m_ButtonText = L"NEW GAME";
+		//new game
+		m_ButtonList[0].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_newgame_selected.png", m_ButtonList[0].m_pSelected);
+		m_ButtonList[0].m_pUnselected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_newgame.png", m_ButtonList[0].m_pUnselected);
 		m_ButtonList[0].m_LinkedScene = SC_SETTING;
 
-		m_ButtonList[1].m_ButtonText = L"NETWORK";
+		//multiplay
+		m_ButtonList[1].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_multiplay_selected.png", m_ButtonList[1].m_pSelected);
+		m_ButtonList[1].m_pUnselected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_multiplay.png", m_ButtonList[1].m_pUnselected);
 		m_ButtonList[1].m_LinkedScene = SC_NETWORK_SETTING;
 
-		m_ButtonList[2].m_ButtonText = L"CREDITS";
+		//credit
+		m_ButtonList[2].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_credit_selected.png", m_ButtonList[2].m_pSelected);
+		m_ButtonList[2].m_pUnselected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_credit.png", m_ButtonList[2].m_pUnselected);
 		m_ButtonList[2].m_LinkedScene = SC_CREDIT;
 
-		m_ButtonList[3].m_ButtonText = L"OPENNING";
-		m_ButtonList[3].m_LinkedScene = SC_OPENING;
-
-		m_ButtonList[4].m_ButtonText = L"EXIT";
-		m_ButtonList[4].m_LinkedScene = SC_EXIT;
+		//exit
+		m_ButtonList[3].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_exit_selected.png", m_ButtonList[3].m_pSelected);
+		m_ButtonList[3].m_pUnselected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_exit.png", m_ButtonList[3].m_pUnselected);
+		m_ButtonList[3].m_LinkedScene = SC_EXIT;
 	}
 
 	return true;

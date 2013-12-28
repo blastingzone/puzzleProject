@@ -8,10 +8,12 @@ const int MAX_PLAYER_NUM= 4;
 
 
 /*	메인 메뉴 오브젝트들의 기본 크기입니다 */
-const float SC_M_DEFAULT_MENU_BUTTON_WIDTH = 290.0f;
-const float SC_M_DEFAULT_MENU_BUTTON_HEIGHT = 40.0f;
-const float SC_M_DEFAULT_TEXT_MARGIN = 15.0F;
-const float SC_M_DEFAULT_TEXT_SIZE = 20.0F;
+const float SC_M_DEFAULT_MENU_BUTTON_WIDTH = 223.0f;
+const float SC_M_DEFAULT_MENU_BUTTON_HEIGHT = 57.0f;
+const float SC_M_DEFAULT_TITLE_WIDTH = 500.0F;
+const float SC_M_DEFAULT_TITLE_HEIGHT = 220.0F;
+const float SC_M_DEFAULT_TITLE_MARGIN = 20.0F;
+const float SC_M_DEFAULT_MENU_MARGIN = 40.0F;
 
 /*	세팅 메뉴 오브젝트들의 기본 크기입니다	*/
 const float SC_S_DEFAULT_PLAYER_BUTTON_WIDTH = 290.0f;

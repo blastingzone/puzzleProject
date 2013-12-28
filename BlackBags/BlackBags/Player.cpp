@@ -35,7 +35,6 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1Box.png", m_pPlayerBox);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileColorBrush);
-		assert(SUCCEEDED(hr) );
 		break;
 	case MO_PLAYER2:
 		SetPlayerName(L"Character2");
@@ -43,7 +42,6 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2Box.png", m_pPlayerBox);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileColorBrush);
-		assert(SUCCEEDED(hr) );
 		break;
 	case MO_PLAYER3:
 		SetPlayerName(L"Character3");
@@ -51,7 +49,6 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3Box.png", m_pPlayerBox);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileColorBrush);
-		assert(SUCCEEDED(hr) );
 		break;
 	case MO_PLAYER4:
 		SetPlayerName(L"Character4");
@@ -59,11 +56,20 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4Box.png", m_pPlayerBox);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileColorBrush);
-		assert(SUCCEEDED(hr) );
 		break;
 	default:
 		return false;
 	}
+
+	if ( !SUCCEEDED(hr) )
+	{
+		std::wstring errorText = L"Error Code : ";
+		errorText.append( std::to_wstring( GetLastError() ) );
+		MessageBox(NULL, errorText.c_str(), L"Error!", MB_ICONERROR|MB_DEFAULT_DESKTOP_ONLY);
+		// 비정상 종료
+		PostQuitMessage(-1);
+	}
+
 	m_pPlayerWaitingBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/playerBox.png", m_pPlayerWaitingBox);
 
 	return true;

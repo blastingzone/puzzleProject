@@ -39,7 +39,10 @@ void CMainScene::EventHandle(Coordinate mouseCoordinate)
 
 	/*	메뉴 버튼 범위 안에서 클릭이 발생하면 해당 인덱스에 해당하는 버튼에 연결된 SceneName을 반환하고 
 		그렇지 않은 경우에는 현재 scene 유지 */
-	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() )
+	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - (m_MainMenu->GetButtonWidth() / 2)
+		&& mouseCoordinate.m_PosX < m_MainMenu->GetStartPosition().width + (m_MainMenu->GetButtonWidth() / 2)
+		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height
+		&& mouseCoordinate.m_PosY < m_MainMenu->GetStartPosition().height + (m_MainMenu->GetButtonHeight() * BUTTON_NUMBER) )
 	{
 		idx = static_cast<int> ( (mouseCoordinate.m_PosY - m_MainMenu->GetStartPosition().height) / m_MainMenu->GetButtonHeight() );
 
@@ -56,8 +59,10 @@ void CMainScene::MouseOver(Coordinate mouseCoordinate)
 	int idx = 0;
 
 	/*	마우스 포인터가 메뉴 버튼 영역에 들어올 경우 그때의 버튼 idx를 계산해서 MainMenu에 넘겨주고, 해당하는 버튼이 화면에 표시되게 함 */
-	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - m_MainMenu->GetButtonWidth() 
-		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height)
+	if (mouseCoordinate.m_PosX > m_MainMenu->GetStartPosition().width - (m_MainMenu->GetButtonWidth() / 2)
+		&& mouseCoordinate.m_PosX < m_MainMenu->GetStartPosition().width + (m_MainMenu->GetButtonWidth() / 2)
+		&& mouseCoordinate.m_PosY > m_MainMenu->GetStartPosition().height
+		&& mouseCoordinate.m_PosY < m_MainMenu->GetStartPosition().height + (m_MainMenu->GetButtonHeight() * BUTTON_NUMBER) )
 	{
 		idx = static_cast<int> ( (mouseCoordinate.m_PosY - m_MainMenu->GetStartPosition().height) / m_MainMenu->GetButtonHeight() );
 
