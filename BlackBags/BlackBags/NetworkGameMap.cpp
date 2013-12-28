@@ -18,8 +18,6 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	m_pPossibleLineBrush = nullptr;
 	m_pTileBrush = nullptr;
 	m_pVoidTileBrush = nullptr;
-	m_pGoldBrush = nullptr;
-	m_pTrashBrush = nullptr;
 
 	m_pTimer = nullptr;
 
@@ -31,7 +29,8 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	m_LineWeight = 0;
 	m_DotRadius = 0;
 	m_ItemRadius = 0;
-	m_ProfileSize = 0;
+	m_ProfileWidth = 0;
+	m_ProfileHeight = 0;
 
 	m_TimerPositionHeight = 0;
 	m_TimerWidth = 0;
@@ -60,8 +59,6 @@ CNetworkGameMap::~CNetworkGameMap(void)
 	SafeRelease(m_pPossibleLineBrush);
 	SafeRelease(m_pTileBrush);
 	SafeRelease(m_pVoidTileBrush);
-	SafeRelease(m_pGoldBrush);
-	SafeRelease(m_pTrashBrush);
 
 	SafeRelease(m_pTimer);
 }
@@ -133,15 +130,16 @@ void CNetworkGameMap::DrawPlayerUI()
 		{
 			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerFace(), m_ProfilePosition[position]);
 
+			/*
 			if (i == CNetworkManager::GetInstance()->GetCurrentTurnId() )
 			{
-				m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerBox(), m_ProfileBoxPosition[position]);
+			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerBox(), m_ProfileBoxPosition[position]);
 			}
 			else
 			{
-				m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[position]);
+			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerWaitingBox(), m_ProfileBoxPosition[position]);
 			}
-
+			*/
 			++position;
 		}
 	}
@@ -165,11 +163,14 @@ void CNetworkGameMap::Render()
 	현재는 겹쳐져서 표시되는 것이 없으므로 필요없음
 	추후 아이템과 UI 추가 시 상황에 맞춰서 레이어 구분 새로 할 것 */
 
-	m_pRenderTarget->DrawBitmap(m_backImg,D2D1::RectF(0,0,WINDOW_WIDTH,WINDOW_HEIGHT));
+	//background
+	m_pRenderTarget->DrawBitmap(CGameData::GetInstance()->GetBackgroundImage(), D2D1::RectF(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT) );
 
 	DrawPlayerUI();
 
 	/*	tile layer */
+	ID2D1SolidColorBrush* tempTileBrush = nullptr;
+
 	for (int i = 0; i <= MAX_MAP_WIDTH; ++i)
 	{
 		for (int j = 0; j <= MAX_MAP_HEIGHT; ++j)
@@ -180,111 +181,121 @@ void CNetworkGameMap::Render()
 				m_pos.x = m_StartPosition.width + ( (m_LineWeight + m_TileSize) / 2 ) * (j - 1) + m_LineWeight / 2;
 				rectElement = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
 
+				//일단 이번 타일을 칠할 브러시를 할당하고
 				switch (GetMapOwner(IndexedPosition(i, j) ) )
 				{
 				case MO_NOBODY:
-					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+					tempTileBrush = m_pVoidTileBrush;
 					break;
 				case MO_PLAYER1:
-					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[0]->GetPlayerBrush() );
+					tempTileBrush = m_CharacterByClientId[0]->GetPlayerBrush();
 					break;
 				case MO_PLAYER2:
-					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[1]->GetPlayerBrush() );
+					tempTileBrush = m_CharacterByClientId[1]->GetPlayerBrush();
 					break;
 				case MO_PLAYER3:
-					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[2]->GetPlayerBrush() );
+					tempTileBrush = m_CharacterByClientId[2]->GetPlayerBrush();
 					break;
 				case MO_PLAYER4:
-					m_pRenderTarget->FillRectangle(rectElement, m_CharacterByClientId[3]->GetPlayerBrush() );
+					tempTileBrush = m_CharacterByClientId[3]->GetPlayerBrush();
 					break;
 				default:
 					break;
 				}
 
-				//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
-				if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
-					|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
+
+				//그릴지 기다릴지 결정(애니메이션 순서에 따라서)
+				if (!m_Map[i][j].m_AnimationFlag)
 				{
-					m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
+					m_pRenderTarget->FillRectangle(rectElement, tempTileBrush);
 				}
-				//진행중인 라인 애니메이션이 없고 
-				//애니메이션 그릴 턴이 되었거나 진행 중이라면
-				else if (!m_LineAnimationFlag 
-					&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
-					&& m_TileAnimationTurn > 0
-					&& m_Map[i][j].m_AnimationTurn > 0)
+				else
 				{
-					if (m_Map[i][j].m_StartTime == 0)
+					//아직 애니메이션을 그릴 차례가 아니면 소유주가 없는 상태로 덮어 버린다.
+					if ( (m_Map[i][j].m_AnimationTurn > m_TileAnimationTurn && m_TileAnimationTurn != 0)
+						|| (m_Map[i][j].m_AnimationTurn != 0 && m_LineAnimationFlag) )
 					{
-						m_Map[i][j].m_StartTime = CNetworkGameTimer::GetInstance()->GetTime();
+						//m_pRenderTarget->FillRectangle(rectElement, m_pVoidTileBrush);
 					}
-
-					DWORD currentTime = CNetworkGameTimer::GetInstance()->GetTime();
-
-					float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
-
-					//만약 애니메이션 재생 시간을 초과하면 최대 크기로 할당
-					float tempLine = 0;
-					if (progressedTimeRatio >= 1)
+					//진행중인 라인 애니메이션이 없고 
+					//애니메이션 그릴 턴이 되었거나 진행 중이라면
+					else if (!m_LineAnimationFlag 
+						&& m_Map[i][j].m_AnimationTurn <= m_TileAnimationTurn
+						&& m_TileAnimationTurn > 0
+						&& m_Map[i][j].m_AnimationTurn > 0)
 					{
-						tempLine = m_TileSize;
-					}
-					else
-					{
-						tempLine = m_TileSize * sin(progressedTimeRatio * 3.14f / 2);
-					}
-
-					if ( tempLine >= m_TileSize)
-					{
-						//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
-						m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
-						m_Map[i][j].m_AnimationTurn = 0;
-						m_Map[i][j].m_AnimationFlag = false;
-
-						//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
-						//CNetworkGameTimer::GetInstance()->SetTimerStart();
-
-						//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
-						if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
+						if (m_Map[i][j].m_StartTime == 0)
 						{
-							m_TileAnimationTurn = 0;
-							m_TileAnimationTurnNumber = 0;
+							m_Map[i][j].m_StartTime = CNetworkGameTimer::GetInstance()->GetTime();
+						}
 
-							// 서버에 Ready 상태 보고
-							TurnReadyRequest sendData;
-							sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+						DWORD currentTime = CNetworkGameTimer::GetInstance()->GetTime();
 
-							if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+						float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
+
+						//만약 애니메이션 재생 시간을 초과하면 최대 크기로 할당
+						float tempLine = 0;
+						if (progressedTimeRatio >= 1)
+						{
+							tempLine = m_TileSize;
+						}
+						else
+						{
+							tempLine = m_TileSize * sin(progressedTimeRatio * 3.14f / 2);
+						}
+
+						if ( tempLine >= m_TileSize)
+						{
+							//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
+							m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
+							m_Map[i][j].m_AnimationTurn = 0;
+							m_Map[i][j].m_AnimationFlag = false;
+
+							//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
+							//CNetworkGameTimer::GetInstance()->SetTimerStart();
+
+							//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
+							if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
 							{
-								CNetworkManager::GetInstance()->PostSendMessage();
+								m_TileAnimationTurn = 0;
+								m_TileAnimationTurnNumber = 0;
+
+								// 서버에 Ready 상태 보고
+								TurnReadyRequest sendData;
+								sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+								if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+								{
+									CNetworkManager::GetInstance()->PostSendMessage();
+								}
 							}
 						}
-					}
-					else
-					{
-						//애니메이션이 재생 중이라면 
-						D2D1_RECT_F animationRect;
-
-						//애니메이션을 그린다
-						switch (m_Map[i][j].m_Direction)
+						else
 						{
-						case DI_UP:
-							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine);
-							break;
-						case DI_RIGHT:
-							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2 + tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
-							break;
-						case DI_DOWN:
-							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
-							break;
-						case DI_LEFT:
-							animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2 - tempLine, m_pos.y + m_TileSize / 2);
-							break;
-						default:
-							break;
-						}
+							//애니메이션이 재생 중이라면 
+							D2D1_RECT_F animationRect;
 
-						m_pRenderTarget->FillRectangle(animationRect, m_pVoidTileBrush);
+							//애니메이션을 그린다
+							switch (m_Map[i][j].m_Direction)
+							{
+							case DI_UP:
+								animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y + m_TileSize / 2 - tempLine, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+								break;
+							case DI_RIGHT:
+								animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x - m_TileSize / 2 + tempLine, m_pos.y + m_TileSize / 2);
+								break;
+							case DI_DOWN:
+								animationRect = D2D1::Rect( m_pos.x - m_TileSize / 2, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y - m_TileSize / 2 + tempLine);
+								break;
+							case DI_LEFT:
+								animationRect = D2D1::Rect( m_pos.x + m_TileSize / 2 - tempLine, m_pos.y - m_TileSize / 2, m_pos.x + m_TileSize / 2, m_pos.y + m_TileSize / 2);
+								break;
+							default:
+								break;
+							}
+
+							m_pRenderTarget->FillRectangle(animationRect, tempTileBrush);
+						}
 					}
 				}
 
@@ -428,7 +439,7 @@ void CNetworkGameMap::Render()
 	m_pos.y = m_TimerPositionHeight;
 
 	//배경
-	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x + (m_TimerWidth / 2), m_pos.y + m_TimerHeight);
+	rectElement = D2D1::Rect(m_StartPosition.width, m_pos.y, m_StartPosition.width + m_TimerWidth / 2, m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 	float remainTimeRatio = (CNetworkGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
@@ -442,7 +453,7 @@ void CNetworkGameMap::Render()
 	float currentTimerLength = m_TimerWidth * remainTimeRatio;
 
 	//남은 시간 표시 (브러시 새로 만들어 쓸 것)
-	rectElement = D2D1::Rect(m_pos.x - (m_TimerWidth / 2), m_pos.y, m_pos.x - (m_TimerWidth / 2) + currentTimerLength, m_pos.y + m_TimerHeight);
+	rectElement = D2D1::Rect(m_StartPosition.width, m_pos.y, m_StartPosition.width + currentTimerLength, m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pTimer);
 }
 
@@ -460,37 +471,28 @@ bool CNetworkGameMap::CreateResource()
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(7.0f/255, 104.0f/255, 172.0f/255), &m_pDotBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(50.0f/255, 50.0f/255, 50.0f/255), &m_pDotBrush); //
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(204.0f/255, 204.0f/255, 204.0f/255), &m_pUnconnectedLineBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(214.0f/255, 184.0f/255, 150.0f/255), &m_pUnconnectedLineBrush); //
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(100.0f/255, 100.0f/255, 100.0f/255), &m_pPossibleLineBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(165.0f/255, 130.0f/255, 93.0f/255), &m_pPossibleLineBrush); //
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(78.0f/255, 179.0f/255, 211.0f/255), &m_pConnectedLineBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(117.0f/255, 76.0f/255, 36.0f/255), &m_pConnectedLineBrush); //
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_pVoidTileBrush);
-
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &m_pGoldBrush);
-
-		if (!SUCCEEDED(hr) )
-			ErrorHandling();
-
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pTrashBrush);
+		//조심해!! 일단 안 보이게 하고 나중에 수정
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 0.9f), &m_pVoidTileBrush);
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
@@ -501,10 +503,8 @@ bool CNetworkGameMap::CreateResource()
 			ErrorHandling();
 	}
 
-	m_backImg = CRenderer::GetInstance()->CreateImage(L"Resource/Image/background_game.png", m_backImg);
-
-	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item1.png", m_gold);
-	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/item2.png", m_trash);
+	m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
+	m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
 
 	return true;
 }
@@ -582,12 +582,11 @@ void CNetworkGameMap::SetObjectSize()
 	m_ItemRadius = tempScale * DEFAULT_ITEM_RADIUS * scaleWeight;
 
 	m_TimerPositionHeight = tempScale * SC_P_TIMER_POSITION_HEIGHT;
-	m_TimerWidth = tempScale * SC_P_TIMER_WIDTH;
+	m_TimerWidth = tempScale * (m_MapSize.m_Width * (m_LineWeight + m_TileSize) + m_LineWeight);
 	m_TimerHeight = tempScale * SC_P_TIMER_HEIGHT;
 
-	m_ProfileSize = tempScale * DEFAULT_CHARACTER_SIZE;
-	m_ProfileBoxHeight = tempScale * DEFAULT_CHARACTER_BOX_HEIGHT;
-	m_ProfileBoxWidth = tempScale * DEFAULT_CHARACTER_BOX_WIDTH;
+	m_ProfileWidth = tempScale * DEFAULT_CHARACTER_WIDTH;
+	m_ProfileHeight = tempScale * DEFAULT_CHARACTER_HEIGHT;
 
 	m_ProfileHorizontalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_H;
 	m_ProfileVerticalMargin = tempScale * DEFAULT_CHARACTER_MARGIN_V;
@@ -595,17 +594,29 @@ void CNetworkGameMap::SetObjectSize()
 
 void CNetworkGameMap::GetPlayerUIPosition()
 {
-	m_ProfilePosition[0] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height-m_ProfileVerticalMargin,m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize);
-	m_ProfileBoxPosition[0] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height-m_ProfileVerticalMargin + m_ProfileSize ,m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize + m_ProfileBoxHeight);
+	m_ProfilePosition[0] = D2D1::RectF(
+		m_CenterPosition.width - m_ProfileHorizontalMargin, 
+		m_CenterPosition.height - m_ProfileVerticalMargin,
+		m_CenterPosition.width - m_ProfileHorizontalMargin + m_ProfileWidth,
+		m_CenterPosition.height - m_ProfileVerticalMargin + m_ProfileHeight);
 
-	m_ProfilePosition[1] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height-m_ProfileVerticalMargin,m_CenterPosition.width + m_ProfileHorizontalMargin,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize);
-	m_ProfileBoxPosition[1] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height-m_ProfileVerticalMargin + m_ProfileSize,m_CenterPosition.width + m_ProfileHorizontalMargin,m_CenterPosition.height-m_ProfileVerticalMargin+m_ProfileSize + m_ProfileBoxHeight);
+	m_ProfilePosition[1] = D2D1::RectF(
+		m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileWidth, 
+		m_CenterPosition.height - m_ProfileVerticalMargin,
+		m_CenterPosition.width + m_ProfileHorizontalMargin,
+		m_CenterPosition.height - m_ProfileVerticalMargin + m_ProfileHeight);
 
-	m_ProfilePosition[2] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileSize, m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin);
-	m_ProfileBoxPosition[2] = D2D1::RectF(m_CenterPosition.width - m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin, m_CenterPosition.width-m_ProfileHorizontalMargin+m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin + m_ProfileBoxHeight);
+	m_ProfilePosition[2] = D2D1::RectF(
+		m_CenterPosition.width - m_ProfileHorizontalMargin, 
+		m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileHeight, 
+		m_CenterPosition.width - m_ProfileHorizontalMargin + m_ProfileWidth, 
+		m_CenterPosition.height + m_ProfileVerticalMargin);
 
-	m_ProfilePosition[3] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileSize, m_CenterPosition.width + m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin);
-	m_ProfileBoxPosition[3] = D2D1::RectF(m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileSize, m_CenterPosition.height + m_ProfileVerticalMargin, m_CenterPosition.width + m_ProfileHorizontalMargin, m_CenterPosition.height + m_ProfileVerticalMargin + m_ProfileBoxHeight);
+	m_ProfilePosition[3] = D2D1::RectF(
+		m_CenterPosition.width + m_ProfileHorizontalMargin - m_ProfileWidth, 
+		m_CenterPosition.height + m_ProfileVerticalMargin - m_ProfileHeight, 
+		m_CenterPosition.width + m_ProfileHorizontalMargin, 
+		m_CenterPosition.height + m_ProfileVerticalMargin);
 }
 
 MO_TYPE CNetworkGameMap::GetMapType(IndexedPosition indexedPosition)

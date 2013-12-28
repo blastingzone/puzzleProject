@@ -16,8 +16,6 @@ public:
 	
 	ID2D1SolidColorBrush*	GetPlayerBrush()		{ return m_pTileColorBrush; }
 	ID2D1Bitmap*			GetPlayerFace()			{ return m_pPlayerFace; }
-	ID2D1Bitmap*			GetPlayerBox()			{ return m_pPlayerBox; }
-	ID2D1Bitmap*			GetPlayerWaitingBox()	{ return m_pPlayerWaitingBox; }
 
 	void	SetPlayerTurn(int playerTurn)			{ m_Turn = playerTurn; }
 	int		GetPlayerTurn()							{ return m_Turn; }
@@ -37,8 +35,6 @@ private:
 	int m_Id;
 
 	std::wstring m_PlayerName;
-	std::wstring m_PlayerImage;
-	std::wstring m_PlayerBox;
 
 	bool m_isJoinGame;
 	bool m_Created;
@@ -50,7 +46,5 @@ private:
 
 	ID2D1SolidColorBrush*	m_pTileColorBrush;
 	ID2D1Bitmap*			m_pPlayerFace;
-	ID2D1Bitmap*			m_pPlayerBox;
-	ID2D1Bitmap*			m_pPlayerWaitingBox;
 };
 

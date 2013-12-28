@@ -6,13 +6,9 @@ CPlayer::CPlayer(void)
 {
 	m_Id = 0;
 	m_PlayerName = L"";
-	m_PlayerImage = L"";
-	m_PlayerBox = L"";
 
 	m_pTileColorBrush = nullptr;
 	m_pPlayerFace = nullptr;
-	m_pPlayerBox = nullptr;
-	m_pPlayerWaitingBox = nullptr;
 
 	ResetValues();
 }
@@ -31,29 +27,25 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 	{
 	case MO_PLAYER1:
 		SetPlayerName(L"Character1");
-		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1.png", m_pPlayerFace);
-		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player1Box.png", m_pPlayerBox);
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_1_face.png", m_pPlayerFace);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER2:
 		SetPlayerName(L"Character2");
-		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2.png", m_pPlayerFace);
-		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player2Box.png", m_pPlayerBox);
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_2_face.png", m_pPlayerFace);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER3:
 		SetPlayerName(L"Character3");
-		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3.png", m_pPlayerFace);
-		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player3Box.png", m_pPlayerBox);
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_3_face.png", m_pPlayerFace);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER4:
 		SetPlayerName(L"Character4");
-		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4.png", m_pPlayerFace);
-		m_pPlayerBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/player4Box.png", m_pPlayerBox);
+		m_pPlayerFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_4_face.png", m_pPlayerFace);
 		
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileColorBrush);
 		break;
@@ -69,8 +61,6 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		// 비정상 종료
 		PostQuitMessage(-1);
 	}
-
-	m_pPlayerWaitingBox = CRenderer::GetInstance()->CreateImage(L"Resource/Image/playerBox.png", m_pPlayerWaitingBox);
 
 	return true;
 }

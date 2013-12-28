@@ -131,9 +131,8 @@ private:
 	float m_LineWeight;
 	float m_DotRadius;
 	float m_ItemRadius;
-	float m_ProfileSize;
-	float m_ProfileBoxHeight;
-	float m_ProfileBoxWidth;
+	float m_ProfileWidth;
+	float m_ProfileHeight;
 	float m_ProfileHorizontalMargin;
 	float m_ProfileVerticalMargin;
 
@@ -142,7 +141,6 @@ private:
 	float m_TimerHeight;
 
 	std::array<D2D1_RECT_F, MAX_PLAYER_NUM> m_ProfilePosition;
-	std::array<D2D1_RECT_F, MAX_PLAYER_NUM> m_ProfileBoxPosition;
 
 	ID2D1SolidColorBrush*	m_pDotBrush;
 	ID2D1SolidColorBrush*	m_pUnconnectedLineBrush;
@@ -151,9 +149,6 @@ private:
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
 
-	ID2D1SolidColorBrush*	m_pGoldBrush;
-	ID2D1SolidColorBrush*	m_pTrashBrush;
-
 	ID2D1SolidColorBrush*	m_pTimer;
 
 	D2D1_ELLIPSE			m_DotEllipse;
@@ -161,8 +156,6 @@ private:
 	bool	m_LineAnimationFlag;
 	int		m_TileAnimationTurnNumber;
 	int		m_TileAnimationTurn;
-
-	ID2D1Bitmap* m_backImg;
 
 	ID2D1Bitmap* m_gold;
 	ID2D1Bitmap* m_trash;

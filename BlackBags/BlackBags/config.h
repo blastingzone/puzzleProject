@@ -66,15 +66,14 @@ const float DEFAULT_TILE_SIZE = 80.0f;
 const float DEFAULT_LINE_WEIGHT = 10.0f;
 const float DEFAULT_DOT_RADIUS = 6.0f;
 const float DEFAULT_ITEM_RADIUS = 4.0f;
-const float DEFAULT_CHARACTER_SIZE = 150.0f;
-const float DEFAULT_CHARACTER_BOX_WIDTH = 150.0f;
-const float DEFAULT_CHARACTER_BOX_HEIGHT = 30.0f;
-const float DEFAULT_CHARACTER_MARGIN_H =600.0f;
+
+const float DEFAULT_CHARACTER_WIDTH = 190.0f;
+const float DEFAULT_CHARACTER_HEIGHT = 230.0f;
+const float DEFAULT_CHARACTER_MARGIN_H = 600.0f;
 const float DEFAULT_CHARACTER_MARGIN_V = 300.0f;
 
-const float SC_P_TIMER_POSITION_HEIGHT = 10.0f;
-const float SC_P_TIMER_WIDTH = 500.0f;
-const float SC_P_TIMER_HEIGHT = 5.0f;
+const float SC_P_TIMER_POSITION_HEIGHT = 5.0f;
+const float SC_P_TIMER_HEIGHT = 12.0f;
 
 const DWORD TIME_LIMIT = 20 * 1000;
 
@@ -143,11 +142,10 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _MENU_FONT L"Segoe UI"
 
 /*	플레이어 색상입니다	*/
-#define _COLOR_PLAYER_1_ 0.0f/255, 101.0f/255, 184.0f/255
-#define _COLOR_PLAYER_2_ 247.0f/255, 176.0f/255, 179.0f/255
-#define _COLOR_PLAYER_3_ 255.0f/255, 96.0f/255, 23.0f/255
-#define _COLOR_PLAYER_4_ 176.0f/255, 199.0f/255, 64.0f/255
-
+#define _COLOR_PLAYER_1_ 26.0f/255, 196.0f/255, 98.0f/255, 0.75f
+#define _COLOR_PLAYER_2_ 28.0f/255, 171.0f/255, 203.0f/255, 0.75f
+#define _COLOR_PLAYER_3_ 206.0f/255, 62.0f/255, 5.0f/255, 0.6f
+#define _COLOR_PLAYER_4_ 241.0f/255, 196.0f/255, 15.0f/255, 0.75f
 
 /*	enum 타입들입니다. */
 enum SceneName	//Scene 이름들
