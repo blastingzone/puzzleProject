@@ -25,6 +25,9 @@ public:
 	void ResizeClientSize();
 	void ChangeScene(const SceneName& newScene);
 
+	/*	키보드 누르는 이벤트를 처리하는 함수 */
+	void KeyDown(int wParam);
+
 protected:
 	HWND	m_Hwnd;
 	CScene* m_CurrentScene;

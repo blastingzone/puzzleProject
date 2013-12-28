@@ -196,6 +196,9 @@
     <ClInclude Include="NetworkGameResult.h">
       <Filter>Scenes\NetworkResultScene</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkNameInputScene.h">
+      <Filter>Scenes\NetworkSettingScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -297,6 +300,9 @@
     </ClCompile>
     <ClCompile Include="NetworkGameResult.cpp">
       <Filter>Scenes\NetworkResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkNameInputScene.cpp">
+      <Filter>Scenes\NetworkSettingScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

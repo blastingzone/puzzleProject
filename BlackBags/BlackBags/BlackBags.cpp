@@ -270,11 +270,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		g_Manager->Update();
 		g_Manager->Render();
 		break;
-	case WM_KEYDOWN:
-		 case VK_END: 
+ 	case WM_KEYDOWN:
+		switch(wParam)
+		{
+		 case VK_ESCAPE:
 			 g_Manager->ChangeScene(SC_MAIN);
 			 //PostQuitMessage(0);
 			 break;
+		 default:
+			 g_Manager->KeyDown(wParam);
+		}
 		break;
 	case WM_SOCKET:
 		{

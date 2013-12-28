@@ -108,6 +108,7 @@
     <ClInclude Include="NetworkGameResult.h" />
     <ClInclude Include="NetworkGameTimer.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="NetworkNameInputScene.h" />
     <ClInclude Include="NetworkPlayScene.h" />
     <ClInclude Include="NetworkResultScene.h" />
     <ClInclude Include="NetworkSettingMenu.h" />
@@ -147,6 +148,7 @@
     <ClCompile Include="NetworkGameResult.cpp" />
     <ClCompile Include="NetworkGameTimer.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkNameInputScene.cpp" />
     <ClCompile Include="NetworkPlayScene.cpp" />
     <ClCompile Include="NetworkResultScene.cpp" />
     <ClCompile Include="NetworkSettingMenu.cpp" />

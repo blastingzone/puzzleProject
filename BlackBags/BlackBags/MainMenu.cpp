@@ -146,7 +146,7 @@ bool CMainMenu::CreateResource()
 		//multiplay
 		m_ButtonList[1].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_multiplay_selected.png", m_ButtonList[1].m_pSelected);
 		m_ButtonList[1].m_pUnselected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_multiplay.png", m_ButtonList[1].m_pUnselected);
-		m_ButtonList[1].m_LinkedScene = SC_NETWORK_SETTING;
+		m_ButtonList[1].m_LinkedScene = SC_NETWORK_NAMESETTING;
 
 		//credit
 		m_ButtonList[2].m_pSelected = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_credit_selected.png", m_ButtonList[2].m_pSelected);

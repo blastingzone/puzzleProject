@@ -11,6 +11,7 @@
 #include "NetworkSettingScene.h"
 #include "NetworkPlayScene.h"
 #include "NetworkResultScene.h"
+#include "NetworkNameInputScene.h"
 
 
 CSceneManager::CSceneManager(HWND hWnd)
@@ -90,6 +91,9 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 	case SC_EXIT:
 		PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 		return;
+	case SC_NETWORK_NAMESETTING:
+		m_CurrentScene = new CNetworkNameInputScene();
+		break;
 	case SC_NETWORK_SETTING:
 		if (!CNetworkManager::GetInstance()->Init() )
 		{
@@ -143,5 +147,13 @@ void CSceneManager::Render()
 			m_CurrentScene->Render();
 			CRenderer::GetInstance()->End();
 		}
+	}
+}
+
+void CSceneManager::KeyDown( int wParam )
+{
+	if (m_CurrentScene->GetCurrentScene() == SC_NETWORK_NAMESETTING)
+	{
+		dynamic_cast<CNetworkNameInputScene*>(m_CurrentScene)->InputPlayerName(wParam);
 	}
 }
