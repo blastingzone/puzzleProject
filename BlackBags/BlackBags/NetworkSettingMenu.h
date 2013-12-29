@@ -5,11 +5,12 @@
 
 struct NetworkPlayerSelect
 {
-	NetworkPlayerSelect() : m_IsSelected(0),
+	NetworkPlayerSelect() : 
+						m_ImgCharacterFace(nullptr),
+						m_IsSelected(0),
 						m_IsMouseOver(0),
 						m_ButtonWidth(0.0f),
 						m_ButtonHeight(0.0f),
-						m_ButtonText(L""),
 						m_pBackgroundBrush(nullptr),
 						m_pSelectedBackgroundBrush(nullptr),
 						m_IsMine(false) 
@@ -23,7 +24,7 @@ struct NetworkPlayerSelect
 	float		m_ButtonWidth;
 	float		m_ButtonHeight;
 
-	std::wstring m_ButtonText;
+	ID2D1Bitmap* m_ImgCharacterFace;
 
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;
@@ -73,13 +74,13 @@ struct NetworkSettingTitle
 {
 	NetworkSettingTitle() : m_LayerWidth(0.f),
 					 m_LayerHeight(0.f),
-					 m_Title(L"Setting")
+					 m_Title(nullptr)
 					 {};
 
 	float m_LayerWidth;
 	float m_LayerHeight;
 
-	std::wstring m_Title;
+	ID2D1Bitmap* m_Title;
 };
 
 struct NetworkPlayerTitle
@@ -173,7 +174,6 @@ protected:
 	IDWriteTextFormat*		m_MapSelectTextFormat;
 	IDWriteTextFormat*		m_NextButtonTextFormat;
 	IDWriteTextFormat*		m_SubTitleTextFormat;
-	IDWriteTextFormat*		m_MainTitleTextFormat;
 
 	// Player와 Map이 공유하는 브러시
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
@@ -185,10 +185,6 @@ protected:
 	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
 
 	ID2D1SolidColorBrush*	m_MyCharacterBrush;
-
-	// 캐릭터 얼굴 브러시
-	// PlayScene 에서도 쓰는데 우선은 따로 만든다.
-	std::array<ID2D1Bitmap*, MAX_PLAYER_NUM> m_pCharacterFace;
 
 	D2D1_SIZE_F				m_StartPosition;
 
@@ -207,17 +203,14 @@ protected:
 	// MAP 타이틀
 	float					m_MapTitleTextSize;
 	float					m_MapTitleTextMargin;
-	// SettingScene 타이틀
-	float					m_SettingTitleTextSize;
-	float					m_SettingTitleTextMargin;
 	// 캐릭터 초상화 관련
 	float					m_PortraitHeight;
 	float					m_PortraitWidth;
 	
 	NetworkPlayerTitle		m_PlayerTitle;
 	NetworkMapTitle			m_MapTitle;
-	NetworkSettingTitle		m_SettingTitle;
 	NetworkNextButton		m_NextButton;
+	NetworkSettingTitle		m_SettingTitle;
 
 	std::array<NetworkPlayerSelect, MAX_PLAYER_NUM> m_PlayerSelect;
 	std::array<NetworkMapSelect, MAX_MAPSIZE_NUM>	m_MapSelect;

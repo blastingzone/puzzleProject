@@ -64,6 +64,7 @@ void CNetworkNameInputScene::Render()
 
 	D2D1_RECT_F rectNamePosition;
 
+	// 이름 입력하는 부분
 	rectNamePosition = D2D1::Rect(m_StartPosition.width, m_StartPosition.height, m_StartPosition.width + 100.0f, m_StartPosition.height + 50.0f);
 
 	m_pRenderTarget->DrawText(
@@ -78,7 +79,8 @@ void CNetworkNameInputScene::Render()
 void CNetworkNameInputScene::EventHandle( Coordinate mouseCoordinate )
 {
 	// 테스트 : 무조건 NetworkSettingScene으로 넘어가게 만든다.
-	// 이 SetMyName은 결국 서버로 갔다 온 내 이름을 처리하는 것.
+	// 각 클라이언트가 SetMyName으로 지정한 자신의 이름을 서버로 전송
+	// 서버는 이 이름들을 종합해서 클라이언트들에게 보낸다
 	CGameData::GetInstance()->SetMyName(m_PlayerName);
 	GoNextScene();
 }
@@ -104,7 +106,6 @@ void CNetworkNameInputScene::ResizeClient()
 	D2D1_SIZE_F centerPosition = m_pRenderTarget->GetSize();
 	m_StartPosition.height = centerPosition.height / 2;
 	m_StartPosition.width = centerPosition.width / 2;
-
 }
 
 void CNetworkNameInputScene::ErrorHandling()
@@ -127,8 +128,7 @@ void CNetworkNameInputScene::CreateResource()
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 	}
 
-	//하드코딩! config으로 빼세요
-	m_PlayerNameTextSize = 25.0f;
+	m_PlayerNameTextSize = SC_N_DEFAULT_NAME_SIZE;
 
 	hr = DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
@@ -266,7 +266,12 @@ void CNetworkNameInputScene::InputPlayerName(int wParam)
 		}
 		break;
 	default:
-		m_PlayerName.append( KeyMap(wParam) );
+		// 이름 최대 길이는 32글자로 제한
+		// 조심해! config로 빼세요
+		if (m_PlayerName.length() < 32)
+		{
+			m_PlayerName.append( KeyMap(wParam) );
+		}
 		break;
 	}
 }

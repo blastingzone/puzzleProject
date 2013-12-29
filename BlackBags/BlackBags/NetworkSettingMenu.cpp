@@ -2,6 +2,7 @@
 #include "NetworkSettingMenu.h"
 #include "NetworkManager.h"
 #include <dwrite.h>
+#include "Player.h"
 
 
 CNetworkSettingMenu::CNetworkSettingMenu(void)
@@ -15,18 +16,10 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 	m_pMapBackgroundBrush = nullptr;
 	m_pMapSelectedBackgroundBrush = nullptr;
 
-	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
-	{
-		m_pCharacterFace[i] = nullptr;
-	}
-
 	m_PlayerMask = 0;
 
 	// 버튼 초기값들을 설정함
-	m_PlayerSelect[0].m_ButtonText = L"Character 1";
-	m_PlayerSelect[1].m_ButtonText = L"Character 2";
-	m_PlayerSelect[2].m_ButtonText = L"Character 3";
-	m_PlayerSelect[3].m_ButtonText = L"Character 4";
+	// 캐릭터 초상화는 별도 생성
 
 	m_MapSelect[0].m_ButtonText = L"5 X 5";
 	m_MapSelect[0].m_GameDataMapSizeHeight = 5;
@@ -117,9 +110,6 @@ void CNetworkSettingMenu::SetObjectSize()
 	m_SettingTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT;
 	m_SettingTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_WIDTH;
 
-	m_SettingTitleTextMargin = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_MARGIN;
-	m_SettingTitleTextSize = CurrentScale * SC_S_DEFAULT_MAINTITLE_TEXT_SIZE;
-
 	m_PortraitWidth = CurrentScale * SC_S_DEFAULT_PORTRAIT_WIDTH;
 	m_PortraitHeight = CurrentScale * SC_S_DEFAULT_PORTRAIT_HEIGHT;
 }
@@ -142,6 +132,15 @@ bool CNetworkSettingMenu::CreateResource()
 
 		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
 		assert(SUCCEEDED(hr));
+
+		// 캐릭터 초상화 포인터를 받아온다
+		for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+		{
+			m_PlayerSelect[i].m_ImgCharacterFace = CGameData::GetInstance()->GetPlayerPtr(i)->GetPlayerFace();
+		}
+
+		// SettingScene 타이틀 이미지를 가져온다
+		m_SettingTitle.m_Title = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/SETTING_title.png", m_SettingTitle.m_Title);
 
 		// 네트워크용 내가 선택한 캐릭터 표시
 		if (SUCCEEDED(hr))
@@ -280,16 +279,6 @@ bool CNetworkSettingMenu::CreateResource()
 		if (SUCCEEDED(hr) )
 		{
 			int i = 0;
-
-			// 캐릭터 초상화 생성
-
-			for (i; i < MAX_PLAYER_NUM; ++i)
-			{
-				int currentPlayerNum = i + 1;
-				std::wstring filepath = L"Resource/Image/player" + std::to_wstring(currentPlayerNum);
-				filepath.append(L".png");
-				m_pCharacterFace[i] = CRenderer::GetInstance()->CreateImage(filepath, m_pCharacterFace[i]);
-			}
 		}
 		else
 		{
@@ -322,7 +311,6 @@ void CNetworkSettingMenu::RefreshTextSize()
 	SafeRelease(m_MapSelectTextFormat);
 	SafeRelease(m_NextButtonTextFormat);
 	SafeRelease(m_SubTitleTextFormat);
-	SafeRelease(m_MainTitleTextFormat);
 
 	// PlayerSelect 창부터 바꿈
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -439,40 +427,14 @@ void CNetworkSettingMenu::RefreshTextSize()
 	}
 	assert(SUCCEEDED(hr));
 
-	if (SUCCEEDED(hr))
-	{
-		// Maintitle TextFormat 생성
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_SettingTitleTextSize,
-			L"ko",
-			&m_MainTitleTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_MainTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
 }
 
 void CNetworkSettingMenu::Render()
 {
 	PollingData();
+
+	// 배경화면을 그린다.
+	m_pRenderTarget->DrawBitmap(CGameData::GetInstance()->GetBackgroundImage(), D2D1::RectF(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT) );
 
 	//상자를 먼저 그리고 그 위에 글자를 얹는 식이다
 	D2D1_RECT_F		rectElement, textPosition, CharacterPortraitPosition;
@@ -483,15 +445,7 @@ void CNetworkSettingMenu::Render()
 	pos.y = m_StartPosition.height - m_SettingTitle.m_LayerHeight * 3;
 
 	rectElement = D2D1::Rect( pos.x, pos.y, pos.x + m_SettingTitle.m_LayerWidth, pos.y + m_SettingTitle.m_LayerHeight);
-	textPosition =  D2D1::Rect( rectElement.left + m_SettingTitleTextMargin, rectElement.top, rectElement.right, rectElement.bottom);
-
-	m_pRenderTarget->DrawText(
-		m_SettingTitle.m_Title.c_str(),
-		m_SettingTitle.m_Title.length(),
-		m_MainTitleTextFormat,
-		textPosition,
-		m_pUnselectedTextBrush
-		);
+	m_pRenderTarget->DrawBitmap(m_SettingTitle.m_Title, rectElement );
 
 	// 캐릭터 선택창을 알리는 타이틀을 렌더
 	// 위치선정
@@ -565,7 +519,8 @@ void CNetworkSettingMenu::Render()
 		}
 		// 캐릭터 초상화 포지션은 Character 선택창의 중심으로부터
 		// 캐릭터 초상화 렌더
-		m_pRenderTarget->DrawBitmap(m_pCharacterFace[i], CharacterPortraitPosition);
+
+		m_pRenderTarget->DrawBitmap(m_PlayerSelect[i].m_ImgCharacterFace, CharacterPortraitPosition);
 	}
 
 	// 맵 선택창을 알리는 타이틀을 렌더
