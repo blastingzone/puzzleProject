@@ -563,10 +563,10 @@ RECT CGameResult::GetGetButtonPosition()
 {
 	RECT buttonPosition;
 
-	buttonPosition.left = static_cast<LONG>(CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().width - m_HorizontalMargin - m_SceneFinishWidth);
-	buttonPosition.right = buttonPosition.left + static_cast<LONG>(m_SceneFinishWidth);
-	buttonPosition.top = static_cast<LONG>(CRenderer::GetInstance()->GetHwndRenderTarget()->GetSize().height - m_VerticalMargin - m_SceneFinishHeight);
-	buttonPosition.bottom = buttonPosition.top + static_cast<LONG>(m_SceneFinishHeight);
+	buttonPosition.left = m_StartPosition.width + m_SceneFinishPositiontH;
+	buttonPosition.right =  buttonPosition.left + m_SceneFinishWidth;
+	buttonPosition.top = m_StartPosition.height + m_SceneFinishPositiontV;
+	buttonPosition.bottom = buttonPosition.top +m_SceneFinishHeight;
 
 	return buttonPosition;
 }
