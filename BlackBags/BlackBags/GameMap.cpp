@@ -271,6 +271,10 @@ void CGameMap::Render()
 						if (m_Map[i][j].m_StartTime == 0)
 						{
 							m_Map[i][j].m_StartTime = CGameTimer::GetInstance()->GetTime();
+
+							//처음에 닫혀지는 타일은 하나뿐이다. 그러니까 걔는 시작할 때 소리 넣어주자
+							if (m_Map[i][j].m_AnimationTurn == 1)
+								CSoundRenderer::GetInstance()->PlaySE_FillTile();
 						}
 					
 						DWORD currentTime = CGameTimer::GetInstance()->GetTime();
@@ -362,6 +366,10 @@ void CGameMap::Render()
 		{
 			m_TileAnimationTurn = 0;
 			m_TileAnimationTurnNumber = 0;
+		}
+		else
+		{
+			CSoundRenderer::GetInstance()->PlaySE_FillTile();
 		}
 	}
 

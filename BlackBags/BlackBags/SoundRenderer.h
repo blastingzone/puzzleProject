@@ -22,6 +22,7 @@ public:
 	void PlaySE_DrawLine();
 	void PlaySE_Select();
 	void PlaySE_Laugh();
+	void PlaySE_FillTile();
 
 
 	FMOD::System* GetSystem() { return m_System; }
@@ -40,6 +41,7 @@ private:
 	FMOD::Channel*			m_SEChannel;
 
 	FMOD::Sound*			m_SE_DrawLine;
+	FMOD::Sound*			m_SE_FillTile;
 	FMOD::Sound*			m_SE_Select;
 	FMOD::Sound*			m_Main;
 	FMOD::Sound*			m_Setting;

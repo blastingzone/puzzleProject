@@ -9,6 +9,7 @@ CSoundRenderer::CSoundRenderer(void) :
 	m_BGMChannel(nullptr),
 	m_SEChannel(nullptr),
 	m_SE_DrawLine(nullptr),
+	m_SE_FillTile(nullptr),
 	m_SE_Select(nullptr),
 	m_Main(nullptr),
 	m_Setting(nullptr),
@@ -75,10 +76,13 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 
 	if (fr == FMOD_OK)
 		fr = m_System->createSound(_SE_SELECT, FMOD_HARDWARE, 0, &m_SE_Select);
+
 	if ( fr == FMOD_OK)
 		fr = m_System->createSound(_SE_LAUGH, FMOD_HARDWARE, 0, &m_SE_Laugh);
 
-
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_FILL_TILE, FMOD_HARDWARE, 0, &m_SE_FillTile);
+	
 	if (!SUCCEEDED(fr) )
 	{
 		ErrorHandling();
@@ -158,8 +162,6 @@ void CSoundRenderer::PlaySE_Select()
 	}
 }
 
-
-
 void CSoundRenderer::PlaySE_Laugh()
 {
 	FMOD_RESULT fr;
@@ -173,6 +175,18 @@ void CSoundRenderer::PlaySE_Laugh()
 	}
 }
 
+void CSoundRenderer::PlaySE_FillTile()
+{
+	FMOD_RESULT fr;
+
+	fr = m_System->playSound(m_SE_FillTile, m_ChannelGroup, false, &m_SEChannel);
+
+	assert(fr == FMOD_OK);
+	if (!SUCCEEDED(fr) )
+	{
+		ErrorHandling();
+	}
+}
 
 void CSoundRenderer::ErrorHandling()
 {
