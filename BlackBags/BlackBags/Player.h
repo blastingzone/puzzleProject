@@ -16,6 +16,9 @@ public:
 	
 	ID2D1SolidColorBrush*	GetPlayerBrush()		{ return m_pTileColorBrush; }
 	ID2D1Bitmap*			GetPlayerFace()			{ return m_pPlayerFace; }
+	ID2D1Bitmap*			GetPlayerSelectedFace()	{ return m_pPlayerSelectedFace; }
+	ID2D1Bitmap*			GetPlayerResultFace()	{ return m_pPlayerResultFace; }
+	ID2D1Bitmap*			GetPlayerResultTile()	{ return m_pPlayerResultTile; }
 
 	void	SetPlayerTurn(int playerTurn)			{ m_Turn = playerTurn; }
 	int		GetPlayerTurn()							{ return m_Turn; }
@@ -46,5 +49,8 @@ private:
 
 	ID2D1SolidColorBrush*	m_pTileColorBrush;
 	ID2D1Bitmap*			m_pPlayerFace;
+	ID2D1Bitmap*			m_pPlayerSelectedFace;
+	ID2D1Bitmap*			m_pPlayerResultFace;
+	ID2D1Bitmap*			m_pPlayerResultTile;
 };
 

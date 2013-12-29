@@ -660,7 +660,7 @@ void CNetworkGameMap::RefreshTextSize()
 	SafeRelease(m_PlayerNameTextFormat);
 
 	hr = m_DWriteFactory->CreateTextFormat(
-		_MENU_FONT,
+		_UI_FONT,
 		NULL,
 		DWRITE_FONT_WEIGHT_SEMI_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,

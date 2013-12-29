@@ -45,15 +45,9 @@ private:
 	ID2D1HwndRenderTarget* m_pRenderTarget;
 
 	IDWriteFactory*			m_DWriteFactory;
-	IDWriteTextFormat*		m_TitleTextFormat;
 	IDWriteTextFormat*		m_PlayerNameTextFormat;
 	IDWriteTextFormat*		m_PlayerScoreTextFormat;
-	IDWriteTextFormat*		m_WinnerTextFormat;
-	IDWriteTextFormat*		m_ButtonTextFormat;
-
-	std::wstring m_Title;
-	std::wstring m_WinnerText;
-	std::wstring m_ButtonText;
+	IDWriteTextFormat*		m_PlayerItemCountTextFormat;
 
 	float m_HorizontalMargin;
 	float m_VerticalMargin;
@@ -61,34 +55,49 @@ private:
 
 	float m_SceneTitleHeight;
 	float m_SceneTitleWidth;
-	float m_SceneTitleTextSize;
+
+	float m_PlayerPositionH;
+	float m_PlayerPositionMargin;
+
+	float m_PlayerFaceHeight;
+	float m_PlayerFaceWidth;
 
 	float m_PlayerNameTextSize;
 	float m_PlayerNameTextWidth;
-	float m_PlayerNameTextHeight;
+
 	float m_PlayerScoreTextSize;
-	float m_PlayerScorePosition;
 	float m_playerScoreWidth;
-	float m_PlayerTileSize;
-	float m_PlayerTileMargin;
-	float m_PlayerBoxHeight;
 
-	float m_WinnerTextSize;
-	float m_WinnerTextWidth;
+	float m_PlayerItemPosition;
+	float m_PlayerItemHeight;
+	float m_playerItemWidth;
+	float m_playerItemMargin;
 
-	float m_ButtonWidth;
-	float m_ButtonHeight;
-	float m_ButtonTextMagin;
-	float m_ButtonTextSize;
+	float m_PlayerMultilyHeight;
+	float m_playerMultilyWidth;
 
-	ID2D1SolidColorBrush*	m_pTextBrush;
-	ID2D1SolidColorBrush*	m_pWinnerTextBrush;
-	ID2D1SolidColorBrush*	m_pWinnerBoxBrush;
-	ID2D1SolidColorBrush*	m_pButtonBrush;
+	float m_PlayerItemCountPosition;
+	float m_PlayerItemCountTextSize;
+	float m_playerItemCountWidth;
 
-	ID2D1SolidColorBrush*	m_pGoldBrush;
-	ID2D1SolidColorBrush*	m_pTrashBrush;
+	float m_CrownPosition;
+	float m_CrownHeight;
+	float m_CrownWidth;
 
-	//나중에 다른 씬과 공유하는 브러시들은 새로 생성하지 말고 공유하도록 할 것
-	std::array<ID2D1SolidColorBrush*, MAX_PLAYER_NUM> m_TileBrush;
+	float m_SceneFinishPositiontH;
+	float m_SceneFinishPositiontV;
+	float m_SceneFinishHeight;
+	float m_SceneFinishWidth;
+
+	ID2D1SolidColorBrush*	m_pPlayerNameTextBrush;
+	ID2D1SolidColorBrush*	m_pPlayerScoreTextBrush;
+	ID2D1SolidColorBrush*	m_pPlayerItemCountTextBrush;
+
+	ID2D1Bitmap*			m_pTitleImage;
+	ID2D1Bitmap*			m_pFinishImage;
+	ID2D1Bitmap*			m_pFinishSelectedImage;
+	ID2D1Bitmap*			m_pCrownImage;
+	ID2D1Bitmap*			m_pMultiplyImage;
+	ID2D1Bitmap*			m_pGoldImage;
+	ID2D1Bitmap*			m_pTrashImage;
 };

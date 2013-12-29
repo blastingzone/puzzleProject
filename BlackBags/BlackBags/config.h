@@ -8,8 +8,8 @@ const int MAX_PLAYER_NUM= 4;
 
 
 /*	메인 메뉴 오브젝트들의 기본 크기입니다 */
-const float SC_M_DEFAULT_MENU_BUTTON_WIDTH = 223.0f;
-const float SC_M_DEFAULT_MENU_BUTTON_HEIGHT = 57.0f;
+const float SC_M_DEFAULT_MENU_BUTTON_WIDTH = 225.0f;
+const float SC_M_DEFAULT_MENU_BUTTON_HEIGHT = 60.0f;
 const float SC_M_DEFAULT_TITLE_WIDTH = 500.0F;
 const float SC_M_DEFAULT_TITLE_HEIGHT = 220.0F;
 const float SC_M_DEFAULT_TITLE_MARGIN = 20.0F;
@@ -95,35 +95,51 @@ const int CHECKLIST_LENGTH = 100;
 
 
 /*	결과 화면 오브젝트들의 기본 크기입니다 */
-const float SC_RT_HORIZONTAL_MARGIN = 63.0f;
-const float SC_RT_VERTICAL_MARGIN = 34.0f;
-const float SC_RT_VOID_SPACE = 66.0f;
+const float SC_RT_HORIZONTAL_MARGIN = 70.0f;
+const float SC_RT_VERTICAL_MARGIN = 50.0f;
+const float SC_RT_VOID_SPACE = 40.0f;
 
-const float SC_RT_TITLE_WIDTH = 340.0f;
-const float SC_RT_TITLE_HEIGHT = 72.0f;
-const float SC_RT_TITLE_TEXT_SIZE = 72.0f;
+const float SC_RT_TITLE_WIDTH = 180.0f;
+const float SC_RT_TITLE_HEIGHT = 70.0f;
 
-const float SC_RT_PLAYER_NAME_TEXT_SIZE = 36.0f;
-const float SC_RT_PLAYER_NAME_TEXT_WIDTH = 240.0f;
-const float SC_RT_PLAYER_NAME_TEXT_HEIGHT = 48.0f;
-const float SC_RT_PLAYER_SCORE_TEXT_SIZE = 36.0f;
-const float SC_RT_PLAYER_SCORE_POSITION = 680.0f;
-const float SC_RT_PLAYER_SCORE_WIDTH = 80.0f;
-const float SC_RT_PLAYER_TILE_SIZE = 18.0f;
-const float SC_RT_PLAYER_TILE_MARGIN = 2.5f;
-const float SC_RT_PLAYER_BOX_HEIGHT = 92.0f;
+const float SC_RT_PLAYER_POSITION_H = 120.0f;
+const float SC_RT_PLAYER_POSITION_MARGIN = 15.0f;
 
-const float SC_RT_WINNER_TEXT_SIZE = 48.0f;
-const float SC_RT_WINNER_TEXT_WIDTH = 326.0f;
+const float SC_RT_PLAYER_FACE_HEIGHT = 100.0f;
+const float SC_RT_PLAYER_FACE_WIDTH= 100.0f;
 
-const float SC_RT_BUTTON_WIDTH = 210.0f;
-const float SC_RT_BUTTON_HEIGHT = 60.0f;
-const float SC_RT_BUTTON_TEXT_SIZE = 36.0f;
-const float SC_RT_BUTTON_TEXT_MARGIN = 0.0f;
+const float SC_RT_PLAYER_NAME_TEXT_SIZE = 30.0f;
+const float SC_RT_PLAYER_NAME_TEXT_WIDTH = 270.0f;
+
+const float SC_RT_PLAYER_SCORE_TEXT_SIZE = 40.0f;
+const float SC_RT_PLAYER_SCORE_WIDTH = 270.0f;
+
+const float SC_RT_PLAYER_ITEM_POSITION = 70.0f;
+const float SC_RT_PLAYER_ITEM_HEIGHT = 100.0f;
+const float SC_RT_PLAYER_ITEM_WIDTH = 100.0f;
+const float SC_RT_PLAYER_ITEM_MARGIN = 10.0f;
+
+const float SC_RT_MULTIPLY_HEIGHT = 100.0f;
+const float SC_RT_MULTIPLY_WIDTH = 37.0f;
+
+const float SC_RT_CROWN_POSITION = 30.0f;
+const float SC_RT_CROWN_WIDTH = 100.0f;
+const float SC_RT_CROWN_HEIGHT = 60.0f;
+
+const float SC_RT_PLAYER_ITEM_COUNT_POSITION = 48.0f;
+const float SC_RT_PLAYER_ITEM_COUNT_SIZE = 50.0f;
+const float SC_RT_PLAYER_ITEM_COUNT_WIDTH = 70.0f;
+
+const float SC_RT_FINISH_POSITION_H = 1000.0f;
+const float SC_RT_FINISH_POSITION_V = 595.0f;
+const float SC_RT_FINISH_WIDTH = 180.0f;
+const float SC_RT_FINISH_HEIGHT = 70.0f;
 
 const int	SC_RT_SCORE_TILE = 2;
 const int	SC_RT_SCORE_GOLD = 5;
 const int	SC_RT_SCORE_TRASH = -10;
+
+#define _COLOR_RESULT_TEXT_ 99.0f/255, 99.0f/255, 99.0f/255
 
 /*	크레딧 신에서 불러올 동영상들입니다	*/
 #define _CREDIT_MOVIE "Resource/Video/credit.avi"
@@ -143,6 +159,7 @@ const int	SC_RT_SCORE_TRASH = -10;
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"
 #define _MENU_FONT L"Segoe UI"
+#define _UI_FONT L"Comic Sans MS"
 
 /*	플레이어 색상입니다	*/
 #define _COLOR_PLAYER_1_ 26.0f/255, 196.0f/255, 98.0f/255, 0.75f
