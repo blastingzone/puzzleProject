@@ -134,7 +134,7 @@ bool CMainMenu::CreateResource()
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-		m_pTitle = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/monsterDoodle.png", m_pTitle);
+		m_pTitle = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/MAIN_title1.png", m_pTitle);
 
 		SetObjectSize();
 
