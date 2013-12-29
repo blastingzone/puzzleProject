@@ -476,7 +476,7 @@ bool CGameResult::CreateResource()
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 		
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_RESULT_TEXT_) ), &m_pPlayerScoreTextBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_RESULT_SCORE_TEXT_) ), &m_pPlayerScoreTextBrush);
 		
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();

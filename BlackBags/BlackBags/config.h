@@ -140,6 +140,8 @@ const int	SC_RT_SCORE_GOLD = 5;
 const int	SC_RT_SCORE_TRASH = -10;
 
 #define _COLOR_RESULT_TEXT_ 99.0f/255, 99.0f/255, 99.0f/255
+//#define _COLOR_RESULT_SCORE_TEXT_ 28.0f/255,171.0f/255,204.0f/255
+#define _COLOR_RESULT_SCORE_TEXT_ 230.0f/255,126.0f/255,34.0f/255
 
 /*	크레딧 신에서 불러올 동영상들입니다	*/
 #define _CREDIT_MOVIE "Resource/Video/credit.avi"

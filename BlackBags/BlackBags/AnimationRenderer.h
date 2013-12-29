@@ -56,6 +56,9 @@ public : CAnimationRenderer(std::wstring fileName)
 		 //	S_LT_ONCE : 한 번만 재생 S_LT_INFINITE: 반복 재생
 		 void SetLoop(LoopType looptype) { m_LoopType = looptype;}
 
+		 //대기상태의 애니메이션 첫 프레임을 보여준다.
+		 void ShowAnimationFristFrame(D2D1_RECT_F imagePosition);
+
 		 //imagePosition위치에서 에니메이션을 재생한다.
 		 void StartAnimation(D2D1_RECT_F imagePosition);
 

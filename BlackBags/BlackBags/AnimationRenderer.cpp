@@ -302,3 +302,8 @@ void CAnimationRenderer::ScaleAnimation(D2D1_RECT_F imagePosition, float destSca
 	}
 
 }
+
+void CAnimationRenderer::ShowAnimationFristFrame( D2D1_RECT_F imagePosition )
+{
+	m_ipRenderTarget->DrawBitmap(m_LoadedBitmap,imagePosition,1.0f,D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,m_Frame[0]);
+}
