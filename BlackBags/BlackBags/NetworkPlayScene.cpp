@@ -635,6 +635,13 @@ void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPositio
 
 		//tile animation 시작 설정
 		m_Map->SetTileAnimationTurn(1);
+
+		//많이 먹었다.
+		if ( i >= 5 )
+		{
+			CSoundRenderer::GetInstance()->PlaySE_Laugh();
+		}
+
 #ifdef _DEBUG
 		printf("우와! 플레이어 %d가 땅을 먹었다!\n",(clientId));
 #endif

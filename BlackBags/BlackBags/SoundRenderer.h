@@ -21,6 +21,7 @@ public:
 	void StopBGM();
 	void PlaySE_DrawLine();
 	void PlaySE_Select();
+	void PlaySE_Laugh();
 
 
 	FMOD::System* GetSystem() { return m_System; }
@@ -44,4 +45,5 @@ private:
 	FMOD::Sound*			m_Setting;
 	FMOD::Sound*			m_Play;
 	FMOD::Sound*			m_Result;
+	FMOD::Sound*			m_SE_Laugh;
 };

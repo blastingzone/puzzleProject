@@ -128,6 +128,12 @@ void CPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 			//tile animation 시작 설정
 			m_Map->SetTileAnimationTurn(1);
+
+			//많이 먹었다.
+			if ( i >= 5 )
+			{
+				CSoundRenderer::GetInstance()->PlaySE_Laugh();
+			}
 #ifdef _DEBUG
 			printf("우와! 플레이어 %d가 땅을 먹었다!\n",(m_PlayerTurn%m_PlayerNumber));
 #endif

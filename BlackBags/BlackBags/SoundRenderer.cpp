@@ -75,6 +75,9 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 
 	if (fr == FMOD_OK)
 		fr = m_System->createSound(_SE_SELECT, FMOD_HARDWARE, 0, &m_SE_Select);
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_LAUGH, FMOD_HARDWARE, 0, &m_SE_Laugh);
+
 
 	if (!SUCCEEDED(fr) )
 	{
@@ -154,6 +157,22 @@ void CSoundRenderer::PlaySE_Select()
 		ErrorHandling();
 	}
 }
+
+
+
+void CSoundRenderer::PlaySE_Laugh()
+{
+	FMOD_RESULT fr;
+
+	fr = m_System->playSound(m_SE_Laugh, m_ChannelGroup, false, &m_SEChannel);
+
+	assert(fr == FMOD_OK);
+	if (!SUCCEEDED(fr) )
+	{
+		ErrorHandling();
+	}
+}
+
 
 void CSoundRenderer::ErrorHandling()
 {
