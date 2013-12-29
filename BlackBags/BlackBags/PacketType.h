@@ -5,6 +5,9 @@
 #define MAX_NAME_LEN	30
 #define MAX_COMMENT_LEN	40
 
+/*  네트워크에서 플레이어가 정할 수 있는 이름의 최대 길이입니다 */
+const int MAX_PLAYER_NAME_LENGTH = 64;
+
 enum PacketTypes
 {
 	PKT_NONE				= 0,
@@ -76,10 +79,12 @@ struct CharacterRequest : public PacketHeader
 		mType = PKT_CS_CHARACTER_SELECT ;
 		mPlayerId = -1 ;
 		mCharacterId = -1;
+		swprintf_s(mPlayerName, MAX_PLAYER_NAME_LENGTH, L"%s", L"defaultName");
 	}
 
 	int		mPlayerId ;
 	int		mCharacterId ;
+	wchar_t	mPlayerName[MAX_PLAYER_NAME_LENGTH];
 } ;
 
 struct CharacterResult : public PacketHeader
@@ -90,9 +95,14 @@ struct CharacterResult : public PacketHeader
 		mType = PKT_SC_CHARACTER_SELECT ;
 		// 인덱스가 플레이어 - 밸류가 캐릭터
 		memset( mCharacterId, -1, sizeof(mCharacterId) );
+		for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+		{
+			swprintf_s(mPlayerName[i], MAX_PLAYER_NAME_LENGTH, L"%s", L"DefaultName");
+		}
 	}
-	int		mConnectionNum;
-	int		mCharacterId[MAX_PLAYER_NUM] ;
+	int				mConnectionNum;
+	int				mCharacterId[MAX_PLAYER_NUM] ;
+	wchar_t			mPlayerName[MAX_PLAYER_NUM][MAX_PLAYER_NAME_LENGTH];
 } ;
 
 struct MapRequest : public PacketHeader

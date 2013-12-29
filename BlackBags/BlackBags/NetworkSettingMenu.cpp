@@ -146,7 +146,7 @@ bool CNetworkSettingMenu::CreateResource()
 		// 네트워크용 내가 선택한 캐릭터 표시
 		if (SUCCEEDED(hr))
 		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_MyCharacterBrush);
+			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aquamarine), &m_MyCharacterBrush);
 		}
 		else
 		{
@@ -546,8 +546,8 @@ void CNetworkSettingMenu::Render()
 			}
 
 			m_pRenderTarget->DrawText(
-				m_PlayerSelect[i].m_ButtonText.c_str(),
-				m_PlayerSelect[i].m_ButtonText.length(),
+				CGameData::GetInstance()->GetPlayerName(i).c_str(),
+				CGameData::GetInstance()->GetPlayerName(i).length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pSelectedTextBrush
@@ -556,8 +556,8 @@ void CNetworkSettingMenu::Render()
 		else // 아니면 글자만 나옴
 		{
 			m_pRenderTarget->DrawText(
-				m_PlayerSelect[i].m_ButtonText.c_str(),
-				m_PlayerSelect[i].m_ButtonText.length(),
+				CGameData::GetInstance()->GetPlayerName(i).c_str(),
+				CGameData::GetInstance()->GetPlayerName(i).length(),
 				m_PlayerSelectTextFormat,
 				textPosition,
 				m_pUnselectedTextBrush

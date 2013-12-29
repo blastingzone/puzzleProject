@@ -73,6 +73,8 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 			{
 				CSoundRenderer::GetInstance()->PlaySE_Select();
 				characterSelectedByClient.mCharacterId = idx;
+				// 내 이름을 같이 담는다.
+				swprintf_s(characterSelectedByClient.mPlayerName, MAX_PLAYER_NAME_LENGTH, L"%s", CGameData::GetInstance()->GetMyName().c_str() );
 
 				//내가 고른 캐릭터를 패킷에 담아서 발송!
 				if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&characterSelectedByClient, characterSelectedByClient.mSize) )
@@ -172,6 +174,7 @@ void CNetworkSettingScene::GoNextScene()
 void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 {
 	int idx = 0;
+	m_SettingMenu->InitMouseOver();
 
 	D2D1_SIZE_F startPosition = m_SettingMenu->GetStartPosition();
 	D2D1_SIZE_F playerButton = m_SettingMenu->GetPlayerSelectButtonSize();
@@ -183,7 +186,6 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
 			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
 		{
-			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
 			// 인덱스가 넘어가지 않게 함
 			if (idx >= MAX_PLAYER_NUM)
@@ -200,7 +202,6 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
-			m_SettingMenu->InitMouseOver();
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
 			// 인덱스가 넘어가지 않게 함
 			if (idx >= MAX_MAPSIZE_NUM)

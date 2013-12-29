@@ -32,6 +32,8 @@ void CNetworkNameInputScene::GoNextScene()
 bool CNetworkNameInputScene::Init()
 {
 	CreateResource();
+	
+	ResizeClient();
 
 	return true;
 }
@@ -42,7 +44,7 @@ void CNetworkNameInputScene::Render()
 	GetMessage(&message, NULL, NULL, NULL);
 
 	//////////////////////////////////////////////////////////////////////////
-	// 여기서 처리하니까 속도가 안 남;;
+	// 여기서 처리하니까 속도가 안 남;; 메인 루프로 보내서 처리합니다.
 	//////////////////////////////////////////////////////////////////////////
 	//	if ( GetMessage(&message, NULL, NULL, NULL) > 0 )
 	// 	{
@@ -60,15 +62,15 @@ void CNetworkNameInputScene::Render()
 	// 		}
 	// 	}
 
-	D2D1_RECT_F rectName;
+	D2D1_RECT_F rectNamePosition;
 
-	rectName = D2D1::Rect(m_StartPosition.width, m_StartPosition.height, m_StartPosition.width + 100.0f, m_StartPosition.height + 50.0f);
+	rectNamePosition = D2D1::Rect(m_StartPosition.width, m_StartPosition.height, m_StartPosition.width + 100.0f, m_StartPosition.height + 50.0f);
 
 	m_pRenderTarget->DrawText(
 		m_PlayerName.c_str(),
 		m_PlayerName.length(),
 		m_PlayerNameTextFormat,
-		rectName,
+		rectNamePosition,
 		m_pPlayerNameBrush
 		);
 }
@@ -76,6 +78,8 @@ void CNetworkNameInputScene::Render()
 void CNetworkNameInputScene::EventHandle( Coordinate mouseCoordinate )
 {
 	// 테스트 : 무조건 NetworkSettingScene으로 넘어가게 만든다.
+	// 이 SetMyName은 결국 서버로 갔다 온 내 이름을 처리하는 것.
+	CGameData::GetInstance()->SetMyName(m_PlayerName);
 	GoNextScene();
 }
 
@@ -96,6 +100,10 @@ void CNetworkNameInputScene::StopBGM()
 
 void CNetworkNameInputScene::ResizeClient()
 {
+	// 렌더 기준점은 화면 중점으로
+	D2D1_SIZE_F centerPosition = m_pRenderTarget->GetSize();
+	m_StartPosition.height = centerPosition.height / 2;
+	m_StartPosition.width = centerPosition.width / 2;
 
 }
 
@@ -243,7 +251,7 @@ std::wstring CNetworkNameInputScene::KeyMap(int VirtualKeyCode)
 		return L"Z";
 
 	default:
-		return L" ";
+		return L"_";
 	}
 }
 
@@ -252,7 +260,10 @@ void CNetworkNameInputScene::InputPlayerName(int wParam)
 	switch (wParam)
 	{
 	case VK_BACK:
-		m_PlayerName.pop_back();
+		if (m_PlayerName.length() > 0)
+		{
+			m_PlayerName.pop_back();
+		}
 		break;
 	default:
 		m_PlayerName.append( KeyMap(wParam) );

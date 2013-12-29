@@ -15,6 +15,8 @@ CGameData::CGameData(void)
 
 	m_CurrentScene = SC_NOSCENE;
 
+	m_myName = L"";
+
 	m_pBackground = nullptr;
 }
 

@@ -57,6 +57,11 @@ public:
 	void	SetNetworkClientList(int clientId, CPlayer* player) { m_NetworkClientList[clientId] = player; }
 
 	ID2D1Bitmap* GetBackgroundImage()							{ return m_pBackground; }
+
+	//네트워크에서 내 이름을 정할 때 사용
+	void		SetMyName(std::wstring myName)					{ m_myName = myName; }
+	std::wstring GetMyName()									{ return m_myName; }
+
 private:
 	void				createPlayer();
 
@@ -83,4 +88,6 @@ private:
 	unsigned int		m_NetworkRandomSeed;
 
 	ID2D1Bitmap*		m_pBackground;
+
+	std::wstring		m_myName;
 };

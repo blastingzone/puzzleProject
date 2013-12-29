@@ -2,6 +2,7 @@
 #include "NetworkManager.h"
 #include "PacketType.h"
 #include "NetworkGameTimer.h"
+#include "Player.h"
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -161,6 +162,7 @@ void CNetworkManager::ProcessPacket()
 						if (recvData.mCharacterId[PlayerIdx] != -1)
 						{
 							m_CharacterIdx[recvData.mCharacterId[PlayerIdx] ] = PlayerIdx;
+							CGameData::GetInstance()->GetPlayerPtr(recvData.mCharacterId[PlayerIdx])->SetPlayerName(recvData.mPlayerName[PlayerIdx]);
 						}
 					}
 				}
