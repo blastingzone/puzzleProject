@@ -303,6 +303,10 @@ void CNetworkManager::InitCharaterList()
 {
 	for (int i = 0; i < MAX_PLAYER_NUM ; ++i)
 	{
+		std::wstring defaultName = L"Character";
+		defaultName.append( std::to_wstring(i+1) );
+
 		m_CharacterIdx[i] = -1;
+		CGameData::GetInstance()->GetPlayerPtr(i)->SetPlayerName(defaultName);
 	}
 }
