@@ -160,14 +160,19 @@ void ClientSession::OnRead(size_t len)
 				CharacterResult outPacket;
 
 				mRecvBuffer.Read( (char*)&inPacket, header.mSize );
+
+				std::wstring PlayerName;
+				PlayerName = inPacket.mPlayerName;
+
 				// 임계영역 문제 생김!
-				if (GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId) )
+				if (GClientManager->SetCharacterSelectedStatus(inPacket.mPlayerId, inPacket.mCharacterId, PlayerName) )
 				{
 					outPacket.mConnectionNum = GClientManager->GetConnectionNum();
 
 					for (int i = 0 ; i < MAX_CLIENT_NUM ; ++i)
 					{
 						outPacket.mCharacterId[i] = GClientManager->GetCharacterSelectedStatusByClientId(i);
+						swprintf_s(outPacket.mPlayerName[i], MAX_PLAYER_NAME_LENGTH, L"%s", GClientManager->GetPlayerNameByClientId(i).c_str() );
 					}
 
 					if (!Broadcast(&outPacket))

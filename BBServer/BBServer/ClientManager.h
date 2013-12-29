@@ -31,7 +31,7 @@ public:
 	void LogOut(int clientId);
 
 	int GetCharacterSelectedStatusByClientId(int clientId)	{ return mCharacterSelectStatus[clientId]; }
-	bool SetCharacterSelectedStatus(int clientId, int characterId);
+	bool SetCharacterSelectedStatus(int clientId, int characterId, const std::wstring& playerName);
 
 	/// Ready State가 되었는지 확인하기 위한 메소드들
 	bool IsReady();
@@ -50,6 +50,10 @@ public:
 	/// 게임 상태 확인 및 설정
 	void		SetCurrentScene(GameScene scene)	{ mCurrentScene = scene; }
 	GameScene	GetCurrentScene()					{ return mCurrentScene; }
+
+	/// 플레이어가 결정한 이름을 저장하고 캐릭터 선택할 때 보내주기 위한 메소드
+	void		SetPlayerNameByClientId(std::wstring playerName, int clientId)	{ mPlayerNameTable[clientId] = playerName; }
+	std::wstring GetPlayerNameByClientId(int clientId)							{ return mPlayerNameTable[clientId]; }
 
 private:
 	void CreatePlayerDone(DatabaseJobContext* dbJob) ;
@@ -86,6 +90,9 @@ private:
 	int mPlayingNumber;
 
 	GameScene mCurrentScene;
+
+	/*	각 플레이어의 이름 */
+	std::array<std::wstring, MAX_CLIENT_NUM> mPlayerNameTable;
 } ;
 
 extern ClientManager* GClientManager ;

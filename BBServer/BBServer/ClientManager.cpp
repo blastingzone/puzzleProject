@@ -226,7 +226,7 @@ int ClientManager::GetConnectionNum()
 	return connectionNum;
 }
 
-bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId) 
+bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId, const std::wstring& playerName) 
 { 
 	//로그인 못 한 놈이면 처리 안 한다
 	if (clientId >= 0 && clientId < MAX_CLIENT_NUM);
@@ -234,7 +234,8 @@ bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId)
 		//캐릭터가 아직 선택 안 된 상태이면 할당해준다
 		if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
 		{
-			mCharacterSelectStatus[clientId] = characterId; 
+			mCharacterSelectStatus[clientId] = characterId;
+			mPlayerNameTable[clientId] = playerName;
 		
 			return true;
 		}
