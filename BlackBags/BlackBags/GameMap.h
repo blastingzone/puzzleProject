@@ -183,5 +183,6 @@ private:
 	float m_PlayerNameTextMaginH;
 
 	CAnimationRenderer* m_Sprite;
+	std::array<CAnimationRenderer*, MAX_PLAYER_NUM> m_PlayerAnimation;
 };
 

@@ -13,7 +13,8 @@ public:
 
 	void					SetPlayerName(const std::wstring& playerName)	{ m_PlayerName = playerName; }
 	const std::wstring&		GetPlayerName()									{ return m_PlayerName; }
-	
+	const std::wstring&		GetFaceAnimation()									{ return m_pPlayerAnimationPath; }
+
 	ID2D1SolidColorBrush*	GetPlayerBrush()		{ return m_pTileColorBrush; }
 	ID2D1Bitmap*			GetPlayerFace()			{ return m_pPlayerFace; }
 	ID2D1Bitmap*			GetPlayerSelectedFace()	{ return m_pPlayerSelectedFace; }
@@ -34,10 +35,13 @@ public:
 	void	SetPlayerCreatedFlag()	{ m_isJoinGame = true; }
 	bool	GetPlayerCreatedFlag()	{ return m_isJoinGame; }
 
+	
+
 private:
 	int m_Id;
 
 	std::wstring m_PlayerName;
+	std::wstring m_pPlayerAnimationPath;
 
 	bool m_isJoinGame;
 	bool m_Created;

@@ -47,6 +47,7 @@ CGameMap::CGameMap(MapSize mapSize)
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_PlayerTurnTable[i] = nullptr;
+		m_PlayerAnimation[i] = nullptr;
 	}
 
 	m_DWriteFactory = nullptr;
@@ -139,10 +140,27 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 	D2D1_RECT_F	textPosition;
 
 	GetPlayerUIPosition();
+
+	for ( int i = 0; i<playerNumber;i++)
+	{
+		if (m_PlayerAnimation[i] == nullptr)
+		{
+			m_PlayerAnimation[i] = new CAnimationRenderer(m_PlayerTurnTable[i]->GetFaceAnimation());
+			m_PlayerAnimation[i]->LoadAnimationImage(190.0f,230.f,0.3f,S_LT_INFINITE);
+		}
+	}
+
 	
 	for (int i = 0 ; i <playerNumber; ++i)
 	{
-		m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
+		//m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
+		if (m_CurrentTurn == i)
+			m_PlayerAnimation[i]->StartAnimation(m_ProfilePosition[i]);
+		else
+		{
+			m_PlayerAnimation[i]->PauseAnimation();
+			m_PlayerAnimation[i]->ShowAnimationFristFrame(m_ProfilePosition[i]);
+		}
 
 		//이름 표현할 것
 		textPosition = D2D1::Rect(
@@ -160,6 +178,7 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 			m_pPlayerNameTextBrush
 			);
 
+		
 
 		/*
 		턴 표시는 어떻게 할까?

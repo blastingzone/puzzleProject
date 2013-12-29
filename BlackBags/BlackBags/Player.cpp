@@ -6,6 +6,7 @@ CPlayer::CPlayer(void)
 {
 	m_Id = 0;
 	m_PlayerName = L"";
+	m_pPlayerAnimationPath = L"";
 
 	m_pTileColorBrush = nullptr;
 	m_pPlayerFace = nullptr;
@@ -33,7 +34,8 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerSelectedFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_1_selected_face.png", m_pPlayerSelectedFace);
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face1.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
-		
+		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_1_face.png";
+
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER2:
@@ -42,7 +44,8 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerSelectedFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_2_selected_face.png", m_pPlayerSelectedFace);
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face2.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
-		
+		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_2_wow.png";
+
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER3:
@@ -51,7 +54,8 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerSelectedFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_3_selected_face.png", m_pPlayerSelectedFace);
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face3.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
-		
+		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_3_face.png";
+
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileColorBrush);
 		break;
 	case MO_PLAYER4:
@@ -60,7 +64,8 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerSelectedFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_4_selected_face.png", m_pPlayerSelectedFace);
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face4.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
-		
+		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_4_face.png";
+
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileColorBrush);
 		break;
 	default:

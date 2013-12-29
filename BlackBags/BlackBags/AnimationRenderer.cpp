@@ -109,7 +109,7 @@ void CAnimationRenderer::CutFrames(float width, float height)
 
 	for ( int i = 1; i < m_TotalFrameNumber ; ++i )
 	{
-		if ( m_Frame[i-1].right + width < ImageWidth)
+		if ( m_Frame[i-1].right + width <= ImageWidth)
 		{
 			m_Frame[i].left = m_Frame[i-1].left + width;
 			m_Frame[i].right = m_Frame[i].left+ width;
