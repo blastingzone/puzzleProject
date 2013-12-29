@@ -162,6 +162,7 @@ private:
 	bool	m_LineAnimationFlag;
 	int		m_TileAnimationTurnNumber;
 	int		m_TileAnimationTurn;
+	bool	m_TileAnimationTurnOver;
 
 	ID2D1Bitmap* m_gold;
 	ID2D1Bitmap* m_trash;

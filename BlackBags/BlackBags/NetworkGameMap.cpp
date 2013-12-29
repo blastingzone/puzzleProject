@@ -24,6 +24,7 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	m_LineAnimationFlag = false;
 	m_TileAnimationTurnNumber = 0;
 	m_TileAnimationTurn = 0;
+	m_TileAnimationTurnOver = false;
 
 	m_TileSize = 0;
 	m_LineWeight = 0;
@@ -275,29 +276,11 @@ void CNetworkGameMap::Render()
 
 						if ( tempLine >= m_TileSize)
 						{
-							//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
-							m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
+							//애니메이션 재생 완료
+							m_TileAnimationTurnOver = true;
+
 							m_Map[i][j].m_AnimationTurn = 0;
 							m_Map[i][j].m_AnimationFlag = false;
-
-							//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
-							//CNetworkGameTimer::GetInstance()->SetTimerStart();
-
-							//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
-							if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
-							{
-								m_TileAnimationTurn = 0;
-								m_TileAnimationTurnNumber = 0;
-
-								// 서버에 Ready 상태 보고
-								TurnReadyRequest sendData;
-								sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
-
-								if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
-								{
-									CNetworkManager::GetInstance()->PostSendMessage();
-								}
-							}
 						}
 						else
 						{
@@ -347,6 +330,33 @@ void CNetworkGameMap::Render()
 					}
 
 				}
+			}
+		}
+	}
+	if (m_TileAnimationTurnOver)
+	{
+		m_TileAnimationTurnOver = false;
+
+		//애니메이션 재생이 완료되면 현재 타일 변수 초기화 및 다음 턴 그릴 준비
+		//m_TileAnimationTurn = m_Map[i][j].m_AnimationTurn + 1;
+		++m_TileAnimationTurn;
+						
+		//혹시라도 애니메이션 재생 시간이 20초를 넘길 경우를 대비해서 주기적으로 초기화
+		//CNetworkGameTimer::GetInstance()->SetTimerStart();
+						
+		//타일 애니메이션 전체가 끝난거라면 관련 변수 초기화
+		if (m_TileAnimationTurn > m_TileAnimationTurnNumber)
+		{
+			m_TileAnimationTurn = 0;
+			m_TileAnimationTurnNumber = 0;
+
+			// 서버에 Ready 상태 보고
+			TurnReadyRequest sendData;
+			sendData.mClientId = CNetworkManager::GetInstance()->GetClientId();
+
+			if (CNetworkManager::GetInstance()->GetSendBuffer()->Write(&sendData, sendData.mSize) )
+			{
+				CNetworkManager::GetInstance()->PostSendMessage();
 			}
 		}
 	}
