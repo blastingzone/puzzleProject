@@ -31,6 +31,7 @@ TCHAR			szWindowClass[MAX_LOADSTRING];			// the main window class name
 RECT			g_ClientRect;							// window client size
 CSceneManager*	g_Manager;
 
+HCURSOR bbCursor = LoadCursorFromFile(L"Resource/Image/update/cursor.cur");
 
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -251,6 +252,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case WM_MOUSEMOVE:
+		SetCursor(bbCursor);
 		//마우스오버 이펙트를 위한 메시지 처리
 		Coordinate mouseOver;
 		mouseOver.m_PosX = GET_X_LPARAM(lParam);
@@ -260,11 +262,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_LBUTTONDOWN:
 		// 마우스 좌표 받아오는 부분
+		SetCursor(bbCursor);
+
 		Coordinate mouseCoordinate;
 		mouseCoordinate.m_PosX = GET_X_LPARAM(lParam);
 		mouseCoordinate.m_PosY = GET_Y_LPARAM(lParam);
 		
 		g_Manager->EventHandle(mouseCoordinate);
+		break;
+	case WM_SETCURSOR:
+		SetCursor(bbCursor);
 		break;
 	case WM_PAINT:
 		g_Manager->Update();
