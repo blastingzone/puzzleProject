@@ -639,7 +639,8 @@ void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPositio
 		//많이 먹었다.
 		if ( i >= 5 )
 		{
-			CSoundRenderer::GetInstance()->PlaySE_Player(CNetworkManager::GetInstance()->GetCurrentTurnId());
+			CGameData::GetInstance()->GetNetworkClinent(clientId)->PlayMonsterSound();
+			//CSoundRenderer::GetInstance()->PlaySE_Player(CNetworkManager::GetInstance()->GetCurrentTurnId());
 		}
 
 #ifdef _DEBUG
