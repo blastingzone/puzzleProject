@@ -175,20 +175,10 @@ protected:
 
 	IDWriteFactory*			m_DWriteFactory;
 	IDWriteTextFormat*		m_PlayerSelectTextFormat;
-	IDWriteTextFormat*		m_MapSelectTextFormat;
-	IDWriteTextFormat*		m_NextButtonTextFormat;
-	IDWriteTextFormat*		m_SubTitleTextFormat;
 
 	// Player와 Map이 공유하는 브러시
 	ID2D1SolidColorBrush*	m_pUnselectedTextBrush;
 	ID2D1SolidColorBrush*	m_pSelectedTextBrush;
-	ID2D1SolidColorBrush*	m_pButtonBrush;
-
-	// 각자 사용하는 브러시
-	ID2D1SolidColorBrush*	m_pMapBackgroundBrush;
-	ID2D1SolidColorBrush*	m_pMapSelectedBackgroundBrush;
-
-	ID2D1SolidColorBrush*	m_MyCharacterBrush;
 
 	D2D1_SIZE_F				m_StartPosition;
 
@@ -198,18 +188,6 @@ protected:
 	// Character 선택창의 이름 부분
 	float					m_PlayerSelectTextSize;
 	float					m_PlayerSelectTextMargin;
-	// Map 선택창
-	float					m_MapSelectTextSize;
-	float					m_MapSelectTextMargin;
-	// GameStart 버튼
-	float					m_NextButtonTextSize;
-	float					m_NextButtonTextMargin;
-	// PLAYER 타이틀
-	float					m_PlayerTitleTextSize;
-	float					m_PlayerTitleTextMargin;
-	// MAP 타이틀
-	float					m_MapTitleTextSize;
-	float					m_MapTitleTextMargin;
 	// 캐릭터 초상화 관련
 	float					m_PortraitHeight;
 	float					m_PortraitWidth;

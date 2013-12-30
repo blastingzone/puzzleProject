@@ -12,9 +12,6 @@ CNetworkSettingMenu::CNetworkSettingMenu(void)
 
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
-	m_pButtonBrush = nullptr;
-	m_pMapBackgroundBrush = nullptr;
-	m_pMapSelectedBackgroundBrush = nullptr;
 	
 	m_SelectedImgCheckIcon = nullptr;
 	
@@ -78,9 +75,6 @@ void CNetworkSettingMenu::SetObjectSize()
 		m_PlayerSelect[i].m_ButtonHeight = CurrentScale * SC_S_DEFAULT_PLAYER_BUTTON_HEIGHT;
 	}
 
-	m_MapSelectTextSize = CurrentScale * SC_S_DEFAULT_MAP_TEXT_SIZE;
-	m_MapSelectTextMargin = CurrentScale * SC_S_DEFAULT_MAP_TEXT_MARGIN;
-
 	for (int j = 0; j < MAX_MAPSIZE_NUM; ++j)
 	{
 		m_MapSelect[j].m_ButtonWidth = CurrentScale * SC_S_DEFAULT_MAP_BUTTON_WIDTH;
@@ -89,15 +83,6 @@ void CNetworkSettingMenu::SetObjectSize()
 
 	m_NextButton.m_ButtonHeight = CurrentScale * SC_S_DEFAULT_NEXT_BUTTON_HEIGHT;
 	m_NextButton.m_ButtonWidth = CurrentScale * SC_S_DEFAULT_NEXT_BUTTON_WIDTH;
-
-	m_NextButtonTextSize = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_SIZE;
-	m_NextButtonTextMargin = CurrentScale * SC_S_DEFAULT_NEXT_TEXT_MARGIN;
-
-	m_MapTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
-	m_MapTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
-
-	m_PlayerTitleTextSize = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_SIZE;
-	m_PlayerTitleTextMargin = CurrentScale * SC_S_DEFAULT_SUBTITLE_TEXT_MARGIN;
 
 	m_PlayerTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
 	m_PlayerTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
@@ -131,9 +116,6 @@ bool CNetworkSettingMenu::CreateResource()
 	{
 		m_pRenderTarget = CRenderer::GetInstance()->GetHwndRenderTarget();
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_pButtonBrush);
-		assert(SUCCEEDED(hr));
-
 		// 캐릭터 초상화 포인터를 받아온다
 		for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 		{
@@ -163,25 +145,14 @@ bool CNetworkSettingMenu::CreateResource()
 		// 게임 시작 버튼
 		m_NextButton.m_NextImgButton = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/SETTING_start.png", m_NextButton.m_NextImgButton);
 
-		// 네트워크용 내가 선택한 캐릭터 표시
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Aquamarine), &m_MyCharacterBrush);
-		}
-		else
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
+
+
+		if ( !SUCCEEDED(hr) )
 		{
 			ErrorHandling();
 		}
 
-		assert(SUCCEEDED(hr));
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
 		/* Player별 마우스 오버 및 선택시 색상 */
 		assert(SUCCEEDED(hr));
 		if (SUCCEEDED(hr))
@@ -277,35 +248,6 @@ bool CNetworkSettingMenu::CreateResource()
 		}
 		assert(SUCCEEDED(hr));
 
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::BlanchedAlmond), &m_pMapBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(245.0f/255,93.0f/255,111.0f/255), &m_pMapSelectedBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr) )
-		{
-			int i = 0;
-		}
-		else
-		{
-			ErrorHandling();
-		}
-
 		hr = DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
 			__uuidof(IDWriteFactory),
@@ -329,9 +271,6 @@ void CNetworkSettingMenu::RefreshTextSize()
 	HRESULT hr;
 
 	SafeRelease(m_PlayerSelectTextFormat);
-	SafeRelease(m_MapSelectTextFormat);
-	SafeRelease(m_NextButtonTextFormat);
-	SafeRelease(m_SubTitleTextFormat);
 
 	// PlayerSelect 창부터 바꿈
 	hr = m_DWriteFactory->CreateTextFormat(
@@ -355,99 +294,6 @@ void CNetworkSettingMenu::RefreshTextSize()
 		ErrorHandling();
 	}
 	assert(SUCCEEDED(hr));
-
-	// MapSelect 창의 TextFormat도 바꿈
-	if ( SUCCEEDED(hr) )
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_PlayerSelectTextSize,
-			L"ko",
-			&m_MapSelectTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_MapSelectTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	// NextButton TextFormat 생성
-	if (SUCCEEDED(hr))
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_NextButtonTextSize,
-			L"ko",
-			&m_NextButtonTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	if (SUCCEEDED(hr))
-	{
-		hr = m_NextButtonTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
-	// Subtitle TextFormat 생성
-	// PlayerTitle 기준으로 통일
-	if (SUCCEEDED(hr))
-	{
-		hr = m_DWriteFactory->CreateTextFormat(
-			_MENU_FONT,
-			NULL,
-			DWRITE_FONT_WEIGHT_THIN,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_PlayerTitleTextSize,
-			L"ko",
-			&m_SubTitleTextFormat
-			);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-
-	assert(SUCCEEDED(hr));
-	if (SUCCEEDED(hr))
-	{
-		hr = m_SubTitleTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-	}
-	else
-	{
-		ErrorHandling();
-	}
-	assert(SUCCEEDED(hr));
-
 }
 
 void CNetworkSettingMenu::Render()
