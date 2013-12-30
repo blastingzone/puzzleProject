@@ -7,8 +7,8 @@
 
 CNetworkSettingMenu::CNetworkSettingMenu(void)
 {
-	m_StartPosition.height = 0;
-	m_StartPosition.width = 0;
+	m_StartPosition.height = 0.0;
+	m_StartPosition.width = 0.0;
 
 	m_pUnselectedTextBrush = nullptr;
 	m_pSelectedTextBrush = nullptr;
@@ -84,12 +84,6 @@ void CNetworkSettingMenu::SetObjectSize()
 	m_NextButton.m_ButtonHeight = CurrentScale * SC_S_DEFAULT_NEXT_BUTTON_HEIGHT;
 	m_NextButton.m_ButtonWidth = CurrentScale * SC_S_DEFAULT_NEXT_BUTTON_WIDTH;
 
-	m_PlayerTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
-	m_PlayerTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
-
-	m_MapTitle.m_LayerHeight  = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_HEIGHT;
-	m_MapTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_SUBTITLE_LAYER_WIDTH;
-
 	m_SettingTitle.m_LayerHeight = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_HEIGHT;
 	m_SettingTitle.m_LayerWidth = CurrentScale * SC_S_DEFAULT_MAINTITLE_LAYER_WIDTH;
 
@@ -110,7 +104,7 @@ void CNetworkSettingMenu::ResizeClient()
 
 bool CNetworkSettingMenu::CreateResource()
 {
-	HRESULT hr;
+	HRESULT hr = S_OK;
 
 	if (m_pRenderTarget == nullptr)
 	{
@@ -145,86 +139,6 @@ bool CNetworkSettingMenu::CreateResource()
 		// 게임 시작 버튼
 		m_NextButton.m_NextImgButton = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/SETTING_start.png", m_NextButton.m_NextImgButton);
 
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pSelectedBackgroundBrush);
-
-
-		if ( !SUCCEEDED(hr) )
-		{
-			ErrorHandling();
-		}
-
-		/* Player별 마우스 오버 및 선택시 색상 */
-		assert(SUCCEEDED(hr));
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_1_)), &m_PlayerSelect[0].m_pBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-
-		assert(SUCCEEDED(hr));
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pSelectedBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_2_)), &m_PlayerSelect[1].m_pBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pSelectedBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_3_)), &m_PlayerSelect[2].m_pBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pSelectedBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
-		if (SUCCEEDED(hr))
-		{
-			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_PLAYER_4_)), &m_PlayerSelect[3].m_pBackgroundBrush);
-		}
-		else
-		{
-			ErrorHandling();
-		}
-		assert(SUCCEEDED(hr));
-
 		/* Player, 맵 버튼에서 마우스 오버 및 선택시 색상 */
 
 		if (SUCCEEDED(hr))
@@ -240,7 +154,6 @@ bool CNetworkSettingMenu::CreateResource()
 		if (SUCCEEDED(hr))
 		{
 			hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pSelectedTextBrush);
-
 		}
 		else
 		{

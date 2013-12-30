@@ -7,12 +7,12 @@ struct NetworkPlayerSelect
 {
 	NetworkPlayerSelect() : 
 						m_ImgCharacterFace(nullptr),
+						m_ImgCharacterFaceMouseOver(nullptr),
+						m_ImgCharacterFaceSelected(nullptr),
 						m_IsSelected(0),
 						m_IsMouseOver(0),
 						m_ButtonWidth(0.0f),
 						m_ButtonHeight(0.0f),
-						m_pBackgroundBrush(nullptr),
-						m_pSelectedBackgroundBrush(nullptr),
 						m_IsMine(false) 
 						{};
 
@@ -25,11 +25,9 @@ struct NetworkPlayerSelect
 	float		m_ButtonHeight;
 
 	ID2D1Bitmap* m_ImgCharacterFace;
+	// 지금은 안 쓰는 변수
 	ID2D1Bitmap* m_ImgCharacterFaceMouseOver;
 	ID2D1Bitmap* m_ImgCharacterFaceSelected;
-
-	ID2D1SolidColorBrush*	m_pBackgroundBrush;
-	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;
 };
 
 struct NetworkMapSelect
@@ -85,32 +83,6 @@ struct NetworkSettingTitle
 	float m_LayerHeight;
 
 	ID2D1Bitmap* m_Title;
-};
-
-struct NetworkPlayerTitle
-{
-	NetworkPlayerTitle() : m_LayerWidth(0.f),
-					 m_LayerHeight(0.f),
-					 m_Title(L"Character")
-					 {};
-
-	float m_LayerWidth;
-	float m_LayerHeight;
-
-	std::wstring m_Title;
-};
-
-struct NetworkMapTitle
-{
-	NetworkMapTitle() : m_LayerWidth(0.f),
-				 m_LayerHeight(0.f),
-				 m_Title(L"Map")
-				 {};
-
-	float m_LayerWidth;
-	float m_LayerHeight;
-
-	std::wstring m_Title;
 };
 
 // 껍데기
@@ -195,8 +167,6 @@ protected:
 	float					m_CheckIconWidth;
 	float					m_CheckIconHeight;
 	
-	NetworkPlayerTitle		m_PlayerTitle;
-	NetworkMapTitle			m_MapTitle;
 	NetworkNextButton		m_NextButton;
 	NetworkSettingTitle		m_SettingTitle;
 
