@@ -461,6 +461,11 @@ void CGameResult::RefreshTextSize()
 	
 	if (!SUCCEEDED(hr) )
 		ErrorHandling();
+
+	hr = m_PlayerItemCountTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 bool CGameResult::CreateResource()

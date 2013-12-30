@@ -15,8 +15,22 @@ const float SC_M_DEFAULT_TITLE_HEIGHT = 220.0F;
 const float SC_M_DEFAULT_TITLE_MARGIN = 20.0F;
 const float SC_M_DEFAULT_MENU_MARGIN = 40.0F;
 
-/*	nameInput 신 오브젝트 기본 크기입니다 */
-const float SC_N_DEFAULT_NAME_SIZE = 25.0f;
+/*	네트워크 이름 입력 메뉴 오브젝트들의 기본 크기입니다	*/
+const float SC_NS_DEFAULT_TITLE_POSITION_H = 470.0f;
+const float SC_NS_DEFAULT_TITLE_POSITION_V = 150.0f;
+const float SC_NS_DEFAULT_TITLE_WIDTH = 470.0f;
+const float SC_NS_DEFAULT_TITLE_HEIGHT = 60.0f;
+
+const float SC_NS_DEFAULT_BUTTON_POSITION_H = 470.0f;
+const float SC_NS_DEFAULT_BUTTON_POSITION_V = 150.0f;
+const float SC_NS_DEFAULT_BUTTON_WIDTH = 240.0f;
+const float SC_NS_DEFAULT_BUTTON_HEIGHT = 80.0f;
+
+const float SC_NS_DEFAULT_TEXT_SIZE = 25.0f;
+const float SC_NS_DEFAULT_TEXT_WIDTH = 200.0f;
+const float SC_NS_DEFAULT_TEXT_HEIGHT = 200.0f;
+
+const int SC_NS_TEXT_INPUT_LIMIT = 32;
 
 /*	세팅 메뉴 오브젝트들의 기본 크기입니다	*/
 const float SC_S_DEFAULT_PLAYER_BUTTON_WIDTH = 290.0f;

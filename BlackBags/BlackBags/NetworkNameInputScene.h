@@ -16,17 +16,24 @@ public:
 	virtual void	PlayBGM();
 	virtual void	StopBGM();
 	virtual void	ResizeClient();
-
-	void CreateResource();
+	void			SetObjectSize();
 
 	void InputPlayerName(int wParam);
 
 private:
+	bool CreateResource();
+
 	void ErrorHandling();
 	std::wstring KeyMap(int virtualKeyCode);
 
+	/*	현재 화면 스케일에 맞춰서 m_TextFormat 갱신  */
+	void RefreshTextSize();
+	void CalcStartPosition();
+
 	// 사용자에게 입력받는 이름
 	std::wstring				m_PlayerName;
+
+	bool m_MouseoverFlag;
 
 	ID2D1HwndRenderTarget*	m_pRenderTarget;
 
@@ -40,5 +47,22 @@ private:
 	IDWriteTextFormat*		m_PlayerNameTextFormat;
 
 	ID2D1SolidColorBrush*	m_pPlayerNameBrush;
+
+	ID2D1Bitmap*			m_pTitleImage;
+	ID2D1Bitmap*			m_pNexthImage;
+	ID2D1Bitmap*			m_pNextSelectedImage;
+
+	float m_NameTextBoxWidth;
+	float m_NameTextBoxHeight;
+
+	float m_TitlePositionH;
+	float m_TitlePositionV;
+	float m_TitleWidth;
+	float m_TitleHeight;
+
+	float m_ButtonPositionH;
+	float m_ButtonPositionV;
+	float m_ButtonWidth;
+	float m_ButtonHeight;
 };
 

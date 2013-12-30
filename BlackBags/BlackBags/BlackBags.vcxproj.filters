@@ -187,9 +187,6 @@
     <ClInclude Include="NetworkGameTimer.h">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationRenderer.h">
-      <Filter>BlackBags</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkResultScene.h">
       <Filter>Scenes\NetworkResultScene</Filter>
     </ClInclude>
@@ -198,6 +195,9 @@
     </ClInclude>
     <ClInclude Include="NetworkNameInputScene.h">
       <Filter>Scenes\NetworkSettingScene</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationRenderer.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
