@@ -121,16 +121,30 @@ void CNetworkNameInputScene::Render()
 
 void CNetworkNameInputScene::EventHandle( Coordinate mouseCoordinate )
 {
-	// 테스트 : 무조건 NetworkSettingScene으로 넘어가게 만든다.
-	// 각 클라이언트가 SetMyName으로 지정한 자신의 이름을 서버로 전송
-	// 서버는 이 이름들을 종합해서 클라이언트들에게 보낸다
-	CGameData::GetInstance()->SetMyName(m_PlayerName);
-	GoNextScene();
+	if (mouseCoordinate.m_PosX > m_StartPosition.width - (m_ButtonWidth / 2)
+		&& mouseCoordinate.m_PosX < m_StartPosition.width + (m_ButtonWidth / 2)
+		&& mouseCoordinate.m_PosY > m_StartPosition.height + m_ButtonPositionV
+		&& mouseCoordinate.m_PosY < m_StartPosition.height + m_NameTextBoxHeight)
+	{
+		// 테스트 : 무조건 NetworkSettingScene으로 넘어가게 만든다.
+		// 각 클라이언트가 SetMyName으로 지정한 자신의 이름을 서버로 전송
+		// 서버는 이 이름들을 종합해서 클라이언트들에게 보낸다
+		CGameData::GetInstance()->SetMyName(m_PlayerName);
+		GoNextScene();
+	}
 }
 
 void CNetworkNameInputScene::MouseOver( Coordinate mouseCoordinate )
 {
+	m_MouseoverFlag = false;
 
+	if (mouseCoordinate.m_PosX > m_StartPosition.width - (m_ButtonWidth / 2)
+		&& mouseCoordinate.m_PosX < m_StartPosition.width + (m_ButtonWidth / 2)
+		&& mouseCoordinate.m_PosY > m_StartPosition.height + m_ButtonPositionV
+		&& mouseCoordinate.m_PosY < m_StartPosition.height + m_NameTextBoxHeight)
+	{
+		m_MouseoverFlag = true;
+	}
 }
 
 void CNetworkNameInputScene::PlayBGM()
