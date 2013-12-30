@@ -3,6 +3,7 @@
 #include "SceneObject.h"
 #include <array>
 #include <dwrite.h>
+#include "AnimationRenderer.h"
 
 struct IDWriteFactory;
 struct IDWriteTextFormat;
@@ -180,5 +181,8 @@ private:
 	float m_PlayerNameTextSize;
 	float m_PlayerNameTextMaginV;
 	float m_PlayerNameTextMaginH;
+
+	std::array<CAnimationRenderer*, MAX_PLAYER_NUM> m_PlayerAnimation;
+	std::array<CAnimationRenderer*, 2> m_TurnPointer;
 };
 

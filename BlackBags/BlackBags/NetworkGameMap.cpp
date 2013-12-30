@@ -49,7 +49,11 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		m_CharacterByClientId[i] = nullptr;
+		m_PlayerAnimation[i] = nullptr;
 	}
+
+	m_TurnPointer[0] = nullptr;
+	m_TurnPointer[1] = nullptr;
 
 	m_DWriteFactory = nullptr;
 	m_PlayerNameTextFormat = nullptr;
@@ -136,13 +140,33 @@ void CNetworkGameMap::DrawPlayerUI()
 
 	GetPlayerUIPosition();
 
+	for ( int i = 0; i<CNetworkManager::GetInstance()->GetPlayerNumber();i++)
+	{
+		if (m_PlayerAnimation[i] == nullptr)
+		{
+			m_PlayerAnimation[i] = new CAnimationRenderer(m_CharacterByClientId[i]->GetFaceAnimation());
+			m_PlayerAnimation[i]->LoadAnimationImage(190.0f,230.f,0.3f,S_LT_INFINITE);
+		}
+	}
+
+
 	int position = 0;
 
 	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
 	{
 		if ( m_CharacterByClientId[i] != nullptr )
 		{
-			m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerFace(), m_ProfilePosition[position]);
+			if (CNetworkManager::GetInstance()->GetCurrentTurnId() == i)
+			{
+				m_PlayerAnimation[i]->StartAnimation(m_ProfilePosition[position]);
+				m_TurnPointer[i%2]->StartAnimation(m_ProfilePosition[position]);
+			}
+			else
+			{
+				m_PlayerAnimation[i]->PauseAnimation();
+				m_PlayerAnimation[i]->ShowAnimationFristFrame(m_ProfilePosition[position]);
+			}
+			//m_pRenderTarget -> DrawBitmap(m_CharacterByClientId[i]->GetPlayerFace(), m_ProfilePosition[position]);
 			
 			//이름 표현할 것
 			textPosition = D2D1::Rect(
@@ -560,6 +584,12 @@ bool CNetworkGameMap::CreateResource()
 
 		m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
 		m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+
+		m_TurnPointer[0] = new CAnimationRenderer(L"Resource/Image/update/PLAY_arrowbigreverse_ani.png");
+		m_TurnPointer[0]->LoadAnimationImage(190.0f,230.0f,0.1f,S_LT_INFINITE);
+
+		m_TurnPointer[1] = new CAnimationRenderer(L"Resource/Image/update/PLAY_arrowbig_ani.png");
+		m_TurnPointer[1]->LoadAnimationImage(190.0f,230.0f,0.1f,S_LT_INFINITE);
 	}
 
 	return true;
