@@ -53,8 +53,8 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
-			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
+		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE - 5)
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
 			// 인덱스가 넘어가지 않게 함
@@ -97,15 +97,15 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 	}
 
 	// Map Select
-	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
-		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
+	if (mouseCoordinate.m_PosX > (startPosition.width - 3 * mapButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + 3 * (MAX_MAPSIZE_NUM - 1) * mapButton.width))
 	{
 		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
-			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			idx = static_cast<int>( (mouseCoordinate.m_PosX - 2 * mapButton.width) / (2 * mapButton.width) );
 			// 인덱스가 넘어가지 않게 함
-			if (idx >= MAX_MAPSIZE_NUM)
+			if (idx >= MAX_MAPSIZE_NUM || idx < 0)
 			{
 				return;
 			}
@@ -140,12 +140,13 @@ void CNetworkSettingScene::EventHandle(Coordinate mouseCoordinate)
 // 		m_SettingMenu->SetNextButtonImpossible();
 // 	}
 
-	if (mouseCoordinate.m_PosX > startPosition.width + (MAX_MAPSIZE_NUM - 2) * nextButton.width
-		&& mouseCoordinate.m_PosX < startPosition.width + (MAX_MAPSIZE_NUM - 1) * nextButton.width
+	if (mouseCoordinate.m_PosX > startPosition.width - (nextButton.width)
+		&& mouseCoordinate.m_PosX < startPosition.width
 		&& CheckGameStartCondition())
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height + (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE-1) * nextButton.height
-			&& mouseCoordinate.m_PosY > startPosition.height + SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * nextButton.height)
+		// Y 좌표 결정에 mapButton을 쓰는 이유는 같은 값(Mapbutton.height)을 기준으로 n배 이동시켜서 버튼을 렌더하기 때문.
+		if (mouseCoordinate.m_PosY > (SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE - 1) * mapButton.height
+			&& mouseCoordinate.m_PosY > SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE * mapButton.height)
 		{
 			//send packet
 			GameStartRequest startRequest;
@@ -183,8 +184,8 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 	if (mouseCoordinate.m_PosX > (startPosition.width - playerButton.width)
 		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_PLAYER_NUM - 1) * playerButton.width))
 	{
-		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE
-			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE+ 1)) )
+		if (mouseCoordinate.m_PosY > startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE - 5)
+			&& mouseCoordinate.m_PosY < (startPosition.height + playerButton.height * (SC_S_DEFAULT_PLAYER_BUTTON_Y_POSITION_SCALE)) )
 		{
 			idx = static_cast<int>((mouseCoordinate.m_PosX) / playerButton.width);
 			// 인덱스가 넘어가지 않게 함
@@ -196,15 +197,15 @@ void CNetworkSettingScene::MouseOver(Coordinate mouseCoordinate)
 		}
 	}
 
-	if (mouseCoordinate.m_PosX > (startPosition.width - mapButton.width)
-		&& mouseCoordinate.m_PosX < (startPosition.width + (MAX_MAPSIZE_NUM - 1) * mapButton.width))
+	if (mouseCoordinate.m_PosX > (startPosition.width - 3 * mapButton.width)
+		&& mouseCoordinate.m_PosX < (startPosition.width + 3 * (MAX_MAPSIZE_NUM - 1) * mapButton.width))
 	{
 		if (mouseCoordinate.m_PosY > (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height)
 			&& mouseCoordinate.m_PosY < (startPosition.height + SC_S_DEFAULT_MAP_BUTTON_Y_POSITION_SCALE * playerButton.height + mapButton.height))
 		{
-			idx = static_cast<int>((mouseCoordinate.m_PosX) / mapButton.width);
+			idx = static_cast<int>( (mouseCoordinate.m_PosX - 2 * mapButton.width) / (2 * mapButton.width) );
 			// 인덱스가 넘어가지 않게 함
-			if (idx >= MAX_MAPSIZE_NUM)
+			if (idx >= MAX_MAPSIZE_NUM || idx < 0)
 			{
 				return;
 			}

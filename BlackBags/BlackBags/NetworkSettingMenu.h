@@ -25,6 +25,8 @@ struct NetworkPlayerSelect
 	float		m_ButtonHeight;
 
 	ID2D1Bitmap* m_ImgCharacterFace;
+	ID2D1Bitmap* m_ImgCharacterFaceMouseOver;
+	ID2D1Bitmap* m_ImgCharacterFaceSelected;
 
 	ID2D1SolidColorBrush*	m_pBackgroundBrush;
 	ID2D1SolidColorBrush*	m_pSelectedBackgroundBrush;
@@ -36,7 +38,8 @@ struct NetworkMapSelect
 					m_IsMouseOver(0),
 					m_ButtonWidth(0.0f),
 					m_ButtonHeight(0.0f),
-					m_ButtonText(L""),
+					m_DefaultImgButtonText(nullptr),
+					m_SelectedImgButtonText(nullptr),
 					m_GameDataMapSizeWidth(0),
 					m_GameDataMapSizeHeight(0)
 					{};
@@ -47,7 +50,8 @@ struct NetworkMapSelect
 	float		m_ButtonWidth;
 	float		m_ButtonHeight;
 
-	std::wstring m_ButtonText;
+	ID2D1Bitmap* m_DefaultImgButtonText;
+	ID2D1Bitmap* m_SelectedImgButtonText;
 
 	int			m_GameDataMapSizeWidth;
 	int			m_GameDataMapSizeHeight;
@@ -59,7 +63,7 @@ struct NetworkNextButton
 	NetworkNextButton() :	m_IsPossible(false),
 					m_ButtonHeight(0),
 					m_ButtonWidth(0),
-					m_ButtonText(L"Game Start")
+					m_NextImgButton(nullptr)
 					{};
 
 	bool		m_IsPossible;
@@ -67,7 +71,7 @@ struct NetworkNextButton
 	float		m_ButtonWidth;
 	float		m_ButtonHeight;
 
-	std::wstring m_ButtonText;
+	ID2D1Bitmap* m_NextImgButton;
 };
 
 struct NetworkSettingTitle
@@ -188,6 +192,9 @@ protected:
 
 	D2D1_SIZE_F				m_StartPosition;
 
+	// 체크 아이콘 이미지
+	ID2D1Bitmap*			m_SelectedImgCheckIcon;
+
 	// Character 선택창의 이름 부분
 	float					m_PlayerSelectTextSize;
 	float					m_PlayerSelectTextMargin;
@@ -206,6 +213,9 @@ protected:
 	// 캐릭터 초상화 관련
 	float					m_PortraitHeight;
 	float					m_PortraitWidth;
+	// 체크 아이콘 관련
+	float					m_CheckIconWidth;
+	float					m_CheckIconHeight;
 	
 	NetworkPlayerTitle		m_PlayerTitle;
 	NetworkMapTitle			m_MapTitle;
