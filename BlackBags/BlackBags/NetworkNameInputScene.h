@@ -1,5 +1,8 @@
 #pragma once
 #include "scene.h"
+
+struct IDWriteFactory;
+
 class CNetworkNameInputScene :
 	public CScene
 {
