@@ -90,6 +90,7 @@ bool CNetworkManager::Connect()
 	SOCKADDR_IN SockAddr ;
 	SockAddr.sin_port = htons(m_Port) ;
 	SockAddr.sin_family = AF_INET;
+	//내 컴퓨터 연결
 	//SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
 	
 	//다른 컴퓨터 연결

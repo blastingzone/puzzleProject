@@ -6,7 +6,7 @@
 CNetworkResultScene::CNetworkResultScene(void)
 {
 	m_GameResult = nullptr;
-	m_SceneStatus = SC_RESULT;
+	m_SceneStatus = SC_NETWORK_RESULT;
 
 	m_ButtonPosition.bottom = 0;
 	m_ButtonPosition.top = 0;
