@@ -483,7 +483,7 @@ void CGameMap::Render()
 	m_pos.y = m_TimerPositionHeight;
 
 	//배경
-	rectElement = D2D1::Rect(m_StartPosition.width, m_pos.y, m_StartPosition.width + m_TimerWidth / 2, m_pos.y + m_TimerHeight);
+	rectElement = D2D1::Rect(m_StartPosition.width, m_pos.y, m_StartPosition.width + m_TimerWidth, m_pos.y + m_TimerHeight);
 	m_pRenderTarget->FillRectangle(rectElement, m_pUnconnectedLineBrush);
 
 	float remainTimeRatio = (CGameTimer::GetInstance()->GetRemainTime() / static_cast<float>(TIME_LIMIT) );
