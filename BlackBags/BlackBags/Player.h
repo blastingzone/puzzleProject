@@ -35,10 +35,13 @@ public:
 	void	SetPlayerCreatedFlag()	{ m_isJoinGame = true; }
 	bool	GetPlayerCreatedFlag()	{ return m_isJoinGame; }
 
+	void   PlayMonsterSound() {CSoundRenderer::GetInstance()->PlaySE_Player(m_MonsterSoundIdx);}
+
 	
 
 private:
 	int m_Id;
+	int m_MonsterSoundIdx;
 
 	std::wstring m_PlayerName;
 	std::wstring m_pPlayerAnimationPath;

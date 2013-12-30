@@ -35,6 +35,7 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face1.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
 		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_1_wow.png";
+		m_MonsterSoundIdx = 0;
 
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_1_), &m_pTileColorBrush);
 		break;
@@ -45,6 +46,7 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face2.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
 		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_2_wow.png";
+		m_MonsterSoundIdx = 1;
 
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_2_), &m_pTileColorBrush);
 		break;
@@ -55,6 +57,7 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face3.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
 		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_3_wow.png";
+		m_MonsterSoundIdx = 2;
 
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_3_), &m_pTileColorBrush);
 		break;
@@ -65,6 +68,8 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 		m_pPlayerResultFace = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_face4.png", m_pPlayerResultFace);
 		m_pPlayerResultTile = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAYER_tile0.png", m_pPlayerResultTile);
 		m_pPlayerAnimationPath = L"Resource/Image/update/PLAYER_4_wow.png";
+		m_MonsterSoundIdx = 3;
+
 
 		hr = CRenderer::GetInstance()->GetHwndRenderTarget()->CreateSolidColorBrush(D2D1::ColorF(_COLOR_PLAYER_4_), &m_pTileColorBrush);
 		break;

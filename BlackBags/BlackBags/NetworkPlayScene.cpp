@@ -640,7 +640,6 @@ void CNetworkPlayScene::DrawLineFromServer(const IndexedPosition& indexedPositio
 		if ( i >= 5 )
 		{
 			CSoundRenderer::GetInstance()->PlaySE_Player(CNetworkManager::GetInstance()->GetCurrentTurnId());
-
 		}
 
 #ifdef _DEBUG
