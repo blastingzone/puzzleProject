@@ -460,6 +460,11 @@ void CNetworkGameResult::RefreshTextSize()
 	
 	if (!SUCCEEDED(hr) )
 		ErrorHandling();
+
+	hr = m_PlayerItemCountTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+
+	if (!SUCCEEDED(hr) )
+		ErrorHandling();
 }
 
 bool CNetworkGameResult::CreateResource()
@@ -475,7 +480,7 @@ bool CNetworkGameResult::CreateResource()
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();
 		
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_RESULT_TEXT_) ), &m_pPlayerScoreTextBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF(_COLOR_RESULT_SCORE_TEXT_) ), &m_pPlayerScoreTextBrush);
 		
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();

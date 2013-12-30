@@ -8,12 +8,11 @@ CNetworkResultScene::CNetworkResultScene(void)
 	m_GameResult = nullptr;
 	m_SceneStatus = SC_RESULT;
 
-	ButtonPosition.bottom = 0;
-	ButtonPosition.top = 0;
-	ButtonPosition.left = 0;
-	ButtonPosition.right = 0;
+	m_ButtonPosition.bottom = 0;
+	m_ButtonPosition.top = 0;
+	m_ButtonPosition.left = 0;
+	m_ButtonPosition.right = 0;
 }
-
 
 CNetworkResultScene::~CNetworkResultScene(void)
 {
@@ -37,10 +36,10 @@ void CNetworkResultScene::MouseOver(Coordinate mouseCoordinate)
 {
 	m_GameResult->InitMouseOver();
 
-	if (mouseCoordinate.m_PosX > ButtonPosition.left
-		&& mouseCoordinate.m_PosX < ButtonPosition.right
-		&& mouseCoordinate.m_PosY > ButtonPosition.top
-		&& mouseCoordinate.m_PosY < ButtonPosition.bottom)
+	if (mouseCoordinate.m_PosX > m_ButtonPosition.left
+		&& mouseCoordinate.m_PosX < m_ButtonPosition.right
+		&& mouseCoordinate.m_PosY > m_ButtonPosition.top
+		&& mouseCoordinate.m_PosY < m_ButtonPosition.bottom)
 	{
 		m_GameResult->SetMouseOver();
 	}
@@ -88,7 +87,7 @@ void CNetworkResultScene::ResizeClient()
 
 void CNetworkResultScene::SetButtonPosition()
 {
-	ButtonPosition = m_GameResult->GetGetButtonPosition();
+	m_ButtonPosition = m_GameResult->GetGetButtonPosition();
 }
 
 void CNetworkResultScene::PlayBGM()

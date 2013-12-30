@@ -555,7 +555,7 @@ bool CNetworkGameMap::CreateResource()
 			ErrorHandling();
 
 		//조심해!! 일단 안 보이게 하고 나중에 수정
-		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 0.9f), &m_pVoidTileBrush);
+		hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 0.0f), &m_pVoidTileBrush);
 
 		if (!SUCCEEDED(hr) )
 			ErrorHandling();

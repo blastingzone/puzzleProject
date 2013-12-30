@@ -26,7 +26,7 @@ public:
 private:
 	void SetButtonPosition();
 
-	RECT ButtonPosition;
+	RECT m_ButtonPosition;
 	CNetworkGameResult* m_GameResult;
 };
 
