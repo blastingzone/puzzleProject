@@ -8,9 +8,14 @@ CSoundRenderer::CSoundRenderer(void) :
 	m_ChannelGroup(nullptr),
 	m_BGMChannel(nullptr),
 	m_SEChannel(nullptr),
+	m_PlayerChannel(nullptr),
 	m_SE_DrawLine(nullptr),
 	m_SE_FillTile(nullptr),
 	m_SE_Select(nullptr),
+	m_SE_Player1(nullptr),
+	m_SE_Player2(nullptr),
+	m_SE_Player3(nullptr),
+	m_SE_Player4(nullptr),
 	m_Main(nullptr),
 	m_Setting(nullptr),
 	m_Play(nullptr),
@@ -81,7 +86,19 @@ FMOD_RESULT CSoundRenderer::CreateSound()
 		fr = m_System->createSound(_SE_LAUGH, FMOD_HARDWARE, 0, &m_SE_Laugh);
 
 	if ( fr == FMOD_OK)
-		fr = m_System->createSound(_SE_FILL_TILE, FMOD_HARDWARE, 0, &m_SE_FillTile);
+		fr = m_System->createSound(_SE_PLAYER1, FMOD_HARDWARE, 0, &m_SE_Player1);
+
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_PLAYER2, FMOD_HARDWARE, 0, &m_SE_Player2);
+
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_PLAYER3, FMOD_HARDWARE, 0, &m_SE_Player3);
+
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_PLAYER4, FMOD_HARDWARE, 0, &m_SE_Player4);
+
+	if ( fr == FMOD_OK)
+		fr = m_System->createSound(_SE_FILL_TILE, FMOD_HARDWARE, 0, &m_SE_FillTile);	
 	
 	if (!SUCCEEDED(fr) )
 	{
@@ -174,6 +191,38 @@ void CSoundRenderer::PlaySE_Laugh()
 		ErrorHandling();
 	}
 }
+
+
+
+void CSoundRenderer::PlaySE_Player( int playerId )
+{
+	FMOD_RESULT fr;
+	
+	switch (playerId)
+	{
+	case 0:
+		fr = m_System->playSound(m_SE_Player1, m_ChannelGroup, false, &m_PlayerChannel);
+		break;
+	case 1:
+		fr = m_System->playSound(m_SE_Player2, m_ChannelGroup, false, &m_PlayerChannel);
+		break;
+	case 2:
+		fr = m_System->playSound(m_SE_Player3, m_ChannelGroup, false, &m_PlayerChannel);
+		break;
+	case 3:
+		fr = m_System->playSound(m_SE_Player4, m_ChannelGroup, false, &m_PlayerChannel);
+		break;
+	default:
+		break;
+	}
+
+	assert(fr == FMOD_OK);
+	if (!SUCCEEDED(fr) )
+	{
+		ErrorHandling();
+	}
+}
+
 
 void CSoundRenderer::PlaySE_FillTile()
 {

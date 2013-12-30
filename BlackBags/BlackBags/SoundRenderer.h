@@ -23,6 +23,7 @@ public:
 	void PlaySE_Select();
 	void PlaySE_Laugh();
 	void PlaySE_FillTile();
+	void PlaySE_Player(int playerId);
 
 
 	FMOD::System* GetSystem() { return m_System; }
@@ -39,6 +40,7 @@ private:
 
 	FMOD::Channel*			m_BGMChannel;
 	FMOD::Channel*			m_SEChannel;
+	FMOD::Channel*			m_PlayerChannel;
 
 	FMOD::Sound*			m_SE_DrawLine;
 	FMOD::Sound*			m_SE_FillTile;
@@ -48,4 +50,9 @@ private:
 	FMOD::Sound*			m_Play;
 	FMOD::Sound*			m_Result;
 	FMOD::Sound*			m_SE_Laugh;
+	FMOD::Sound*			m_SE_Player1;
+	FMOD::Sound*			m_SE_Player2;
+	FMOD::Sound*			m_SE_Player3;
+	FMOD::Sound*			m_SE_Player4;
+
 };

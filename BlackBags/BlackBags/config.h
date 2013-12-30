@@ -178,6 +178,11 @@ const int	SC_RT_SCORE_TRASH = -10;
 #define _SE_SELECT "Resource/Sound/button_pop.mp3"
 #define _SE_LAUGH "Resource/Sound/SE_laugh.mp3"
 #define _SE_FILL_TILE "Resource/Sound/temp/slide.wav"
+#define _SE_PLAYER1 "Resource/Sound/PLAYER_1_good.mp3"
+#define _SE_PLAYER2 "Resource/Sound/PLAYER_2_good.mp3"
+#define _SE_PLAYER3 "Resource/Sound/PLAYER_3_good.mp3"
+#define _SE_PLAYER4 "Resource/Sound/PLAYER_4_good.mp3"
+
 
 /*	폰트들입니다	*/
 #define _DEBUG_FONT L"Consolas"
