@@ -44,7 +44,10 @@ void CGameData::Release()
 	for (unsigned int i = 0; i < m_PlayerData.size(); ++i)
 	{
 		SafeDelete(m_PlayerData[i]);
+		SafeDelete(m_NetworkClientList[i]);
 	}
+
+	SafeRelease(m_pBackground);
 }
 
 void CGameData::Init()

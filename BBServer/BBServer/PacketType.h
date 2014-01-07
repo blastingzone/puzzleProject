@@ -139,7 +139,7 @@ struct GameStartRequest : public PacketHeader
 {
 	GameStartRequest()
 	{
-		mSize = sizeof(MapResult) ;
+		mSize = sizeof(GameStartRequest) ;
 		mType = PKT_CS_GAME_START ;
 		mStart = false;
 	}
@@ -150,7 +150,7 @@ struct GameStartResult : public PacketHeader
 {
 	GameStartResult()
 	{
-		mSize = sizeof(MapResult) ;
+		mSize = sizeof(GameStartResult) ;
 		mType = PKT_SC_GAME_START ;
 		mStart = false;
 		randomSeed = 0;

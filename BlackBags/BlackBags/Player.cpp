@@ -20,6 +20,9 @@ CPlayer::CPlayer(void)
 CPlayer::~CPlayer(void)
 {
 	SafeRelease(m_pTileColorBrush);
+	SafeRelease(m_pPlayerFace);
+	SafeRelease(m_pPlayerResultFace);
+	SafeRelease(m_pPlayerResultTile);
 }
 
 bool CPlayer::Init(MO_OWNER playerIdx)
