@@ -575,7 +575,7 @@ void CNetworkPlayScene::Render()
 	//timer 여기에 추가할 것
 	CNetworkGameTimer::GetInstance()->Render();
 
-	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() )
+	if (CGameData::GetInstance()->GetPlaySceneTimerFlag() && !m_EndFlag)
 	{
 		TimeOut();
 		CGameData::GetInstance()->InitPlaySceneTimerFlag();

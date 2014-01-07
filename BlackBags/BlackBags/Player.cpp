@@ -5,7 +5,7 @@
 CPlayer::CPlayer(void)
 {
 	m_Id = 0;
-	m_PlayerName = L"";
+	m_MonsterSoundIdx = 0;
 	m_pPlayerAnimationPath = L"";
 
 	m_pTileColorBrush = nullptr;
@@ -92,7 +92,9 @@ bool CPlayer::Init(MO_OWNER playerIdx)
 void CPlayer::ResetValues()
 {
 	m_isJoinGame = false;
-	
+	m_PlayerName = L"";
+
+	m_Created = false;
 	m_Turn = 0;
 
 	m_MyTile = 0;
