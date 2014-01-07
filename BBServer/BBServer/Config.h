@@ -19,4 +19,5 @@ enum GameScene
 	SC_SETTING,
 	SC_PLAY,
 	SC_NOSCENE,
+	SC_RESULT
 };

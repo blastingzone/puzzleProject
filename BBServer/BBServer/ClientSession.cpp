@@ -69,7 +69,8 @@ void ClientSession::Disconnect()
 	if (mClientId >= 0 && mClientId < MAX_CLIENT_NUM)
 	{
 		//자기 차례에 나가면 그 턴을 다시 시작해줘야한다. 아니면 나간 사람의 패킷을 계속 기다리게 된다.
-		if( mClientId == GClientManager->GetCurrentTurnClientId() )
+		if( mClientId == GClientManager->GetCurrentTurnClientId()
+			&& GClientManager->GetCurrentScene() == SC_PLAY)
 		{
 			//일단 배열을 정리하자
 			GClientManager->InitReadyTable();
@@ -260,7 +261,7 @@ void ClientSession::OnRead(size_t len)
 		case PKT_CS_GAME_END:
 			{
 				//종료 조건을 설정하고 자신의 접속을 끊는다.
-				GClientManager->SetCurrentScene(SC_NOSCENE);
+				GClientManager->SetCurrentScene(SC_RESULT);
 
 				Disconnect();
 				return;

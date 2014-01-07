@@ -69,7 +69,7 @@ void ClientManager::OnPeriodWork()
 
 		//게임 종료 메시지를 받았고, 모든 접속이 종료가 되면 게임에 관련된 정보들을 초기화한다.
 		
-		if (mCurrentScene == SC_NOSCENE && GetConnectionNum() == 0)
+		if (mCurrentScene == SC_RESULT && GetConnectionNum() == 0)
 		{
 			InitGameCondition();
 		}
