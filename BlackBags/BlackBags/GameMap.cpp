@@ -149,7 +149,7 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 		if (m_PlayerAnimation[i] == nullptr)
 		{
 			m_PlayerAnimation[i] = new CAnimationRenderer(m_PlayerTurnTable[i]->GetFaceAnimation());
-			m_PlayerAnimation[i]->LoadAnimationImage(190.0f,230.f,0.3f,S_LT_INFINITE);
+			m_PlayerAnimation[i]->LoadAnimationImage(190.0f,230.f,0.2f,S_LT_INFINITE);
 		}
 	}
 
