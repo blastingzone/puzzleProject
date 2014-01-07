@@ -285,6 +285,10 @@ void CNetworkGameMap::Render()
 
 						DWORD currentTime = CNetworkGameTimer::GetInstance()->GetTime();
 
+						//처음에 닫혀지는 타일은 하나뿐이다. 그러니까 걔는 시작할 때 소리 넣어주자
+						if (m_Map[i][j].m_AnimationTurn == 1)
+							CSoundRenderer::GetInstance()->PlaySE_FillTile();
+
 						float progressedTimeRatio = (currentTime - m_Map[i][j].m_StartTime) / static_cast<float>(SC_P_TILE_ANIMATION_TIME);
 
 						//만약 애니메이션 재생 시간을 초과하면 최대 크기로 할당
@@ -382,6 +386,10 @@ void CNetworkGameMap::Render()
 			{
 				CNetworkManager::GetInstance()->PostSendMessage();
 			}
+		}
+		else
+		{
+			CSoundRenderer::GetInstance()->PlaySE_FillTile();
 		}
 	}
 

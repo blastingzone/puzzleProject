@@ -50,6 +50,9 @@ CGameMap::CGameMap(MapSize mapSize)
 		m_PlayerAnimation[i] = nullptr;
 	}
 
+	m_TurnPointer[0] = nullptr;
+	m_TurnPointer[1] = nullptr;
+
 	m_DWriteFactory = nullptr;
 	m_PlayerNameTextFormat = nullptr;
 	m_pPlayerNameTextBrush = nullptr;
@@ -155,7 +158,10 @@ void CGameMap::DrawPlayerUI( int playerNumber )
 	{
 		//m_pRenderTarget -> DrawBitmap(m_PlayerTurnTable[i]->GetPlayerFace(), m_ProfilePosition[i]);
 		if (m_CurrentTurn == i)
+		{
 			m_PlayerAnimation[i]->StartAnimation(m_ProfilePosition[i]);
+			m_TurnPointer[i%2]->StartAnimation(m_ProfilePosition[i]);
+		}
 		else
 		{
 			m_PlayerAnimation[i]->PauseAnimation();
@@ -565,6 +571,12 @@ bool CGameMap::CreateResource()
 
 		m_gold = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_gold.png", m_gold);
 		m_trash = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/PLAY_trash.png", m_trash);
+
+		m_TurnPointer[0] = new CAnimationRenderer(L"Resource/Image/update/PLAY_arrowbigreverse_ani.png");
+		m_TurnPointer[0]->LoadAnimationImage(190.0f,230.0f,0.1f,S_LT_INFINITE);
+
+		m_TurnPointer[1] = new CAnimationRenderer(L"Resource/Image/update/PLAY_arrowbig_ani.png");
+		m_TurnPointer[1]->LoadAnimationImage(190.0f,230.0f,0.1f,S_LT_INFINITE);
 	}
 
 	return true;

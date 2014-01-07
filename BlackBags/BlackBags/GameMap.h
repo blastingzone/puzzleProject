@@ -184,5 +184,6 @@ private:
 
 	CAnimationRenderer* m_Sprite;
 	std::array<CAnimationRenderer*, MAX_PLAYER_NUM> m_PlayerAnimation;
+	std::array<CAnimationRenderer*, 2> m_TurnPointer;
 };
 
