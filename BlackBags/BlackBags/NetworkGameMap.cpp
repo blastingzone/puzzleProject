@@ -18,7 +18,6 @@ CNetworkGameMap::CNetworkGameMap(MapSize mapSize)
 	m_pPossibleLineBrush = nullptr;
 	m_pTileBrush = nullptr;
 	m_pVoidTileBrush = nullptr;
-
 	m_pTimer = nullptr;
 
 	m_LineAnimationFlag = false;
@@ -72,11 +71,19 @@ CNetworkGameMap::~CNetworkGameMap(void)
 	SafeRelease(m_pPossibleLineBrush);
 	SafeRelease(m_pTileBrush);
 	SafeRelease(m_pVoidTileBrush);
+	SafeRelease(m_pTimer);
+
 	SafeRelease(m_DWriteFactory);
 	SafeRelease(m_PlayerNameTextFormat);
 	SafeRelease(m_pPlayerNameTextBrush);
 
-	SafeRelease(m_pTimer);
+	for (int i = 0; i < MAX_PLAYER_NUM; ++i)
+	{
+		SafeRelease(m_PlayerAnimation[i]);
+	}
+
+	SafeRelease(m_TurnPointer[0]);
+	SafeRelease(m_TurnPointer[1]);
 }
 
 

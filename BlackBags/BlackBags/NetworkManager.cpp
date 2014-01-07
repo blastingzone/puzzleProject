@@ -91,10 +91,10 @@ bool CNetworkManager::Connect()
 	SockAddr.sin_port = htons(m_Port) ;
 	SockAddr.sin_family = AF_INET;
 	//내 컴퓨터 연결
-	//SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
+	SockAddr.sin_addr.s_addr = *((unsigned long*)host->h_addr) ;
 	
 	//다른 컴퓨터 연결
-	SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.44.30" );
+	//SockAddr.sin_addr.S_un.S_addr = inet_addr( "10.73.44.30" );
 
 	if ( SOCKET_ERROR == connect(m_Socket, (LPSOCKADDR)(&SockAddr), sizeof(SockAddr)) )
 	{
@@ -130,7 +130,7 @@ void CNetworkManager::ProcessPacket()
 					if ( recvData.mPlayerId == -1  )
 					{
 						/// 여기 걸리면 로그인 실패다.
-						ExitProcess(-1) ;
+						CGameData::GetInstance()->SetCurrentScene(SC_MAIN);
 					}
 					
 					m_ClientId = recvData.mPlayerId;				

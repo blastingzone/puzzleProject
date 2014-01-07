@@ -146,7 +146,7 @@ void CSoundRenderer::StopBGM()
 
 	fr = m_BGMChannel->stop();
 
-	assert(fr == FMOD_OK);
+	//assert(fr == FMOD_OK);
 	if (!SUCCEEDED(fr) )
 	{
 		ErrorHandling();

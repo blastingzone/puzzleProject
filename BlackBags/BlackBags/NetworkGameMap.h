@@ -154,7 +154,6 @@ private:
 	ID2D1SolidColorBrush*	m_pPossibleLineBrush;
 	ID2D1SolidColorBrush*	m_pTileBrush;
 	ID2D1SolidColorBrush*	m_pVoidTileBrush;
-
 	ID2D1SolidColorBrush*	m_pTimer;
 
 	D2D1_ELLIPSE			m_DotEllipse;
