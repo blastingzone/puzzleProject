@@ -93,6 +93,7 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 		return;
 	case SC_NETWORK_NAMESETTING:
 		m_CurrentScene = new CNetworkNameInputScene();
+		CGameData::GetInstance()->Init();
 		break;
 	case SC_NETWORK_SETTING:
 		if (!CNetworkManager::GetInstance()->Init() )
@@ -100,7 +101,6 @@ void CSceneManager::ChangeScene(const SceneName& newScene)
 			PostMessage(m_Hwnd, WM_DESTROY, NULL, NULL);
 		}
 		m_CurrentScene = new CNetworkSettingScene();
-		CGameData::GetInstance()->Init();
 		break;
 	case SC_NETWORK_PLAY:
 		m_CurrentScene = new CNetworkPlayScene();
