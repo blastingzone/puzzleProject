@@ -103,8 +103,8 @@ void CSettingScene::EventHandle(Coordinate mouseCoordinate)
 		m_SettingMenu->SetNextButtonImpossible();
 	}
 
-	if (mouseCoordinate.m_PosX > startPosition.width - (nextButton.width)
-		&& mouseCoordinate.m_PosX < startPosition.width
+	if (mouseCoordinate.m_PosX > startPosition.width + 2.5 * (nextButton.width)
+		&& mouseCoordinate.m_PosX < 3.5 * startPosition.width
 		&& CheckGameStartCondition())
 	{
 		// Y 좌표 결정에 mapButton을 쓰는 이유는 같은 값(Mapbutton.height)을 기준으로 n배 이동시켜서 버튼을 렌더하기 때문.

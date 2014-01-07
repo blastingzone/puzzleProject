@@ -339,7 +339,7 @@ void CNetworkSettingMenu::Render()
 	//NextButton 조건이 부합하면 렌더. 이 조건이 부합하지 않으면 활성화되지도 않는다(클릭불가)
 	if (m_NextButton.m_IsPossible)
 	{
-		pos.x = m_StartPosition.width - (m_NextButton.m_ButtonWidth);
+		pos.x = m_StartPosition.width + 2.5 * (m_NextButton.m_ButtonWidth);
 		// 밑으로  얼마나 내려갈지
 		pos.y = m_MapSelect[0].m_ButtonHeight * SC_S_DEFAULT_NEXT_BUTTON_Y_POSITION_SCALE;
 
