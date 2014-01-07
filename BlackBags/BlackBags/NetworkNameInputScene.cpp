@@ -9,6 +9,9 @@ CNetworkNameInputScene::CNetworkNameInputScene(void)
 
 	m_PlayerName = L"Name";
 	
+	m_pRenderTarget = nullptr;
+	m_DWriteFactory = nullptr;
+
 	m_StartPosition.height = 0.f;
 	m_StartPosition.width = 0.f;
 
