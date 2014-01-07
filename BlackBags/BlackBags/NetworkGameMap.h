@@ -53,6 +53,9 @@ public:
 	/*	애니메이션 상태를 지정, 반환하는 함수들 */
 	bool		GetLineAnimationFlag()						{ return m_LineAnimationFlag; }
 	int			GetTileAnimationTurnNumber()				{ return m_TileAnimationTurnNumber; }
+
+	void		InitAnimationFlag()							{ m_LineAnimationFlag = false; m_TileAnimationTurnNumber = 0; }
+
 	void		SetTileAnimationTurnNumber(int turnNumber)	{ m_TileAnimationTurnNumber = turnNumber; }
 	void		SetAnimationState(IndexedPosition indexedPosition, int turn, Direction direction);
 	void		InitAnimationState(IndexedPosition indexedPosition);

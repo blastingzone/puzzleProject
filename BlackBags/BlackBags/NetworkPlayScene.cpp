@@ -112,8 +112,8 @@ void CNetworkPlayScene::EventHandle(IndexedPosition indexedPosition)
 
 	// 현재 턴의 ClientId가 내 ClientId와 다르면 튕겨낸다
 	// 내 턴일 때 IsPossible 이면 서버로 보내고, 패킷을 받으면 DrawLine을 실행한다.
-	if (clientIdIdx != CNetworkManager::GetInstance()->GetClientId() )
-		return;
+	//if (clientIdIdx != CNetworkManager::GetInstance()->GetClientId() )
+	//	return;
 
 	if (IsPossible(indexedPosition))
 	{

@@ -15,7 +15,6 @@ CNetworkManager* CNetworkManager::m_pInstance = nullptr;
 CNetworkManager::CNetworkManager(void) : m_SendBuffer(BUFSIZE), m_RecvBuffer(BUFSIZE)
 {
 	m_Hwnd = NULL;
-	m_ClientId = -1;
 
 	m_ServerAddr = "localhost" ;
 	m_Port = 22222 ;
@@ -41,7 +40,8 @@ bool CNetworkManager::Init()
 {
 	m_SendBuffer.Clear();
 	m_RecvBuffer.Clear();
-
+	
+	m_ClientId = -1;
 	m_CurrentTurnId = 0;
 	m_PlayerNumber = 0;
 	m_MapIndex = -1;
