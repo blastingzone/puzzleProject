@@ -236,14 +236,20 @@ int ClientManager::GetConnectionNum()
 bool ClientManager::SetCharacterSelectedStatus(int clientId, int characterId, const std::wstring& playerName) 
 { 
 	//로그인 못 한 놈이면 처리 안 한다
-	if (clientId >= 0 && clientId < MAX_CLIENT_NUM);
+	if (clientId >= 0 && clientId < MAX_CLIENT_NUM)
 	{
 		//캐릭터가 아직 선택 안 된 상태이면 할당해준다
 		if (mCharacterSelectStatus[clientId] == NOT_SELECTED || characterId == NOT_SELECTED)
 		{
 			mCharacterSelectStatus[clientId] = characterId;
-			mPlayerNameTable[clientId] = playerName;
-		
+			if (characterId != NOT_SELECTED)
+			{
+				mPlayerNameTable[clientId] = playerName;
+			}
+			else
+			{
+				mPlayerNameTable[clientId] = L"";
+			}
 			return true;
 		}
 	}
@@ -328,6 +334,7 @@ void ClientManager::InitGameCondition()
 	{
 		mRandomPlayerTurnTable[i] = NOT_LOGIN_CLIENT;
 		mBroadcastList[i] = nullptr;
+		mPlayerNameTable[i] = L"";
 	}
 
 	mCurrentTurn = 0;
