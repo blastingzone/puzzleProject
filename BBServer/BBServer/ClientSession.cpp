@@ -322,7 +322,7 @@ bool ClientSession::Send(PacketHeader* pkt)
 	}
 
 	IncOverlappedRequest() ;
-	printf_s("%d : received\n", mClientId);
+	//printf_s("%d : received\n", mClientId);
 	return true ;
 }
 

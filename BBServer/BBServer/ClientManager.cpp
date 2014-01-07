@@ -14,7 +14,7 @@ ClientSession* ClientManager::CreateClient(SOCKET sock)
 	mClientList.insert(ClientList::value_type(sock, client)) ;
 
 	int clientId = GiveClientId();
-	if (clientId == NOT_LOGIN_CLIENT || mCurrentScene == SC_PLAY)
+	if (clientId == NOT_LOGIN_CLIENT || mCurrentScene == SC_PLAY || mCurrentScene == SC_RESULT)
 	{
 		//이미 게임이 진행 중이거나 풀방이므로 나가주세요
 		client->Disconnect();
@@ -69,7 +69,7 @@ void ClientManager::OnPeriodWork()
 
 		//게임 종료 메시지를 받았고, 모든 접속이 종료가 되면 게임에 관련된 정보들을 초기화한다.
 		
-		if (mCurrentScene == SC_RESULT && GetConnectionNum() == 0)
+		if ( (mCurrentScene == SC_RESULT || mCurrentScene == SC_PLAY) && GetConnectionNum() == 0)
 		{
 			InitGameCondition();
 		}
