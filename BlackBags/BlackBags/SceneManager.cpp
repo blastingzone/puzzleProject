@@ -52,6 +52,7 @@ void CSceneManager::EventHandle( Coordinate mouseCoordinate )
 
 void CSceneManager::Update()
 {
+	CSoundRenderer::GetInstance()->Update();
 	SceneName tempName = CGameData::GetInstance()->GetCurrentScene();
 
 	if (m_CurrentScene->GetCurrentScene() != tempName)

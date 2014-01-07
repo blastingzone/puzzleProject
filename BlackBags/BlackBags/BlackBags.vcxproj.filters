@@ -294,7 +294,6 @@
     <ClCompile Include="NetworkGameTimer.cpp">
       <Filter>Scenes\NetworkPlayScene</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationRenderer.cpp" />
     <ClCompile Include="NetworkResultScene.cpp">
       <Filter>Scenes\NetworkResultScene</Filter>
     </ClCompile>
@@ -303,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="NetworkNameInputScene.cpp">
       <Filter>Scenes\NetworkSettingScene</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationRenderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

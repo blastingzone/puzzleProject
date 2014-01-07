@@ -24,6 +24,7 @@ public:
 	void PlaySE_Laugh();
 	void PlaySE_FillTile();
 	void PlaySE_Player(int playerId);
+	void Update() {m_System->update();}
 
 
 	FMOD::System* GetSystem() { return m_System; }
