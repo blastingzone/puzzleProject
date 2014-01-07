@@ -226,7 +226,7 @@ struct GameEndRequest : public PacketHeader
 {
 	GameEndRequest()
 	{
-		mSize = sizeof(TurnStartResult);
+		mSize = sizeof(GameEndRequest);
 		mType = PKT_CS_GAME_END;
 		mClientId = -1;
 	}

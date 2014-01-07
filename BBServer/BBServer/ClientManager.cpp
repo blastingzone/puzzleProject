@@ -68,10 +68,17 @@ void ClientManager::OnPeriodWork()
 		mLastGCTick = currTick ;
 
 		//게임 종료 메시지를 받았고, 모든 접속이 종료가 되면 게임에 관련된 정보들을 초기화한다.
+		
 		if (mCurrentScene == SC_NOSCENE && GetConnectionNum() == 0)
 		{
 			InitGameCondition();
 		}
+		/*
+		if (GetConnectionNum() == 0)
+		{
+			InitGameCondition();
+		}
+		*/
 	}
 
 	/// 접속된 클라이언트 세션별로 주기적으로 해줘야 하는 일 (주기는 알아서 정하면 됨 - 지금은 1초로 ㅎㅎ)
