@@ -28,11 +28,14 @@ CSettingMenu::CSettingMenu(void)
 
 	m_MapSelect[3].m_GameDataMapSizeHeight = 10;
 	m_MapSelect[3].m_GameDataMapSizeWidth = 9;
+
+	m_CheckIcon = nullptr;
 }
 
 
 CSettingMenu::~CSettingMenu(void)
 {
+	SafeRelease(m_CheckIcon);
 }
 
 bool CSettingMenu::Init()
@@ -114,6 +117,9 @@ bool CSettingMenu::CreateResource()
 
 		// 체크 아이콘 이미지를 가져온다.
 		m_SelectedImgCheckIcon = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/SETTING_check.png", m_SelectedImgCheckIcon);
+
+		m_CheckIcon = new CAnimationRenderer(L"Resource/Image/update/SETTING_check_ani.png");
+		m_CheckIcon -> LoadAnimationImage(160.0f,65.0f,0.05f,S_LT_ONCE);
 
 		// SettingScene 타이틀 이미지를 가져온다
 		m_SettingTitle.m_Title = CRenderer::GetInstance()->CreateImage(L"Resource/Image/update/SETTING_title.png", m_SettingTitle.m_Title);
@@ -301,7 +307,8 @@ void CSettingMenu::Render()
 		if (m_MapSelect[j].m_IsSelected)
 		{
 			m_pRenderTarget->DrawBitmap(m_MapSelect[j].m_SelectedImgButtonText, rectElement);
-			m_pRenderTarget->DrawBitmap(m_SelectedImgCheckIcon, rectElement);
+			//m_pRenderTarget->DrawBitmap(m_SelectedImgCheckIcon, rectElement);
+			m_CheckIcon->ReStartAnimation(rectElement, j);
 		}
 		else if (m_MapSelect[j].m_IsMouseOver)
 		{

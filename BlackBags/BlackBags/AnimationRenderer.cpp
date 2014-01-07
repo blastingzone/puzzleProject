@@ -21,6 +21,7 @@ void CAnimationRenderer::Release()
 
 bool CAnimationRenderer::LoadAnimationImage(float width, float height, float frameSpeed, LoopType loopType)
 {
+	m_Value = -1;
 	if ( m_ipRenderTarget == nullptr )
 		return false;
 
@@ -173,6 +174,22 @@ void CAnimationRenderer::StartAnimation(D2D1_RECT_F imagePosition)
 		m_ipRenderTarget->DrawBitmap(m_LoadedBitmap,imagePosition,1.0f,D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,m_Frame[m_CurrentFrame%m_TotalFrameNumber]);
 	}
 }
+
+
+void CAnimationRenderer::ReStartAnimation( D2D1_RECT_F imagePosition , int value)
+{
+	if ( m_Value != value && (m_CurrentFrame%m_TotalFrameNumber) == (m_TotalFrameNumber - 1) )
+	{
+		m_CurrentFrame = 0;
+		m_AnimationState = S_PAUSE;
+	}
+
+	if ( m_CurrentFrame == 0)
+		m_Value = value;
+
+	StartAnimation(imagePosition);
+}
+
 
 void CAnimationRenderer::RotateImage(D2D1_RECT_F dest)
 {

@@ -62,6 +62,9 @@ public : CAnimationRenderer(std::wstring fileName)
 		 //imagePosition위치에서 에니메이션을 재생한다.
 		 void StartAnimation(D2D1_RECT_F imagePosition);
 
+		 //imagePositon위치에서 에니메이션을 한번씩 replay한다.
+		 void ReStartAnimation(D2D1_RECT_F imagePosition, int value);
+
 		 //회전시킨다.
 		 void StartRotateAnimation(D2D1_RECT_F imagePosition);
 
@@ -116,5 +119,7 @@ private:
 	float m_verticalPoint;
 
 	float m_CurrentScale;
+
+	int m_Value;
 };
 

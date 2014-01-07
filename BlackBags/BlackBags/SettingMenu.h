@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "SceneObject.h"
+#include "AnimationRenderer.h"
 
 #define MAX_MAPSIZE_NUM 4
 
@@ -140,6 +141,7 @@ private:
 
 	// 체크 아이콘 이미지
 	ID2D1Bitmap*			m_SelectedImgCheckIcon;
+	CAnimationRenderer* m_CheckIcon;
 
 	// Character 선택창의 이름 부분
 	float					m_PlayerSelectTextSize;
